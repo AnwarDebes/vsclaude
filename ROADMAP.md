@@ -37,9 +37,11 @@ the journey from there to a signed, installable, delightful editor.
 - [x] `motion`: the event-to-motion mapper (debounce, priority, dwell, captions)
 - [~] `motion`: Rive state machine for Pixie, sprite-sheet fallback
 - [x] `swarm`: roster, delegation edges, token aggregation, layout selection
-- [~] `swarm`: the animated workshop scene, drill-down, timeline scrubber
+- [x] `swarm`: the workshop scene, each agent performing its action, token meters
+- [ ] `swarm`: animated delegation threads and a timeline scrubber
 - [x] `chat`: timeline builder, turn grouping, tool-call inspector model
-- [~] `chat`: conversation UI, plan view, diff review
+- [x] `chat`: the conversation timeline UI with the tool-call inspector
+- [ ] `chat`: plan view and side-by-side diff review
 - [x] `git`: porcelain status parser, git-action events
 - [~] `git`: full status and commit UI
 - [x] `persistence`: session serialize and parse, settings merge, secret store
@@ -47,8 +49,8 @@ the journey from there to a signed, installable, delightful editor.
 
 ## Phase 3: Delight, hardening, reach
 
-- [~] Onboarding wizard and first-run flow
-- [ ] Accessibility pass: narrated stream, reduced motion, contrast audit
+- [x] First-run shell: presentation modes, command palette, runtime theming
+- [~] Accessibility: narrated stream and reduced motion done; contrast audit pending
 - [ ] Sound design (Tone.js, off by default)
 - [ ] Performance profiling against the budgets
 - [x] `plugin-sdk`: host, manifest validation, registration lifecycle

@@ -5,7 +5,38 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-21. Session 1 (Phase 0 foundation, plus the agent action integration).
+2026-06-21. Session 1 (Phase 0 foundation, the action integration, and a working IDE shell).
+
+## Working IDE shell
+
+The browser renderer is now a real, multi-panel IDE that composes every package
+end to end (run it with `pnpm dev`):
+
+- **Session engine** (`apps/desktop/src/session/`): replays a scripted multi-agent
+  session (an orchestrator delegating to two workers) through the real motion
+  mapper, agent runtime, chat builder, and swarm helpers.
+- **Panels**: file explorer (editor tree model), Pixie stage (Pixie performing the
+  current action), swarm view (each agent performing its own action with token
+  meters), conversation timeline with the tool-call inspector, token and cost
+  dashboard, and a narrated accessibility stream.
+- **Shell**: a command palette (Ctrl or Cmd plus K) driven by the core-shell
+  registry, five presentation modes (companion, stage, swarm, minimal, cozy),
+  runtime theming via the design system, reduced-motion and sound toggles, all
+  persisted to local storage.
+
+Builds (vite), typechecks, tests, and lints clean.
+
+## Remaining for a production release
+
+These need the Rust toolchain and more time, and are the honest next steps:
+
+- Native Tauri build: install rustup plus platform prerequisites, then
+  `pnpm tauri:dev`. App icons are generated; the Rust core compiles there.
+- A live Claude Code provider: spawn the agent process over the Rust PTY and feed
+  its stream-json through the existing adapter so the shell runs a real session.
+- Monaco editor and xterm terminal wired to the core, the Rive Pixie artboard,
+  Storybook for every component and Pixie state, Playwright e2e, signed
+  installers and auto-update, and a security and performance hardening pass.
 
 ## Agent action integration
 
