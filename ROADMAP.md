@@ -23,14 +23,16 @@ the journey from there to a signed, installable, delightful editor.
 
 - [x] `core-shell`: panel-tree layout model, command registry
 - [x] `editor`: file-tree model, tab manager
-- [~] `editor`: Monaco integration, diff editor, multi-root workspaces
+- [x] `editor`: Monaco integration (offline workers, syntax, minimap, save)
+- [ ] `editor`: side-by-side diff editor, multi-root workspaces
 - [x] `terminal`: typed PTY client over IPC
-- [~] `terminal`: xterm.js WebGL rendering wired to a real Rust PTY
+- [x] `terminal`: xterm wired to a real Rust PTY (portable-pty / ConPTY)
 - [x] `agent-runtime`: AgentEvent reducer, agent-tree session manager
 - [x] `providers`: registry, Claude Code stream-json parser
-- [~] `providers`: live process spawning, Codex, Gemini, Ollama adapters
+- [x] `providers`: live Claude Code process spawning over the Rust core
+- [ ] `providers`: Codex, Gemini, Ollama adapters
 - [x] `design-system`: tokens to CSS, theme registry
-- [~] `design-system`: component primitives, Storybook for every Pixie state
+- [x] `design-system`: Storybook with a story for every component and Pixie state
 
 ## Phase 2: The soul and the experience
 
@@ -52,13 +54,15 @@ the journey from there to a signed, installable, delightful editor.
 - [x] First-run shell: presentation modes, command palette, runtime theming
 - [~] Accessibility: narrated stream and reduced motion done; contrast audit pending
 - [ ] Sound design (Tone.js, off by default)
-- [ ] Performance profiling against the budgets
+- [x] Performance: static SVG Pixie on a timer (no animation loop), near-zero idle CPU
 - [x] `plugin-sdk`: host, manifest validation, registration lifecycle
 - [ ] Two example plugins (a theme and a companion skin)
-- [ ] Signed installers, auto-update, CI for all three OSes
+- [x] Installer pipeline and CI for all three OSes (signing gated on certificates)
+- [ ] Signed release and auto-update (needs your certificates and an update host)
 
 ## Phase 4: Finish
 
-- [ ] Full e2e suite (Playwright) for the core flows
+- [x] Playwright e2e for the core renderer flows
+- [ ] tauri-driver native-window e2e
 - [ ] Docs with GIFs, polished README screenshots
 - [ ] Tagged 1.0 release

@@ -5,7 +5,7 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-21. Session 1 (Phase 0 foundation, the action integration, and a working IDE shell).
+2026-06-21. Session 1 (Phase 0 foundation, the action integration, the IDE shell, and the native desktop build).
 
 ## Working IDE shell
 
@@ -26,17 +26,43 @@ end to end (run it with `pnpm dev`):
 
 Builds (vite), typechecks, tests, and lints clean.
 
-## Remaining for a production release
+## Native desktop IDE (done)
 
-These need the Rust toolchain and more time, and are the honest next steps:
+The app now builds and runs as a real native desktop IDE:
 
-- Native Tauri build: install rustup plus platform prerequisites, then
-  `pnpm tauri:dev`. App icons are generated; the Rust core compiles there.
-- A live Claude Code provider: spawn the agent process over the Rust PTY and feed
-  its stream-json through the existing adapter so the shell runs a real session.
-- Monaco editor and xterm terminal wired to the core, the Rive Pixie artboard,
-  Storybook for every component and Pixie state, Playwright e2e, signed
-  installers and auto-update, and a security and performance hardening pass.
+- **Toolchain**: Rust stable on the MSVC host is installed; the existing Visual
+  Studio C++ Build Tools and Windows SDK provide the linker. `pnpm tauri:build`
+  produces the native `vsclaude.exe` plus a WiX `.msi` and an NSIS setup `.exe`.
+  The window launches and runs the full renderer in WebView2.
+- **Rust core**: filesystem ops, OS-keychain secrets (keyring), a real terminal
+  PTY (portable-pty / ConPTY), and a live provider that spawns
+  `claude --output-format stream-json` and streams it to the renderer.
+- **Monaco editor**: real editing with offline workers, syntax, a minimap, and
+  save, as the protagonist of the layout, with Pixie in a companion corner.
+- **xterm terminal**: wired to the real PTY natively, with the agent's command
+  activity as the browser fallback.
+- **Live session**: `useLiveProvider` normalizes the live stream through the same
+  `parseClaudeStreamLine` adapter, so a real Claude Code run drives Pixie and the
+  swarm; the recorded demo is the fallback.
+- **Storybook**: a story for every component and every Pixie state (200 actions),
+  with the a11y addon. `build-storybook` passes.
+- **Playwright**: five e2e tests over the core flows, all passing.
+- **Packaging**: a three-OS installer pipeline (`.github/workflows/desktop-release.yml`)
+  and `BUILD.md` documenting signing.
+- **Hardening**: strict CSP (with `worker-src` for Monaco), minimal Tauri
+  capabilities, secrets only in the OS keychain. Pixie is a static SVG driven by a
+  timer (no animation loop), so idle CPU is near zero.
+
+## Remaining (needs your input or hosting)
+
+- **Signed release**: provide the certificates and the build signs automatically
+  (Windows Authenticode, Apple Developer ID notarization). See `BUILD.md`.
+- **Auto-update**: generate the updater key (`tauri signer generate`), host
+  `latest.json`, then add `tauri-plugin-updater`. Gated on choosing an update host.
+- **Rive Pixie**: swap the pixel sprite for a Rive artboard driven by the motion
+  mapper (its output is already the right shape).
+- **Native-window e2e**: add tauri-driver plus WebdriverIO alongside the Playwright
+  renderer suite.
 
 ## Agent action integration
 
