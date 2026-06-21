@@ -45,7 +45,7 @@ the journey from there to a signed, installable, delightful editor.
 - [x] `chat`: the conversation timeline UI with the tool-call inspector
 - [ ] `chat`: plan view and side-by-side diff review
 - [x] `git`: porcelain status parser, git-action events
-- [~] `git`: full status and commit UI
+- [x] `git`: diff review overlay and real commit flow (status, per-file diff, commit)
 - [x] `persistence`: session serialize and parse, settings merge, secret store
 - [~] `persistence`: checkpoints and time-travel, keychain via Rust IPC
 

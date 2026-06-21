@@ -41,6 +41,9 @@ The app now builds and runs as a real native desktop IDE:
   save, as the protagonist of the layout, with Pixie in a companion corner.
 - **xterm terminal**: wired to the real PTY natively, with the agent's command
   activity as the browser fallback.
+- **Diff review and commit**: a Rust git module (status, diff, commit) and a
+  review overlay that lists changed files, shows each file's colored diff, and
+  commits for real with "Accept all and commit".
 - **Live session**: `useLiveProvider` normalizes the live stream through the same
   `parseClaudeStreamLine` adapter, so a real Claude Code run drives Pixie and the
   swarm; the recorded demo is the fallback.
