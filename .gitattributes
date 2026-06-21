@@ -1,0 +1,31 @@
+# Normalize line endings to LF in the repository
+* text=auto eol=lf
+
+# Shell scripts must stay LF
+*.sh text eol=lf
+
+# Windows scripts stay CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Binary assets
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.icns binary
+*.riv binary
+*.woff binary
+*.woff2 binary
+*.mp3 binary
+*.wav binary
+*.ogg binary
+
+# Generated lockfiles use union merge to reduce conflicts
+pnpm-lock.yaml -diff
+
+# Mark generated files for GitHub linguist
+*.gen.ts linguist-generated=true

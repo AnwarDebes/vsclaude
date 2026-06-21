@@ -1,0 +1,12 @@
+node_modules
+dist
+build
+out
+target
+coverage
+storybook-static
+playwright-report
+test-results
+pnpm-lock.yaml
+*.gen.ts
+apps/desktop/src-tauri/gen
