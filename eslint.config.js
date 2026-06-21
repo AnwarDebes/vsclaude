@@ -15,8 +15,11 @@ export default tseslint.config(
       '**/node_modules/**',
       '**/storybook-static/**',
       '**/playwright-report/**',
+      '**/test-results/**',
       '**/*.gen.ts',
       'apps/desktop/src-tauri/gen/**',
+      // A vendored clone of the mascot project, kept for reference only.
+      'Claude-Code-In-Motion/**',
     ],
   },
   js.configs.recommended,
@@ -42,6 +45,11 @@ export default tseslint.config(
       ],
       'no-console': ['warn', { allow: ['warn', 'error'] }],
     },
+  },
+  {
+    // Codegen and build scripts legitimately log progress to the console.
+    files: ['scripts/**/*.mjs'],
+    rules: { 'no-console': 'off' },
   },
   prettier,
 );
