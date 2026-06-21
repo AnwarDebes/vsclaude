@@ -1,0 +1,61 @@
+version: 2
+updates:
+  # JavaScript and TypeScript dependencies across the pnpm workspace.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+    open-pull-requests-limit: 10
+    labels:
+      - dependencies
+      - javascript
+    commit-message:
+      prefix: chore
+      include: scope
+    assignees:
+      - AnwarDebes
+    groups:
+      dev-dependencies:
+        dependency-type: development
+      production-dependencies:
+        dependency-type: production
+
+  # Rust crates for the Tauri desktop core.
+  - package-ecosystem: cargo
+    directory: /apps/desktop/src-tauri
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+      - rust
+    commit-message:
+      prefix: chore
+      include: scope
+    assignees:
+      - AnwarDebes
+    groups:
+      cargo:
+        patterns:
+          - "*"
+
+  # GitHub Actions used by the CI and release workflows.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    labels:
+      - dependencies
+      - ci
+    commit-message:
+      prefix: ci
+    assignees:
+      - AnwarDebes
+    groups:
+      actions:
+        patterns:
+          - "*"
