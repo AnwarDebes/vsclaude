@@ -1,0 +1,455 @@
+name: Bug report
+description: Report something in vsclaude that is broken, incorrect, or behaving differently than the Three Sacred Motion Rules promise.
+title: "[Bug]: "
+labels:
+  - bug
+  - triage
+# This file is a GitHub issue form. It renders structured fields when a user
+# clicks "New issue" and selects "Bug report". The schema is documented at:
+# https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/syntax-for-issue-forms
+#
+# Field-type reference (every type used below is valid GitHub issue-forms):
+#   markdown   -> static rendered text, never collected in the issue body
+#   input      -> single-line free text
+#   textarea   -> multi-line free text, optional code render
+#   dropdown   -> single or multi select from a fixed option list
+#   checkboxes -> list of acknowledgement boxes, at least one can be required
+#
+# Authoring rules for this file:
+#   * Every "id" must be unique within the form.
+#   * "validations.required: true" forces the field before submit.
+#   * Keep captions plain enough that a non-technical reporter can follow,
+#     mirroring Motion Rule 3 (plain-language captions).
+#   * Ask for the exact underlying detail (tool name, command, raw output)
+#     so a maintainer can recover meaning, mirroring Motion Rule 2.
+
+body:
+  # -------------------------------------------------------------------------
+  # Intro and pre-flight
+  # -------------------------------------------------------------------------
+  - type: markdown
+    attributes:
+      value: |
+        ## Thanks for filing a bug for vsclaude
+
+        vsclaude is a pixel-art IDE where you watch your AI coding agent work
+        through living animation. The more concretely you describe what Pixie
+        did versus what the agent actually did, the faster we can fix it.
+
+        Before you continue, please:
+
+        - Search [existing issues](https://github.com/AnwarDebes/vsclaude/issues?q=is%3Aissue) to avoid duplicates.
+        - Update to the latest release if you can. Many bugs are already fixed.
+        - Have your logs ready. The **Help -> Open Logs Folder** menu reveals them.
+
+        Fields marked with a red asterisk are required.
+
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Pre-flight checklist
+      description: Please confirm each item before submitting.
+      options:
+        - label: I searched existing issues and this is not a duplicate.
+          required: true
+        - label: I can reproduce this on the latest version, or I have stated the version below.
+          required: true
+        - label: I removed any secrets (API keys, tokens) from the logs and screenshots I attach.
+          required: true
+
+  # -------------------------------------------------------------------------
+  # The core report: what happened vs what you expected
+  # -------------------------------------------------------------------------
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: |
+        Describe the actual behavior. Be specific about what you saw on screen.
+        If this is a motion bug, tell us what Pixie did and what the agent was
+        actually doing at that moment. Remember Motion Rule 1: every animation
+        is bound to a real event, so a mismatch between Pixie and the real event
+        is itself a reportable bug.
+      placeholder: |
+        Example: The agent ran a build command, but Pixie stayed in the "reading"
+        state the whole time and never switched to "building". The terminal
+        clearly showed `pnpm build` running.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What did you expect to happen instead?
+      placeholder: |
+        Example: Pixie should have entered the "building" state with a focused
+        mood and a caption like "Building the project".
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: |
+        Give us a precise, numbered recipe. A maintainer should be able to follow
+        these steps on a clean machine and see the same result. If reproduction is
+        intermittent, say roughly how often it happens (for example, 1 in 5 runs).
+      value: |
+        1. Open vsclaude and start a session with ...
+        2. Ask the agent to ...
+        3. Watch Pixie / the event stream / the terminal ...
+        4. Observe that ...
+      placeholder: |
+        1. Open vsclaude on a fresh project folder.
+        2. Start a Claude Code session and send the prompt "build the app".
+        3. Wait for the build command to start in the integrated terminal.
+        4. Pixie does not transition to the building state.
+    validations:
+      required: true
+
+  # -------------------------------------------------------------------------
+  # Provider and event context
+  # -------------------------------------------------------------------------
+  - type: markdown
+    attributes:
+      value: |
+        ### Provider and event context
+
+        vsclaude normalizes every provider into one `AgentEvent` stream, and all
+        visuals consume only that stream. Telling us which provider you used and,
+        if possible, which `AgentEventType` was involved helps us isolate whether
+        the bug lives in a provider adapter or in the shared visual layer.
+
+  - type: dropdown
+    id: provider
+    attributes:
+      label: Provider used
+      description: Which AI provider was driving the session when the bug occurred?
+      multiple: false
+      options:
+        - Claude Code (claude-code)
+        - Codex (codex)
+        - Gemini (gemini)
+        - Ollama / local model (ollama)
+        - Other / custom adapter
+        - Not applicable (UI-only bug, no active session)
+    validations:
+      required: true
+
+  - type: input
+    id: provider-model
+    attributes:
+      label: Model identifier
+      description: |
+        The exact model id if you know it (for example, a Claude model id, a Codex
+        model id, or the Ollama tag like `llama3.1:8b`). Leave blank if unknown.
+      placeholder: claude-... / gpt-... / llama3.1:8b
+    validations:
+      required: false
+
+  - type: dropdown
+    id: event-type
+    attributes:
+      label: Related AgentEvent type
+      description: |
+        If the bug relates to a specific event, pick the closest type from the
+        frozen `AgentEventType` union. Choose "Unknown" if you are not sure.
+      multiple: false
+      options:
+        - Unknown / not sure
+        - session_start
+        - session_end
+        - thinking
+        - message
+        - tool_call
+        - tool_result
+        - file_read
+        - file_edit
+        - file_create
+        - file_delete
+        - command_run
+        - command_output
+        - search
+        - web_fetch
+        - git_action
+        - subagent_spawned
+        - subagent_finished
+        - todo_update
+        - permission_request
+        - token_usage
+        - error
+        - complete
+    validations:
+      required: false
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected area
+      description: Which part of vsclaude does this bug touch? Select all that apply.
+      multiple: true
+      options:
+        - Pixie animation / Rive state machine
+        - Swarm view (sub-agents)
+        - Plain-language captions
+        - Event timeline / drill-in detail
+        - Monaco editor
+        - Terminal (xterm.js / PTY)
+        - Provider adapter
+        - Secret storage / keychain
+        - Process or PTY lifecycle (Rust core)
+        - Auto-update
+        - Settings / onboarding
+        - Performance (jank, memory, CPU)
+        - Accessibility
+        - Other
+    validations:
+      required: false
+
+  - type: dropdown
+    id: pixie-state
+    attributes:
+      label: Pixie state involved
+      description: |
+        If this is a motion bug, which Pixie state was shown (or should have been
+        shown)? This maps directly to a Rive state. Leave as the default if the
+        bug is not about animation.
+      multiple: false
+      options:
+        - Not applicable
+        - greeting
+        - idle
+        - sleeping
+        - thinking
+        - planning
+        - reading
+        - typing
+        - searching
+        - web
+        - running
+        - debugging
+        - building
+        - git
+        - spawning
+        - waiting
+        - success
+        - confused
+    validations:
+      required: false
+
+  # -------------------------------------------------------------------------
+  # Environment
+  # -------------------------------------------------------------------------
+  - type: markdown
+    attributes:
+      value: |
+        ### Environment
+
+        Environment details let us match bugs to a specific OS, build, or
+        rendering backend. You can find the app version and build channel under
+        **Help -> About vsclaude**.
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      description: Which OS were you running vsclaude on?
+      multiple: false
+      options:
+        - Windows 11
+        - Windows 10
+        - macOS (Apple Silicon)
+        - macOS (Intel)
+        - Linux (Debian / Ubuntu family)
+        - Linux (Fedora / RHEL family)
+        - Linux (Arch family)
+        - Linux (other)
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: os-version
+    attributes:
+      label: OS version detail
+      description: The precise OS version or distro release, if you know it.
+      placeholder: "macOS 14.5 / Ubuntu 24.04 / Windows 11 23H2"
+    validations:
+      required: false
+
+  - type: input
+    id: app-version
+    attributes:
+      label: vsclaude version
+      description: |
+        The app version from **Help -> About vsclaude**. Include the build channel
+        if relevant (stable, beta, or nightly).
+      placeholder: "1.4.2 (stable)"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: install-source
+    attributes:
+      label: Install source
+      description: How did you install vsclaude?
+      multiple: false
+      options:
+        - Official release binary (GitHub Releases)
+        - Package manager (Homebrew, winget, AUR, etc.)
+        - Built from source
+        - Other
+    validations:
+      required: false
+
+  - type: dropdown
+    id: renderer
+    attributes:
+      label: Rendering backend (if known)
+      description: |
+        The terminal uses an xterm.js WebGL renderer, and the swarm view can fall
+        back to a PixiJS canvas. If you know which path was active, tell us. This
+        helps with graphics and performance bugs.
+      multiple: false
+      options:
+        - Not sure
+        - WebGL (default)
+        - Canvas / software fallback
+        - DOM fallback
+    validations:
+      required: false
+
+  - type: textarea
+    id: env-extra
+    attributes:
+      label: Additional environment details
+      description: |
+        Anything else about your setup that might matter: GPU model, display
+        scaling, multiple monitors, remote or VM session, locale, or whether you
+        run a custom or self-hosted provider endpoint.
+      placeholder: |
+        - GPU: integrated, no discrete card
+        - Display: 4K at 200% scaling
+        - Running inside a VM via remote desktop
+    validations:
+      required: false
+
+  # -------------------------------------------------------------------------
+  # Logs and evidence
+  # -------------------------------------------------------------------------
+  - type: markdown
+    attributes:
+      value: |
+        ### Logs and evidence
+
+        Logs are the single most useful thing you can give us. Open them with
+        **Help -> Open Logs Folder**. The folder contains:
+
+        | Log file                | What it captures                                    |
+        | ----------------------- | --------------------------------------------------- |
+        | `app.log`               | Frontend and IPC bridge messages                    |
+        | `core.log`              | Rust core: process, PTY, and filesystem watcher      |
+        | `agent-events.ndjson`   | The normalized `AgentEvent` stream for the session   |
+        | `provider-<name>.log`   | Raw output from a specific provider adapter          |
+
+        Please redact any API keys or tokens before pasting. Long logs can be
+        attached as files by dragging them into a comment after you submit.
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: |
+        Paste the relevant section of your logs. The lines around the moment the
+        bug happened are the most useful. This box renders as a code block, so
+        you do not need to add backticks yourself.
+      render: shell
+      placeholder: |
+        Paste the few seconds of app.log and core.log around the failure here.
+    validations:
+      required: false
+
+  - type: textarea
+    id: agent-event
+    attributes:
+      label: Relevant AgentEvent JSON
+      description: |
+        If the bug involves the event stream, paste the offending event(s) from
+        `agent-events.ndjson`. Each line is a single JSON `AgentEvent`. One or two
+        events is usually enough. Remove the `raw` field if it contains anything
+        sensitive.
+      render: json
+      placeholder: |
+        {"id":"evt_123","sessionId":"s_1","agentId":"a_1","ts":1718900000000,"type":"command_run","provider":"claude-code","schemaVersion":1,"tool":{"name":"Bash","input":{"command":"pnpm build"}},"caption":"Running the build"}
+    validations:
+      required: false
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots or screen recording
+      description: |
+        For motion and UI bugs, a short screen recording is worth a thousand
+        words. Drag image or video files directly into this box to attach them.
+      placeholder: Drag and drop a screenshot or recording here.
+    validations:
+      required: false
+
+  # -------------------------------------------------------------------------
+  # Impact and extras
+  # -------------------------------------------------------------------------
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: How badly does this bug affect your ability to use vsclaude?
+      multiple: false
+      options:
+        - Blocker (the app is unusable or crashes)
+        - High (a core flow is broken, no workaround)
+        - Medium (a feature is broken, but there is a workaround)
+        - Low (cosmetic or minor annoyance)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: regression
+    attributes:
+      label: Is this a regression?
+      description: Did this work in a previous version of vsclaude?
+      multiple: false
+      options:
+        - "No, or not sure"
+        - "Yes, it worked in an earlier version"
+    validations:
+      required: false
+
+  - type: input
+    id: last-working-version
+    attributes:
+      label: Last known working version
+      description: If this is a regression, which version was the last one that worked?
+      placeholder: "1.3.0"
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: |
+        Anything else we should know. Workarounds you found, links to related
+        issues, or a hypothesis about the cause if you have one.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      description: Optional. Let us know if you want to help fix this.
+      options:
+        - label: I am willing to open a pull request to fix this bug.
+          required: false

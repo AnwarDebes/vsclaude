@@ -1,0 +1,310 @@
+name: Feature request
+description: Propose a new capability, enhancement, or motion behavior for vsclaude.
+title: "[Feature]: "
+labels:
+  - "type: feature"
+  - "needs triage"
+# This is a GitHub issue form. The schema reference lives at:
+# https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/syntax-for-githubs-form-schema
+#
+# vsclaude is a cozy, purpose-built IDE where a developer watches their AI coding
+# agent work through living pixel-art animation instead of scrolling walls of text.
+# A pixel-art companion named Pixie acts out exactly what the agent is doing in real
+# time, bound to real events. Every feature must respect the three sacred motion rules
+# and serve at least one product pillar. This form collects the context maintainers
+# need to triage, scope, and accept a proposal without a round trip of clarifying
+# questions.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Thanks for proposing a feature
+
+        Before you fill this out, please:
+
+        - Search [existing issues](https://github.com/AnwarDebes/vsclaude/issues?q=is%3Aissue) so we avoid duplicates.
+        - Skim the [Architecture](../../docs/ARCHITECTURE.md) and [Motion](../../docs/MOTION.md) specs so your proposal fits the system.
+        - Remember the three sacred motion rules. Every feature is judged against them.
+
+        ### The three sacred motion rules
+
+        | # | Rule | What it means for your proposal |
+        |---|------|---------------------------------|
+        | 1 | Every animation is bound to a real event | Nothing is decorative theater. If Pixie reacts, an `AgentEvent` caused it. |
+        | 2 | Meaning is always preserved and recoverable | One click always drills into the exact tool name, inputs, diff, command, or raw output. |
+        | 3 | A non-technical person can follow along | Plain-language captions describe what is happening in real time. |
+
+        If a proposal violates a rule, say how you would keep the rule intact anyway. Proposals that cannot satisfy all three are unlikely to land.
+
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Preflight checklist
+      description: Confirm you have done the basics. This keeps the tracker clean for everyone.
+      options:
+        - label: I searched existing issues and discussions and did not find a duplicate.
+          required: true
+        - label: This is a single, focused request, not a bundle of unrelated ideas.
+          required: true
+        - label: My proposal can satisfy all three sacred motion rules, or I explain below how it stays compatible with them.
+          required: true
+        - label: I am willing to discuss tradeoffs and iterate on the design.
+          required: false
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: >
+        What is the user problem or unmet need? Describe the situation, who hits it, and how
+        often. Focus on the pain, not the solution. A strong problem statement is concrete and
+        observable, not aspirational.
+      placeholder: |
+        As a developer running a long Claude Code session, I cannot tell at a glance whether
+        the agent is stuck waiting on a permission prompt or genuinely thinking. Pixie shows
+        the `waiting` state, but I miss it when I look away, so I lose minutes per session.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed solution
+      description: >
+        Describe the behavior you want. Be concrete and implementable. If it touches motion,
+        name the Pixie state, mood, or intensity. If it touches data, name the `AgentEvent`
+        type or types involved. If it touches UI, describe the surface (editor, terminal,
+        swarm canvas, captions rail, drill-down panel).
+      placeholder: |
+        When an `AgentEvent` of type `permission_request` arrives and stays unanswered for
+        more than N seconds, escalate the `waiting` Pixie state with a higher `intensity`
+        input and a gentle, repeating accent (Lottie, off by default) so the user notices.
+        Clicking Pixie drills into the exact permission request payload.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: pillar
+    attributes:
+      label: Which pillar does this serve?
+      description: >
+        Pick the single pillar this feature most advances. If it serves several, choose the
+        primary one and mention the others in additional context. Proposals that do not clearly
+        serve a pillar are usually out of scope.
+      multiple: false
+      options:
+        - "Usability above all (clarity, low friction, the trader-grade at-a-glance feel)"
+        - "Alive and cozy (Pixie motion, warmth, delight that stays truthful)"
+        - "Truthful by construction (every visual maps to a real event, meaning recoverable)"
+        - "Any model your key (Claude Code, Codex, Gemini, Ollama behind one experience)"
+        - "Fast and light (low CPU and memory, no DOM stalls, smooth 60fps motion)"
+        - "Open and extensible (clean adapters, the AgentEvent contract, plugin surfaces)"
+        - "Accessible (keyboard navigation, screen readers, contrast, reduced motion)"
+        - "Other or unsure (explain in additional context)"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Primary area
+      description: Where does this feature mostly live? This routes the issue to the right owners.
+      multiple: false
+      options:
+        - "Pixie and motion (Rive state machine, sprite fallback, GSAP timelines)"
+        - "AgentEvent schema and provider adapters (Claude Code, Codex, Gemini, Ollama)"
+        - "Swarm view (subagent spawning, PixiJS canvas)"
+        - "Editor (Monaco)"
+        - "Terminal and PTY (xterm.js, Rust PTY lifecycle)"
+        - "Captions and drill-down (plain-language layer, raw detail panel)"
+        - "Rust core (process lifecycle, filesystem watch, keychain, IPC, auto-update)"
+        - "Design system and theming (Tailwind v4, CSS variable tokens)"
+        - "Settings, onboarding, and key management"
+        - "Build, packaging, and release (Tauri, Changesets)"
+        - "Docs and developer experience"
+        - "Other (explain in additional context)"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: providers
+    attributes:
+      label: Affected providers
+      description: >
+        Which agent providers does this feature touch? Because everything visual consumes only
+        `AgentEvent`, most features are provider neutral. Choose only the ones that need adapter
+        changes. Select all that apply.
+      multiple: true
+      options:
+        - "Provider neutral (works through the shared AgentEvent stream, no adapter change)"
+        - "Claude Code (stream-json or Agent SDK)"
+        - "Codex"
+        - "Gemini"
+        - "Ollama (local models)"
+        - "New or custom provider"
+    validations:
+      required: false
+
+  - type: textarea
+    id: event-mapping
+    attributes:
+      label: Event and motion mapping
+      description: >
+        If this feature reacts to agent activity, show how it maps onto the frozen
+        `AgentEvent` contract and, where relevant, a Pixie state. This is the single most
+        useful thing you can give a maintainer. Fenced code is encouraged. Leave the block as is
+        if your feature does not touch events or motion, and say so.
+      value: |
+        ```ts
+        // Frozen contract for reference: packages/contracts/src/agent-event.ts
+        // type AgentEventType =
+        //   | 'session_start' | 'session_end'
+        //   | 'thinking' | 'message'
+        //   | 'tool_call' | 'tool_result'
+        //   | 'file_read' | 'file_edit' | 'file_create' | 'file_delete'
+        //   | 'command_run' | 'command_output'
+        //   | 'search' | 'web_fetch' | 'git_action'
+        //   | 'subagent_spawned' | 'subagent_finished'
+        //   | 'todo_update' | 'permission_request' | 'token_usage'
+        //   | 'error' | 'complete';
+
+        // Trigger event(s) this feature listens to:
+        // e.g. 'permission_request'
+
+        // Resulting Pixie state / mood / intensity (if any):
+        // state: waiting   mood: focused   intensity: high
+
+        // What the drill-down (rule 2) reveals on click:
+        // the raw permission_request payload (tool name, inputs)
+
+        // Plain-language caption (rule 3):
+        // "Pixie is waiting for you to approve writing src/app.ts"
+        ```
+    validations:
+      required: false
+
+  - type: textarea
+    id: ux-sketch
+    attributes:
+      label: UX sketch or flow
+      description: >
+        Optional. Describe the interaction step by step, paste an ASCII or mermaid diagram, or
+        attach a screenshot or mockup by dragging it into this field. Show the happy path and at
+        least one edge case (long idle, error, rapid event burst, reduced-motion mode).
+      placeholder: |
+        ```mermaid
+        sequenceDiagram
+          participant Agent
+          participant Stream as AgentEvent stream
+          participant Pixie
+          participant User
+          Agent->>Stream: permission_request
+          Stream->>Pixie: enter waiting (intensity rises after N s)
+          User->>Pixie: clicks to drill down
+          Pixie->>User: shows raw tool input
+        ```
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: >
+        What other approaches did you weigh, and why did you reject them? Include the option of
+        doing nothing. Listing alternatives shows you have thought about tradeoffs and helps us
+        avoid relitigating settled ground.
+      placeholder: |
+        - A persistent banner at the top of the window: rejected, it competes with Pixie and
+          breaks the cozy, single-focal-point feel (pillar: alive and cozy).
+        - An OS-level notification: kept as a follow-up, but it does not solve the in-app
+          glanceability problem on its own.
+        - Do nothing: the lost minutes per session add up and erode trust in the tool.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: motion-rule-risk
+    attributes:
+      label: Motion rule risk
+      description: >
+        Be honest about whether this feature stresses any of the three sacred rules. Maintainers
+        will probe this during triage, so flag it now.
+      multiple: false
+      options:
+        - "No risk: fits all three rules cleanly"
+        - "Rule 1 risk: the motion is not yet bound to a concrete event"
+        - "Rule 2 risk: the drill-down path to raw detail is unclear"
+        - "Rule 3 risk: a plain-language caption is hard to write"
+        - "Multiple rules at risk (explain in additional context)"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: accessibility
+    attributes:
+      label: Accessibility and reduced motion
+      description: >
+        Accessibility is a pillar, not an afterthought. How does this feature behave for users
+        on keyboard only, with a screen reader, or with reduced-motion enabled?
+      multiple: false
+      options:
+        - "Fully accounted for: keyboard, screen reader, and reduced-motion behavior described below"
+        - "Partially: I described the main path but need help with the rest"
+        - "Not yet considered: I would like guidance"
+        - "Not applicable: this feature has no user-facing surface"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Estimated scope
+      description: Your rough sense of size. Maintainers will recalibrate. This is only a starting signal.
+      multiple: false
+      options:
+        - "Small: a contained change, one package, low risk"
+        - "Medium: touches a few packages or an adapter"
+        - "Large: spans the Rust core, the contract, and the frontend"
+        - "Unsure"
+    validations:
+      required: false
+
+  - type: input
+    id: platforms
+    attributes:
+      label: Target platforms
+      description: >
+        Which desktop platforms must this support? The shell is Tauri 2.x, so list the OSes that
+        matter for this feature (macOS, Windows, Linux, or all).
+      placeholder: "All (macOS, Windows, Linux)"
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: >
+        Anything else: related issues, prior art from other tools, performance concerns, data or
+        privacy implications, links to the relevant spec sections, or notes on why an earlier
+        decision should be revisited. Cross-link sibling specs with relative links where helpful.
+      placeholder: |
+        Related: #123. Prior art: how some terminals surface a blocked prompt. Performance note:
+        the escalation timer should live in the Rust core so it survives a webview reload. See
+        [Architecture](../../docs/ARCHITECTURE.md) for the IPC bridge details.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      description: Optional. Tell us how involved you would like to be.
+      options:
+        - label: I am willing to open a pull request for this feature.
+          required: false
+        - label: I can help test a prototype on my platform.
+          required: false
+        - label: I can help write or review the docs for this feature.
+          required: false

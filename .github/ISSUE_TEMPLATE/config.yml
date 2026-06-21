@@ -1,0 +1,130 @@
+# =============================================================================
+# vsclaude :: GitHub Issue Template chooser configuration
+# -----------------------------------------------------------------------------
+# Path: .github/ISSUE_TEMPLATE/config.yml
+#
+# This file configures the issue-creation chooser that GitHub renders when a
+# user clicks "New issue" on the vsclaude repository. It does two things:
+#
+#   1. Disables the legacy "blank issue" escape hatch so that every report
+#      flows through a structured form (bug report, feature request, Pixie
+#      motion bug, provider-adapter bug, and so on). Structured forms keep the
+#      AgentEvent contract, the Rive state inputs, and the Tauri/Rust core
+#      version information attached to each report, which is what triage needs.
+#
+#   2. Declares a small set of "contact links". These appear as extra buttons
+#      on the chooser screen and route people who do not actually have a bug to
+#      the right place (Discussions for questions, the docs site for how-to
+#      content, the security policy for vulnerabilities, and the chat for live
+#      help). Fewer misfiled issues means faster triage for real defects.
+#
+# GitHub schema reference (the only two top-level keys are recognized):
+#   blank_issues_enabled: boolean
+#   contact_links:        list of { name, url, about }
+#
+# Notes on the schema (important, easy to get wrong):
+#   - `name`  is the button title shown in the chooser.
+#   - `url`   MUST be an absolute http(s) URL. Relative paths do not work here.
+#   - `about` is one line of helper text under the button title.
+#   - Contact links are NOT issue forms. They never open the issue editor.
+#     They simply send the user elsewhere. Use them for "this is not a bug"
+#     destinations only.
+#   - The actual structured forms live next to this file as separate
+#     `*.yml` files (for example `bug_report.yml`, `feature_request.yml`,
+#     `pixie_motion_bug.yml`, `provider_adapter_bug.yml`). This config file
+#     does not list those forms; GitHub discovers them automatically. This
+#     file only governs the blank-issue toggle and the contact links.
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Disable free-form blank issues.
+#
+# When false, the "Open a blank issue" link is removed from the chooser. Every
+# report must use one of the structured forms, which guarantees we collect the
+# fields triage depends on:
+#
+#   - vsclaude app version and channel (stable / beta)
+#   - OS and architecture (Tauri shell target: macOS, Windows, Linux)
+#   - Provider in use (claude-code | codex | gemini | ollama | other)
+#   - AgentEvent schemaVersion when the bug touches the event stream
+#   - Rive state / mood / intensity when the bug is a Pixie motion defect
+#
+# Maintainers can still open blank issues via the URL query trick
+# (`...?template=` omitted) if absolutely needed, but the public chooser will
+# not offer it.
+# -----------------------------------------------------------------------------
+blank_issues_enabled: false
+
+# -----------------------------------------------------------------------------
+# Contact links shown beneath the structured issue forms.
+#
+# Order matters: the chooser renders these top to bottom, so the most common
+# "not a bug" destinations come first. Keep this list short and unambiguous.
+# Every entry routes a category of report away from the issue tracker so the
+# tracker stays a list of actionable defects and scoped feature work.
+# -----------------------------------------------------------------------------
+contact_links:
+  # ---------------------------------------------------------------------------
+  # Questions, ideas, and "is this expected?" go to Discussions, not Issues.
+  # This is the single biggest source of misfiled issues, so it leads.
+  # ---------------------------------------------------------------------------
+  - name: Questions and general help
+    url: https://github.com/vsclaude/vsclaude/discussions/categories/q-a
+    about: >-
+      Not sure if it is a bug? Ask in Q&A Discussions first. Setup help,
+      "why does Pixie do X", bring-your-own-key questions, and provider
+      configuration belong here.
+
+  # ---------------------------------------------------------------------------
+  # Feature brainstorming that is not yet a concrete, scoped request.
+  # The Ideas board lets the community vote before it becomes a tracked form.
+  # ---------------------------------------------------------------------------
+  - name: Feature ideas and brainstorming
+    url: https://github.com/vsclaude/vsclaude/discussions/categories/ideas
+    about: >-
+      Have a rough idea for a new Pixie state, a new provider adapter, or a
+      workflow improvement? Float it in Ideas. Well-shaped requests can graduate
+      to a Feature Request issue later.
+
+  # ---------------------------------------------------------------------------
+  # Documentation: install, build prerequisites (Rust toolchain, pnpm), the
+  # AgentEvent contract, provider adapters, and the Pixie state catalog.
+  # ---------------------------------------------------------------------------
+  - name: Documentation and setup guides
+    url: https://vsclaude.dev/docs
+    about: >-
+      Installation, the Rust toolchain and pnpm prerequisites, the AgentEvent
+      schema, writing a provider adapter, and the full Pixie state catalog are
+      documented here. Check the docs before filing a "how do I" issue.
+
+  # ---------------------------------------------------------------------------
+  # Security: vulnerabilities must NEVER be filed as public issues. Route to
+  # the private advisory flow. vsclaude stores secrets in the OS keychain and
+  # runs untrusted agent output, so this link is non-negotiable.
+  # ---------------------------------------------------------------------------
+  - name: Report a security vulnerability (private)
+    url: https://github.com/vsclaude/vsclaude/security/advisories/new
+    about: >-
+      Do NOT open a public issue for security problems. Report exposed keys,
+      keychain access flaws, PTY or command-execution sandbox escapes, and
+      auto-update integrity issues privately via GitHub Security Advisories.
+
+  # ---------------------------------------------------------------------------
+  # Live community chat for fast, low-stakes back-and-forth.
+  # ---------------------------------------------------------------------------
+  - name: Community chat (Discord)
+    url: https://discord.gg/vsclaude
+    about: >-
+      Real-time help, motion-design chat, and provider tinkering with the
+      maintainers and community. Great for quick questions that do not need a
+      paper trail.
+
+  # ---------------------------------------------------------------------------
+  # Code of Conduct so the link is one click away from every contributor.
+  # ---------------------------------------------------------------------------
+  - name: Code of Conduct
+    url: https://github.com/vsclaude/vsclaude/blob/main/CODE_OF_CONDUCT.md
+    about: >-
+      Our community standards. Please read before participating. Conduct
+      concerns go to the contacts listed in that document, not to the issue
+      tracker.
