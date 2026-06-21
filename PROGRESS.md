@@ -5,9 +5,32 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-21. Session 1 (Phase 0 foundation).
+2026-06-21. Session 1 (Phase 0 foundation, plus the agent action integration).
 
-## What this session delivered
+## Agent action integration
+
+The 200 agent behaviors shown in the banner are now a working part of the IDE,
+wired through every layer:
+
+- **Contracts**: a canonical `AgentAction` catalog (`packages/contracts/src/actions.ts`),
+  200 actions across 20 categories, each mapped to its `AgentEventType`,
+  `PixieState`, and a plain-language caption. `MotionDirective` gained an
+  `actionId` field.
+- **Motion**: `classifyAction(event)` (`packages/motion/src/classify.ts`) resolves
+  any real event to its most specific action (git kind, command keywords, tool
+  name). The mapper stamps the resolved `actionId` onto every directive.
+- **Icons**: `scripts/gen-action-icons.mjs` extracts the 200 pixel symbols from
+  the banner into a sprite (`apps/desktop/src/assets/pixie-actions.svg`), verified
+  to match the catalog exactly. `ActionIcon` renders Pixie performing any action.
+- **App**: the Pixie stage shows Pixie performing the current action, and the
+  activity feed shows each event's action icon, label, and caption, with the
+  action id in the drill-down.
+- **Docs**: `docs/agent-actions.md` is generated from the catalog by
+  `scripts/gen-actions-doc.mjs`.
+
+All layers build, type, test, and lint clean.
+
+## What the Phase 0 session delivered
 
 The complete Phase 0 foundation, built, typed, tested, and linted clean.
 

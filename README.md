@@ -205,6 +205,7 @@ next milestones. See [ROADMAP.md](./ROADMAP.md) and [PROGRESS.md](./PROGRESS.md)
 - [Specifications](./specs) - the full contract every module is built against
 - [Getting started](./docs/getting-started.md)
 - [Pixie states guide](./docs/pixie-states.md)
+- [Agent actions catalog](./docs/agent-actions.md) - the 200 behaviors Pixie performs
 - [Architecture overview](./docs/architecture-overview.md)
 - [FAQ](./docs/faq.md)
 
