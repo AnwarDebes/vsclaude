@@ -1,3 +1,6 @@
+# Local reference clones (not part of this repo)
+Claude-Code-In-Motion/
+
 # Dependencies
 node_modules/
 .pnp
