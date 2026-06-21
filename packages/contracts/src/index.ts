@@ -15,6 +15,7 @@ export * from './event-payloads.js';
 export * from './provider.js';
 export * from './ipc.js';
 export * from './motion.js';
+export * from './actions.js';
 export * from './design-tokens.js';
 export * from './plugin-api.js';
 export * from './state.js';

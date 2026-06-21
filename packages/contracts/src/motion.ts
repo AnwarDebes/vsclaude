@@ -77,6 +77,8 @@ export interface MotionDirective {
   caption?: string;
   /** The id of the AgentEvent that produced this directive (sacred rule 2). */
   sourceEventId?: string;
+  /** The fine-grained agent action this directive represents (see actions catalog). */
+  actionId?: string;
 }
 
 /**

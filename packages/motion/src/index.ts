@@ -24,6 +24,8 @@ export type { MapperOptions } from './mapper.js';
 
 export { captionFor, basename, truncate } from './captions.js';
 
+export { classifyAction } from './classify.js';
+
 export { intensityFor, moodFor, clamp01 } from './intensity.js';
 
 export {

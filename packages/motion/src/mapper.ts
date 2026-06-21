@@ -5,6 +5,7 @@ import type {
 } from '@vsclaude/contracts';
 import { REST_DIRECTIVE } from '@vsclaude/contracts';
 import { captionFor } from './captions.js';
+import { classifyAction } from './classify.js';
 import { intensityFor, moodFor } from './intensity.js';
 import {
   gazeForEvent,
@@ -67,6 +68,7 @@ function buildDirective(input: {
   sourceEventId: MotionDirective['sourceEventId'];
   gaze: MotionDirective['gaze'];
   mood: MotionDirective['mood'];
+  actionId: MotionDirective['actionId'];
 }): MotionDirective {
   return {
     ...REST_DIRECTIVE,
@@ -76,6 +78,7 @@ function buildDirective(input: {
     gaze: input.gaze,
     caption: input.caption,
     sourceEventId: input.sourceEventId,
+    actionId: input.actionId,
   };
 }
 
@@ -169,6 +172,7 @@ export class Mapper {
       sourceEventId: event.id,
       gaze,
       mood,
+      actionId: classifyAction(event),
     });
     return this.directive;
   }
