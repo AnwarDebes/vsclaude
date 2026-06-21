@@ -217,6 +217,6 @@ above all others: the animation never lies.
 
 ## License
 
-[MIT](./LICENSE) (c) 2026 Anwar Debes.
+[MIT](./LICENSE) (c) 2026.
 
 <div align="center"><sub>Made with care. The truth, made beautiful.</sub></div>
