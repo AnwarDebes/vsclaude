@@ -1,8 +1,10 @@
 name: Release
 
+# Releases are manual until the packages are first published. Trigger this from
+# the Actions tab once an NPM_TOKEN secret is configured and there are changesets
+# to version. To automate later, add a `push: branches: [main]` trigger.
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
 
 # Changesets opens and maintains a release pull request, and publishes when it
 # is merged. Publishing requires an NPM_TOKEN secret to be configured.
