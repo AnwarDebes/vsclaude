@@ -190,15 +190,37 @@ pnpm tauri:dev
 The first run plays a scripted demo session so you can meet Pixie immediately.
 Connect a provider and the very same view renders a real run, no changes.
 
+To build the native installers:
+
+```bash
+# produces the native executable plus a .msi and a setup .exe (Windows),
+# a .dmg (macOS), and an .AppImage and .deb (Linux)
+pnpm --filter @vsclaude/desktop tauri:build
+```
+
+See [BUILD.md](./BUILD.md) for packaging, signing, and the release pipeline.
+
 ## Project status
 
-This is **Phase 0**: the foundation is in place. The frozen `AgentEvent` contract,
-the full design-token and theme system, real initial domain logic in every package
-(the event-to-motion mapper, the Claude Code stream parser, the agent-tree
-reducer, the timeline builder, and more), a working animated demo app, and the
-complete specification set are all here, built, typed, and tested. The Rive
-artboards, the Monaco and xterm integrations, and the native installers are the
-next milestones. See [ROADMAP.md](./ROADMAP.md) and [PROGRESS.md](./PROGRESS.md).
+vsclaude now runs as a **real native desktop IDE**. The frozen `AgentEvent`
+contract and every package (the event-to-motion mapper, the Claude Code stream
+parser, the agent-tree reducer, the timeline builder, the swarm helpers, and
+more) are built, typed, and tested. On top of them the app ships:
+
+- a multi-panel IDE shell with a **Monaco** editor, an **xterm** terminal on a
+  real Rust PTY, the swarm view, the conversation timeline, a token dashboard,
+  and a narrated accessibility stream,
+- a **live Claude Code provider** (the Rust core spawns the CLI and streams it),
+  with a recorded demo as the fallback,
+- a **git diff review and commit** flow,
+- a command palette, five presentation modes, runtime theming,
+- **Storybook** with a story for every component and Pixie state,
+- **Playwright** end-to-end tests, and a three-OS **installer pipeline**.
+
+Native `vsclaude.exe`, a WiX `.msi`, and an NSIS setup `.exe` build and run today.
+Remaining: signed release builds (your certificates), auto-update hosting, the
+Rive Pixie artboard, and an open-folder workspace. See [ROADMAP.md](./ROADMAP.md)
+and [PROGRESS.md](./PROGRESS.md).
 
 ## Documentation
 
