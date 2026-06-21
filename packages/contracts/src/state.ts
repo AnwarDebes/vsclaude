@@ -1,0 +1,110 @@
+/**
+ * Shared application state shapes.
+ *
+ * These are the cross-package data structures that the Zustand stores in the
+ * renderer build on. Keeping them in contracts means the chat panel, the swarm
+ * view, the motion engine, and persistence all describe a session the same way.
+ */
+import type { AgentEvent, ProviderId } from './agent-event.js';
+import type { TodoItem } from './event-payloads.js';
+
+/** The five ways Pixie can be presented. Remembered per user. */
+export type PresentationMode = 'companion' | 'stage' | 'swarm' | 'minimal' | 'cozy';
+
+/** An opened workspace folder. */
+export interface Workspace {
+  rootPath: string;
+  name: string;
+}
+
+/** Lifecycle status of one agent in the delegation tree. */
+export type AgentStatus = 'spawning' | 'active' | 'waiting' | 'finished' | 'error' | 'cancelled';
+
+/** One node in the agent delegation tree, the backbone of the swarm view. */
+export interface AgentNode {
+  agentId: string;
+  parentAgentId?: string;
+  provider: ProviderId;
+  /** The task label shown at this Pixie's workshop station. */
+  task?: string;
+  status: AgentStatus;
+  startedAt: number;
+  finishedAt?: number;
+  /** Child agent ids this node delegated to. */
+  children: string[];
+  /** Running token and cost totals for this agent. */
+  tokens?: { input: number; output: number; costUsd?: number };
+}
+
+/** The full delegation tree for a session. */
+export interface AgentTree {
+  rootAgentId: string;
+  nodes: Record<string, AgentNode>;
+}
+
+/** Metadata describing a saved or active session. */
+export interface SessionMeta {
+  id: string;
+  name: string;
+  provider: ProviderId;
+  model?: string;
+  cwd: string;
+  createdAt: number;
+  updatedAt: number;
+  /** A short auto-generated or user-set summary. */
+  summary?: string;
+}
+
+/** A persisted session: its metadata plus the full event log to replay. */
+export interface PersistedSession {
+  meta: SessionMeta;
+  events: AgentEvent[];
+  todos?: TodoItem[];
+  checkpoints?: Checkpoint[];
+}
+
+/** A checkpoint: a snapshot the user can roll back to. */
+export interface Checkpoint {
+  id: string;
+  sessionId: string;
+  label: string;
+  createdAt: number;
+  /** Index into the session event log this checkpoint corresponds to. */
+  eventIndex: number;
+  /** Opaque handle to the workspace snapshot held by the Rust core. */
+  snapshotRef: string;
+}
+
+/** Sound preferences. Sound is off by default. */
+export interface SoundSettings {
+  enabled: boolean;
+  masterVolume: number;
+  typing: boolean;
+  ambient: boolean;
+}
+
+/** User-level application settings. */
+export interface AppSettings {
+  themeId: string;
+  presentationMode: PresentationMode;
+  reducedMotion: boolean;
+  colorBlindSafe: boolean;
+  sound: SoundSettings;
+  defaultProvider: ProviderId;
+  /** Map of provider id to last-used model. */
+  models: Record<string, string>;
+  /** Telemetry is opt-in and off by default. */
+  telemetry: boolean;
+}
+
+/** The default settings a fresh install starts from. */
+export const DEFAULT_SETTINGS: AppSettings = {
+  themeId: 'cozy-dark',
+  presentationMode: 'companion',
+  reducedMotion: false,
+  colorBlindSafe: false,
+  sound: { enabled: false, masterVolume: 0.6, typing: true, ambient: false },
+  defaultProvider: 'claude-code',
+  models: {},
+  telemetry: false,
+};
