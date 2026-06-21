@@ -336,6 +336,14 @@ body {
   flex: none;
 }
 
+.activity-item__icon {
+  flex: none;
+  display: flex;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+}
+
 .activity-item__caption {
   flex: 1;
   font-size: 0.9rem;

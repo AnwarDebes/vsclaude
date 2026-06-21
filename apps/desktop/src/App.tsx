@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { REST_DIRECTIVE, type MotionDirective } from '@vsclaude/contracts';
+import { classifyAction } from '@vsclaude/motion';
 import { demoEvents } from './demo-events';
 import { captionFor, pixieStateFor } from './lib/motion-lite';
 import { PixieStage } from './components/PixieStage';
+import { PixieActionSprite } from './components/ActionIcon';
 import { ActivityFeed } from './components/ActivityFeed';
 
 const STATE_LABELS: Record<string, string> = {
@@ -49,8 +51,11 @@ export function App() {
       gaze: { x: 0, y: 0 },
       caption: captionFor(current),
       sourceEventId: current.id,
+      actionId: classifyAction(current),
     };
   }, [current]);
+
+  const actionId = directive.actionId ?? 'rest';
 
   useEffect(() => {
     if (!playing) return;
@@ -71,6 +76,7 @@ export function App() {
 
   return (
     <div className="app-shell">
+      <PixieActionSprite />
       <header className="app-header">
         <div className="app-brand">
           <span className="app-brand__glyph" aria-hidden>
@@ -90,7 +96,7 @@ export function App() {
       </header>
 
       <main className="app-main">
-        <PixieStage state={directive.state} caption={directive.caption} stateLabel={stateLabel} />
+        <PixieStage actionId={actionId} caption={directive.caption} stateLabel={stateLabel} />
         <ActivityFeed events={seen} />
       </main>
 

@@ -62,6 +62,9 @@ importers:
       '@vsclaude/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts
+      '@vsclaude/motion':
+        specifier: workspace:*
+        version: link:../../packages/motion
       react:
         specifier: ^19.0.0
         version: 19.2.7

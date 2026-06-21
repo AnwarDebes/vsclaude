@@ -1,0 +1,824 @@
+<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" style="display:none" aria-hidden="true">
+  <defs>
+    <g id="pixie">
+      <rect x="9" y="4" width="2" height="4" fill="#d97757"/>
+      <rect x="8" y="3" width="3" height="2" fill="#e8a085"/>
+      <rect x="21" y="4" width="2" height="4" fill="#d97757"/>
+      <rect x="21" y="3" width="3" height="2" fill="#e8a085"/>
+      <rect x="7" y="8" width="18" height="16" fill="#d97757"/>
+      <rect x="6" y="9" width="20" height="14" fill="#d97757"/>
+      <rect x="8" y="9" width="16" height="2" fill="#e8a085"/>
+      <rect x="7" y="21" width="18" height="2" fill="#b85d40"/>
+      <rect x="11" y="13" width="3" height="4" fill="#2b2a27"/>
+      <rect x="18" y="13" width="3" height="4" fill="#2b2a27"/>
+      <rect x="12" y="13" width="1" height="1" fill="#f4efe2"/>
+      <rect x="19" y="13" width="1" height="1" fill="#f4efe2"/>
+      <rect x="9" y="24" width="2" height="4" fill="#b85d40"/>
+      <rect x="13" y="24" width="2" height="4" fill="#b85d40"/>
+      <rect x="17" y="24" width="2" height="4" fill="#b85d40"/>
+      <rect x="21" y="24" width="2" height="4" fill="#b85d40"/>
+    </g>
+
+  </defs>
+  <symbol id="act-greet" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="60" y="40" width="11" height="12" fill="#d97757"/><rect x="60" y="35" width="2" height="6" fill="#d97757"/><rect x="63" y="34" width="2" height="7" fill="#d97757"/><rect x="66" y="34" width="2" height="7" fill="#d97757"/><rect x="69" y="35" width="2" height="6" fill="#d97757"/><rect x="73" y="42" width="3" height="2" fill="#e8a085" opacity="0.7"/>
+  </symbol>
+  <symbol id="act-think" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="58" y="16" width="6" height="6" fill="#d97757"/><rect x="67" y="9" width="7" height="7" fill="#d97757" opacity="0.6"/>
+  </symbol>
+  <symbol id="act-plan" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="55" y="20" width="21" height="28" fill="#211d18" stroke="#34322a"/><rect x="62" y="16" width="7" height="6" fill="#34322a"/>
+    <rect x="58" y="26" width="3" height="3" fill="#7db36a"/><rect x="63" y="27" width="10" height="2" fill="#a8a69b"/><rect x="58" y="33" width="3" height="3" fill="#7db36a"/><rect x="63" y="34" width="10" height="2" fill="#a8a69b"/><rect x="58" y="40" width="3" height="3" fill="#34322a"/><rect x="63" y="41" width="7" height="2" fill="#a8a69b"/>
+  </symbol>
+  <symbol id="act-message" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="22" width="22" height="15" fill="#211d18" stroke="#34322a"/><rect x="58" y="37" width="6" height="4" fill="#211d18"/><rect x="58" y="27" width="14" height="2" fill="#a8a69b"/><rect x="58" y="31" width="10" height="2" fill="#a8a69b"/>
+  </symbol>
+  <symbol id="act-ask" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="20" width="22" height="16" fill="#211d18" stroke="#34322a"/><rect x="58" y="36" width="6" height="4" fill="#211d18"/><text x="65" y="33" font-size="13" font-weight="700" fill="#d97757" text-anchor="middle">?</text>
+  </symbol>
+  <symbol id="act-read" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="55" y="18" width="19" height="25" fill="#211d18" stroke="#34322a"/><rect x="59" y="23" width="11" height="2" fill="#a8a69b"/><rect x="59" y="28" width="11" height="2" fill="#a8a69b"/><rect x="59" y="33" width="11" height="2" fill="#a8a69b"/><rect x="59" y="38" width="7" height="2" fill="#a8a69b"/>
+  </symbol>
+  <symbol id="act-create" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="55" y="18" width="19" height="25" fill="#211d18" stroke="#34322a"/><rect x="63" y="27" width="4" height="11" fill="#7db36a"/><rect x="59" y="31" width="12" height="4" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-edit" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="55" y="18" width="19" height="25" fill="#211d18" stroke="#34322a"/><rect x="58" y="24" width="3" height="3" fill="#7db36a"/><rect x="62" y="25" width="9" height="2" fill="#a8a69b"/><rect x="58" y="30" width="3" height="3" fill="#e0594e"/><rect x="62" y="31" width="9" height="2" fill="#a8a69b"/><rect x="58" y="36" width="3" height="3" fill="#7db36a"/><rect x="62" y="37" width="7" height="2" fill="#a8a69b"/>
+  </symbol>
+  <symbol id="act-type" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 12) scale(1.6)"/>
+    <rect x="24" y="62" width="34" height="4" fill="#b85d40"/><rect x="27" y="53" width="28" height="10" fill="#2b2a27"/><rect x="29" y="55" width="24" height="6" fill="#bfe0e8"/>
+  </symbol>
+  <symbol id="act-delete" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="56" y="46" width="16" height="16" fill="#4a4640"/><rect x="54" y="42" width="20" height="3" fill="#b85d40"/><rect x="61" y="38" width="6" height="3" fill="#b85d40"/><rect x="60" y="50" width="2" height="9" fill="#2b2a27"/><rect x="66" y="50" width="2" height="9" fill="#2b2a27"/>
+  </symbol>
+  <symbol id="act-search" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <circle cx="59" cy="56" r="8" fill="none" stroke="#2b2a27" stroke-width="3"/><circle cx="59" cy="56" r="4" fill="#bfe0e8"/><rect x="64" y="61" width="9" height="4" fill="#2b2a27" transform="rotate(45 64 61)"/>
+  </symbol>
+  <symbol id="act-web" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <circle cx="61" cy="28" r="10" fill="none" stroke="#6c9bd9" stroke-width="2"/><rect x="51" y="27" width="20" height="2" fill="#6c9bd9"/><ellipse cx="61" cy="28" rx="4" ry="10" fill="none" stroke="#6c9bd9" stroke-width="2"/>
+  </symbol>
+  <symbol id="act-fetch" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="55" y="42" width="20" height="14" fill="#211d18" stroke="#34322a"/><rect x="63" y="20" width="4" height="12" fill="#6c9bd9"/><rect x="59" y="30" width="12" height="2" fill="#6c9bd9"/><rect x="61" y="32" width="8" height="2" fill="#6c9bd9"/><rect x="63" y="34" width="4" height="2" fill="#6c9bd9"/>
+  </symbol>
+  <symbol id="act-open" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="30" width="11" height="5" fill="#d97757"/><rect x="54" y="34" width="24" height="18" fill="#d97757"/><rect x="56" y="38" width="20" height="12" fill="#e8a085"/>
+  </symbol>
+  <symbol id="act-move" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="52" y="24" width="14" height="18" fill="#211d18" stroke="#34322a"/><rect x="64" y="52" width="10" height="3" fill="#a8a69b"/><rect x="70" y="49" width="3" height="3" fill="#a8a69b"/><rect x="70" y="55" width="3" height="3" fill="#a8a69b"/>
+  </symbol>
+  <symbol id="act-run" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="50" width="22" height="18" fill="#15140f" stroke="#34322a"/><rect x="57" y="54" width="2" height="2" fill="#7db36a"/><rect x="59" y="56" width="2" height="2" fill="#7db36a"/><rect x="57" y="58" width="2" height="2" fill="#7db36a"/><rect x="62" y="60" width="9" height="2" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-output" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="52" y="48" width="24" height="20" fill="#15140f" stroke="#34322a"/><rect x="55" y="52" width="14" height="2" fill="#7db36a"/><rect x="55" y="56" width="18" height="2" fill="#a8a69b"/><rect x="55" y="60" width="10" height="2" fill="#a8a69b"/><rect x="55" y="64" width="16" height="2" fill="#a8a69b"/>
+  </symbol>
+  <symbol id="act-test" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="22" width="20" height="22" fill="#211d18" stroke="#34322a"/><path d="M 57 30 l 3 3 l 6 -7" stroke="#7db36a" stroke-width="2" fill="none"/><path d="M 57 38 l 3 3 l 6 -7" stroke="#7db36a" stroke-width="2" fill="none"/>
+  </symbol>
+  <symbol id="act-build" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="55" y="46" width="10" height="10" fill="#d97757"/><rect x="66" y="46" width="10" height="10" fill="#b85d40"/><rect x="60" y="36" width="10" height="10" fill="#e8a085"/>
+  </symbol>
+  <symbol id="act-install" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="62" y="34" width="4" height="9" fill="#7db36a"/><rect x="58" y="40" width="12" height="2" fill="#7db36a"/><rect x="60" y="42" width="8" height="2" fill="#7db36a"/><rect x="54" y="46" width="20" height="16" fill="#d97757"/><rect x="54" y="46" width="20" height="4" fill="#b85d40"/>
+  </symbol>
+  <symbol id="act-format" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="59" y="22" width="2" height="8" fill="#f0c674"/><rect x="56" y="25" width="8" height="2" fill="#f0c674"/><rect x="69" y="36" width="2" height="6" fill="#f0c674"/><rect x="67" y="38" width="6" height="2" fill="#f0c674"/><rect x="56" y="46" width="2" height="5" fill="#f0c674" opacity="0.8"/><rect x="54" y="47" width="6" height="2" fill="#f0c674" opacity="0.8"/>
+  </symbol>
+  <symbol id="act-lint" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <circle cx="63" cy="34" r="11" fill="none" stroke="#7db36a" stroke-width="2"/><path d="M 58 34 l 4 4 l 7 -8" stroke="#7db36a" stroke-width="3" fill="none"/>
+  </symbol>
+  <symbol id="act-refactor" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="55" y="28" width="14" height="3" fill="#d97757"/><rect x="66" y="25" width="3" height="3" fill="#d97757"/><rect x="66" y="31" width="3" height="3" fill="#d97757"/><rect x="55" y="40" width="14" height="3" fill="#d97757"/><rect x="55" y="37" width="3" height="3" fill="#d97757"/><rect x="55" y="43" width="3" height="3" fill="#d97757"/>
+  </symbol>
+  <symbol id="act-debug" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <ellipse cx="60" cy="56" rx="7" ry="5" fill="#4a4640"/><rect x="59" y="50" width="2" height="3" fill="#4a4640"/><rect x="58" y="51" width="2" height="2" fill="#e0594e"/><rect x="50" y="53" width="3" height="2" fill="#4a4640"/><rect x="50" y="58" width="3" height="2" fill="#4a4640"/><rect x="67" y="53" width="3" height="2" fill="#4a4640"/><rect x="67" y="58" width="3" height="2" fill="#4a4640"/>
+  </symbol>
+  <symbol id="act-git" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="58" y="18" width="6" height="6" fill="#d97757"/><rect x="58" y="42" width="6" height="6" fill="#d97757"/><rect x="59" y="24" width="2" height="18" fill="#b85d40"/><rect x="61" y="30" width="9" height="2" fill="#b85d40"/><rect x="70" y="30" width="6" height="6" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-commit" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="62" y="20" width="2" height="28" fill="#b85d40"/><rect x="58" y="29" width="10" height="10" fill="#d97757"/><rect x="60" y="31" width="6" height="6" fill="#15140f"/>
+  </symbol>
+  <symbol id="act-branch" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="58" y="20" width="3" height="28" fill="#b85d40"/><rect x="59" y="30" width="12" height="3" fill="#b85d40"/><rect x="68" y="30" width="3" height="18" fill="#b85d40"/><rect x="55" y="17" width="7" height="7" fill="#d97757"/><rect x="66" y="44" width="7" height="7" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-push" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="56" y="40" width="20" height="12" fill="#211d18" stroke="#34322a"/><rect x="64" y="22" width="4" height="16" fill="#7db36a"/><rect x="60" y="26" width="12" height="2" fill="#7db36a"/><rect x="62" y="24" width="8" height="2" fill="#7db36a"/><rect x="64" y="22" width="4" height="2" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-merge" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="55" y="20" width="3" height="15" fill="#b85d40"/><rect x="70" y="20" width="3" height="15" fill="#b85d40"/><rect x="56" y="33" width="15" height="3" fill="#b85d40"/><rect x="62" y="35" width="3" height="13" fill="#b85d40"/><rect x="52" y="16" width="7" height="6" fill="#d97757"/><rect x="69" y="16" width="7" height="6" fill="#d97757"/><rect x="60" y="46" width="7" height="6" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-checkpoint" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="58" y="20" width="3" height="28" fill="#a8a69b"/><rect x="61" y="22" width="14" height="10" fill="#d97757"/><rect x="61" y="22" width="14" height="3" fill="#e8a085"/>
+  </symbol>
+  <symbol id="act-tool" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="56" y="46" width="14" height="14" fill="#a8a69b"/><rect x="60" y="42" width="6" height="4" fill="#a8a69b"/><rect x="60" y="60" width="6" height="4" fill="#a8a69b"/><rect x="52" y="50" width="4" height="6" fill="#a8a69b"/><rect x="70" y="50" width="4" height="6" fill="#a8a69b"/><rect x="60" y="50" width="6" height="6" fill="#15140f"/>
+  </symbol>
+  <symbol id="act-mcp" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="56" y="44" width="16" height="16" fill="#d97757"/><rect x="61" y="39" width="6" height="5" fill="#d97757"/><rect x="52" y="48" width="4" height="6" fill="#15140f"/>
+  </symbol>
+  <symbol id="act-spawn" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(10 14) scale(1.45)"/>
+    <rect x="48" y="56" width="9" height="2" fill="#b85d40"/><use href="#pixie" transform="translate(54 46) scale(0.72)"/>
+  </symbol>
+  <symbol id="act-handoff" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <use href="#pixie" transform="translate(52 42) scale(0.68)"/><rect x="47" y="56" width="11" height="3" fill="#7db36a"/><rect x="47" y="53" width="3" height="3" fill="#7db36a"/><rect x="47" y="59" width="3" height="3" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-retry" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <path d="M 70 38 A 9 9 0 1 1 61 27" fill="none" stroke="#d97757" stroke-width="3"/><rect x="58" y="25" width="7" height="2" fill="#d97757"/><rect x="59" y="23" width="2" height="6" fill="#d97757"/>
+  </symbol>
+  <symbol id="act-wait" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="55" y="24" width="10" height="10" fill="none" stroke="#f0c674" stroke-width="2"/><rect x="64" y="32" width="2" height="14" fill="#f0c674"/><rect x="66" y="40" width="4" height="2" fill="#f0c674"/><rect x="66" y="44" width="3" height="2" fill="#f0c674"/>
+  </symbol>
+  <symbol id="act-cost" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="44" width="18" height="18" fill="none" stroke="#f0c674" stroke-width="2"/><text x="63" y="58" font-size="13" font-weight="700" fill="#f0c674" text-anchor="middle">$</text>
+  </symbol>
+  <symbol id="act-done" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <path d="M 52 56 l 5 6 l 10 -12" fill="none" stroke="#7db36a" stroke-width="4" stroke-linecap="square"/><rect x="50" y="40" width="3" height="3" fill="#f0c674"/><rect x="68" y="46" width="3" height="3" fill="#f0c674"/>
+  </symbol>
+  <symbol id="act-stuck" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <text x="62" y="36" font-size="22" font-weight="700" fill="#e0594e">?</text>
+  </symbol>
+  <symbol id="act-rest" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <text x="58" y="30" font-size="15" fill="#a8a69b">z</text><text x="67" y="21" font-size="11" fill="#a8a69b" opacity="0.7">z</text>
+  </symbol>
+  <symbol id="act-diff" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="52" y="22" width="10" height="22" fill="#211d18" stroke="#34322a"/><rect x="66" y="22" width="10" height="22" fill="#211d18" stroke="#34322a"/><rect x="54" y="26" width="6" height="2" fill="#e0594e"/><rect x="54" y="30" width="6" height="2" fill="#e0594e"/><rect x="68" y="26" width="6" height="2" fill="#7db36a"/><rect x="68" y="30" width="6" height="2" fill="#7db36a"/><rect x="68" y="34" width="4" height="2" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-approve" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="36" width="3" height="11" fill="#5a8a47"/><rect x="57" y="36" width="5" height="11" fill="#7db36a"/><rect x="62" y="33" width="13" height="14" fill="#7db36a"/><rect x="64" y="26" width="5" height="9" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-reject" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <path d="M 56 28 l 14 14 M 70 28 l -14 14" stroke="#e0594e" stroke-width="3" fill="none"/>
+  </symbol>
+  <symbol id="act-stage" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="48" width="22" height="6" fill="#211d18" stroke="#34322a"/><rect x="63" y="28" width="4" height="16" fill="#7db36a"/><rect x="57" y="34" width="16" height="4" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-stash" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="42" width="22" height="16" fill="#d97757"/><rect x="54" y="42" width="22" height="5" fill="#b85d40"/><rect x="62" y="49" width="6" height="3" fill="#2b2a27"/>
+  </symbol>
+  <symbol id="act-pull" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="55" y="22" width="20" height="12" fill="#211d18" stroke="#34322a"/><rect x="63" y="36" width="4" height="14" fill="#6c9bd9"/><rect x="59" y="44" width="12" height="2" fill="#6c9bd9"/><rect x="61" y="46" width="8" height="2" fill="#6c9bd9"/><rect x="63" y="48" width="4" height="2" fill="#6c9bd9"/>
+  </symbol>
+  <symbol id="act-status" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <circle cx="63" cy="32" r="11" fill="none" stroke="#a8a69b" stroke-width="2"/><rect x="61" y="25" width="4" height="4" fill="#a8a69b"/><rect x="61" y="31" width="4" height="9" fill="#a8a69b"/>
+  </symbol>
+  <symbol id="act-clone" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="58" y="26" width="16" height="16" fill="#211d18" stroke="#34322a"/><rect x="52" y="32" width="16" height="16" fill="#d97757"/><rect x="55" y="35" width="10" height="2" fill="#15140f"/><rect x="55" y="39" width="10" height="2" fill="#15140f"/>
+  </symbol>
+  <symbol id="act-revert" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="56" y="29" width="2" height="10" fill="#d97757"/><path d="M 65 29 l -7 5 l 7 5 Z" fill="#d97757"/><path d="M 73 29 l -7 5 l 7 5 Z" fill="#d97757"/>
+  </symbol>
+  <symbol id="act-tag" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <path d="M 54 28 L 66 28 L 74 36 L 66 44 L 54 44 Z" fill="#d97757"/><circle cx="59" cy="36" r="2" fill="#15140f"/>
+  </symbol>
+  <symbol id="act-deploy" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <path d="M 63 24 L 68 36 L 63 40 L 58 36 Z" fill="#d97757"/><rect x="61" y="30" width="4" height="4" fill="#bfe0e8"/><path d="M 58 36 l -3 6 l 5 -2 Z" fill="#b85d40"/><path d="M 68 36 l 3 6 l -5 -2 Z" fill="#b85d40"/><rect x="61" y="44" width="4" height="3" fill="#f0c674"/><rect x="62" y="47" width="2" height="3" fill="#e0594e"/>
+  </symbol>
+  <symbol id="act-schedule" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <circle cx="63" cy="34" r="11" fill="none" stroke="#a8a69b" stroke-width="2"/><rect x="62" y="27" width="2" height="8" fill="#a8a69b"/><rect x="63" y="33" width="6" height="2" fill="#a8a69b"/>
+  </symbol>
+  <symbol id="act-notify" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <path d="M 57 42 Q 57 30 63 30 Q 69 30 69 42 Z" fill="#f0c674"/><rect x="55" y="42" width="16" height="2" fill="#f0c674"/><rect x="61" y="44" width="4" height="3" fill="#f0c674"/>
+  </symbol>
+  <symbol id="act-watch" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <ellipse cx="63" cy="34" rx="11" ry="6" fill="none" stroke="#a8a69b" stroke-width="2"/><circle cx="63" cy="34" r="3" fill="#6c9bd9"/>
+  </symbol>
+  <symbol id="act-log" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="24" width="20" height="22" fill="#211d18" stroke="#34322a"/><rect x="57" y="29" width="14" height="2" fill="#7db36a"/><rect x="57" y="33" width="14" height="2" fill="#a8a69b"/><rect x="57" y="37" width="10" height="2" fill="#a8a69b"/><rect x="57" y="41" width="12" height="2" fill="#a8a69b"/>
+  </symbol>
+  <symbol id="act-config" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="28" width="20" height="2" fill="#a8a69b"/><rect x="60" y="26" width="4" height="6" fill="#d97757"/><rect x="54" y="36" width="20" height="2" fill="#a8a69b"/><rect x="66" y="34" width="4" height="6" fill="#d97757"/><rect x="54" y="44" width="20" height="2" fill="#a8a69b"/><rect x="58" y="42" width="4" height="6" fill="#d97757"/>
+  </symbol>
+  <symbol id="act-secure" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="56" y="34" width="16" height="14" fill="#d97757"/><path d="M 59 34 v -4 a 5 5 0 0 1 10 0 v 4" fill="none" stroke="#a8a69b" stroke-width="2"/><rect x="62" y="38" width="4" height="6" fill="#15140f"/>
+  </symbol>
+  <symbol id="act-memory" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="24" width="20" height="20" fill="#6c9bd9"/><rect x="58" y="24" width="12" height="7" fill="#211d18"/><rect x="62" y="25" width="3" height="5" fill="#bfe0e8"/><rect x="58" y="34" width="12" height="8" fill="#bfe0e8"/>
+  </symbol>
+  <symbol id="act-docs" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="24" width="18" height="22" fill="#211d18" stroke="#34322a"/><rect x="58" y="29" width="10" height="2" fill="#a8a69b"/><rect x="58" y="33" width="10" height="2" fill="#a8a69b"/><rect x="62" y="37" width="11" height="3" fill="#f0c674" transform="rotate(45 62 37)"/>
+  </symbol>
+  <symbol id="act-index" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="26" width="8" height="8" fill="#d97757"/><rect x="64" y="26" width="8" height="8" fill="#b85d40"/><rect x="54" y="36" width="8" height="8" fill="#b85d40"/><rect x="64" y="36" width="8" height="8" fill="#d97757"/>
+  </symbol>
+  <symbol id="act-summarize" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="26" width="20" height="2" fill="#a8a69b"/><rect x="56" y="31" width="16" height="2" fill="#a8a69b"/><rect x="59" y="36" width="10" height="2" fill="#a8a69b"/><rect x="61" y="41" width="6" height="2" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-explain" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <circle cx="63" cy="30" r="8" fill="none" stroke="#f0c674" stroke-width="2"/><rect x="60" y="38" width="6" height="4" fill="#f0c674"/><rect x="61" y="42" width="4" height="2" fill="#a8a69b"/><rect x="62" y="28" width="2" height="6" fill="#f0c674"/>
+  </symbol>
+  <symbol id="act-rename" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="30" width="22" height="12" fill="#211d18" stroke="#34322a"/><rect x="57" y="34" width="3" height="4" fill="#a8a69b"/><rect x="61" y="34" width="3" height="4" fill="#a8a69b"/><rect x="66" y="32" width="2" height="8" fill="#d97757"/>
+  </symbol>
+  <symbol id="act-init" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="61" y="24" width="3" height="20" fill="#d97757"/><rect x="52" y="33" width="20" height="3" fill="#d97757"/><path d="M 55 27 l 14 14 M 69 27 l -14 14" stroke="#d97757" stroke-width="2.5"/>
+  </symbol>
+  <symbol id="act-env" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="53" y="30" width="24" height="14" fill="#211d18" stroke="#34322a"/><rect x="56" y="35" width="6" height="4" fill="#f0c674"/><rect x="63" y="36" width="2" height="2" fill="#a8a69b"/><rect x="66" y="36" width="2" height="2" fill="#a8a69b"/><rect x="69" y="35" width="6" height="4" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-benchmark" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <circle cx="63" cy="36" r="10" fill="none" stroke="#a8a69b" stroke-width="2"/><rect x="61" y="23" width="4" height="4" fill="#a8a69b"/><rect x="62" y="29" width="2" height="8" fill="#d97757"/><rect x="63" y="35" width="5" height="2" fill="#d97757"/>
+  </symbol>
+  <symbol id="act-screenshot" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="52" y="32" width="24" height="16" fill="#211d18" stroke="#34322a"/><rect x="58" y="28" width="8" height="4" fill="#211d18" stroke="#34322a"/><circle cx="64" cy="40" r="5" fill="none" stroke="#a8a69b" stroke-width="2"/><circle cx="64" cy="40" r="2" fill="#6c9bd9"/><rect x="71" y="34" width="3" height="2" fill="#f0c674"/>
+  </symbol>
+  <symbol id="act-navigate" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <circle cx="63" cy="34" r="11" fill="none" stroke="#a8a69b" stroke-width="2"/><path d="M 63 26 l 3 8 l -3 -2 l -3 2 Z" fill="#e0594e"/><path d="M 63 42 l 3 -8 l -3 2 l -3 -2 Z" fill="#a8a69b"/>
+  </symbol>
+  <symbol id="act-compact" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="50" y="28" width="7" height="2" fill="#6c9bd9"/><rect x="50" y="28" width="2" height="7" fill="#6c9bd9"/><rect x="69" y="28" width="7" height="2" fill="#6c9bd9"/><rect x="74" y="28" width="2" height="7" fill="#6c9bd9"/><rect x="50" y="40" width="7" height="2" fill="#6c9bd9"/><rect x="50" y="35" width="2" height="7" fill="#6c9bd9"/><rect x="69" y="40" width="7" height="2" fill="#6c9bd9"/><rect x="74" y="35" width="2" height="7" fill="#6c9bd9"/>
+  </symbol>
+  <symbol id="act-translate" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <text x="54" y="40" font-size="14" font-weight="700" fill="#d97757">A</text><rect x="62" y="33" width="7" height="2" fill="#a8a69b"/><rect x="67" y="31" width="2" height="2" fill="#a8a69b"/><rect x="67" y="35" width="2" height="2" fill="#a8a69b"/><text x="68" y="40" font-size="13" font-weight="700" fill="#6c9bd9">B</text>
+  </symbol>
+  <symbol id="act-pick" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="62" y="24" width="2" height="11" fill="#7db36a"/><rect x="64" y="26" width="6" height="3" fill="#7db36a"/><circle cx="59" cy="39" r="5" fill="#e0594e"/><circle cx="70" cy="39" r="5" fill="#e0594e"/>
+  </symbol>
+  <symbol id="act-blame" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="26" width="18" height="2" fill="#a8a69b"/><rect x="54" y="31" width="18" height="2" fill="#d97757"/><rect x="54" y="36" width="14" height="2" fill="#a8a69b"/><rect x="54" y="41" width="16" height="2" fill="#a8a69b"/><rect x="49" y="31" width="4" height="2" fill="#d97757"/><rect x="51" y="29" width="2" height="2" fill="#d97757"/><rect x="51" y="33" width="2" height="2" fill="#d97757"/>
+  </symbol>
+  <symbol id="act-bisect" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="52" y="33" width="24" height="3" fill="#a8a69b"/><rect x="62" y="27" width="3" height="14" fill="#d97757"/><rect x="55" y="38" width="3" height="3" fill="#7db36a"/><rect x="70" y="38" width="3" height="3" fill="#e0594e"/>
+  </symbol>
+  <symbol id="act-profile" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="55" y="38" width="4" height="8" fill="#d97757"/><rect x="61" y="32" width="4" height="14" fill="#f0c674"/><rect x="67" y="35" width="4" height="11" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-cache" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <ellipse cx="63" cy="28" rx="11" ry="4" fill="#d97757"/><rect x="52" y="28" width="22" height="12" fill="#d97757"/><ellipse cx="63" cy="40" rx="11" ry="4" fill="#b85d40"/><ellipse cx="63" cy="34" rx="11" ry="4" fill="none" stroke="#b85d40" stroke-width="1.5"/>
+  </symbol>
+  <symbol id="act-queue" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="28" width="22" height="4" fill="#d97757"/><rect x="54" y="34" width="16" height="4" fill="#b85d40"/><rect x="54" y="40" width="20" height="4" fill="#a8a69b"/>
+  </symbol>
+  <symbol id="act-sandbox" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="52" y="26" width="24" height="20" fill="none" stroke="#a8a69b" stroke-width="2" stroke-dasharray="3 2"/><rect x="58" y="32" width="12" height="10" fill="#d97757"/>
+  </symbol>
+  <symbol id="act-sign" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <circle cx="63" cy="32" r="7" fill="#f0c674"/><circle cx="63" cy="32" r="4" fill="#b85d40"/><rect x="59" y="38" width="3" height="8" fill="#e0594e"/><rect x="64" y="38" width="3" height="8" fill="#e0594e"/>
+  </symbol>
+  <symbol id="act-verify" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <path d="M 63 24 L 73 28 L 73 36 Q 73 44 63 47 Q 53 44 53 36 L 53 28 Z" fill="#211d18" stroke="#7db36a" stroke-width="2"/><path d="M 58 35 l 4 4 l 7 -8" stroke="#7db36a" stroke-width="2.5" fill="none"/>
+  </symbol>
+  <symbol id="act-migrate" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <ellipse cx="56" cy="30" rx="5" ry="2" fill="#d97757"/><rect x="51" y="30" width="10" height="8" fill="#d97757"/><ellipse cx="56" cy="38" rx="5" ry="2" fill="#b85d40"/><rect x="61" y="33" width="5" height="2" fill="#a8a69b"/><rect x="64" y="31" width="2" height="2" fill="#a8a69b"/><rect x="64" y="35" width="2" height="2" fill="#a8a69b"/><ellipse cx="71" cy="34" rx="5" ry="2" fill="#7db36a"/><rect x="66" y="34" width="10" height="8" fill="#7db36a"/><ellipse cx="71" cy="42" rx="5" ry="2" fill="#5a8a47"/>
+  </symbol>
+  <symbol id="act-generate" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="46" width="20" height="3" fill="#a8a69b" transform="rotate(-40 54 46)"/><rect x="69" y="24" width="2" height="8" fill="#f0c674"/><rect x="66" y="27" width="8" height="2" fill="#f0c674"/><rect x="56" y="30" width="2" height="4" fill="#f0c674"/><rect x="55" y="31" width="4" height="2" fill="#f0c674"/>
+  </symbol>
+  <symbol id="act-complete" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="34" width="10" height="2" fill="#a8a69b"/><rect x="66" y="34" width="3" height="2" fill="#5d564e"/><rect x="70" y="34" width="3" height="2" fill="#5d564e"/><rect x="63" y="30" width="1" height="10" fill="#d97757"/>
+  </symbol>
+  <symbol id="act-snippet" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <text x="63" y="40" font-size="20" font-weight="700" fill="#d97757" text-anchor="middle">{ }</text>
+  </symbol>
+  <symbol id="act-comment" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <path d="M 55 40 l 3 -10 M 60 40 l 3 -10" stroke="#7db36a" stroke-width="2"/><rect x="65" y="31" width="9" height="2" fill="#a8a69b"/><rect x="65" y="35" width="6" height="2" fill="#a8a69b"/>
+  </symbol>
+  <symbol id="act-sort" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="42" width="4" height="4" fill="#d97757"/><rect x="60" y="38" width="4" height="8" fill="#d97757"/><rect x="66" y="34" width="4" height="12" fill="#d97757"/><rect x="72" y="30" width="4" height="16" fill="#d97757"/>
+  </symbol>
+  <symbol id="act-fold" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <path d="M 56 30 l 7 6 l 7 -6" stroke="#a8a69b" stroke-width="2.5" fill="none"/><rect x="54" y="40" width="18" height="2" fill="#a8a69b"/><rect x="54" y="44" width="12" height="2" fill="#a8a69b"/>
+  </symbol>
+  <symbol id="act-patch" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <g transform="translate(63 36) rotate(-35)"><rect x="-11" y="-4" width="22" height="8" rx="3" fill="#e8a085"/><rect x="-4" y="-4" width="8" height="8" fill="#d97757"/><rect x="-2" y="-2" width="1" height="1" fill="#b85d40"/><rect x="1" y="-2" width="1" height="1" fill="#b85d40"/><rect x="-2" y="1" width="1" height="1" fill="#b85d40"/><rect x="1" y="1" width="1" height="1" fill="#b85d40"/></g>
+  </symbol>
+  <symbol id="act-annotate" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="40" width="20" height="4" fill="#f0c674" opacity="0.55"/><rect x="54" y="34" width="14" height="2" fill="#a8a69b"/><g transform="translate(70 30) rotate(45)"><rect x="-2" y="0" width="4" height="10" fill="#d97757"/><rect x="-2" y="10" width="4" height="3" fill="#2b2a27"/></g>
+  </symbol>
+  <symbol id="act-scaffold" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="28" width="20" height="18" fill="none" stroke="#a8a69b" stroke-width="1.5"/><rect x="54" y="28" width="20" height="5" fill="#34322a"/><rect x="63" y="36" width="2" height="6" fill="#7db36a"/><rect x="60" y="38" width="8" height="2" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-select" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="28" width="20" height="16" fill="none" stroke="#bfe0e8" stroke-width="1.5" stroke-dasharray="3 2"/><path d="M 63 35 l 0 9 l 2 -2 l 2 4 l 2 -1 l -2 -4 l 3 0 Z" fill="#bfe0e8"/>
+  </symbol>
+  <symbol id="act-rebase" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="42" width="22" height="2" fill="#b85d40"/><circle cx="58" cy="32" r="3" fill="#d97757"/><circle cx="65" cy="32" r="3" fill="#d97757"/><circle cx="72" cy="32" r="3" fill="#d97757"/><rect x="64" y="35" width="2" height="7" fill="#b85d40"/>
+  </symbol>
+  <symbol id="act-reset" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="68" y="24" width="2" height="22" fill="#b85d40"/><circle cx="69" cy="44" r="4" fill="#d97757"/><circle cx="69" cy="30" r="4" fill="#7db36a"/><path d="M 64 30 l -9 0 M 58 27 l -3 3 l 3 3" stroke="#e0594e" stroke-width="2" fill="none"/>
+  </symbol>
+  <symbol id="act-amend" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="60" y="22" width="2" height="24" fill="#b85d40"/><circle cx="61" cy="34" r="5" fill="#d97757"/><g transform="translate(72 28) rotate(45)"><rect x="-1.5" y="0" width="3" height="9" fill="#f0c674"/><rect x="-1.5" y="9" width="3" height="2" fill="#2b2a27"/></g>
+  </symbol>
+  <symbol id="act-squash" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <circle cx="59" cy="26" r="3" fill="#d97757"/><circle cx="59" cy="34" r="3" fill="#d97757"/><circle cx="59" cy="42" r="3" fill="#d97757"/><path d="M 63 26 q 8 0 8 8 q 0 8 -8 8" stroke="#b85d40" stroke-width="2" fill="none"/><circle cx="72" cy="34" r="4" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-fork" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="62" y="36" width="2" height="10" fill="#b85d40"/><circle cx="63" cy="44" r="3" fill="#d97757"/><path d="M 63 38 l -7 -7 M 63 38 l 7 -7" stroke="#b85d40" stroke-width="2"/><circle cx="55" cy="29" r="3" fill="#7db36a"/><circle cx="71" cy="29" r="3" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-pr" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <circle cx="58" cy="26" r="3" fill="#d97757"/><circle cx="58" cy="44" r="3" fill="#d97757"/><rect x="57" y="28" width="2" height="16" fill="#b85d40"/><path d="M 60 30 q 10 0 10 10" stroke="#7db36a" stroke-width="2" fill="none"/><circle cx="70" cy="42" r="4" fill="none" stroke="#7db36a" stroke-width="2"/>
+  </symbol>
+  <symbol id="act-review" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="52" y="26" width="14" height="18" fill="#211d18" stroke="#34322a"/><rect x="55" y="31" width="3" height="2" fill="#7db36a"/><rect x="55" y="35" width="3" height="2" fill="#e0594e"/><circle cx="68" cy="40" r="6" fill="none" stroke="#a8a69b" stroke-width="2.5"/><rect x="72" y="44" width="6" height="3" fill="#a8a69b" transform="rotate(45 72 44)"/>
+  </symbol>
+  <symbol id="act-prune" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="34" width="14" height="2" fill="#b85d40"/><circle cx="54" cy="35" r="3" fill="#d97757"/><circle cx="70" cy="30" r="3" fill="none" stroke="#a8a69b" stroke-width="1.5"/><circle cx="70" cy="40" r="3" fill="none" stroke="#a8a69b" stroke-width="1.5"/><path d="M 68 32 l -6 3 M 68 38 l -6 -3" stroke="#a8a69b" stroke-width="1.5"/>
+  </symbol>
+  <symbol id="act-release" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="55" y="34" width="18" height="14" fill="#d97757"/><rect x="55" y="34" width="18" height="4" fill="#b85d40"/><rect x="62" y="34" width="4" height="14" fill="#b85d40"/><rect x="61" y="24" width="2" height="6" fill="#f0c674"/><rect x="58" y="27" width="8" height="2" fill="#f0c674"/>
+  </symbol>
+  <symbol id="act-lockfile" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="24" width="18" height="22" fill="#211d18" stroke="#34322a"/><rect x="58" y="29" width="10" height="2" fill="#a8a69b"/><rect x="58" y="33" width="10" height="2" fill="#a8a69b"/><rect x="60" y="38" width="8" height="6" fill="#f0c674"/><path d="M 61 38 v -2 a 3 3 0 0 1 6 0 v 2" fill="none" stroke="#f0c674" stroke-width="1.5"/>
+  </symbol>
+  <symbol id="act-serve" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="56" y="26" width="16" height="8" fill="#d97757"/><rect x="56" y="36" width="16" height="8" fill="#b85d40"/><circle cx="60" cy="30" r="1.5" fill="#7db36a"/><circle cx="60" cy="40" r="1.5" fill="#7db36a"/><path d="M 74 25 q 4 4 0 8" stroke="#bfe0e8" stroke-width="1.5" fill="none"/>
+  </symbol>
+  <symbol id="act-preview" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="52" y="26" width="24" height="18" fill="#211d18" stroke="#34322a"/><rect x="52" y="26" width="24" height="4" fill="#34322a"/><ellipse cx="64" cy="37" rx="7" ry="4" fill="none" stroke="#bfe0e8" stroke-width="1.5"/><circle cx="64" cy="37" r="2" fill="#bfe0e8"/>
+  </symbol>
+  <symbol id="act-restart" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <path d="M 71 36 A 9 9 0 1 1 63 27" fill="none" stroke="#7db36a" stroke-width="2.5"/><rect x="60" y="25" width="6" height="2" fill="#7db36a"/><rect x="62" y="30" width="2" height="6" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-stop" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="56" y="28" width="16" height="16" rx="2" fill="#e0594e"/>
+  </symbol>
+  <symbol id="act-kill" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="28" width="20" height="16" fill="#211d18" stroke="#34322a"/><path d="M 58 32 l 12 8 M 70 32 l -12 8" stroke="#e0594e" stroke-width="2"/>
+  </symbol>
+  <symbol id="act-coverage" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="36" width="22" height="6" fill="#34322a"/><rect x="54" y="36" width="15" height="6" fill="#7db36a"/><text x="64" y="32" font-size="10" font-weight="700" fill="#7db36a" text-anchor="middle">%</text>
+  </symbol>
+  <symbol id="act-bundle" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="34" width="9" height="9" fill="#d97757"/><rect x="64" y="34" width="9" height="9" fill="#b85d40"/><rect x="59" y="29" width="9" height="9" fill="#e8a085"/><rect x="53" y="33" width="21" height="2" fill="#a8a69b"/>
+  </symbol>
+  <symbol id="act-minify" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="58" y="34" width="12" height="2" fill="#a8a69b"/><path d="M 54 35 l 4 -3 M 54 35 l 4 3" stroke="#7db36a" stroke-width="1.5" fill="none"/><path d="M 74 35 l -4 -3 M 74 35 l -4 3" stroke="#7db36a" stroke-width="1.5" fill="none"/>
+  </symbol>
+  <symbol id="act-audit" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <path d="M 63 26 L 71 29 L 71 37 Q 71 43 63 46 Q 55 43 55 37 L 55 29 Z" fill="#211d18" stroke="#f0c674" stroke-width="1.5"/><circle cx="62" cy="35" r="4" fill="none" stroke="#f0c674" stroke-width="1.5"/><rect x="65" y="38" width="4" height="2" fill="#f0c674" transform="rotate(45 65 38)"/>
+  </symbol>
+  <symbol id="act-update" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="56" y="34" width="16" height="12" fill="#d97757"/><rect x="56" y="34" width="16" height="3" fill="#b85d40"/><path d="M 68 27 A 6 6 0 1 0 71 32" fill="none" stroke="#7db36a" stroke-width="2"/><rect x="68" y="25" width="4" height="2" fill="#7db36a"/><rect x="70" y="25" width="2" height="4" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-docker" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="52" y="34" width="24" height="12" fill="#6c9bd9"/><rect x="55" y="30" width="6" height="4" fill="#6c9bd9"/><rect x="63" y="30" width="6" height="4" fill="#6c9bd9"/><rect x="56" y="34" width="1.5" height="12" fill="#15140f"/><rect x="62" y="34" width="1.5" height="12" fill="#15140f"/><rect x="68" y="34" width="1.5" height="12" fill="#15140f"/>
+  </symbol>
+  <symbol id="act-ssh" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="52" y="28" width="18" height="16" fill="#15140f" stroke="#34322a"/><path d="M 56 33 l 3 2 l -3 2" stroke="#7db36a" stroke-width="1.5" fill="none"/><circle cx="71" cy="38" r="3" fill="none" stroke="#f0c674" stroke-width="1.5"/><rect x="73" y="40" width="5" height="1.5" fill="#f0c674"/>
+  </symbol>
+  <symbol id="act-api" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <path d="M 58 28 q -5 0 -5 8 q 0 8 5 8" stroke="#7db36a" stroke-width="2.5" fill="none"/><path d="M 68 28 q 5 0 5 8 q 0 8 -5 8" stroke="#7db36a" stroke-width="2.5" fill="none"/><circle cx="63" cy="36" r="2.5" fill="#d97757"/>
+  </symbol>
+  <symbol id="act-webhook" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <path d="M 64 26 l -7 11 l 5 0 l -3 9 l 9 -13 l -6 0 l 5 -7 Z" fill="#f0c674"/>
+  </symbol>
+  <symbol id="act-query" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <ellipse cx="60" cy="30" rx="8" ry="3" fill="#d97757"/><rect x="52" y="30" width="16" height="10" fill="#d97757"/><ellipse cx="60" cy="40" rx="8" ry="3" fill="#b85d40"/><circle cx="70" cy="40" r="4" fill="none" stroke="#a8a69b" stroke-width="2"/><rect x="73" y="43" width="4" height="2" fill="#a8a69b" transform="rotate(45 73 43)"/>
+  </symbol>
+  <symbol id="act-report" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="24" width="20" height="22" fill="#211d18" stroke="#34322a"/><rect x="58" y="29" width="12" height="2" fill="#a8a69b"/><rect x="58" y="38" width="3" height="5" fill="#d97757"/><rect x="62" y="34" width="3" height="9" fill="#7db36a"/><rect x="66" y="36" width="3" height="7" fill="#f0c674"/>
+  </symbol>
+  <symbol id="act-embed" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <circle cx="57" cy="30" r="2" fill="#bfe0e8"/><circle cx="68" cy="28" r="2" fill="#bfe0e8"/><circle cx="62" cy="37" r="2" fill="#d97757"/><circle cx="71" cy="40" r="2" fill="#bfe0e8"/><circle cx="55" cy="42" r="2" fill="#bfe0e8"/><circle cx="64" cy="44" r="2" fill="#bfe0e8"/>
+  </symbol>
+  <symbol id="act-evaluate" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="62" y="26" width="2" height="18" fill="#a8a69b"/><rect x="54" y="30" width="18" height="2" fill="#a8a69b"/><path d="M 54 32 l -2 5 l 6 0 Z" fill="#d97757"/><path d="M 72 32 l -2 5 l 6 0 Z" fill="#7db36a"/><rect x="58" y="44" width="10" height="2" fill="#a8a69b"/>
+  </symbol>
+  <symbol id="act-loop" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <path d="M 71 36 A 9 9 0 1 1 63 27" fill="none" stroke="#d97757" stroke-width="2.5"/><path d="M 63 24 l 3 4 l -4 1 Z" fill="#d97757"/>
+  </symbol>
+  <symbol id="act-pipeline" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <circle cx="54" cy="34" r="3" fill="#d97757"/><rect x="57" y="33" width="5" height="2" fill="#a8a69b"/><circle cx="64" cy="34" r="3" fill="#f0c674"/><rect x="67" y="33" width="5" height="2" fill="#a8a69b"/><circle cx="74" cy="34" r="3" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-encrypt" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="58" y="34" width="14" height="12" fill="#d97757"/><path d="M 61 34 v -3 a 4 4 0 0 1 8 0 v 3" fill="none" stroke="#a8a69b" stroke-width="2"/><rect x="63" y="38" width="4" height="5" fill="#15140f"/><rect x="52" y="28" width="3" height="2" fill="#7db36a"/><rect x="56" y="30" width="2" height="2" fill="#e0594e"/><rect x="52" y="32" width="2" height="2" fill="#f0c674"/>
+  </symbol>
+  <symbol id="act-decrypt" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="58" y="34" width="14" height="12" fill="#d97757"/><path d="M 61 34 v -3 a 4 4 0 0 1 8 0" fill="none" stroke="#7db36a" stroke-width="2"/><rect x="63" y="38" width="4" height="5" fill="#15140f"/><rect x="52" y="30" width="4" height="2" fill="#a8a69b"/><rect x="52" y="34" width="4" height="2" fill="#a8a69b"/>
+  </symbol>
+  <symbol id="act-hash" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <text x="58" y="39" font-size="14" font-weight="700" fill="#7db36a">#</text><rect x="66" y="30" width="3" height="3" fill="#a8a69b"/><rect x="70" y="30" width="3" height="3" fill="#a8a69b"/><rect x="66" y="35" width="3" height="3" fill="#a8a69b"/><rect x="70" y="35" width="3" height="3" fill="#a8a69b"/>
+  </symbol>
+  <symbol id="act-token" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="32" width="22" height="10" rx="3" fill="#f0c674"/><circle cx="59" cy="37" r="2" fill="#15140f"/><rect x="64" y="36" width="9" height="2" fill="#15140f"/>
+  </symbol>
+  <symbol id="act-login" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="62" y="26" width="12" height="20" fill="#211d18" stroke="#34322a"/><rect x="64" y="28" width="8" height="16" fill="#d97757"/><circle cx="70" cy="36" r="1.5" fill="#15140f"/><rect x="52" y="35" width="9" height="2" fill="#7db36a"/><rect x="58" y="33" width="2" height="2" fill="#7db36a"/><rect x="58" y="37" width="2" height="2" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-logout" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="52" y="26" width="12" height="20" fill="#211d18" stroke="#34322a"/><rect x="54" y="28" width="8" height="16" fill="#d97757"/><circle cx="56" cy="36" r="1.5" fill="#15140f"/><rect x="65" y="35" width="9" height="2" fill="#e0594e"/><rect x="71" y="33" width="2" height="2" fill="#e0594e"/><rect x="71" y="37" width="2" height="2" fill="#e0594e"/>
+  </symbol>
+  <symbol id="act-validate" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="55" y="26" width="20" height="20" fill="#211d18" stroke="#34322a"/><path d="M 58 31 l 2 2 l 4 -4" stroke="#7db36a" stroke-width="2" fill="none"/><rect x="65" y="31" width="7" height="2" fill="#a8a69b"/><path d="M 58 38 l 2 2 l 4 -4" stroke="#7db36a" stroke-width="2" fill="none"/><rect x="65" y="38" width="7" height="2" fill="#a8a69b"/>
+  </symbol>
+  <symbol id="act-sanitize" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <path d="M 63 26 L 71 29 L 71 37 Q 71 43 63 46 Q 55 43 55 37 L 55 29 Z" fill="#211d18" stroke="#6c9bd9" stroke-width="1.5"/><rect x="58" y="33" width="10" height="2" fill="#6c9bd9"/><rect x="60" y="36" width="6" height="2" fill="#6c9bd9"/><rect x="62" y="39" width="2" height="2" fill="#6c9bd9"/>
+  </symbol>
+  <symbol id="act-backup" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="36" width="16" height="10" fill="#d97757"/><rect x="54" y="36" width="16" height="3" fill="#b85d40"/><rect x="60" y="24" width="4" height="9" fill="#7db36a"/><rect x="57" y="28" width="10" height="2" fill="#7db36a"/><rect x="59" y="26" width="6" height="2" fill="#7db36a"/><rect x="61" y="24" width="2" height="2" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-restore" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="24" width="16" height="10" fill="#d97757"/><rect x="54" y="24" width="16" height="3" fill="#b85d40"/><rect x="60" y="37" width="4" height="9" fill="#7db36a"/><rect x="57" y="40" width="10" height="2" fill="#7db36a"/><rect x="59" y="42" width="6" height="2" fill="#7db36a"/><rect x="61" y="44" width="2" height="2" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-rollout" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <circle cx="63" cy="34" r="3" fill="#d97757"/><rect x="66" y="33" width="8" height="2" fill="#7db36a"/><rect x="71" y="31" width="2" height="2" fill="#7db36a"/><rect x="71" y="35" width="2" height="2" fill="#7db36a"/><rect x="63" y="24" width="2" height="7" fill="#7db36a"/><rect x="63" y="37" width="2" height="7" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-scale" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="34" width="8" height="8" fill="#d97757"/><rect x="64" y="28" width="12" height="14" fill="#d97757"/><rect x="53" y="29" width="6" height="2" fill="#7db36a"/><rect x="53" y="29" width="2" height="6" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-cluster" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <circle cx="58" cy="30" r="3" fill="#d97757"/><circle cx="70" cy="30" r="3" fill="#d97757"/><circle cx="64" cy="42" r="3" fill="#d97757"/><rect x="60" y="29" width="9" height="1.5" fill="#a8a69b"/><rect x="59" y="32" width="1.5" height="9" fill="#a8a69b"/><rect x="68" y="32" width="1.5" height="9" fill="#a8a69b"/>
+  </symbol>
+  <symbol id="act-worker" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <circle cx="63" cy="38" r="6" fill="#d97757"/><path d="M 56 34 q 7 -6 14 0 Z" fill="#f0c674"/><rect x="55" y="34" width="16" height="2" fill="#f0c674"/>
+  </symbol>
+  <symbol id="act-proxy" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="52" y="32" width="6" height="8" fill="#d97757"/><rect x="68" y="32" width="6" height="8" fill="#7db36a"/><rect x="60" y="34" width="8" height="4" fill="#a8a69b"/><rect x="58" y="35" width="2" height="2" fill="#a8a69b"/>
+  </symbol>
+  <symbol id="act-tunnel" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <path d="M 54 44 L 54 36 Q 54 28 63 28 Q 72 28 72 36 L 72 44 Z" fill="#211d18" stroke="#a8a69b" stroke-width="1.5"/><rect x="60" y="34" width="6" height="10" fill="#6c9bd9"/>
+  </symbol>
+  <symbol id="act-firewall" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="32" width="20" height="12" fill="#b85d40"/><rect x="54" y="37" width="20" height="1" fill="#15140f"/><rect x="61" y="32" width="1" height="5" fill="#15140f"/><rect x="68" y="32" width="1" height="5" fill="#15140f"/><rect x="57" y="38" width="1" height="6" fill="#15140f"/><rect x="64" y="38" width="1" height="6" fill="#15140f"/><path d="M 63 24 l 3 6 l -3 2 l -3 -2 Z" fill="#e0594e"/>
+  </symbol>
+  <symbol id="act-dns" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <circle cx="61" cy="32" r="8" fill="none" stroke="#6c9bd9" stroke-width="2"/><rect x="53" y="31" width="16" height="2" fill="#6c9bd9"/><ellipse cx="61" cy="32" rx="3" ry="8" fill="none" stroke="#6c9bd9" stroke-width="1.4"/><rect x="56" y="42" width="14" height="4" fill="#211d18" stroke="#34322a"/>
+  </symbol>
+  <symbol id="act-health" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <path d="M 53 36 l 5 0 l 3 -8 l 4 14 l 3 -6 l 4 0" stroke="#7db36a" stroke-width="2" fill="none"/>
+  </symbol>
+  <symbol id="act-trace" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <circle cx="55" cy="30" r="2.5" fill="#d97757"/><circle cx="64" cy="40" r="2.5" fill="#f0c674"/><circle cx="73" cy="32" r="2.5" fill="#7db36a"/><rect x="56" y="31" width="9" height="1.5" fill="#a8a69b" transform="rotate(40 56 31)"/><rect x="65" y="38" width="9" height="1.5" fill="#a8a69b" transform="rotate(-40 65 38)"/>
+  </symbol>
+  <symbol id="act-serialize" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <text x="55" y="39" font-size="12" font-weight="700" fill="#d97757">{ }</text><rect x="64" y="32" width="6" height="2" fill="#a8a69b"/><rect x="64" y="36" width="2" height="2" fill="#7db36a"/><rect x="67" y="36" width="2" height="2" fill="#7db36a"/><rect x="70" y="36" width="2" height="2" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-parse" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="28" width="3" height="3" fill="#d97757"/><rect x="54" y="34" width="3" height="3" fill="#d97757"/><rect x="54" y="40" width="3" height="3" fill="#d97757"/><circle cx="68" cy="30" r="3" fill="#7db36a"/><circle cx="64" cy="40" r="2.5" fill="#7db36a"/><circle cx="72" cy="40" r="2.5" fill="#7db36a"/><rect x="66" y="33" width="1.5" height="5" fill="#a8a69b"/><rect x="70" y="33" width="1.5" height="5" fill="#a8a69b"/>
+  </symbol>
+  <symbol id="act-export" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="52" y="28" width="14" height="18" fill="#211d18" stroke="#34322a"/><rect x="62" y="36" width="12" height="2" fill="#7db36a"/><rect x="70" y="34" width="2" height="2" fill="#7db36a"/><rect x="70" y="38" width="2" height="2" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-import" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="60" y="28" width="14" height="18" fill="#211d18" stroke="#34322a"/><rect x="52" y="36" width="12" height="2" fill="#7db36a"/><rect x="60" y="34" width="2" height="2" fill="#7db36a"/><rect x="60" y="38" width="2" height="2" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-zip" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="56" y="26" width="14" height="20" fill="#d97757"/><rect x="62" y="26" width="2" height="20" fill="#b85d40"/><rect x="59" y="28" width="2" height="2" fill="#f0c674"/><rect x="64" y="31" width="2" height="2" fill="#f0c674"/><rect x="59" y="34" width="2" height="2" fill="#f0c674"/><rect x="64" y="37" width="2" height="2" fill="#f0c674"/>
+  </symbol>
+  <symbol id="act-unzip" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="56" y="34" width="14" height="12" fill="#d97757"/><path d="M 56 34 l 7 -6 l 7 6 Z" fill="#b85d40"/><rect x="61" y="24" width="3" height="3" fill="#7db36a"/><rect x="66" y="22" width="3" height="3" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-upload" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="42" width="20" height="4" fill="#a8a69b"/><rect x="62" y="26" width="4" height="14" fill="#7db36a"/><rect x="58" y="30" width="12" height="2" fill="#7db36a"/><rect x="60" y="28" width="8" height="2" fill="#7db36a"/><rect x="62" y="26" width="4" height="2" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-sync" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <path d="M 56 30 a 8 8 0 0 1 14 2" stroke="#7db36a" stroke-width="2" fill="none"/><path d="M 70 40 a 8 8 0 0 1 -14 -2" stroke="#7db36a" stroke-width="2" fill="none"/><path d="M 70 29 l 0 4 l -4 -1 Z" fill="#7db36a"/><path d="M 56 41 l 0 -4 l 4 1 Z" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-seed" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="62" y="36" width="2" height="10" fill="#7db36a"/><path d="M 63 38 q -6 -2 -8 -8 q 6 0 8 6 Z" fill="#5a8a47"/><path d="M 63 36 q 6 -2 8 -8 q -6 0 -8 6 Z" fill="#7db36a"/><ellipse cx="63" cy="46" rx="6" ry="2" fill="#b85d40"/>
+  </symbol>
+  <symbol id="act-archive" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="30" width="20" height="16" fill="#d97757"/><rect x="54" y="30" width="20" height="5" fill="#b85d40"/><circle cx="64" cy="40" r="4" fill="none" stroke="#15140f" stroke-width="1.5"/><rect x="63" y="37" width="2" height="4" fill="#15140f"/>
+  </symbol>
+  <symbol id="act-classify" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <circle cx="58" cy="28" r="2.5" fill="#d97757"/><circle cx="58" cy="35" r="2.5" fill="#7db36a"/><rect x="63" y="27" width="10" height="2" fill="#a8a69b"/><rect x="63" y="34" width="10" height="2" fill="#a8a69b"/><rect x="69" y="40" width="6" height="6" fill="#d97757"/><rect x="55" y="40" width="6" height="6" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-extract" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <path d="M 54 28 L 72 28 L 65 38 L 61 38 Z" fill="none" stroke="#a8a69b" stroke-width="2"/><rect x="61" y="38" width="4" height="5" fill="#a8a69b"/><rect x="61" y="44" width="4" height="3" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-rank" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="60" y="28" width="6" height="18" fill="#f0c674"/><rect x="52" y="34" width="6" height="12" fill="#a8a69b"/><rect x="68" y="38" width="6" height="8" fill="#b85d40"/>
+  </symbol>
+  <symbol id="act-reflect" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="62" y="26" width="1" height="20" fill="#a8a69b"/><path d="M 60 30 l -6 6 l 6 6" stroke="#d97757" stroke-width="2" fill="none"/><path d="M 65 30 l 6 6 l -6 6" stroke="#7db36a" stroke-width="2" fill="none"/>
+  </symbol>
+  <symbol id="act-critique" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="26" width="22" height="15" fill="#211d18" stroke="#34322a"/><rect x="58" y="41" width="6" height="4" fill="#211d18"/><path d="M 57 32 l 2 2 l 3 -3" stroke="#7db36a" stroke-width="1.5" fill="none"/><path d="M 67 31 l 5 5 M 72 31 l -5 5" stroke="#e0594e" stroke-width="1.5"/>
+  </symbol>
+  <symbol id="act-vote" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="56" y="34" width="16" height="12" fill="#d97757"/><rect x="60" y="30" width="8" height="5" fill="#211d18"/><path d="M 60 40 l 3 3 l 6 -6" stroke="#15140f" stroke-width="2" fill="none"/>
+  </symbol>
+  <symbol id="act-consensus" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <path d="M 54 32 l 2 2 l 4 -4" stroke="#7db36a" stroke-width="2" fill="none"/><path d="M 62 32 l 2 2 l 4 -4" stroke="#7db36a" stroke-width="2" fill="none"/><path d="M 58 40 l 2 2 l 4 -4" stroke="#7db36a" stroke-width="2" fill="none"/>
+  </symbol>
+  <symbol id="act-supervise" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <ellipse cx="63" cy="28" rx="9" ry="5" fill="none" stroke="#a8a69b" stroke-width="1.5"/><circle cx="63" cy="28" r="2.5" fill="#6c9bd9"/><circle cx="57" cy="42" r="2.5" fill="#d97757"/><circle cx="63" cy="42" r="2.5" fill="#d97757"/><circle cx="69" cy="42" r="2.5" fill="#d97757"/>
+  </symbol>
+  <symbol id="act-learn" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <path d="M 63 26 L 76 31 L 63 36 L 50 31 Z" fill="#d97757"/><rect x="61" y="34" width="4" height="6" fill="#b85d40"/><rect x="74" y="31" width="1.5" height="8" fill="#f0c674"/><circle cx="75" cy="40" r="2" fill="#f0c674"/>
+  </symbol>
+  <symbol id="act-context" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="28" width="20" height="16" fill="#211d18" stroke="#34322a"/><rect x="54" y="28" width="20" height="4" fill="#34322a"/><rect x="57" y="35" width="14" height="6" fill="#34322a"/><rect x="57" y="35" width="9" height="6" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-throttle" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <path d="M 53 42 A 11 11 0 0 1 74 42" fill="none" stroke="#a8a69b" stroke-width="2"/><rect x="62" y="34" width="8" height="2" fill="#e0594e" transform="rotate(-30 63 42)"/><circle cx="63" cy="42" r="2" fill="#e0594e"/>
+  </symbol>
+  <symbol id="act-subscribe" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <path d="M 57 40 Q 57 30 63 30 Q 69 30 69 40 Z" fill="#f0c674"/><rect x="55" y="40" width="16" height="2" fill="#f0c674"/><rect x="61" y="42" width="4" height="2" fill="#f0c674"/><rect x="70" y="26" width="2" height="6" fill="#7db36a"/><rect x="68" y="28" width="6" height="2" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-publish" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <circle cx="58" cy="40" r="3" fill="#d97757"/><path d="M 62 36 a 6 6 0 0 1 0 8" stroke="#7db36a" stroke-width="1.5" fill="none"/><path d="M 65 33 a 10 10 0 0 1 0 14" stroke="#7db36a" stroke-width="1.5" fill="none"/>
+  </symbol>
+  <symbol id="act-email" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="30" width="20" height="14" fill="#d97757"/><path d="M 54 30 l 10 8 l 10 -8" fill="none" stroke="#15140f" stroke-width="1.5"/>
+  </symbol>
+  <symbol id="act-chat" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="53" y="28" width="14" height="10" fill="#d97757"/><rect x="56" y="38" width="4" height="3" fill="#d97757"/><rect x="62" y="34" width="13" height="9" fill="#6c9bd9"/><rect x="69" y="43" width="4" height="3" fill="#6c9bd9"/>
+  </symbol>
+  <symbol id="act-render" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="53" y="28" width="22" height="16" fill="#211d18" stroke="#34322a"/><rect x="56" y="31" width="4" height="4" fill="#d97757"/><rect x="61" y="31" width="4" height="4" fill="#7db36a"/><rect x="66" y="31" width="4" height="4" fill="#6c9bd9"/><rect x="56" y="36" width="4" height="4" fill="#f0c674"/><rect x="61" y="36" width="4" height="4" fill="#e0594e"/><rect x="66" y="36" width="4" height="4" fill="#d97757"/>
+  </symbol>
+  <symbol id="act-transpile" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <text x="55" y="39" font-size="9" font-weight="700" fill="#6c9bd9">TS</text><rect x="63" y="33" width="6" height="2" fill="#a8a69b"/><rect x="67" y="31" width="2" height="2" fill="#a8a69b"/><rect x="67" y="35" width="2" height="2" fill="#a8a69b"/><text x="68" y="40" font-size="9" font-weight="700" fill="#f0c674">JS</text>
+  </symbol>
+  <symbol id="act-shim" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <path d="M 54 44 L 74 44 L 74 30 Z" fill="#a8a69b"/>
+  </symbol>
+  <symbol id="act-treeshake" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="62" y="38" width="3" height="8" fill="#b85d40"/><circle cx="63" cy="32" r="8" fill="#5a8a47"/><circle cx="60" cy="30" r="3" fill="#7db36a"/><rect x="71" y="40" width="3" height="3" fill="#e0594e"/><rect x="73" y="44" width="2" height="2" fill="#e0594e"/>
+  </symbol>
+  <symbol id="act-dedupe" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="30" width="9" height="9" fill="#d97757"/><rect x="65" y="30" width="9" height="9" fill="#d97757"/><path d="M 66 31 l 7 7 M 73 31 l -7 7" stroke="#e0594e" stroke-width="1.5"/>
+  </symbol>
+  <symbol id="act-provision" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="28" width="20" height="18" fill="none" stroke="#6c9bd9" stroke-width="1.5" stroke-dasharray="3 2"/><rect x="62" y="34" width="2" height="8" fill="#7db36a"/><rect x="59" y="37" width="8" height="2" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-terraform" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="40" width="20" height="6" fill="#5a8a47"/><rect x="56" y="34" width="16" height="6" fill="#7db36a"/><rect x="58" y="28" width="12" height="6" fill="#d97757"/>
+  </symbol>
+  <symbol id="act-vacuum" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <ellipse cx="60" cy="30" rx="7" ry="2.5" fill="#d97757"/><rect x="53" y="30" width="14" height="8" fill="#d97757"/><ellipse cx="60" cy="38" rx="7" ry="2.5" fill="#b85d40"/><g transform="translate(70 30) rotate(35)"><rect x="-1" y="0" width="2" height="10" fill="#a8a69b"/><rect x="-3" y="10" width="6" height="4" fill="#f0c674"/></g>
+  </symbol>
+  <symbol id="act-reindex" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="28" width="7" height="7" fill="#d97757"/><rect x="63" y="28" width="7" height="7" fill="#b85d40"/><rect x="54" y="37" width="7" height="7" fill="#b85d40"/><rect x="63" y="37" width="7" height="7" fill="#d97757"/><path d="M 72 30 a 4 4 0 1 0 1 3" stroke="#7db36a" stroke-width="1.5" fill="none"/>
+  </symbol>
+  <symbol id="act-shard" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <ellipse cx="60" cy="30" rx="7" ry="2.5" fill="#d97757"/><rect x="53" y="30" width="6" height="10" fill="#d97757"/><rect x="61" y="30" width="6" height="10" fill="#d97757"/><ellipse cx="60" cy="40" rx="7" ry="2.5" fill="#b85d40"/><rect x="59" y="28" width="2" height="14" fill="#15140f"/>
+  </symbol>
+  <symbol id="act-replicate" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <ellipse cx="57" cy="30" rx="4" ry="2" fill="#d97757"/><rect x="53" y="30" width="8" height="8" fill="#d97757"/><ellipse cx="57" cy="38" rx="4" ry="2" fill="#b85d40"/><ellipse cx="71" cy="34" rx="4" ry="2" fill="#7db36a"/><rect x="67" y="34" width="8" height="8" fill="#7db36a"/><ellipse cx="71" cy="42" rx="4" ry="2" fill="#5a8a47"/><rect x="61" y="33" width="5" height="2" fill="#a8a69b"/>
+  </symbol>
+  <symbol id="act-failover" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="53" y="30" width="8" height="14" fill="#e0594e"/><rect x="67" y="30" width="8" height="14" fill="#7db36a"/><path d="M 62 30 q 3 0 3 4" stroke="#a8a69b" stroke-width="1.5" fill="none"/><rect x="63" y="32" width="3" height="2" fill="#a8a69b"/>
+  </symbol>
+  <symbol id="act-loadtest" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <path d="M 53 42 A 11 11 0 0 1 74 42" fill="none" stroke="#a8a69b" stroke-width="2"/><rect x="62" y="34" width="9" height="2" fill="#e0594e" transform="rotate(30 63 42)"/><circle cx="63" cy="42" r="2" fill="#e0594e"/>
+  </symbol>
+  <symbol id="act-mock" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="28" width="20" height="18" fill="#211d18" stroke="#a8a69b" stroke-dasharray="3 2" stroke-width="1.5"/><text x="64" y="42" font-size="14" font-weight="700" fill="#a8a69b" text-anchor="middle">M</text>
+  </symbol>
+  <symbol id="act-stub" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="58" y="34" width="12" height="8" fill="#a8a69b"/><rect x="62" y="30" width="4" height="4" fill="#a8a69b"/>
+  </symbol>
+  <symbol id="act-spy" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <circle cx="58" cy="36" r="5" fill="none" stroke="#a8a69b" stroke-width="2"/><circle cx="69" cy="36" r="5" fill="none" stroke="#a8a69b" stroke-width="2"/><rect x="62" y="34" width="3" height="2" fill="#a8a69b"/><rect x="56" y="29" width="4" height="3" fill="#a8a69b"/><rect x="67" y="29" width="4" height="3" fill="#a8a69b"/>
+  </symbol>
+  <symbol id="act-assert" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="32" width="8" height="2" fill="#a8a69b"/><rect x="54" y="37" width="8" height="2" fill="#a8a69b"/><path d="M 65 35 l 3 3 l 6 -7" stroke="#7db36a" stroke-width="2.5" fill="none"/>
+  </symbol>
+  <symbol id="act-fuzz" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="30" width="3" height="3" fill="#d97757"/><rect x="60" y="33" width="3" height="3" fill="#7db36a"/><rect x="66" y="29" width="3" height="3" fill="#6c9bd9"/><rect x="71" y="34" width="3" height="3" fill="#f0c674"/><rect x="57" y="38" width="3" height="3" fill="#e0594e"/><rect x="63" y="40" width="3" height="3" fill="#a8a69b"/><rect x="69" y="40" width="3" height="3" fill="#d97757"/>
+  </symbol>
+  <symbol id="act-e2e" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <circle cx="55" cy="34" r="3" fill="#d97757"/><rect x="58" y="33" width="14" height="2" fill="#a8a69b"/><circle cx="73" cy="34" r="3" fill="#7db36a"/><path d="M 62 38 l 2 2 l 4 -4" stroke="#7db36a" stroke-width="1.5" fill="none"/>
+  </symbol>
+  <symbol id="act-a11y" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <circle cx="63" cy="35" r="11" fill="none" stroke="#6c9bd9" stroke-width="2"/><circle cx="63" cy="30" r="2" fill="#6c9bd9"/><rect x="62" y="32" width="2" height="6" fill="#6c9bd9"/><rect x="58" y="34" width="10" height="2" fill="#6c9bd9"/><rect x="60" y="38" width="2" height="4" fill="#6c9bd9"/><rect x="65" y="38" width="2" height="4" fill="#6c9bd9"/>
+  </symbol>
+  <symbol id="act-i18n" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <circle cx="60" cy="32" r="8" fill="none" stroke="#6c9bd9" stroke-width="1.5"/><rect x="52" y="31" width="16" height="1.5" fill="#6c9bd9"/><ellipse cx="60" cy="32" rx="3" ry="8" fill="none" stroke="#6c9bd9" stroke-width="1.2"/><text x="71" y="44" font-size="11" font-weight="700" fill="#d97757">A</text>
+  </symbol>
+  <symbol id="act-score" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <path d="M 53 42 A 11 11 0 0 1 74 42" fill="none" stroke="#a8a69b" stroke-width="2"/><text x="63" y="40" font-size="11" font-weight="700" fill="#7db36a" text-anchor="middle">A+</text>
+  </symbol>
+  <symbol id="act-regex" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <text x="63" y="41" font-size="18" font-weight="700" fill="#7db36a" text-anchor="middle">.*</text>
+  </symbol>
+  <symbol id="act-hotreload" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <path d="M 62 26 l -5 9 l 4 0 l -2 8 l 7 -11 l -4 0 l 4 -6 Z" fill="#e0594e"/><path d="M 70 34 a 4 4 0 1 0 1 3" stroke="#f0c674" stroke-width="1.5" fill="none"/>
+  </symbol>
+  <symbol id="act-lazyload" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="34" width="3" height="3" fill="#a8a69b"/><rect x="60" y="34" width="3" height="3" fill="#a8a69b"/><rect x="66" y="34" width="3" height="3" fill="#a8a69b"/><rect x="62" y="40" width="2" height="6" fill="#7db36a"/><rect x="59" y="42" width="8" height="2" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-theme" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <circle cx="63" cy="36" r="10" fill="#f4efe2"/><path d="M 63 26 A 10 10 0 0 0 63 46 Z" fill="#211d18"/><circle cx="63" cy="36" r="10" fill="none" stroke="#d97757" stroke-width="1.5"/>
+  </symbol>
+  <symbol id="act-animate" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <circle cx="68" cy="40" r="4" fill="#d97757"/><path d="M 54 40 q 4 -12 14 0" stroke="#7db36a" stroke-width="1.5" fill="none" stroke-dasharray="2 2"/><circle cx="54" cy="40" r="2" fill="#a8a69b"/>
+  </symbol>
+  <symbol id="act-style" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <g transform="translate(58 30) rotate(40)"><rect x="-1.5" y="0" width="3" height="11" fill="#a8a69b"/><rect x="-3" y="11" width="6" height="5" fill="#d97757"/></g><rect x="66" y="40" width="8" height="4" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-layout" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="28" width="20" height="16" fill="none" stroke="#a8a69b" stroke-width="1.5"/><rect x="54" y="28" width="20" height="4" fill="#34322a"/><rect x="54" y="34" width="6" height="10" fill="#34322a"/>
+  </symbol>
+  <symbol id="act-responsive" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="30" width="14" height="12" fill="#211d18" stroke="#a8a69b" stroke-width="1.5"/><rect x="56" y="32" width="10" height="6" fill="#6c9bd9"/><rect x="68" y="32" width="7" height="12" fill="#211d18" stroke="#a8a69b" stroke-width="1.5"/><rect x="69" y="34" width="5" height="7" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-optimize" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="28" width="16" height="14" fill="#211d18" stroke="#34322a"/><circle cx="59" cy="33" r="1.5" fill="#f0c674"/><path d="M 56 40 l 4 -5 l 4 4 l 3 -3 l 3 4" fill="none" stroke="#7db36a" stroke-width="1.5"/><rect x="71" y="36" width="2" height="6" fill="#7db36a"/><rect x="69" y="38" width="6" height="2" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-preload" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <path d="M 56 30 l 6 5 l -6 5 Z" fill="#7db36a"/><path d="M 64 30 l 6 5 l -6 5 Z" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-prefetch" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="60" y="26" width="4" height="10" fill="#6c9bd9"/><rect x="56" y="31" width="12" height="2" fill="#6c9bd9"/><rect x="58" y="33" width="8" height="2" fill="#6c9bd9"/><rect x="60" y="35" width="4" height="2" fill="#6c9bd9"/><circle cx="63" cy="42" r="4" fill="none" stroke="#f0c674" stroke-width="1.5"/><rect x="62" y="39" width="1.5" height="3.5" fill="#f0c674"/>
+  </symbol>
+  <symbol id="act-cdn" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <circle cx="63" cy="34" r="9" fill="none" stroke="#6c9bd9" stroke-width="1.5"/><circle cx="63" cy="34" r="2" fill="#d97757"/><circle cx="55" cy="29" r="2" fill="#7db36a"/><circle cx="71" cy="29" r="2" fill="#7db36a"/><circle cx="71" cy="40" r="2" fill="#7db36a"/><circle cx="55" cy="40" r="2" fill="#7db36a"/>
+  </symbol>
+  <symbol id="act-dashboard" viewBox="0 0 80 80">
+    <use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="28" width="20" height="16" fill="#211d18" stroke="#34322a"/><rect x="57" y="38" width="2" height="3" fill="#d97757"/><rect x="60" y="35" width="2" height="6" fill="#7db36a"/><rect x="63" y="37" width="2" height="4" fill="#f0c674"/><rect x="68" y="31" width="5" height="4" fill="#6c9bd9"/>
+  </symbol>
+</svg>
