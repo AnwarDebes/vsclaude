@@ -4,6 +4,7 @@ import { CommandRegistry } from '@vsclaude/core-shell';
 import { bundledThemeIds } from '@vsclaude/design-system';
 import { useSession } from './session/useSession';
 import { demoFiles } from './session/demo-session';
+import { demoContentFor } from './session/demo-files';
 import { applyTheme, loadAppSettings, saveAppSettings } from './lib/theme';
 import { PixieStage } from './components/PixieStage';
 import { PixieActionSprite } from './components/ActionIcon';
@@ -11,6 +12,7 @@ import { SettingsBar } from './components/SettingsBar';
 import { CommandPalette } from './components/CommandPalette';
 import { Narration } from './components/Narration';
 import { ExplorerPanel } from './panels/ExplorerPanel';
+import { EditorPanel } from './panels/EditorPanel';
 import { SwarmPanel } from './panels/SwarmPanel';
 import { TimelinePanel } from './panels/TimelinePanel';
 import { TokenPanel } from './panels/TokenPanel';
@@ -43,6 +45,8 @@ const STATE_LABELS: Record<string, string> = {
  */
 export function App() {
   const [settings, setSettings] = useState<AppSettings>(() => loadAppSettings());
+  const [openFile, setOpenFile] = useState('src/auth/login-form.tsx');
+  const [editedContents, setEditedContents] = useState<Record<string, string>>({});
   const session = useSession();
   const { playing, setPlaying, restart } = session;
 
@@ -93,13 +97,24 @@ export function App() {
   }, [playing, setPlaying, restart]);
 
   const mode = settings.presentationMode;
+  const isEditorMode = mode === 'companion' || mode === 'cozy';
   const stateLabel = STATE_LABELS[session.directive.state] ?? session.directive.state;
   const currentPath = session.current?.payload?.['path'];
   const activePath = typeof currentPath === 'string' ? currentPath : undefined;
 
+  // Follow the agent: when it touches a file, open that file in the editor.
+  useEffect(() => {
+    if (isEditorMode && activePath) setOpenFile(activePath);
+  }, [activePath, isEditorMode]);
+
   const showExplorer = mode === 'companion';
   const showTimeline = mode !== 'minimal';
   const showBottom = mode !== 'minimal';
+  const content = editedContents[openFile] ?? demoContentFor(openFile);
+
+  const pixie = (
+    <PixieStage actionId={session.actionId} caption={session.directive.caption} stateLabel={stateLabel} />
+  );
 
   return (
     <div className="app-shell" data-mode={mode}>
@@ -125,7 +140,14 @@ export function App() {
       </header>
 
       <main className="app-main">
-        {showExplorer ? <ExplorerPanel files={demoFiles} activePath={activePath} /> : null}
+        {showExplorer ? (
+          <ExplorerPanel
+            files={demoFiles}
+            activePath={activePath}
+            openPath={openFile}
+            onSelect={setOpenFile}
+          />
+        ) : null}
 
         <div className="app-center">
           {mode === 'swarm' ? (
@@ -135,12 +157,33 @@ export function App() {
               actionByAgent={session.actionByAgent}
               tokens={session.tokens}
             />
+          ) : isEditorMode ? (
+            <EditorPanel
+              path={openFile}
+              value={content}
+              onChange={(v) => setEditedContents((m) => ({ ...m, [openFile]: v }))}
+              onSave={(v) => setEditedContents((m) => ({ ...m, [openFile]: v }))}
+            />
           ) : (
-            <PixieStage actionId={session.actionId} caption={session.directive.caption} stateLabel={stateLabel} />
+            pixie
           )}
         </div>
 
-        {showTimeline ? <TimelinePanel timeline={session.timeline} /> : null}
+        {isEditorMode ? (
+          <div className="app-right">
+            <section className="pixie-companion">
+              <PixieStage
+                actionId={session.actionId}
+                caption={session.directive.caption}
+                stateLabel={stateLabel}
+                size={92}
+              />
+            </section>
+            <TimelinePanel timeline={session.timeline} />
+          </div>
+        ) : showTimeline ? (
+          <TimelinePanel timeline={session.timeline} />
+        ) : null}
       </main>
 
       {showBottom ? (
