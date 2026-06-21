@@ -1,82 +1,110 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { REST_DIRECTIVE, type MotionDirective } from '@vsclaude/contracts';
-import { classifyAction } from '@vsclaude/motion';
-import { demoEvents } from './demo-events';
-import { captionFor, pixieStateFor } from './lib/motion-lite';
+import { useEffect, useMemo, useState } from 'react';
+import type { AppSettings, PresentationMode } from '@vsclaude/contracts';
+import { CommandRegistry } from '@vsclaude/core-shell';
+import { bundledThemeIds } from '@vsclaude/design-system';
+import { useSession } from './session/useSession';
+import { demoFiles } from './session/demo-session';
+import { applyTheme, loadAppSettings, saveAppSettings } from './lib/theme';
 import { PixieStage } from './components/PixieStage';
 import { PixieActionSprite } from './components/ActionIcon';
-import { ActivityFeed } from './components/ActivityFeed';
+import { SettingsBar } from './components/SettingsBar';
+import { CommandPalette } from './components/CommandPalette';
+import { Narration } from './components/Narration';
+import { ExplorerPanel } from './panels/ExplorerPanel';
+import { SwarmPanel } from './panels/SwarmPanel';
+import { TimelinePanel } from './panels/TimelinePanel';
+import { TokenPanel } from './panels/TokenPanel';
 
 const STATE_LABELS: Record<string, string> = {
   idle: 'resting',
   greeting: 'saying hello',
   thinking: 'thinking',
-  planning: 'planning the work',
-  reading: 'reading files',
+  planning: 'planning',
+  reading: 'reading',
   searching: 'searching',
-  web: 'checking the web',
+  web: 'on the web',
   typing: 'writing code',
-  running: 'running a command',
+  running: 'running',
   building: 'building',
   debugging: 'debugging',
-  git: 'saving to git',
-  spawning: 'calling a helper',
-  waiting: 'waiting for you',
+  git: 'using git',
+  spawning: 'delegating',
+  waiting: 'waiting',
   success: 'celebrating',
   confused: 'puzzled',
   sleeping: 'resting',
 };
 
-const STEP_MS = 1600;
-
 /**
- * The first-run shell. It plays the scripted demo timeline so a new user
- * immediately sees the core promise: a real event stream driving Pixie, with
- * the readable truth one click away. Connecting a provider swaps the demo feed
- * for a live one and nothing else changes.
+ * The vsclaude shell: a cozy, multi-panel IDE driven end to end by the real
+ * packages. The motion mapper drives Pixie, the agent runtime builds the swarm
+ * tree, the chat builder drives the timeline, and the design system themes it.
+ * Presentation modes rearrange the room; the command palette runs everything.
  */
 export function App() {
-  const [index, setIndex] = useState(0);
-  const [playing, setPlaying] = useState(true);
-
-  const seen = useMemo(() => demoEvents.slice(0, index + 1), [index]);
-  const current = seen[seen.length - 1];
-
-  const directive: MotionDirective = useMemo(() => {
-    if (!current) return REST_DIRECTIVE;
-    return {
-      state: pixieStateFor(current),
-      mood: 'focused',
-      intensity: 0.6,
-      gaze: { x: 0, y: 0 },
-      caption: captionFor(current),
-      sourceEventId: current.id,
-      actionId: classifyAction(current),
-    };
-  }, [current]);
-
-  const actionId = directive.actionId ?? 'rest';
+  const [settings, setSettings] = useState<AppSettings>(() => loadAppSettings());
+  const session = useSession();
+  const { playing, setPlaying, restart } = session;
 
   useEffect(() => {
-    if (!playing) return;
-    if (index >= demoEvents.length - 1) {
-      setPlaying(false);
-      return;
+    applyTheme(settings);
+    saveAppSettings(settings);
+  }, [settings]);
+
+  const registry = useMemo(() => {
+    const r = new CommandRegistry();
+    r.register({
+      id: 'play',
+      title: playing ? 'Pause the session' : 'Play the session',
+      keywords: ['pause', 'resume', 'run'],
+      run: () => setPlaying(!playing),
+    });
+    r.register({ id: 'restart', title: 'Replay the session', keywords: ['restart'], run: restart });
+    const modes: PresentationMode[] = ['companion', 'stage', 'swarm', 'minimal', 'cozy'];
+    for (const mode of modes) {
+      r.register({
+        id: `mode-${mode}`,
+        title: `Switch to ${mode} mode`,
+        keywords: ['view', 'layout', mode],
+        run: () => setSettings((s) => ({ ...s, presentationMode: mode })),
+      });
     }
-    const timer = setTimeout(() => setIndex((i) => Math.min(i + 1, demoEvents.length - 1)), STEP_MS);
-    return () => clearTimeout(timer);
-  }, [playing, index]);
+    for (const id of bundledThemeIds()) {
+      r.register({
+        id: `theme-${id}`,
+        title: `Theme: ${id}`,
+        keywords: ['color', 'appearance'],
+        run: () => setSettings((s) => ({ ...s, themeId: id })),
+      });
+    }
+    r.register({
+      id: 'reduced-motion',
+      title: 'Toggle reduced motion',
+      keywords: ['accessibility', 'a11y'],
+      run: () => setSettings((s) => ({ ...s, reducedMotion: !s.reducedMotion })),
+    });
+    r.register({
+      id: 'sound',
+      title: 'Toggle sound',
+      keywords: ['audio'],
+      run: () => setSettings((s) => ({ ...s, sound: { ...s.sound, enabled: !s.sound.enabled } })),
+    });
+    return r;
+  }, [playing, setPlaying, restart]);
 
-  const restart = useCallback(() => {
-    setIndex(0);
-    setPlaying(true);
-  }, []);
+  const mode = settings.presentationMode;
+  const stateLabel = STATE_LABELS[session.directive.state] ?? session.directive.state;
+  const currentPath = session.current?.payload?.['path'];
+  const activePath = typeof currentPath === 'string' ? currentPath : undefined;
 
-  const stateLabel = STATE_LABELS[directive.state] ?? directive.state;
+  const showExplorer = mode === 'companion';
+  const showTimeline = mode !== 'minimal';
+  const showBottom = mode !== 'minimal';
 
   return (
-    <div className="app-shell">
+    <div className="app-shell" data-mode={mode}>
       <PixieActionSprite />
+
       <header className="app-header">
         <div className="app-brand">
           <span className="app-brand__glyph" aria-hidden>
@@ -85,27 +113,48 @@ export function App() {
           <span className="app-brand__name">vsclaude</span>
           <span className="app-brand__tag">Claude Code, in motion</span>
         </div>
-        <div className="app-header__controls">
-          <button type="button" onClick={() => setPlaying((p) => !p)} className="btn">
-            {playing ? 'Pause' : 'Play'}
-          </button>
-          <button type="button" onClick={restart} className="btn btn--ghost">
-            Replay
-          </button>
-        </div>
+        <SettingsBar
+          settings={settings}
+          onSettings={setSettings}
+          playing={playing}
+          setPlaying={setPlaying}
+          restart={restart}
+          index={session.index}
+          total={session.total}
+        />
       </header>
 
       <main className="app-main">
-        <PixieStage actionId={actionId} caption={directive.caption} stateLabel={stateLabel} />
-        <ActivityFeed events={seen} />
+        {showExplorer ? <ExplorerPanel files={demoFiles} activePath={activePath} /> : null}
+
+        <div className="app-center">
+          {mode === 'swarm' ? (
+            <SwarmPanel
+              roster={session.roster}
+              edges={session.edges}
+              actionByAgent={session.actionByAgent}
+              tokens={session.tokens}
+            />
+          ) : (
+            <PixieStage actionId={session.actionId} caption={session.directive.caption} stateLabel={stateLabel} />
+          )}
+        </div>
+
+        {showTimeline ? <TimelinePanel timeline={session.timeline} /> : null}
       </main>
 
-      <footer className="app-footer">
-        <span>
-          Demo session, {seen.length} of {demoEvents.length} events. This is placeholder data so you
-          can meet Pixie. Connect a provider to watch a real run.
-        </span>
-      </footer>
+      {showBottom ? (
+        <footer className="app-bottom">
+          <TokenPanel tokens={session.tokens} tree={session.tree} />
+          <Narration narration={session.narration} />
+        </footer>
+      ) : (
+        <footer className="app-bottom app-bottom--minimal">
+          <Narration narration={session.narration} />
+        </footer>
+      )}
+
+      <CommandPalette registry={registry} />
     </div>
   );
 }

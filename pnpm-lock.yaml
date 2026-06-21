@@ -59,12 +59,33 @@ importers:
       '@tauri-apps/api':
         specifier: ^2.1.1
         version: 2.11.1
+      '@vsclaude/agent-runtime':
+        specifier: workspace:*
+        version: link:../../packages/agent-runtime
+      '@vsclaude/chat':
+        specifier: workspace:*
+        version: link:../../packages/chat
       '@vsclaude/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts
+      '@vsclaude/core-shell':
+        specifier: workspace:*
+        version: link:../../packages/core-shell
+      '@vsclaude/design-system':
+        specifier: workspace:*
+        version: link:../../packages/design-system
+      '@vsclaude/editor':
+        specifier: workspace:*
+        version: link:../../packages/editor
       '@vsclaude/motion':
         specifier: workspace:*
         version: link:../../packages/motion
+      '@vsclaude/persistence':
+        specifier: workspace:*
+        version: link:../../packages/persistence
+      '@vsclaude/swarm':
+        specifier: workspace:*
+        version: link:../../packages/swarm
       react:
         specifier: ^19.0.0
         version: 19.2.7
