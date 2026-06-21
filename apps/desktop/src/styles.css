@@ -1,0 +1,420 @@
+/*
+ * The cozy default theme, expressed as CSS variables.
+ *
+ * These values mirror the `darkTheme` tokens in `@vsclaude/contracts`. Once the
+ * `@vsclaude/design-system` package is wired in, these variables are generated
+ * from the tokens rather than hand-written, so there is a single source of truth.
+ */
+:root {
+  --color-bg: #1a1614;
+  --color-surface: #221d1a;
+  --color-surface-elevated: #2c2521;
+  --color-border: #3a312c;
+  --color-text: #f3ece6;
+  --color-text-muted: #a8998f;
+  --color-accent: #d97757;
+  --color-accent-muted: #3a2620;
+  --color-accent-contrast: #1a1614;
+  --color-success: #7fb069;
+  --color-warning: #e0a458;
+  --color-danger: #d96c6c;
+  --color-info: #6c9bd9;
+  --color-glow: rgba(217, 119, 87, 0.45);
+
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 24px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+
+  --font-sans: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Cascadia Code', ui-monospace, monospace;
+
+  --duration-base: 220ms;
+  --ease-cozy: cubic-bezier(0.34, 1.2, 0.64, 1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: radial-gradient(120% 120% at 50% 0%, #211a17 0%, var(--color-bg) 60%);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100%;
+}
+
+/* Header ------------------------------------------------------------------ */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-xl);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.app-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.app-brand__glyph {
+  font-family: var(--font-mono);
+  color: var(--color-accent);
+  background: var(--color-accent-muted);
+  padding: 2px 8px;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+}
+
+.app-brand__name {
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.app-brand__tag {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+.app-header__controls {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.btn {
+  font: inherit;
+  color: var(--color-accent-contrast);
+  background: var(--color-accent);
+  border: none;
+  padding: 6px 16px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: transform var(--duration-base) var(--ease-cozy), filter var(--duration-base);
+}
+
+.btn:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+}
+
+/* Main -------------------------------------------------------------------- */
+.app-main {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: var(--space-xl);
+  padding: var(--space-xl);
+  min-height: 0;
+}
+
+/* Pixie stage ------------------------------------------------------------- */
+.pixie-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xl);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 30px 80px -40px var(--color-glow);
+}
+
+.pixie-scene {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 220px;
+}
+
+.pixie {
+  position: relative;
+  width: 120px;
+  height: 150px;
+  animation: pixie-breathe 3.4s var(--ease-cozy) infinite;
+}
+
+.pixie__head {
+  position: absolute;
+  top: 24px;
+  left: 20px;
+  width: 80px;
+  height: 64px;
+  background: var(--color-accent);
+  border-radius: 12px;
+  box-shadow: inset 0 -8px 0 rgba(0, 0, 0, 0.12);
+}
+
+.pixie__body {
+  position: absolute;
+  bottom: 0;
+  left: 28px;
+  width: 64px;
+  height: 56px;
+  background: var(--color-surface-elevated);
+  border: 3px solid var(--color-accent);
+  border-radius: 10px;
+}
+
+.pixie__eye {
+  position: absolute;
+  top: 24px;
+  width: 14px;
+  height: 14px;
+  background: var(--color-bg);
+  border-radius: 50%;
+  animation: pixie-blink 4.2s steps(1) infinite;
+}
+
+.pixie__eye--left {
+  left: 16px;
+}
+
+.pixie__eye--right {
+  right: 16px;
+}
+
+.pixie__mouth {
+  position: absolute;
+  bottom: 12px;
+  left: 28px;
+  width: 24px;
+  height: 6px;
+  background: var(--color-bg);
+  border-radius: 4px;
+}
+
+.pixie__antenna {
+  position: absolute;
+  top: 4px;
+  width: 4px;
+  height: 22px;
+  background: var(--color-accent);
+  border-radius: 4px;
+}
+
+.pixie__antenna::after {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: -3px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-warning);
+  box-shadow: 0 0 12px var(--color-glow);
+}
+
+.pixie__antenna--left {
+  left: 36px;
+  transform: rotate(-12deg);
+}
+
+.pixie__antenna--right {
+  right: 36px;
+  transform: rotate(12deg);
+}
+
+/* State flavors: subtle, honest cues that map to real events. */
+.pixie--typing {
+  animation-duration: 0.9s;
+}
+.pixie--running .pixie__head,
+.pixie--building .pixie__head {
+  background: var(--color-info);
+}
+.pixie--success .pixie__head {
+  background: var(--color-success);
+}
+.pixie--confused .pixie__head,
+.pixie--debugging .pixie__head {
+  background: var(--color-danger);
+}
+.pixie--waiting {
+  animation: pixie-tap 1s steps(2) infinite;
+}
+.pixie--thinking .pixie__antenna::after,
+.pixie--planning .pixie__antenna::after {
+  animation: pixie-pulse 1.2s ease-in-out infinite;
+}
+
+.pixie-caption {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding-bottom: var(--space-xl);
+  text-align: center;
+}
+
+.pixie-caption__state {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-accent);
+}
+
+.pixie-caption__text {
+  font-size: 1.05rem;
+  color: var(--color-text);
+}
+
+/* Activity feed ----------------------------------------------------------- */
+.activity-feed {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  overflow: auto;
+}
+
+.activity-feed__title {
+  margin: 0 0 var(--space-md);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-text-muted);
+}
+
+.activity-feed__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.activity-item__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--color-text);
+  font: inherit;
+  text-align: left;
+  padding: 8px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.activity-item__head:hover {
+  background: var(--color-surface-elevated);
+}
+
+.activity-item__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  flex: none;
+}
+
+.activity-item__caption {
+  flex: 1;
+  font-size: 0.9rem;
+}
+
+.activity-item__type {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+}
+
+.activity-item__detail {
+  margin: 4px 0 8px;
+  padding: var(--space-md);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  overflow: auto;
+  max-height: 180px;
+}
+
+/* Footer ------------------------------------------------------------------ */
+.app-footer {
+  padding: var(--space-md) var(--space-xl);
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  background: var(--color-surface);
+}
+
+/* Animations -------------------------------------------------------------- */
+@keyframes pixie-breathe {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes pixie-blink {
+  0%,
+  92%,
+  100% {
+    transform: scaleY(1);
+  }
+  95% {
+    transform: scaleY(0.1);
+  }
+}
+
+@keyframes pixie-tap {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-2px) rotate(-1deg);
+  }
+}
+
+@keyframes pixie-pulse {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pixie,
+  .pixie__eye,
+  .pixie__antenna::after {
+    animation: none !important;
+  }
+}

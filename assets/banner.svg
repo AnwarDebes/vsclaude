@@ -1,0 +1,78 @@
+<svg width="1280" height="360" viewBox="0 0 1280 360" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="vsclaude. Claude Code, in motion. For any model.">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1280" y2="360" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#211a17"/>
+      <stop offset="0.55" stop-color="#1a1614"/>
+      <stop offset="1" stop-color="#161210"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop stop-color="#d97757" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#d97757" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="word" x1="360" y1="120" x2="360" y2="210" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f7efe9"/>
+      <stop offset="1" stop-color="#e7d8cd"/>
+    </linearGradient>
+    <pattern id="dots" width="26" height="26" patternUnits="userSpaceOnUse">
+      <circle cx="1.5" cy="1.5" r="1.5" fill="#ffffff" fill-opacity="0.035"/>
+    </pattern>
+  </defs>
+
+  <rect width="1280" height="360" rx="20" fill="url(#bg)"/>
+  <rect width="1280" height="360" rx="20" fill="url(#dots)"/>
+  <rect x="1" y="1" width="1278" height="358" rx="19" fill="none" stroke="#3a312c" stroke-opacity="0.7"/>
+
+  <!-- Pixie, the companion, drawn in pixels -->
+  <g transform="translate(150 96)">
+    <ellipse cx="60" cy="100" rx="120" ry="120" fill="url(#glow)"/>
+    <!-- antennae -->
+    <rect x="36" y="-6" width="7" height="30" rx="3" fill="#d97757" transform="rotate(-12 39 9)"/>
+    <rect x="77" y="-6" width="7" height="30" rx="3" fill="#d97757" transform="rotate(12 80 9)"/>
+    <circle cx="33" cy="-8" r="8" fill="#e0a458"/>
+    <circle cx="87" cy="-8" r="8" fill="#e0a458"/>
+    <!-- head -->
+    <rect x="14" y="22" width="92" height="74" rx="14" fill="#d97757"/>
+    <rect x="14" y="78" width="92" height="18" rx="9" fill="#c2603f"/>
+    <!-- eyes -->
+    <circle cx="42" cy="52" r="9" fill="#1a1614"/>
+    <circle cx="78" cy="52" r="9" fill="#1a1614"/>
+    <circle cx="45" cy="49" r="3" fill="#f7efe9"/>
+    <circle cx="81" cy="49" r="3" fill="#f7efe9"/>
+    <!-- smile -->
+    <rect x="48" y="72" width="24" height="6" rx="3" fill="#1a1614"/>
+    <!-- body -->
+    <rect x="28" y="100" width="64" height="58" rx="12" fill="#2c2521" stroke="#d97757" stroke-width="4"/>
+    <rect x="46" y="116" width="28" height="8" rx="4" fill="#7fb069"/>
+    <rect x="46" y="132" width="20" height="6" rx="3" fill="#a8998f"/>
+  </g>
+
+  <!-- Wordmark -->
+  <g transform="translate(330 0)">
+    <text x="0" y="172" font-family="'JetBrains Mono','Cascadia Code',ui-monospace,monospace" font-size="92" font-weight="800" letter-spacing="-2">
+      <tspan fill="#d97757">&gt;_</tspan><tspan fill="url(#word)"> vsclaude</tspan>
+    </text>
+    <text x="6" y="222" font-family="'Inter','Segoe UI',system-ui,sans-serif" font-size="27" font-weight="500" fill="#c9b8ac">
+      <tspan fill="#c9b8ac">Claude Code, in motion.</tspan><tspan fill="#d97757">  For any model.</tspan>
+    </text>
+
+    <!-- chips -->
+    <g transform="translate(8 256)" font-family="'JetBrains Mono',ui-monospace,monospace" font-size="16" font-weight="600">
+      <g>
+        <rect x="0" y="0" width="86" height="34" rx="17" fill="#2c2521" stroke="#3a312c"/>
+        <text x="43" y="22" text-anchor="middle" fill="#c9b8ac">Tauri 2</text>
+      </g>
+      <g transform="translate(98 0)">
+        <rect x="0" y="0" width="104" height="34" rx="17" fill="#2c2521" stroke="#3a312c"/>
+        <text x="52" y="22" text-anchor="middle" fill="#c9b8ac">React 19</text>
+      </g>
+      <g transform="translate(214 0)">
+        <rect x="0" y="0" width="132" height="34" rx="17" fill="#2c2521" stroke="#3a312c"/>
+        <text x="66" y="22" text-anchor="middle" fill="#c9b8ac">TypeScript</text>
+      </g>
+      <g transform="translate(358 0)">
+        <rect x="0" y="0" width="78" height="34" rx="17" fill="#3a2620" stroke="#d97757"/>
+        <text x="39" y="22" text-anchor="middle" fill="#e8a07f">v0.1.0</text>
+      </g>
+    </g>
+  </g>
+</svg>

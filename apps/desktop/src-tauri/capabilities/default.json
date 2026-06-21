@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Baseline capability for the main vsclaude window. The agent runs under explicit, user-controlled permissions, so this stays intentionally small.",
+  "windows": ["main"],
+  "permissions": ["core:default"]
+}

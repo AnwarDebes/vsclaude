@@ -1,0 +1,35 @@
+[package]
+name = "vsclaude"
+version = "0.1.0"
+description = "The vsclaude desktop core: process lifecycle, PTY, filesystem, and secure secret storage."
+authors = ["Anwar Debes"]
+license = "MIT"
+repository = "https://github.com/AnwarDebes/vsclaude"
+edition = "2021"
+rust-version = "1.77"
+
+# The Tauri app is a library plus a thin binary so it can be embedded by the
+# mobile targets later. The desktop binary lives in src/main.rs.
+[lib]
+name = "vsclaude_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+keyring = "3"
+
+[features]
+# Used by the production bundle.
+custom-protocol = ["tauri/custom-protocol"]
+
+[profile.release]
+panic = "abort"
+codegen-units = 1
+lto = true
+opt-level = "s"
+strip = true
