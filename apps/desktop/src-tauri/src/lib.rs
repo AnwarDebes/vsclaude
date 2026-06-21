@@ -8,6 +8,7 @@
 //! names below.
 
 mod fs_ops;
+mod git;
 mod provider;
 mod pty;
 mod secrets;
@@ -50,6 +51,10 @@ pub fn run() {
             pty::pty_kill,
             provider::provider_available,
             provider::provider_start,
+            git::git_status,
+            git::git_diff,
+            git::git_head_file,
+            git::git_commit,
         ])
         .run(tauri::generate_context!())
         .expect("error while running the vsclaude application");

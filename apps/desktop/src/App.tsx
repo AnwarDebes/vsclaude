@@ -11,6 +11,7 @@ import { PixieStage } from './components/PixieStage';
 import { PixieActionSprite } from './components/ActionIcon';
 import { SettingsBar } from './components/SettingsBar';
 import { CommandPalette } from './components/CommandPalette';
+import { DiffReview } from './components/DiffReview';
 import { Narration } from './components/Narration';
 import { ExplorerPanel } from './panels/ExplorerPanel';
 import { EditorPanel } from './panels/EditorPanel';
@@ -49,6 +50,7 @@ export function App() {
   const [settings, setSettings] = useState<AppSettings>(() => loadAppSettings());
   const [openFile, setOpenFile] = useState('src/auth/login-form.tsx');
   const [editedContents, setEditedContents] = useState<Record<string, string>>({});
+  const [reviewOpen, setReviewOpen] = useState(false);
   const live = useLiveProvider();
   const { available: liveAvailable, start: liveStart } = live;
   const usingLive = live.events.length > 0;
@@ -82,6 +84,12 @@ export function App() {
         );
         if (prompt) void liveStart(prompt);
       },
+    });
+    r.register({
+      id: 'review-changes',
+      title: 'Review changes and commit',
+      keywords: ['git', 'diff', 'commit', 'review', 'accept'],
+      run: () => setReviewOpen(true),
     });
     const modes: PresentationMode[] = ['companion', 'stage', 'swarm', 'minimal', 'cozy'];
     for (const mode of modes) {
@@ -232,6 +240,7 @@ export function App() {
       )}
 
       <CommandPalette registry={registry} />
+      <DiffReview open={reviewOpen} cwd="." onClose={() => setReviewOpen(false)} />
     </div>
   );
 }

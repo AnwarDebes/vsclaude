@@ -80,6 +80,9 @@ importers:
       '@vsclaude/editor':
         specifier: workspace:*
         version: link:../../packages/editor
+      '@vsclaude/git':
+        specifier: workspace:*
+        version: link:../../packages/git
       '@vsclaude/motion':
         specifier: workspace:*
         version: link:../../packages/motion

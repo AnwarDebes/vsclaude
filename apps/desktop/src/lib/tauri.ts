@@ -58,3 +58,13 @@ export const onProviderExit = (
   handler: (p: { sessionId: string; code: number | null }) => void,
 ): Promise<UnlistenFn> =>
   listen<{ sessionId: string; code: number | null }>('provider:exit', (e) => handler(e.payload));
+
+/* ---- Git (diff review and commit) ---- */
+
+export const gitStatus = (cwd: string): Promise<string> => invoke('git_status', { cwd });
+export const gitDiff = (cwd: string, path?: string): Promise<string> =>
+  invoke('git_diff', { cwd, path: path ?? null });
+export const gitHeadFile = (cwd: string, path: string): Promise<string> =>
+  invoke('git_head_file', { cwd, path });
+export const gitCommit = (cwd: string, message: string): Promise<{ output: string }> =>
+  invoke('git_commit', { cwd, message });

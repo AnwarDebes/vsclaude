@@ -28,6 +28,7 @@
     "@vsclaude/core-shell": "workspace:*",
     "@vsclaude/design-system": "workspace:*",
     "@vsclaude/editor": "workspace:*",
+    "@vsclaude/git": "workspace:*",
     "@vsclaude/motion": "workspace:*",
     "@vsclaude/persistence": "workspace:*",
     "@vsclaude/providers": "workspace:*",
