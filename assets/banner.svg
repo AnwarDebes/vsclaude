@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1080" viewBox="0 0 1200 1080" font-family="'JetBrains Mono','SF Mono','DejaVu Sans Mono',monospace" shape-rendering="crispEdges">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200" font-family="'JetBrains Mono','SF Mono','DejaVu Sans Mono',monospace" shape-rendering="crispEdges">
   <defs>
     <!-- Pixie, the coral pixel creature, drawn once and reused everywhere -->
     <g id="pixie">
@@ -22,7 +22,7 @@
   </defs>
 
   <!-- panel -->
-  <rect x="6" y="6" width="1188" height="1068" rx="18" fill="#1a1915" stroke="#34322a" stroke-width="2"/>
+  <rect x="6" y="6" width="1188" height="1188" rx="18" fill="#1a1915" stroke="#34322a" stroke-width="2"/>
 
   <!-- faint pixel scanlines behind the hero -->
   <g opacity="0.06" fill="#d97757">
@@ -315,4 +315,45 @@
   <g transform="translate(1070 958)"><rect width="80" height="80" rx="8" fill="#15140f" stroke="#34322a"/><use href="#pixie" transform="translate(14 15) scale(1.6)"/>
     <rect x="54" y="26" width="8" height="8" fill="#d97757"/><rect x="64" y="26" width="8" height="8" fill="#b85d40"/><rect x="54" y="36" width="8" height="8" fill="#b85d40"/><rect x="64" y="36" width="8" height="8" fill="#d97757"/></g>
   <text x="1110" y="1054" font-size="12" fill="#75736b" text-anchor="middle">index</text>
+
+  <!-- ROW 7: understand and orchestrate more -->
+  <g transform="translate(44 1078)"><rect width="80" height="80" rx="8" fill="#15140f" stroke="#34322a"/><use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="26" width="20" height="2" fill="#a8a69b"/><rect x="56" y="31" width="16" height="2" fill="#a8a69b"/><rect x="59" y="36" width="10" height="2" fill="#a8a69b"/><rect x="61" y="41" width="6" height="2" fill="#7db36a"/></g>
+  <text x="84" y="1174" font-size="12" fill="#75736b" text-anchor="middle">summarize</text>
+
+  <g transform="translate(158 1078)"><rect width="80" height="80" rx="8" fill="#15140f" stroke="#34322a"/><use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <circle cx="63" cy="30" r="8" fill="none" stroke="#f0c674" stroke-width="2"/><rect x="60" y="38" width="6" height="4" fill="#f0c674"/><rect x="61" y="42" width="4" height="2" fill="#a8a69b"/><rect x="62" y="28" width="2" height="6" fill="#f0c674"/></g>
+  <text x="198" y="1174" font-size="12" fill="#75736b" text-anchor="middle">explain</text>
+
+  <g transform="translate(272 1078)"><rect width="80" height="80" rx="8" fill="#15140f" stroke="#34322a"/><use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="54" y="30" width="22" height="12" fill="#211d18" stroke="#34322a"/><rect x="57" y="34" width="3" height="4" fill="#a8a69b"/><rect x="61" y="34" width="3" height="4" fill="#a8a69b"/><rect x="66" y="32" width="2" height="8" fill="#d97757"/></g>
+  <text x="312" y="1174" font-size="12" fill="#75736b" text-anchor="middle">rename</text>
+
+  <g transform="translate(386 1078)"><rect width="80" height="80" rx="8" fill="#15140f" stroke="#34322a"/><use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="61" y="24" width="3" height="20" fill="#d97757"/><rect x="52" y="33" width="20" height="3" fill="#d97757"/><path d="M 55 27 l 14 14 M 69 27 l -14 14" stroke="#d97757" stroke-width="2.5"/></g>
+  <text x="426" y="1174" font-size="12" fill="#75736b" text-anchor="middle">init</text>
+
+  <g transform="translate(500 1078)"><rect width="80" height="80" rx="8" fill="#15140f" stroke="#34322a"/><use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="53" y="30" width="24" height="14" fill="#211d18" stroke="#34322a"/><rect x="56" y="35" width="6" height="4" fill="#f0c674"/><rect x="63" y="36" width="2" height="2" fill="#a8a69b"/><rect x="66" y="36" width="2" height="2" fill="#a8a69b"/><rect x="69" y="35" width="6" height="4" fill="#7db36a"/></g>
+  <text x="540" y="1174" font-size="12" fill="#75736b" text-anchor="middle">env</text>
+
+  <g transform="translate(614 1078)"><rect width="80" height="80" rx="8" fill="#15140f" stroke="#34322a"/><use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <circle cx="63" cy="36" r="10" fill="none" stroke="#a8a69b" stroke-width="2"/><rect x="61" y="23" width="4" height="4" fill="#a8a69b"/><rect x="62" y="29" width="2" height="8" fill="#d97757"/><rect x="63" y="35" width="5" height="2" fill="#d97757"/></g>
+  <text x="654" y="1174" font-size="12" fill="#75736b" text-anchor="middle">benchmark</text>
+
+  <g transform="translate(728 1078)"><rect width="80" height="80" rx="8" fill="#15140f" stroke="#34322a"/><use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="52" y="32" width="24" height="16" fill="#211d18" stroke="#34322a"/><rect x="58" y="28" width="8" height="4" fill="#211d18" stroke="#34322a"/><circle cx="64" cy="40" r="5" fill="none" stroke="#a8a69b" stroke-width="2"/><circle cx="64" cy="40" r="2" fill="#6c9bd9"/><rect x="71" y="34" width="3" height="2" fill="#f0c674"/></g>
+  <text x="768" y="1174" font-size="12" fill="#75736b" text-anchor="middle">screenshot</text>
+
+  <g transform="translate(842 1078)"><rect width="80" height="80" rx="8" fill="#15140f" stroke="#34322a"/><use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <circle cx="63" cy="34" r="11" fill="none" stroke="#a8a69b" stroke-width="2"/><path d="M 63 26 l 3 8 l -3 -2 l -3 2 Z" fill="#e0594e"/><path d="M 63 42 l 3 -8 l -3 2 l -3 -2 Z" fill="#a8a69b"/></g>
+  <text x="882" y="1174" font-size="12" fill="#75736b" text-anchor="middle">navigate</text>
+
+  <g transform="translate(956 1078)"><rect width="80" height="80" rx="8" fill="#15140f" stroke="#34322a"/><use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <rect x="50" y="28" width="7" height="2" fill="#6c9bd9"/><rect x="50" y="28" width="2" height="7" fill="#6c9bd9"/><rect x="69" y="28" width="7" height="2" fill="#6c9bd9"/><rect x="74" y="28" width="2" height="7" fill="#6c9bd9"/><rect x="50" y="40" width="7" height="2" fill="#6c9bd9"/><rect x="50" y="35" width="2" height="7" fill="#6c9bd9"/><rect x="69" y="40" width="7" height="2" fill="#6c9bd9"/><rect x="74" y="35" width="2" height="7" fill="#6c9bd9"/></g>
+  <text x="996" y="1174" font-size="12" fill="#75736b" text-anchor="middle">compact</text>
+
+  <g transform="translate(1070 1078)"><rect width="80" height="80" rx="8" fill="#15140f" stroke="#34322a"/><use href="#pixie" transform="translate(14 15) scale(1.6)"/>
+    <text x="54" y="40" font-size="14" font-weight="700" fill="#d97757">A</text><rect x="62" y="33" width="7" height="2" fill="#a8a69b"/><rect x="67" y="31" width="2" height="2" fill="#a8a69b"/><rect x="67" y="35" width="2" height="2" fill="#a8a69b"/><text x="68" y="40" font-size="13" font-weight="700" fill="#6c9bd9">B</text></g>
+  <text x="1110" y="1174" font-size="12" fill="#75736b" text-anchor="middle">translate</text>
 </svg>
