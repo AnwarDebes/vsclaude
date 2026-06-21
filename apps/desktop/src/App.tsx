@@ -3,6 +3,7 @@ import type { AppSettings, PresentationMode } from '@vsclaude/contracts';
 import { CommandRegistry } from '@vsclaude/core-shell';
 import { bundledThemeIds } from '@vsclaude/design-system';
 import { useSession } from './session/useSession';
+import { useLiveProvider } from './session/useLiveProvider';
 import { demoFiles } from './session/demo-session';
 import { demoContentFor } from './session/demo-files';
 import { applyTheme, loadAppSettings, saveAppSettings } from './lib/theme';
@@ -16,6 +17,7 @@ import { EditorPanel } from './panels/EditorPanel';
 import { SwarmPanel } from './panels/SwarmPanel';
 import { TimelinePanel } from './panels/TimelinePanel';
 import { TokenPanel } from './panels/TokenPanel';
+import { TerminalPanel } from './panels/TerminalPanel';
 
 const STATE_LABELS: Record<string, string> = {
   idle: 'resting',
@@ -47,7 +49,10 @@ export function App() {
   const [settings, setSettings] = useState<AppSettings>(() => loadAppSettings());
   const [openFile, setOpenFile] = useState('src/auth/login-form.tsx');
   const [editedContents, setEditedContents] = useState<Record<string, string>>({});
-  const session = useSession();
+  const live = useLiveProvider();
+  const { available: liveAvailable, start: liveStart } = live;
+  const usingLive = live.events.length > 0;
+  const session = useSession(usingLive ? live.events : undefined, { live: usingLive });
   const { playing, setPlaying, restart } = session;
 
   useEffect(() => {
@@ -64,6 +69,20 @@ export function App() {
       run: () => setPlaying(!playing),
     });
     r.register({ id: 'restart', title: 'Replay the session', keywords: ['restart'], run: restart });
+    r.register({
+      id: 'run-agent',
+      title: liveAvailable
+        ? 'Run a real agent session'
+        : 'Run a real agent session (needs the claude CLI)',
+      keywords: ['agent', 'claude', 'session', 'live', 'run'],
+      run: () => {
+        const prompt = window.prompt(
+          'What should the agent do?',
+          'Add a validated login form with tests.',
+        );
+        if (prompt) void liveStart(prompt);
+      },
+    });
     const modes: PresentationMode[] = ['companion', 'stage', 'swarm', 'minimal', 'cozy'];
     for (const mode of modes) {
       r.register({
@@ -94,7 +113,7 @@ export function App() {
       run: () => setSettings((s) => ({ ...s, sound: { ...s.sound, enabled: !s.sound.enabled } })),
     });
     return r;
-  }, [playing, setPlaying, restart]);
+  }, [playing, setPlaying, restart, liveAvailable, liveStart]);
 
   const mode = settings.presentationMode;
   const isEditorMode = mode === 'companion' || mode === 'cozy';
@@ -111,6 +130,20 @@ export function App() {
   const showTimeline = mode !== 'minimal';
   const showBottom = mode !== 'minimal';
   const content = editedContents[openFile] ?? demoContentFor(openFile);
+
+  const terminalLines = useMemo(() => {
+    const lines: string[] = [];
+    for (const e of session.events) {
+      if (e.type === 'command_run') {
+        const cmd = e.payload?.['command'];
+        if (typeof cmd === 'string') lines.push(`\x1b[38;2;127;176;105m$\x1b[0m ${cmd}`);
+      } else if (e.type === 'command_output') {
+        const chunk = e.payload?.['chunk'];
+        if (typeof chunk === 'string') lines.push(chunk);
+      }
+    }
+    return lines;
+  }, [session.events]);
 
   const pixie = (
     <PixieStage actionId={session.actionId} caption={session.directive.caption} stateLabel={stateLabel} />
@@ -188,6 +221,7 @@ export function App() {
 
       {showBottom ? (
         <footer className="app-bottom">
+          <TerminalPanel fallbackLines={terminalLines} />
           <TokenPanel tokens={session.tokens} tree={session.tree} />
           <Narration narration={session.narration} />
         </footer>

@@ -8,6 +8,8 @@
 //! names below.
 
 mod fs_ops;
+mod provider;
+mod pty;
 mod secrets;
 
 use serde::Serialize;
@@ -42,6 +44,12 @@ pub fn run() {
             secrets::secret_set,
             secrets::secret_get,
             secrets::secret_delete,
+            pty::pty_create,
+            pty::pty_write,
+            pty::pty_resize,
+            pty::pty_kill,
+            provider::provider_available,
+            provider::provider_start,
         ])
         .run(tauri::generate_context!())
         .expect("error while running the vsclaude application");

@@ -39,9 +39,19 @@ export interface SessionState {
  * swarm helpers (roster, edges, token totals). Connecting a provider swaps the
  * event source and nothing else changes.
  */
-export function useSession(events: AgentEvent[] = demoSession): SessionState {
+export function useSession(
+  events: AgentEvent[] = demoSession,
+  options: { live?: boolean } = {},
+): SessionState {
+  const live = options.live ?? false;
   const [index, setIndex] = useState(0);
   const [playing, setPlaying] = useState(true);
+
+  // In live mode the events stream in from a real provider, so always show the
+  // newest one instead of replaying on a timer.
+  useEffect(() => {
+    if (live) setIndex(Math.max(0, events.length - 1));
+  }, [live, events.length]);
 
   const seen = useMemo(() => events.slice(0, index + 1), [events, index]);
   const current = seen[seen.length - 1];
@@ -80,14 +90,14 @@ export function useSession(events: AgentEvent[] = demoSession): SessionState {
   );
 
   useEffect(() => {
-    if (!playing) return;
+    if (live || !playing) return;
     if (index >= events.length - 1) {
       setPlaying(false);
       return;
     }
     const timer = setTimeout(() => setIndex((i) => Math.min(i + 1, events.length - 1)), STEP_MS);
     return () => clearTimeout(timer);
-  }, [playing, index, events.length]);
+  }, [live, playing, index, events.length]);
 
   const restart = useCallback(() => {
     setIndex(0);

@@ -1,0 +1,60 @@
+/**
+ * Thin typed bridge to the native Rust core. Every call is a no-op-safe wrapper
+ * around the Tauri IPC, plus an `isTauri` guard so the same components run in the
+ * browser (demo) and in the native app (real PTY, real provider).
+ */
+import { invoke } from '@tauri-apps/api/core';
+import { listen, type UnlistenFn } from '@tauri-apps/api/event';
+
+/** True when running inside the native Tauri shell. */
+export function isTauri(): boolean {
+  return typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window;
+}
+
+/* ---- PTY (integrated terminal) ---- */
+
+export async function ptyCreate(
+  cols: number,
+  rows: number,
+  opts?: { shell?: string; cwd?: string },
+): Promise<string> {
+  const result = await invoke<{ ptyId: string }>('pty_create', {
+    cols,
+    rows,
+    shell: opts?.shell ?? null,
+    cwd: opts?.cwd ?? null,
+  });
+  return result.ptyId;
+}
+export const ptyWrite = (ptyId: string, data: string): Promise<void> =>
+  invoke('pty_write', { ptyId, data });
+export const ptyResize = (ptyId: string, cols: number, rows: number): Promise<void> =>
+  invoke('pty_resize', { ptyId, cols, rows });
+export const ptyKill = (ptyId: string): Promise<void> => invoke('pty_kill', { ptyId });
+
+export const onPtyData = (handler: (p: { ptyId: string; data: string }) => void): Promise<UnlistenFn> =>
+  listen<{ ptyId: string; data: string }>('pty:data', (e) => handler(e.payload));
+export const onPtyExit = (
+  handler: (p: { ptyId: string; exitCode: number | null }) => void,
+): Promise<UnlistenFn> =>
+  listen<{ ptyId: string; exitCode: number | null }>('pty:exit', (e) => handler(e.payload));
+
+/* ---- Live agent provider ---- */
+
+export const providerAvailable = (command?: string): Promise<boolean> =>
+  invoke('provider_available', { command: command ?? null });
+
+export const providerStart = (
+  prompt: string,
+  opts?: { cwd?: string; command?: string },
+): Promise<{ sessionId: string; pid: number }> =>
+  invoke('provider_start', { prompt, cwd: opts?.cwd ?? null, command: opts?.command ?? null });
+
+export const onProviderStdout = (
+  handler: (p: { sessionId: string; line: string }) => void,
+): Promise<UnlistenFn> =>
+  listen<{ sessionId: string; line: string }>('provider:stdout', (e) => handler(e.payload));
+export const onProviderExit = (
+  handler: (p: { sessionId: string; code: number | null }) => void,
+): Promise<UnlistenFn> =>
+  listen<{ sessionId: string; code: number | null }>('provider:exit', (e) => handler(e.payload));
