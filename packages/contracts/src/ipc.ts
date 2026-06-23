@@ -77,7 +77,12 @@ export interface IpcCommandMap {
   'fs.unwatch': { args: { watchId: string }; result: void };
 
   'secret.set': { args: { key: string; value: string }; result: void };
-  'secret.get': { args: { key: string }; result: { value: string | null } };
+  /**
+   * Reports only whether a secret is stored and a masked hint (last four
+   * characters). The raw value is never returned to the renderer; see
+   * specs/SECURITY.md.
+   */
+  'secret.status': { args: { key: string }; result: { configured: boolean; hint: string } };
   'secret.delete': { args: { key: string }; result: void };
 
   'git.status': { args: { repo: string }; result: { staged: string[]; unstaged: string[]; branch: string } };
@@ -125,7 +130,7 @@ export const IPC_COMMANDS = [
   'fs.watch',
   'fs.unwatch',
   'secret.set',
-  'secret.get',
+  'secret.status',
   'secret.delete',
   'git.status',
 ] as const satisfies readonly IpcCommandName[];

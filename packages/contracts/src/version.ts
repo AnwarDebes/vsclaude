@@ -16,8 +16,12 @@ export const AGENT_EVENT_SCHEMA_VERSION = 1 as const;
  * rename, delete, copy, stat), gave readFile/writeFile an mtimeMs for conflict
  * detection, and implemented the previously declared watch/unwatch commands. See
  * specs/WORKSPACE_AND_FILES.md.
+ *
+ * v3: replaced the cleartext `secret.get` with `secret.status`, which returns
+ * only a configured flag and a masked hint. No command returns a raw key. See
+ * specs/SECURITY.md.
  */
-export const IPC_PROTOCOL_VERSION = 2 as const;
+export const IPC_PROTOCOL_VERSION = 3 as const;
 
 /** Version of the public plugin API surface. Plugins declare the version they target. */
 export const PLUGIN_API_VERSION = 1 as const;

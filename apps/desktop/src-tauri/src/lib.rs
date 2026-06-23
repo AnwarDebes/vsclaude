@@ -24,8 +24,9 @@ pub struct CoreVersion {
 
 /// The IPC protocol version this core speaks. Keep in lockstep with
 /// `IPC_PROTOCOL_VERSION` in the contracts package. v2 added the filesystem
-/// mutation surface, mtime conflict detection, and the live watcher.
-const IPC_PROTOCOL_VERSION: u32 = 2;
+/// mutation surface, mtime conflict detection, and the live watcher. v3 replaced
+/// the cleartext `secret.get` with `secret.status` (no key ever leaves the core).
+const IPC_PROTOCOL_VERSION: u32 = 3;
 
 #[tauri::command]
 fn core_version() -> CoreVersion {
@@ -54,7 +55,7 @@ pub fn run() {
             fs_ops::fs_watch,
             fs_ops::fs_unwatch,
             secrets::secret_set,
-            secrets::secret_get,
+            secrets::secret_status,
             secrets::secret_delete,
             pty::pty_create,
             pty::pty_write,
