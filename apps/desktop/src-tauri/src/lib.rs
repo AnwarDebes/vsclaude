@@ -23,8 +23,9 @@ pub struct CoreVersion {
 }
 
 /// The IPC protocol version this core speaks. Keep in lockstep with
-/// `IPC_PROTOCOL_VERSION` in the contracts package.
-const IPC_PROTOCOL_VERSION: u32 = 1;
+/// `IPC_PROTOCOL_VERSION` in the contracts package. v2 added the filesystem
+/// mutation surface, mtime conflict detection, and the live watcher.
+const IPC_PROTOCOL_VERSION: u32 = 2;
 
 #[tauri::command]
 fn core_version() -> CoreVersion {
@@ -37,11 +38,21 @@ fn core_version() -> CoreVersion {
 /// Build and run the Tauri application.
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_dialog::init())
+        .manage(fs_ops::WatcherState::default())
         .invoke_handler(tauri::generate_handler![
             core_version,
             fs_ops::fs_read_dir,
             fs_ops::fs_read_file,
             fs_ops::fs_write_file,
+            fs_ops::fs_stat,
+            fs_ops::fs_create_file,
+            fs_ops::fs_create_dir,
+            fs_ops::fs_rename,
+            fs_ops::fs_delete,
+            fs_ops::fs_copy,
+            fs_ops::fs_watch,
+            fs_ops::fs_unwatch,
             secrets::secret_set,
             secrets::secret_get,
             secrets::secret_delete,

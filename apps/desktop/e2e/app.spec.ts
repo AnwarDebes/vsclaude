@@ -39,4 +39,18 @@ test.describe('vsclaude shell', () => {
     await page.getByRole('button', { name: 'session.ts', exact: true }).click();
     await expect(page.locator('.monaco-editor')).toBeVisible({ timeout: 15_000 });
   });
+
+  test('opens the diff review overlay from the command palette', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.getByText('vsclaude').first()).toBeVisible();
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await expect(palette).toBeVisible();
+    await palette.getByPlaceholder(/type a command/i).fill('review');
+    await page.keyboard.press('Enter');
+    const review = page.getByRole('dialog', { name: /review changes/i });
+    await expect(review).toBeVisible();
+    await expect(review.getByText(/native app/i)).toBeVisible();
+  });
 });

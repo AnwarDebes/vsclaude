@@ -24,7 +24,10 @@ the journey from there to a signed, installable, delightful editor.
 - [x] `core-shell`: panel-tree layout model, command registry
 - [x] `editor`: file-tree model, tab manager
 - [x] `editor`: Monaco integration (offline workers, syntax, minimap, save)
-- [ ] `editor`: side-by-side diff editor, multi-root workspaces
+- [x] `editor`: open-folder workspace, real lazy fs tree, file operations
+      (create, rename, delete to recycle bin, duplicate, move), save to disk with
+      dirty tracking, live external-change detection, multi-root (A1)
+- [ ] `editor`: side-by-side diff editor, agent-edit review queue
 - [x] `terminal`: typed PTY client over IPC
 - [x] `terminal`: xterm wired to a real Rust PTY (portable-pty / ConPTY)
 - [x] `agent-runtime`: AgentEvent reducer, agent-tree session manager

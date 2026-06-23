@@ -4,6 +4,7 @@ import { CommandRegistry } from '@vsclaude/core-shell';
 import { bundledThemeIds } from '@vsclaude/design-system';
 import { useSession } from './session/useSession';
 import { useLiveProvider } from './session/useLiveProvider';
+import { useWorkspace } from './workspace/useWorkspace';
 import { demoFiles } from './session/demo-session';
 import { demoContentFor } from './session/demo-files';
 import { applyTheme, loadAppSettings, saveAppSettings } from './lib/theme';
@@ -15,6 +16,8 @@ import { DiffReview } from './components/DiffReview';
 import { Narration } from './components/Narration';
 import { ExplorerPanel } from './panels/ExplorerPanel';
 import { EditorPanel } from './panels/EditorPanel';
+import { WorkspaceExplorer } from './components/WorkspaceExplorer';
+import { WorkspaceEditor } from './components/WorkspaceEditor';
 import { SwarmPanel } from './panels/SwarmPanel';
 import { TimelinePanel } from './panels/TimelinePanel';
 import { TokenPanel } from './panels/TokenPanel';
@@ -56,6 +59,8 @@ export function App() {
   const usingLive = live.events.length > 0;
   const session = useSession(usingLive ? live.events : undefined, { live: usingLive });
   const { playing, setPlaying, restart } = session;
+  const ws = useWorkspace();
+  const hasWorkspace = ws.roots.length > 0;
 
   useEffect(() => {
     applyTheme(settings);
@@ -91,6 +96,49 @@ export function App() {
       keywords: ['git', 'diff', 'commit', 'review', 'accept'],
       run: () => setReviewOpen(true),
     });
+    if (ws.available) {
+      r.register({
+        id: 'open-folder',
+        title: 'Open Folder',
+        keywords: ['workspace', 'project', 'directory', 'open'],
+        run: () => void ws.openFolder(),
+      });
+    }
+    if (hasWorkspace) {
+      r.register({
+        id: 'save-all',
+        title: 'Save All',
+        keywords: ['write', 'disk', 'save'],
+        run: () => void ws.saveAll(),
+      });
+      r.register({
+        id: 'new-file',
+        title: 'New File',
+        keywords: ['create', 'file'],
+        run: () => {
+          const root = ws.roots[0];
+          if (!root) return;
+          const name = window.prompt('New file name', 'untitled.ts');
+          if (name) void ws.newFile(root.path, name);
+        },
+      });
+      for (const root of ws.roots) {
+        r.register({
+          id: `close-folder-${root.id}`,
+          title: `Close Folder: ${root.name}`,
+          keywords: ['workspace', 'close'],
+          run: () => ws.closeRoot(root.id),
+        });
+      }
+    }
+    for (const recent of ws.recents) {
+      r.register({
+        id: `recent-${recent.path}`,
+        title: `Open Recent: ${recent.name}`,
+        keywords: ['workspace', 'project', 'recent', recent.path],
+        run: () => void ws.openPath(recent.path),
+      });
+    }
     const modes: PresentationMode[] = ['companion', 'stage', 'swarm', 'minimal', 'cozy'];
     for (const mode of modes) {
       r.register({
@@ -121,7 +169,7 @@ export function App() {
       run: () => setSettings((s) => ({ ...s, sound: { ...s.sound, enabled: !s.sound.enabled } })),
     });
     return r;
-  }, [playing, setPlaying, restart, liveAvailable, liveStart]);
+  }, [playing, setPlaying, restart, liveAvailable, liveStart, hasWorkspace, ws]);
 
   const mode = settings.presentationMode;
   const isEditorMode = mode === 'companion' || mode === 'cozy';
@@ -129,12 +177,21 @@ export function App() {
   const currentPath = session.current?.payload?.['path'];
   const activePath = typeof currentPath === 'string' ? currentPath : undefined;
 
-  // Follow the agent: when it touches a file, open that file in the editor.
+  // Follow the agent: when it touches a file, open that file in the editor. With
+  // a real workspace open this only follows a live session (whose paths exist on
+  // disk); the scripted demo drives the soul, not the real editor.
   useEffect(() => {
-    if (isEditorMode && activePath) setOpenFile(activePath);
-  }, [activePath, isEditorMode]);
+    if (!isEditorMode || !activePath) return;
+    if (hasWorkspace) {
+      if (usingLive) void ws.openFile(activePath);
+    } else {
+      setOpenFile(activePath);
+    }
+  }, [activePath, isEditorMode, hasWorkspace, usingLive, ws]);
 
-  const showExplorer = mode === 'companion';
+  // The explorer shows in companion mode, and also whenever a real workspace is
+  // open in any editor mode so files are always reachable.
+  const showExplorer = mode === 'companion' || (hasWorkspace && isEditorMode);
   const showTimeline = mode !== 'minimal';
   const showBottom = mode !== 'minimal';
   const content = editedContents[openFile] ?? demoContentFor(openFile);
@@ -182,12 +239,16 @@ export function App() {
 
       <main className="app-main">
         {showExplorer ? (
-          <ExplorerPanel
-            files={demoFiles}
-            activePath={activePath}
-            openPath={openFile}
-            onSelect={setOpenFile}
-          />
+          hasWorkspace ? (
+            <WorkspaceExplorer ws={ws} />
+          ) : (
+            <ExplorerPanel
+              files={demoFiles}
+              activePath={activePath}
+              openPath={openFile}
+              onSelect={setOpenFile}
+            />
+          )
         ) : null}
 
         <div className="app-center">
@@ -199,12 +260,16 @@ export function App() {
               tokens={session.tokens}
             />
           ) : isEditorMode ? (
-            <EditorPanel
-              path={openFile}
-              value={content}
-              onChange={(v) => setEditedContents((m) => ({ ...m, [openFile]: v }))}
-              onSave={(v) => setEditedContents((m) => ({ ...m, [openFile]: v }))}
-            />
+            hasWorkspace ? (
+              <WorkspaceEditor ws={ws} />
+            ) : (
+              <EditorPanel
+                path={openFile}
+                value={content}
+                onChange={(v) => setEditedContents((m) => ({ ...m, [openFile]: v }))}
+                onSave={(v) => setEditedContents((m) => ({ ...m, [openFile]: v }))}
+              />
+            )
           ) : (
             pixie
           )}
@@ -238,6 +303,15 @@ export function App() {
           <Narration narration={session.narration} />
         </footer>
       )}
+
+      {ws.error ? (
+        <div className="workspace-toast" role="alert">
+          <span>{ws.error}</span>
+          <button type="button" className="workspace-toast__close" aria-label="Dismiss" onClick={ws.clearError}>
+            {'×'}
+          </button>
+        </div>
+      ) : null}
 
       <CommandPalette registry={registry} />
       <DiffReview open={reviewOpen} cwd="." onClose={() => setReviewOpen(false)} />

@@ -19,10 +19,16 @@ tauri-build = { version = "2", features = [] }
 
 [dependencies]
 tauri = { version = "2", features = [] }
+tauri-plugin-dialog = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 keyring = "3"
 portable-pty = "0.8"
+# Live filesystem watching for the explorer and open buffers (Phase A1).
+notify = "8"
+notify-debouncer-full = "0.5"
+# Deletes go to the OS recycle bin so they stay recoverable.
+trash = "5"
 
 [features]
 # Used by the production bundle.
@@ -30,7 +36,9 @@ custom-protocol = ["tauri/custom-protocol"]
 
 [profile.release]
 panic = "abort"
-codegen-units = 1
-lto = true
+# Thin LTO keeps the binary small and optimized while building reliably and in
+# parallel. Fat LTO with a single codegen unit can take hours on the full Tauri
+# dependency tree; thin gives nearly the same result far more dependably.
+lto = "thin"
 opt-level = "s"
 strip = true

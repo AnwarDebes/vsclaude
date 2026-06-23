@@ -5,6 +5,48 @@ continue seamlessly.
 
 ## Last updated
 
+2026-06-23. Session 2 (Phase A1: the real workspace and filesystem layer).
+
+## Phase A1: workspace and real filesystem (done)
+
+vsclaude now opens a real project folder and works on real files, not the demo
+fixture. The spec is `specs/WORKSPACE_AND_FILES.md`.
+
+- **Contract v2** (`packages/contracts`): bumped `IPC_PROTOCOL_VERSION` to 2 and
+  added the filesystem mutation surface (`fs.stat`, `fs.createFile`,
+  `fs.createDir`, `fs.rename`, `fs.delete`, `fs.copy`), gave `fs.readFile` and
+  `fs.writeFile` an `mtimeMs` for conflict detection, and added the `FileStat`
+  type. The Rust core mirrors the version.
+- **Rust core** (`fs_ops.rs`): real implementations of every new command plus the
+  previously declared `fs.watch`/`fs.unwatch`, backed by `notify` (a 150 ms
+  debounced recursive watcher that emits `fs:changed`) and `trash` (deletes go to
+  the OS recycle bin, so they are recoverable). Every returned path is normalized
+  to forward slashes for stable keys across platforms. Open-folder uses
+  `tauri-plugin-dialog`. `cargo check` is clean with no warnings.
+- **Pure model** (`@vsclaude/editor`): new `workspace/` modules with path helpers
+  (normalize, parent, join, move validation, duplicate-name derivation), a lazy
+  workspace-tree builder reusing the existing `flattenVisible` renderer, dir-merge
+  and subtree-prune reconcilers, and the recent-projects model. 14 new unit tests.
+- **Renderer**: a `useWorkspace` hook owns the open roots, the lazily loaded tree,
+  open documents with dirty tracking and save-to-disk, all file operations, and
+  live external-change reconciliation. New `WorkspaceExplorer` (lazy tree, context
+  menu, inline create and rename, drag-and-drop move, dirty markers, a11y tree),
+  `WorkspaceEditor` (tab bar, Monaco bound to the active document, external-change
+  banner), and a small `ContextMenu`. Recent projects and open roots persist to
+  local storage and restore on relaunch. With no folder open the app falls back to
+  the demo experience, so the soul is intact.
+- **Command palette**: Open Folder, Open Recent (one per remembered project), New
+  File, Save All, and Close Folder.
+- **Quality**: 172 unit tests pass (158 plus 14), typecheck and lint are clean
+  (zero warnings), the renderer production build succeeds, all 6 Playwright e2e
+  tests pass, and `cargo check` is clean.
+
+## Earlier: Phase 0 and the native build (Session 1)
+
+The notes below describe the foundation that Session 2 built on.
+
+## Last updated (session 1)
+
 2026-06-21. Session 1 (Phase 0 foundation, the action integration, the IDE shell, and the native desktop build).
 
 ## Working IDE shell

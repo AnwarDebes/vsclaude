@@ -19,6 +19,20 @@ export interface FsEntry {
   kind: 'file' | 'directory' | 'symlink';
   /** Size in bytes for files. */
   size?: number;
+  /** Last modification time in epoch milliseconds, when available. */
+  mtimeMs?: number;
+}
+
+/** Metadata about a single path, returned by `fs.stat`. */
+export interface FileStat {
+  path: string;
+  name: string;
+  kind: 'file' | 'directory' | 'symlink';
+  /** False when the path does not exist; the other fields are then unset. */
+  exists: boolean;
+  size?: number;
+  /** Last modification time in epoch milliseconds. */
+  mtimeMs?: number;
 }
 
 /**
@@ -48,8 +62,17 @@ export interface IpcCommandMap {
   'pty.kill': { args: { ptyId: string }; result: void };
 
   'fs.readDir': { args: { path: string }; result: FsEntry[] };
-  'fs.readFile': { args: { path: string }; result: { content: string; encoding: 'utf-8' } };
-  'fs.writeFile': { args: { path: string; content: string }; result: void };
+  'fs.readFile': {
+    args: { path: string };
+    result: { content: string; encoding: 'utf-8'; mtimeMs: number };
+  };
+  'fs.writeFile': { args: { path: string; content: string }; result: { mtimeMs: number } };
+  'fs.stat': { args: { path: string }; result: FileStat };
+  'fs.createFile': { args: { path: string; content?: string }; result: void };
+  'fs.createDir': { args: { path: string }; result: void };
+  'fs.rename': { args: { from: string; to: string }; result: void };
+  'fs.delete': { args: { path: string }; result: void };
+  'fs.copy': { args: { from: string; to: string }; result: void };
   'fs.watch': { args: { path: string }; result: { watchId: string } };
   'fs.unwatch': { args: { watchId: string }; result: void };
 
@@ -93,6 +116,12 @@ export const IPC_COMMANDS = [
   'fs.readDir',
   'fs.readFile',
   'fs.writeFile',
+  'fs.stat',
+  'fs.createFile',
+  'fs.createDir',
+  'fs.rename',
+  'fs.delete',
+  'fs.copy',
   'fs.watch',
   'fs.unwatch',
   'secret.set',
