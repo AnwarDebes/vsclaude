@@ -280,6 +280,49 @@ pub fn git_log(cwd: String, limit: Option<u32>) -> Result<Vec<GitCommit>, String
     Ok(commits)
 }
 
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GitRemote {
+    name: String,
+    url: String,
+}
+
+/// The configured remotes with their fetch URLs, one entry per remote name.
+#[tauri::command]
+pub fn git_remotes(cwd: String) -> Result<Vec<GitRemote>, String> {
+    let out = run_git(&cwd, &["remote", "-v"])?;
+    let mut remotes = Vec::new();
+    let mut seen = std::collections::HashSet::new();
+    for line in out.lines() {
+        // Lines look like: "origin\thttps://...\t(fetch)".
+        let mut parts = line.split_whitespace();
+        let (Some(name), Some(url)) = (parts.next(), parts.next()) else {
+            continue;
+        };
+        if seen.insert(name.to_string()) {
+            remotes.push(GitRemote {
+                name: name.to_string(),
+                url: url.to_string(),
+            });
+        }
+    }
+    Ok(remotes)
+}
+
+/// Add a remote pointing at a URL.
+#[tauri::command]
+pub fn git_remote_add(cwd: String, name: String, url: String) -> Result<(), String> {
+    run_git(&cwd, &["remote", "add", &name, &url])?;
+    Ok(())
+}
+
+/// Remove a remote.
+#[tauri::command]
+pub fn git_remote_remove(cwd: String, name: String) -> Result<(), String> {
+    run_git(&cwd, &["remote", "remove", &name])?;
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -513,6 +556,29 @@ mod tests {
         assert_eq!(commits[0].author, "Test");
         assert!(!commits[0].short_hash.is_empty());
         assert!(commits[0].date > 0);
+
+        let _ = fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn add_list_and_remove_remotes() {
+        let dir = init_repo("remotes");
+        let cwd = dir.to_str().unwrap().to_string();
+        assert!(git_remotes(cwd.clone()).unwrap().is_empty());
+
+        git_remote_add(
+            cwd.clone(),
+            "origin".to_string(),
+            "https://example.com/r.git".to_string(),
+        )
+        .unwrap();
+        let remotes = git_remotes(cwd.clone()).unwrap();
+        assert_eq!(remotes.len(), 1);
+        assert_eq!(remotes[0].name, "origin");
+        assert_eq!(remotes[0].url, "https://example.com/r.git");
+
+        git_remote_remove(cwd.clone(), "origin".to_string()).unwrap();
+        assert!(git_remotes(cwd.clone()).unwrap().is_empty());
 
         let _ = fs::remove_dir_all(&dir);
     }

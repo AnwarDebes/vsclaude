@@ -20,7 +20,19 @@ tasks.json loading, git push/pull/fetch, commit amend, commit revert, on-save tr
 settings JSON editor, reset layout, task variables, task groups, files.exclude,
 at-symbol navigation, hex view, notification toasts, inlay hints, menu bar,
 edit menu, minimap config, diff settings, process info, snippet browser,
-accessibility help.
+accessibility help, git remotes.
+
+## Slice 70: git remotes (done)
+
+Manage remotes (catalog 5.9).
+
+- **Core** (`git.rs`): git_remotes (parses git remote -v, one entry per name),
+  git_remote_add, and git_remote_remove. Cargo tested (16 cargo tests now).
+- **UI** (`GitRemotesModal.tsx`): Git: Remotes lists, adds, and removes remotes; like the
+  tags modal it opens without a repo and shows a note, so it is browser-e2e-able.
+- **Quality**: 379 unit tests, 16 cargo tests, typecheck, lint clean, the renderer build
+  succeeds, and 53 Playwright e2e pass (the new one opens the modal with no folder). Matrix
+  5.9 remotes row moved to Partial.
 
 ## Slice 69: accessibility help dialog (done)
 

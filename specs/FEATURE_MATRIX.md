@@ -23,7 +23,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.6 | Quick open and command palette | 7 | 2 | 2 | 0 |
 | 5.7 | File explorer and workspace management | 6 | 4 | 4 | 3 |
 | 5.8 | Search and replace across files | 5 | 2 | 5 | 0 |
-| 5.9 | Source control and git | 7 | 9 | 8 | 0 |
+| 5.9 | Source control and git | 7 | 10 | 7 | 0 |
 | 5.10 | Integrated terminal | 6 | 7 | 5 | 0 |
 | 5.11 | Tasks (VS Code task support) | 0 | 7 | 3 | 0 |
 | 5.12 | Debugging (Debug Adapter Protocol) | 0 | 0 | 10 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 4 | 9 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 3 | 5 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 94 | 121 | 113 | 5 |
+| TOTAL | | 94 | 122 | 112 | 5 |
 
 ## Legend
 
@@ -258,7 +258,7 @@ vsclaude now has a working Source Control panel for the daily git workflow: stag
 | Branch operations (create/checkout/delete/rename) | Done | git.rs git_branches, git_checkout, git_create_branch, git_delete_branch, and git_rename_branch (cargo tested); the SourceControlPanel branch picker switches, creates, deletes a branch, and renames the current one. | |
 | Merge, rebase, cherry-pick, revert | Partial | git.rs git_revert (cargo tested) creates a revert commit; the GitHistoryModal has a per-commit Revert. | No merge, rebase, or cherry-pick, and no continue or abort flow. |
 | Push, pull, fetch, sync with ahead/behind | Done | git.rs git_fetch, git_pull (fast-forward only), and git_push (cargo tested over a bare remote); the SourceControlPanel has Fetch, Pull, and Push buttons; ahead/behind are shown. Authentication uses git's own credential helper or ssh-agent. | |
-| Remotes (add/remove/rename/tracking) | Missing | No remote commands or UI. | No remote management. |
+| Remotes (add/remove/rename/tracking) | Partial | git.rs git_remotes, git_remote_add, and git_remote_remove (cargo tested); the GitRemotesModal (Git: Remotes) lists, adds, and removes remotes. | No rename or upstream-tracking management. |
 | Stash (create/apply/pop/drop/list/include-untracked) | Partial | git.rs git_stash (push -u, include untracked), git_stash_pop, and git_stash_list; the Source Control panel has Stash Changes and Pop Stash buttons with a count (countStashes). Cargo and unit tested. | No apply, drop, named stash, or stash list view. |
 | Tags (create/delete/push/list) | Partial | git.rs git_tags, git_create_tag (annotated or lightweight), and git_delete_tag (cargo tested); the GitTagsModal (Git: Tags) lists, creates, and deletes tags. | No tag push or tagging a specific commit. |
 | Blame (inline, gutter, annotation) | Missing | No git_blame; spec section 17 lists blame as a non-goal for v1. | Out of scope for phase 0. |

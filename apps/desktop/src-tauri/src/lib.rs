@@ -93,6 +93,9 @@ pub fn run() {
             git::git_push,
             git::git_commit_amend,
             git::git_revert,
+            git::git_remotes,
+            git::git_remote_add,
+            git::git_remote_remove,
         ])
         .run(tauri::generate_context!())
         .expect("error while running the vsclaude application");

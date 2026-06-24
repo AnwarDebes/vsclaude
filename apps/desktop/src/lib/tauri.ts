@@ -119,3 +119,13 @@ export const gitIgnoreAdd = (cwd: string, pattern: string): Promise<void> =>
 export const gitFetch = (cwd: string): Promise<string> => invoke('git_fetch', { cwd });
 export const gitPull = (cwd: string): Promise<string> => invoke('git_pull', { cwd });
 export const gitPush = (cwd: string): Promise<string> => invoke('git_push', { cwd });
+
+export interface GitRemote {
+  name: string;
+  url: string;
+}
+export const gitRemotes = (cwd: string): Promise<GitRemote[]> => invoke('git_remotes', { cwd });
+export const gitRemoteAdd = (cwd: string, name: string, url: string): Promise<void> =>
+  invoke('git_remote_add', { cwd, name, url });
+export const gitRemoteRemove = (cwd: string, name: string): Promise<void> =>
+  invoke('git_remote_remove', { cwd, name });

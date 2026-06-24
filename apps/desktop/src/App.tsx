@@ -43,6 +43,7 @@ import { SearchPanel } from './components/SearchPanel';
 import { SourceControlPanel } from './components/SourceControlPanel';
 import { GitHistoryModal } from './components/GitHistoryModal';
 import { GitTagsModal } from './components/GitTagsModal';
+import { GitRemotesModal } from './components/GitRemotesModal';
 import { gitLog, type GitCommit } from './lib/tauri';
 import { SettingsPanel } from './components/SettingsPanel';
 import { SettingsJsonModal } from './components/SettingsJsonModal';
@@ -137,6 +138,7 @@ export function App() {
   const [a11yHelpOpen, setA11yHelpOpen] = useState(false);
   const [gitHistory, setGitHistory] = useState<GitCommit[] | null>(null);
   const [tagsOpen, setTagsOpen] = useState(false);
+  const [remotesOpen, setRemotesOpen] = useState(false);
   const [npmTasks, setNpmTasks] = useState<NpmTask[]>([]);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [settingsJsonOpen, setSettingsJsonOpen] = useState(false);
@@ -773,6 +775,12 @@ export function App() {
       run: () => setTagsOpen(true),
     });
     r.register({
+      id: 'git-remotes',
+      title: 'Git: Remotes',
+      keywords: ['git', 'remote', 'remotes', 'origin', 'upstream', 'url'],
+      run: () => setRemotesOpen(true),
+    });
+    r.register({
       id: 'git-history',
       title: 'Git: View History',
       keywords: ['git', 'history', 'log', 'commits'],
@@ -1144,6 +1152,11 @@ export function App() {
         open={tagsOpen}
         repo={hasWorkspace ? ws.roots[0]?.path ?? null : null}
         onClose={() => setTagsOpen(false)}
+      />
+      <GitRemotesModal
+        open={remotesOpen}
+        repo={hasWorkspace ? ws.roots[0]?.path ?? null : null}
+        onClose={() => setRemotesOpen(false)}
       />
       <ReleaseNotes open={releaseOpen} onClose={() => setReleaseOpen(false)} />
       <NotificationCenter open={notificationsOpen} onClose={() => setNotificationsOpen(false)} />
