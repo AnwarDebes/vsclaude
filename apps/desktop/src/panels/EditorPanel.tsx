@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useSyncExternalStore } from 'react';
 import Editor, { type OnMount } from '@monaco-editor/react';
 import '../lib/monaco-setup';
 import {
@@ -7,6 +7,11 @@ import {
   setEditorStatus,
   type BridgeEditor,
 } from '../lib/editor-bridge';
+import {
+  editorSettingsToMonaco,
+  getEditorSettings,
+  subscribeEditorSettings,
+} from '../lib/editor-settings';
 import { languageForPath } from '../lib/language';
 
 interface EditorPanelProps {
@@ -25,6 +30,7 @@ interface EditorPanelProps {
  */
 export function EditorPanel({ path, value, language, onChange, onSave }: EditorPanelProps) {
   const editorRef = useRef<BridgeEditor | null>(null);
+  const settings = useSyncExternalStore(subscribeEditorSettings, getEditorSettings, getEditorSettings);
 
   const onMount: OnMount = (editor, monacoInstance) => {
     editor.addCommand(monacoInstance.KeyMod.CtrlCmd | monacoInstance.KeyCode.KeyS, () => {
@@ -87,16 +93,14 @@ export function EditorPanel({ path, value, language, onChange, onSave }: EditorP
         onMount={onMount}
         loading={<div className="editor-loading">Loading editor...</div>}
         options={{
-          fontSize: 13,
           fontFamily: "'JetBrains Mono', 'Cascadia Code', ui-monospace, monospace",
           fontLigatures: true,
-          minimap: { enabled: true },
           scrollBeyondLastLine: false,
           automaticLayout: true,
-          tabSize: 2,
           renderWhitespace: 'selection',
           smoothScrolling: true,
           cursorBlinking: 'smooth',
+          ...editorSettingsToMonaco(settings),
         }}
       />
     </div>

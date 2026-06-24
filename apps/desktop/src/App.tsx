@@ -17,6 +17,7 @@ import { useLiveProvider } from './session/useLiveProvider';
 import { useWorkspace } from './workspace/useWorkspace';
 import { useFileIndex } from './workspace/useFileIndex';
 import { gotoLine, runEditorAction } from './lib/editor-bridge';
+import { setEditorSettings } from './lib/editor-settings';
 import { EDITOR_COMMANDS } from './lib/editor-commands';
 import { useDiagnostics } from './lib/useDiagnostics';
 import { demoFiles } from './session/demo-session';
@@ -30,6 +31,7 @@ import { StatusBar, useEditorStatus, useGitStatus } from './components/StatusBar
 import { ProblemsPanel } from './components/ProblemsPanel';
 import { SearchPanel } from './components/SearchPanel';
 import { SourceControlPanel } from './components/SourceControlPanel';
+import { SettingsPanel } from './components/SettingsPanel';
 import { DiffModal, type DiffTarget } from './components/DiffModal';
 import { DiffReview } from './components/DiffReview';
 import { Narration } from './components/Narration';
@@ -92,6 +94,7 @@ export function App() {
   const [bottomPanel, setBottomPanel] = useState<'none' | 'problems' | 'search' | 'scm'>('none');
   const [gitNonce, setGitNonce] = useState(0);
   const [diffTarget, setDiffTarget] = useState<DiffTarget | null>(null);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const live = useLiveProvider();
   const { available: liveAvailable, start: liveStart } = live;
   const usingLive = live.events.length > 0;
@@ -301,12 +304,18 @@ export function App() {
   useEffect(() => {
     applyTheme(settings);
     saveAppSettings(settings);
+    setEditorSettings(settings.editor);
   }, [settings]);
 
   // The bottom drawer shortcuts, matching VS Code: Ctrl or Cmd plus Shift plus M
   // for Problems and plus Shift plus F for Search. One slot, so each toggles.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key === ',') {
+        e.preventDefault();
+        setSettingsOpen((o) => !o);
+        return;
+      }
       if (!(e.ctrlKey || e.metaKey) || !e.shiftKey) return;
       const key = e.key.toLowerCase();
       if (key === 'm') {
@@ -380,6 +389,13 @@ export function App() {
       title: 'Compare with Saved',
       keywords: ['diff', 'compare', 'changes', 'saved', 'disk'],
       run: compareWithSaved,
+    });
+    r.register({
+      id: 'open-settings',
+      title: 'Preferences: Open Settings',
+      keywords: ['settings', 'preferences', 'config', 'options'],
+      keybinding: 'Ctrl+,',
+      run: () => setSettingsOpen(true),
     });
     // The editor command surface: Monaco's built-in editing actions, run on the
     // active editor through the bridge, so they are discoverable in the palette.
@@ -661,6 +677,9 @@ export function App() {
         onGotoLine={(line, column) => gotoLine(line, column)}
         onRefreshFiles={hasWorkspace ? fileIndex.refresh : undefined}
       />
+      {settingsOpen ? (
+        <SettingsPanel settings={settings} onChange={setSettings} onClose={() => setSettingsOpen(false)} />
+      ) : null}
       <DiffModal target={diffTarget} onClose={() => setDiffTarget(null)} />
       <DiffReview open={reviewOpen} cwd="." onClose={() => setReviewOpen(false)} />
     </div>

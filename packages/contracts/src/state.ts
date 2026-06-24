@@ -83,6 +83,16 @@ export interface SoundSettings {
   ambient: boolean;
 }
 
+/** Editor preferences applied to the Monaco editor and the diff view. */
+export interface EditorSettings {
+  fontSize: number;
+  tabSize: number;
+  insertSpaces: boolean;
+  wordWrap: boolean;
+  minimap: boolean;
+  lineNumbers: 'on' | 'off' | 'relative';
+}
+
 /** User-level application settings. */
 export interface AppSettings {
   themeId: string;
@@ -90,6 +100,7 @@ export interface AppSettings {
   reducedMotion: boolean;
   colorBlindSafe: boolean;
   sound: SoundSettings;
+  editor: EditorSettings;
   defaultProvider: ProviderId;
   /** Map of provider id to last-used model. */
   models: Record<string, string>;
@@ -104,6 +115,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   reducedMotion: false,
   colorBlindSafe: false,
   sound: { enabled: false, masterVolume: 0.6, typing: true, ambient: false },
+  editor: { fontSize: 13, tabSize: 2, insertSpaces: true, wordWrap: false, minimap: true, lineNumbers: 'on' },
   defaultProvider: 'claude-code',
   models: {},
   telemetry: false,

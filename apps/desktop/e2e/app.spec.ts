@@ -158,6 +158,25 @@ test.describe('vsclaude shell', () => {
     await expect(page.getByRole('dialog', { name: /diff of/i })).toHaveCount(0);
   });
 
+  test('settings: the palette opens a searchable Settings panel', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.getByText('vsclaude').first()).toBeVisible();
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('open settings');
+    await page.keyboard.press('Enter');
+    const settings = page.getByRole('dialog', { name: 'Settings' });
+    await expect(settings).toBeVisible();
+    // The Font Size setting is present, and search filters to it.
+    await expect(settings.getByText('Font Size', { exact: true })).toBeVisible();
+    await settings.getByRole('textbox', { name: /search settings/i }).fill('minimap');
+    await expect(settings.getByText('Minimap', { exact: true })).toBeVisible();
+    await expect(settings.getByText('Font Size', { exact: true })).toHaveCount(0);
+    await settings.getByRole('button', { name: /close settings/i }).click();
+    await expect(page.getByRole('dialog', { name: 'Settings' })).toHaveCount(0);
+  });
+
   test('opens the diff review overlay from the command palette', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByText('vsclaude').first()).toBeVisible();

@@ -28,9 +28,9 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.11 | Tasks (VS Code task support) | 0 | 2 | 7 | 0 |
 | 5.12 | Debugging (Debug Adapter Protocol) | 0 | 0 | 9 | 0 |
 | 5.13 | Snippets and Emmet | 1 | 1 | 3 | 0 |
-| 5.14 | Settings and configuration | 0 | 4 | 5 | 1 |
+| 5.14 | Settings and configuration | 2 | 2 | 5 | 1 |
 | 5.15 | Keybindings and keymaps | 2 | 2 | 7 | 0 |
-| 5.16 | Themes and appearance | 6 | 5 | 11 | 0 |
+| 5.16 | Themes and appearance | 10 | 2 | 10 | 0 |
 | 5.17 | Extensions and plugin ecosystem | 5 | 2 | 11 | 0 |
 | 5.18 | Notebooks | 0 | 0 | 6 | 0 |
 | 5.19 | Remote development and tunnels | 0 | 0 | 6 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 5 | 9 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 1 | 7 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 3 | 5 | 0 |
-| TOTAL | | 67 | 83 | 174 | 5 |
+| TOTAL | | 73 | 78 | 173 | 5 |
 
 ## Legend
 
@@ -348,18 +348,18 @@ Monaco 0.55.1 is integrated with basic configuration, and Emmet and snippets are
 
 ## 5.14 Settings and configuration
 
-Settings support is minimal and aspirational. A basic AppSettings schema exists (state.ts) with defaults frozen in the binary and localStorage persistence in the web renderer. SettingsBar provides UI for theme, presentation mode, reduced motion, and sound. No settings IPC (patch/get/reset/export/import) is wired in the Rust core, defeating the layered scope model. JSON editing, validation, and schema completion are absent. Profiles, language-specific overrides, a configuration contribution API, and full export/import are missing. Only localStorage persistence exists; no OS-backed storage.
+A real Settings panel now ships: a searchable, categorized list with a modified indicator and per-setting and reset-all, driven by a settings schema (apps/desktop/src/lib/settings-schema.ts) and opened with Ctrl or Cmd plus comma. AppSettings carries an editor block (font size, tab size, insert spaces, word wrap, minimap, line numbers) that is applied live to Monaco through a small editor-settings store. Persistence is still localStorage only (no OS-backed native store and no settings IPC), and JSON editing, multi-scope resolution, profiles, language-specific overrides, and a configuration contribution API remain.
 
 | Capability | Status | Evidence | What is missing |
 | --- | --- | --- | --- |
-| Settings UI (search, categories, modified indicator, reset) | Partial | SettingsBar.tsx has a theme selector and toggles for mode, reduced motion, sound; no search/categories/reset. | No settings panel with search, categories, modified indicators, or reset. |
+| Settings UI (search, categories, modified indicator, reset) | Done | SettingsPanel.tsx renders the settings-schema list with search (filterSettings), categories, a modified dot, a per-setting reset, and reset-all; opened by Ctrl or Cmd plus comma. | |
 | Settings JSON editing with completion and validation | Missing | persistence/settings.ts merges/loads but no editing UI or validation. | No JSON editor, generated schema, validation, or key completion. |
 | Multi-scope resolution (user/workspace/folder with source) | Missing | state.ts defines a flat AppSettings; spec describes four layers, unimplemented. | No workspace/folder files, scope indicator, precedence, or scope IPC. |
 | Language-specific setting overrides | Missing | EditorPanel.tsx hardcodes options; no override mechanism. | No [language] section or per-filetype options. |
 | Settings profiles (create/switch/export/import) | Missing | No profile code; PluginContributions has no profiles field. | No profile storage, switching, or bundle export/import. |
 | Settings sync across machines | Not planned | SETTINGS_THEMES_PERSISTENCE.md section 13 states no cloud sync; export/import via JSON only. | Cross-machine sync out of scope; manual JSON only. |
 | Configuration contribution API with schemas | Missing | PluginManifest contributes lists pixieStates/themes/panels/providers/visualizations; no settings field. | No plugin settings registration or schema merging. |
-| Editor settings UI (font, tab size, wrap, minimap, format-on-save) | Partial | EditorPanel.tsx passes hardcoded options (fontSize 13, tabSize 2, minimap on); not user-configurable. | No UI to change editor settings; not in AppSettings; compiled in. |
+| Editor settings UI (font, tab size, wrap, minimap, format-on-save) | Done | AppSettings.editor holds fontSize, tabSize, insertSpaces, wordWrap, minimap, and lineNumbers; the Settings panel edits them; editor-settings.ts applies them live to Monaco via editorSettingsToMonaco. | Format-on-save is a separate formatting item (5.2). |
 | Secrets handling with keychain integration | Partial | secrets.rs uses keyring (set/status/delete) with IPC; in-memory fallback in persistence/secrets.ts. | IPC exists but not wired to a settings UI; no key-management panel. |
 | Settings persistence (localStorage web, OS store native) | Partial | theme.ts load/save via localStorage; no IPC to Rust for settings. | Native does not persist to OS config; settings patch/reset IPC absent; no atomic write or migration. |
 
@@ -397,15 +397,15 @@ vsclaude has a strong design-token system and bundled themes, but many appearanc
 | Product icon themes | Missing | No productIcon references in source or design system. | No product icon theme or API. |
 | Token color customization and semantic token theming | Missing | design-system handles bundled themes; registration accepts full themes only; no tokenColor field. | No per-token overrides. |
 | Workbench color customization | Missing | No workbench customization UI or API; AppSettings has themeId only. | No workbench color overrides. |
-| Editor font size customization | Partial | EditorPanel.tsx hardcodes fontSize 13; spec mentions 8 to 32. | No AppSettings field or UI; hardcoded. |
+| Editor font size customization | Done | AppSettings.editor.fontSize, edited in the Settings panel (8 to 32) and applied live to Monaco. | |
 | Editor font family customization | Partial | EditorPanel.tsx hardcodes fontFamily; no override field. | Not user-configurable. |
 | Editor font ligatures toggle | Partial | EditorPanel.tsx hardcodes fontLigatures true. | No user toggle. |
 | Editor line height customization | Missing | No lineHeight option or AppSettings field. | No line-height customization. |
 | Editor font weight customization | Missing | No fontWeight option or field. | Not customizable. |
 | Editor wheel/scroll zoom | Missing | No explicit Ctrl+Scroll zoom feature or UI. | Not exposed or documented. |
-| Editor tab size and indentation settings | Partial | EditorPanel.tsx hardcodes tabSize 2; spec mentions 1 to 8 and insertSpaces. | No AppSettings fields; not configurable. |
-| Editor word wrap setting | Missing | wordWrap not passed; spec mentions off/on/bounded. | Not in AppSettings or options. |
-| Editor minimap visibility | Partial | EditorPanel.tsx hardcodes minimap enabled. | No toggle setting. |
+| Editor tab size and indentation settings | Done | AppSettings.editor.tabSize and insertSpaces, edited in the Settings panel and applied to Monaco. | |
+| Editor word wrap setting | Done | AppSettings.editor.wordWrap, toggled in the Settings panel and applied to Monaco. | |
+| Editor minimap visibility | Done | AppSettings.editor.minimap, toggled in the Settings panel and applied to Monaco. | |
 | Follow OS system theme | Missing | Spec mentions followSystemTheme; not in AppSettings; no OS listener. | No OS theme detection or auto switch. |
 | UI scale customization | Missing | Spec mentions uiScale 0.8 to 1.5; no field or zoom UI. | No UI scale setting. |
 | Monaco editor theme binding to app theme | Missing | EditorPanel.tsx hardcodes vs-dark; ignores AppSettings.themeId. | Monaco stays dark when app theme changes; no binding. |

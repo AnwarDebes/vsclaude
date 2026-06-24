@@ -1492,6 +1492,133 @@ body {
   color: var(--color-text-muted);
 }
 
+/* Settings panel */
+.settings-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 8vh;
+  z-index: var(--z-popover, 200);
+}
+.settings {
+  width: min(720px, 94vw);
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.settings__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 10px var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+}
+.settings__title {
+  font-size: 1rem;
+  margin: 0;
+}
+.settings__close {
+  margin-left: 0;
+}
+.settings__search {
+  margin: var(--space-md) var(--space-lg) 0;
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+  outline: none;
+}
+.settings__search:focus {
+  border-color: var(--color-accent);
+}
+.settings__body {
+  flex: 1 1 auto;
+  overflow: auto;
+  padding: var(--space-md) var(--space-lg) var(--space-lg);
+}
+.settings__category {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  margin: var(--space-md) 0 4px;
+}
+.settings__row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  padding: 8px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+.settings__meta {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.settings__label {
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.settings__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--color-accent);
+}
+.settings__desc {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+}
+.settings__control {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.settings__number {
+  width: 64px;
+  font: inherit;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm, 4px);
+  padding: 4px 6px;
+}
+.settings__select {
+  font: inherit;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm, 4px);
+  padding: 4px 6px;
+}
+.settings__reset {
+  font: inherit;
+  font-size: 0.72rem;
+  color: var(--color-accent);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.settings__empty {
+  padding: var(--space-md);
+  color: var(--color-text-muted);
+}
+
 /* Diff modal (Monaco diff editor) */
 .diff-overlay {
   position: fixed;

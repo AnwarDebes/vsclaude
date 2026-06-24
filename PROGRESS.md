@@ -5,9 +5,31 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus seven parity slices, the last six self-paced by
-an autonomous /loop): quick open, status bar, problems, search, source control,
-editor commands, diff editor.
+2026-06-24. Session 3 (Step 0 plus eight parity slices, the last seven self-paced
+by an autonomous /loop): quick open, status bar, problems, search, source control,
+editor commands, diff editor, settings.
+
+## Slice 8: editor settings and a Settings panel (done)
+
+This ships catalog 5.14 and most of the editor-appearance rows of 5.16.
+
+- **Contract**: `AppSettings` gains an `editor` block (fontSize, tabSize,
+  insertSpaces, wordWrap, minimap, lineNumbers) with defaults; the persistence
+  deep-merge absorbs it for old stored settings.
+- **Editor settings store** (`lib/editor-settings.ts`): holds the live editor
+  settings with a subscribe API and an `editorSettingsToMonaco` mapper. EditorPanel
+  reads it through useSyncExternalStore and applies it to Monaco; App writes it
+  whenever settings change. Unit tested.
+- **Settings schema** (`lib/settings-schema.ts`): a data list of every setting,
+  its control, and get and set on AppSettings, with `filterSettings`,
+  `isSettingDefault`, and `defaultSettingValue`. Unit tested.
+- **Settings panel** (`SettingsPanel.tsx`): a searchable, categorized modal with a
+  modified indicator, a per-setting reset, and reset-all, opened by Ctrl or Cmd
+  plus comma and the Preferences: Open Settings command.
+- **Quality**: 238 unit tests (229 plus 9), typecheck, lint clean (no Rust change),
+  the renderer build succeeds, and 15 Playwright e2e pass (the new one opens and
+  searches the Settings panel). Matrix 5.14 moved to Done 2, Partial 2, and 5.16 to
+  Done 10, Partial 2.
 
 ## Slice 7: the Monaco diff editor (done)
 
