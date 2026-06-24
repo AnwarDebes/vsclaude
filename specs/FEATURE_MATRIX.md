@@ -16,7 +16,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | Section | Title | Done | Partial | Missing | Not planned |
 | --- | --- | --- | --- | --- | --- |
 | 5.1 | Text editing core | 8 | 14 | 5 | 0 |
-| 5.2 | Code intelligence (LSP language features) | 0 | 10 | 14 | 0 |
+| 5.2 | Code intelligence (LSP language features) | 1 | 9 | 14 | 0 |
 | 5.3 | Editor advanced surface | 7 | 5 | 0 | 0 |
 | 5.4 | Diff and merge | 3 | 4 | 1 | 1 |
 | 5.5 | Workbench layout and navigation | 6 | 12 | 9 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 10 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 2 | 6 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 4 | 4 | 0 |
-| TOTAL | | 83 | 104 | 137 | 5 |
+| TOTAL | | 84 | 103 | 137 | 5 |
 
 ## Legend
 
@@ -109,7 +109,7 @@ vsclaude implements a limited set of code intelligence features, relying on Mona
 | Language detection and manual mode switch | Partial | languageFor(path) maps extensions to Monaco ids; language prop override exists. | Extension-based only; no content detection; switch not in UI. |
 | TS/JS smart editing (auto imports, update on move, JSDoc, inlay hints, CodeLens) | Missing | No auto-import, rename-update, JSDoc, inlay, or CodeLens registration. | No TS/JS smarts beyond the worker. |
 | Emmet expansion for HTML/CSS | Missing | No Emmet config; Monaco needs explicit registration. | No abbreviation expansion. |
-| JSON schema validation and completion | Partial | monaco-setup.ts registers jsonWorker; built-in JSON validation applies. | No custom schemas for package.json, tsconfig.json, etc. |
+| JSON schema validation and completion | Done | monaco-setup.ts registers schemas (json-schemas.ts, unit tested) for package.json and tsconfig.json through jsonDefaults.setDiagnosticsOptions, on top of Monaco's built-in JSON validation, giving schema-driven validation and completion. | |
 | Markdown preview (synced scroll, link completion, math/diagram, broken-link diagnostics) | Partial | renderMarkdown (lib/markdown.ts) is a safe Markdown to HTML renderer (escapes HTML, sanitizes hrefs) shown by MarkdownPreview via the Markdown: Open Preview command. Thoroughly unit tested. | No synced-scroll, link or path completion, math or diagram rendering, or broken-link diagnostics. |
 
 ## 5.3 Editor advanced surface

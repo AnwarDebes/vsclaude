@@ -5,7 +5,7 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus forty parity slices, the last thirty-nine
+2026-06-24. Session 3 (Step 0 plus forty-one parity slices, the last forty
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
@@ -13,7 +13,22 @@ stash, zen mode, breadcrumbs, tasks, activity-bar badges, output panel, untitled
 more editor settings, markdown preview, document links, color decorators, outline,
 git history, release notes, notification center, branch delete and rename, git tags,
 gitignore action, svg preview, snippets, line height and font weight, ui scale and
-wheel zoom, follow system theme, command categories, output log levels, diff setting.
+wheel zoom, follow system theme, command categories, output log levels, diff setting,
+json schemas.
+
+## Slice 41: JSON schemas for package.json and tsconfig.json (done)
+
+Schema-driven JSON (catalog 5.2; the row moved to Done, 5.2's first Done).
+
+- **Schemas** (`lib/json-schemas.ts`): minimal offline schemas for package.json and
+  tsconfig.json. 3 unit tests for shape.
+- **Wiring**: monaco-setup registers them via jsonDefaults.setDiagnosticsOptions, so
+  those files get schema-driven validation and completion. (The json contribution
+  exports jsonDefaults at runtime but ships no types for the deep path, so a small
+  ambient declaration in vite-env.d.ts types the slice we use.)
+- **Quality**: 336 unit tests (333 plus 3), typecheck, lint clean (no Rust change),
+  the renderer build succeeds, and 34 Playwright e2e pass (no regression). Matrix 5.2
+  json-schema row moved to Done.
 
 ## Slice 40: diff ignore-trailing-whitespace setting (done)
 

@@ -13,7 +13,9 @@ import { loader } from '@monaco-editor/react';
 import { findLinks } from './links';
 import { findColors, toHex } from './colors';
 import { markdownSymbols } from './symbols';
+import { jsonDefaults } from 'monaco-editor/esm/vs/language/json/monaco.contribution';
 import { SNIPPET_LANGUAGES, snippetsFor } from './snippets';
+import { JSON_SCHEMAS } from './json-schemas';
 
 declare global {
   interface Window {
@@ -45,6 +47,13 @@ self.MonacoEnvironment = {
 
 // Use the locally bundled Monaco instead of the default CDN loader.
 loader.config({ monaco });
+
+// Schema-driven validation and completion for package.json and tsconfig.json.
+jsonDefaults.setDiagnosticsOptions({
+  validate: true,
+  enableSchemaRequest: false,
+  schemas: JSON_SCHEMAS,
+});
 
 // Make URLs clickable in any file: a link provider over the shared findLinks.
 const LINK_LANGUAGES = [
