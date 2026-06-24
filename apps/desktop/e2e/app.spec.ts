@@ -256,6 +256,13 @@ test.describe('vsclaude shell', () => {
     await expect(page.getByRole('dialog', { name: 'Settings' })).toBeVisible();
   });
 
+  test('the explorer hides excluded noise directories', async ({ page }) => {
+    await page.goto('/');
+    const explorer = page.getByRole('navigation', { name: 'Files' });
+    await expect(explorer.getByRole('button', { name: 'README.md', exact: true })).toBeVisible();
+    await expect(explorer.getByText('node_modules')).toHaveCount(0);
+  });
+
   test('the explorer decorates files that have problems', async ({ page }) => {
     await page.goto('/');
     // The default open file imports unresolved modules, so the language worker

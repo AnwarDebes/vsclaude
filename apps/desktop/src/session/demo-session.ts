@@ -85,4 +85,6 @@ export const demoFiles = [
   { name: 'README.md', path: 'README.md', kind: 'file' as const },
   { name: 'logo.svg', path: 'logo.svg', kind: 'file' as const },
   { name: 'package.json', path: 'package.json', kind: 'file' as const },
+  // A noise directory, hidden by the default files.exclude (see lib/excludes.ts).
+  { name: 'index.js', path: 'node_modules/react/index.js', kind: 'file' as const },
 ];

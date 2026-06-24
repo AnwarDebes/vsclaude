@@ -3,6 +3,7 @@ import type { FsEntry } from '@vsclaude/contracts';
 import { buildFileTree, collectDirectoryPaths, flattenVisible, toggleExpanded } from '@vsclaude/editor';
 import { FileIcon } from '../components/FileIcon';
 import type { ProblemSeverity } from '../lib/problem-decorations';
+import { isExcludedPath } from '../lib/excludes';
 
 interface ExplorerPanelProps {
   files: FsEntry[];
@@ -22,7 +23,7 @@ interface ExplorerPanelProps {
  * hide their descendants. The file the agent is touching is highlighted.
  */
 export function ExplorerPanel({ files, activePath, openPath, problems, onSelect }: ExplorerPanelProps) {
-  const tree = useMemo(() => buildFileTree(files), [files]);
+  const tree = useMemo(() => buildFileTree(files.filter((f) => !isExcludedPath(f.path))), [files]);
   const [expanded, setExpanded] = useState<ReadonlySet<string>>(() => collectDirectoryPaths(tree));
   const rows = useMemo(() => flattenVisible(tree, expanded), [tree, expanded]);
 

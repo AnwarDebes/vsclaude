@@ -21,7 +21,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.4 | Diff and merge | 3 | 4 | 1 | 1 |
 | 5.5 | Workbench layout and navigation | 6 | 13 | 8 | 0 |
 | 5.6 | Quick open and command palette | 7 | 1 | 3 | 0 |
-| 5.7 | File explorer and workspace management | 6 | 3 | 5 | 3 |
+| 5.7 | File explorer and workspace management | 6 | 4 | 4 | 3 |
 | 5.8 | Search and replace across files | 5 | 2 | 5 | 0 |
 | 5.9 | Source control and git | 7 | 9 | 8 | 0 |
 | 5.10 | Integrated terminal | 6 | 7 | 6 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 10 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 2 | 6 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 4 | 4 | 0 |
-| TOTAL | | 91 | 115 | 118 | 5 |
+| TOTAL | | 91 | 116 | 117 | 5 |
 
 ## Legend
 
@@ -216,7 +216,7 @@ Phase A1 is substantially complete: a working file tree, lazy loading, full CRUD
 | File decorations for git status | Missing | WorkspaceExplorer.tsx renders only dirty and type glyphs; git status only in DiffReview modal. | No git status colors/badges in the tree. |
 | File decorations for problems/errors | Partial | ExplorerPanel.tsx shows an error or warning dot per file from the diagnostics (filesWithProblems, unit tested); an e2e covers it. | Only the open file has markers (Monaco validates open models), so no cross-file decorations. |
 | Auto-reveal active file | Missing | No reveal logic; explorer tracks active path but does not expand parents. | No auto-expand of parent directories on editor switch. |
-| files.exclude, search.exclude, watcherExclude | Missing | No exclusion patterns; WORKSPACE_AND_FILES.md section 5 defers gitignore filtering. | No exclusion settings; noise dirs still listed. |
+| files.exclude, search.exclude, watcherExclude | Partial | A default files.exclude (lib/excludes.ts isExcludedPath, unit tested) hides noise directories (node_modules, .git, dist, build, coverage, .next) from the explorer and quick-open. An e2e covers it. | Not user-configurable, and no separate search.exclude or watcherExclude. |
 | Open Editors section with dirty indicators and headers | Done | WorkspaceEditor.tsx tablist shows open docs, active class, dirty span, close button, roving keyboard nav. | |
 | New untitled file and language selection | Partial | App.tsx New File prompts a name (default untitled.ts); languageFor() infers language from extension. | No save-as language picker or immediate language selection. |
 | Recent projects/open roots persist and restore | Done | useWorkspace.ts localStorage RECENTS_KEY/ROOTS_KEY with load/persist; recents.ts with tests; App.tsx Open Recent. | |

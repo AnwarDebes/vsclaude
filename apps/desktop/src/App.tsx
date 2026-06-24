@@ -68,6 +68,7 @@ import { TokenPanel } from './panels/TokenPanel';
 import { TerminalTabs, requestNewTerminal, requestRunInTerminal } from './components/TerminalTabs';
 import { detectNpmTasks, parseTasksJson, type NpmTask } from './lib/tasks';
 import { substituteVariables } from './lib/variables';
+import { isExcludedPath } from './lib/excludes';
 import { untitledName } from './lib/untitled';
 
 const STATE_LABELS: Record<string, string> = {
@@ -151,7 +152,7 @@ export function App() {
   const demoFileItems = useMemo<QuickPickItem[]>(
     () =>
       demoFiles
-        .filter((f) => f.kind === 'file')
+        .filter((f) => f.kind === 'file' && !isExcludedPath(f.path))
         .map((f) => {
           const slash = f.path.lastIndexOf('/');
           return {

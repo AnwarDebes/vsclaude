@@ -5,7 +5,7 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus fifty-seven parity slices, the last fifty-six
+2026-06-24. Session 3 (Step 0 plus fifty-eight parity slices, the last fifty-seven
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
@@ -17,7 +17,19 @@ wheel zoom, follow system theme, command categories, output log levels, diff set
 json schemas, bracket guides and large-file mode, in-file find, terminal find,
 terminal menu, terminal tab rename, explorer problem decorations, search history,
 tasks.json loading, git push/pull/fetch, commit amend, commit revert, on-save trim,
-settings JSON editor, reset layout, task variables, task groups.
+settings JSON editor, reset layout, task variables, task groups, files.exclude.
+
+## Slice 58: files.exclude noise filtering (done)
+
+Hide noise directories (catalog 5.7).
+
+- **Helper** (`lib/excludes.ts` isExcludedPath): hides paths inside node_modules, .git,
+  dist, build, coverage, and .next by segment match. 2 unit tests.
+- **Wiring**: the explorer and quick-open filter excluded paths; a demo node_modules
+  entry shows it working.
+- **Quality**: 362 unit tests (360 plus 2), typecheck, lint clean (no Rust change), the
+  renderer build succeeds, and 44 Playwright e2e pass (the new one confirms the explorer
+  hides node_modules). Matrix 5.7 files.exclude row moved to Partial.
 
 ## Slice 57: task groups and a default build task (done)
 
