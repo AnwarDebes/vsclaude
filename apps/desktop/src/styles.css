@@ -2558,6 +2558,67 @@ body {
   color: var(--color-text);
 }
 
+/* Process info */
+.proc-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 8vh;
+  z-index: var(--z-popover, 200);
+}
+.proc-modal {
+  width: min(420px, 92vw);
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.proc-modal__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 10px var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+}
+.proc-modal__title {
+  font-size: 0.95rem;
+  margin: 0;
+  margin-right: auto;
+}
+.proc-modal__action {
+  font: inherit;
+  font-size: 0.72rem;
+  color: var(--color-accent);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.proc-modal__grid {
+  margin: 0;
+  padding: var(--space-sm) var(--space-lg) var(--space-md);
+}
+.proc-modal__row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  padding: 6px 0;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.84rem;
+}
+.proc-modal__row:last-child {
+  border-bottom: none;
+}
+.proc-modal__row dt {
+  color: var(--color-text-muted);
+}
+.proc-modal__row dd {
+  margin: 0;
+  font-family: var(--font-mono, ui-monospace, monospace);
+}
+
 /* Hex view */
 .hex-overlay {
   position: fixed;

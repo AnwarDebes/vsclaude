@@ -37,8 +37,8 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.20 | Accessibility (full) | 1 | 11 | 4 | 0 |
 | 5.21 | Productivity and workspace lifecycle | 4 | 9 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 3 | 5 | 0 |
-| 5.23 | Performance, logging, diagnostics, updates | 0 | 4 | 4 | 0 |
-| TOTAL | | 94 | 118 | 116 | 5 |
+| 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
+| TOTAL | | 94 | 119 | 115 | 5 |
 
 ## Legend
 
@@ -537,7 +537,7 @@ The repository has extensive performance specification (PERFORMANCE_BUDGETS.md w
 | Privacy-respecting opt-in telemetry plus clear setting | Partial | state.ts telemetry false by default; AppSettings declares it; test confirms default. | No collection, transmission, UI toggle, or opt-in flow. |
 | Auto-update with channels plus restart-to-update | Missing | BUILD.md notes the updater needs tauri-plugin-updater, which is not in Cargo.toml; no update logic or UI. | No updater dependency, registration, version check, download/install, notification, restart, or channels. |
 | Crash reporting respecting telemetry setting | Missing | No crash reporting integration; no error boundary or Rust panic handler. | No crash service, capture, conditional sending, panic hook, or symbolication. |
-| Process explorer plus renderer/extension-host load inspection | Missing | No process explorer UI; TimelinePanel has an event inspector, not process metrics; no metrics command. | No memory/CPU display, process metrics, watcher counts, or GPU resource counts. |
+| Process explorer plus renderer/extension-host load inspection | Partial | Developer: Process Info opens a panel of runtime metrics (collectProcessInfo): JS heap used, total, and limit where the engine exposes them, CPU cores, live DOM node count, and the IPC protocol version. formatBytes is unit tested; an e2e opens it. | No per-process CPU, watcher counts, GPU resources, or renderer and extension-host split. |
 | Performance budget measurement and CI gates | Partial | PERFORMANCE_BUDGETS.md section 13 specifies budgets and gates; ci.yml has only lint/typecheck/test/build. | No bundle-size analyzer, jank or frame-sampler harness, or nightly performance job. |
 | Profiling flow (dev tools, flame graphs, memory snapshots) | Missing | Spec section 12 describes manual procedures; no automated tooling or CI profiling. | No automated heap snapshots, flame graphs, frame sampler, Long Task/Event Timing observers, or regression alerting. |
 

@@ -566,6 +566,19 @@ test.describe('vsclaude shell', () => {
     await expect(outline.getByRole('button', { name: 'Getting started' })).toBeVisible();
   });
 
+  test('the process info panel shows runtime metrics', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('process info');
+    await page.keyboard.press('Enter');
+    const modal = page.getByRole('dialog', { name: 'Process info' });
+    await expect(modal).toBeVisible();
+    await expect(modal.getByText('CPU cores')).toBeVisible();
+    await expect(modal.getByText('IPC protocol')).toBeVisible();
+  });
+
   test('the hex view shows the active file as a hex dump', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('button', { name: 'README.md', exact: true }).click();

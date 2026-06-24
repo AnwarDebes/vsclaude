@@ -19,7 +19,20 @@ terminal menu, terminal tab rename, explorer problem decorations, search history
 tasks.json loading, git push/pull/fetch, commit amend, commit revert, on-save trim,
 settings JSON editor, reset layout, task variables, task groups, files.exclude,
 at-symbol navigation, hex view, notification toasts, inlay hints, menu bar,
-edit menu, minimap config, diff settings.
+edit menu, minimap config, diff settings, process info.
+
+## Slice 67: process info panel (done)
+
+Runtime metrics (catalog 5.23).
+
+- **Helper** (`lib/process-info.ts`): formatBytes (unit tested) and collectProcessInfo,
+  which reads the JS heap (where exposed), CPU cores, live DOM node count, and the IPC
+  protocol version.
+- **Panel** (`ProcessInfoModal.tsx`): Developer: Process Info shows the metrics with a
+  Refresh button.
+- **Quality**: 376 unit tests (374 plus 2), typecheck, lint clean (no Rust change), the
+  renderer build succeeds, and 50 Playwright e2e pass (the new one opens the panel and
+  sees the metrics). Matrix 5.23 process-explorer row moved to Partial.
 
 ## Slice 66: diff editor settings and a matrix roll-up reconciliation (done)
 

@@ -58,6 +58,7 @@ import { MarkdownPreview, type MarkdownTarget } from './components/MarkdownPrevi
 import { ImagePreview, type ImageTarget } from './components/ImagePreview';
 import { isSvgPath, svgDataUrl } from './lib/preview';
 import { HexView, type HexTarget } from './components/HexView';
+import { ProcessInfoModal } from './components/ProcessInfoModal';
 import { themeForSystem } from './lib/system-theme';
 import { DiffReview } from './components/DiffReview';
 import { Narration } from './components/Narration';
@@ -129,6 +130,7 @@ export function App() {
   const [markdownTarget, setMarkdownTarget] = useState<MarkdownTarget | null>(null);
   const [imageTarget, setImageTarget] = useState<ImageTarget | null>(null);
   const [hexTarget, setHexTarget] = useState<HexTarget | null>(null);
+  const [processInfoOpen, setProcessInfoOpen] = useState(false);
   const [gitHistory, setGitHistory] = useState<GitCommit[] | null>(null);
   const [tagsOpen, setTagsOpen] = useState(false);
   const [npmTasks, setNpmTasks] = useState<NpmTask[]>([]);
@@ -615,6 +617,12 @@ export function App() {
       run: () => setSettingsJsonOpen(true),
     });
     r.register({
+      id: 'developer-process-info',
+      title: 'Developer: Process Info',
+      keywords: ['process', 'info', 'memory', 'heap', 'performance', 'diagnostics', 'developer'],
+      run: () => setProcessInfoOpen(true),
+    });
+    r.register({
       id: 'show-notifications',
       title: 'Notifications: Show',
       keywords: ['notifications', 'alerts', 'messages', 'center', 'bell'],
@@ -1098,6 +1106,7 @@ export function App() {
       <MarkdownPreview target={markdownTarget} onClose={() => setMarkdownTarget(null)} />
       <ImagePreview target={imageTarget} onClose={() => setImageTarget(null)} />
       <HexView target={hexTarget} onClose={() => setHexTarget(null)} />
+      <ProcessInfoModal open={processInfoOpen} onClose={() => setProcessInfoOpen(false)} />
       <GitHistoryModal
         commits={gitHistory}
         repo={hasWorkspace ? ws.roots[0]?.path ?? null : null}
