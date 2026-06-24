@@ -334,6 +334,18 @@ test.describe('vsclaude shell', () => {
     await expect(settings.getByText('Render Whitespace', { exact: true })).toBeVisible();
   });
 
+  test('release notes open from the command palette', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('release notes');
+    await page.keyboard.press('Enter');
+    const notes = page.getByRole('dialog', { name: 'Release Notes' });
+    await expect(notes).toBeVisible();
+    await expect(notes.getByRole('heading', { name: 'Source control' })).toBeVisible();
+  });
+
   test('the outline view lists markdown headings', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('button', { name: 'README.md', exact: true }).click();

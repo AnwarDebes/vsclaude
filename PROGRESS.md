@@ -5,13 +5,24 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus twenty-seven parity slices, the last twenty-six
+2026-06-24. Session 3 (Step 0 plus twenty-eight parity slices, the last twenty-seven
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
 stash, zen mode, breadcrumbs, tasks, activity-bar badges, output panel, untitled,
 more editor settings, markdown preview, document links, color decorators, outline,
-git history.
+git history, release notes.
+
+## Slice 28: a What's New / Release Notes panel (done)
+
+A capability summary (catalog 5.21).
+
+- **Data** (`lib/release-notes.ts`): `RELEASE_NOTES`, a categorized capability
+  summary. 3 unit tests for shape.
+- **Panel** (`ReleaseNotes.tsx`): a modal opened by Help: Release Notes; Escape closes.
+- **Quality**: 316 unit tests (313 plus 3), typecheck, lint clean (no Rust change),
+  the renderer build succeeds, and 30 Playwright e2e pass (the new one opens the panel
+  and checks a section heading). Matrix 5.21 what-is-new row moved to Partial.
 
 ## Slice 27: git commit history (done)
 

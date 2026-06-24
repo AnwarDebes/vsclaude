@@ -2006,6 +2006,58 @@ body {
   color: var(--color-text-muted);
 }
 
+/* Release notes modal */
+.release-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 6vh;
+  z-index: var(--z-popover, 200);
+}
+.release-modal {
+  width: min(640px, 92vw);
+  max-height: 82vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.release-modal__header {
+  display: flex;
+  align-items: center;
+  padding: 10px var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+}
+.release-modal__title {
+  font-size: 0.95rem;
+  margin: 0;
+}
+.release-modal__header .btn {
+  margin-left: auto;
+}
+.release-modal__body {
+  flex: 1 1 auto;
+  overflow: auto;
+  padding: var(--space-md) var(--space-lg);
+}
+.release-section__title {
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  margin: var(--space-md) 0 var(--space-xs);
+}
+.release-section__list {
+  margin: 0 0 var(--space-sm);
+  padding-left: 1.3em;
+  line-height: 1.6;
+}
+
 /* Git history modal */
 .history-overlay {
   position: fixed;

@@ -43,6 +43,7 @@ import { gitLog, type GitCommit } from './lib/tauri';
 import { SettingsPanel } from './components/SettingsPanel';
 import { KeyboardShortcuts } from './components/KeyboardShortcuts';
 import { WelcomePanel } from './components/WelcomePanel';
+import { ReleaseNotes } from './components/ReleaseNotes';
 import { welcomeQuickActions, type WelcomeActionId } from './lib/welcome';
 import { DiffModal, type DiffTarget } from './components/DiffModal';
 import { MarkdownPreview, type MarkdownTarget } from './components/MarkdownPreview';
@@ -117,6 +118,7 @@ export function App() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const [welcomeOpen, setWelcomeOpen] = useState(false);
+  const [releaseOpen, setReleaseOpen] = useState(false);
   const [zenMode, setZenMode] = useState(false);
   const untitledCounter = useRef(0);
   const live = useLiveProvider();
@@ -521,6 +523,12 @@ export function App() {
       title: 'Terminal: New Terminal',
       keywords: ['terminal', 'shell', 'console', 'new'],
       run: requestNewTerminal,
+    });
+    r.register({
+      id: 'help-release-notes',
+      title: 'Help: Release Notes',
+      keywords: ['release', 'notes', 'changelog', 'whats', 'new', 'about'],
+      run: () => setReleaseOpen(true),
     });
     r.register({
       id: 'help-welcome',
@@ -938,6 +946,7 @@ export function App() {
       <DiffModal target={diffTarget} onClose={() => setDiffTarget(null)} />
       <MarkdownPreview target={markdownTarget} onClose={() => setMarkdownTarget(null)} />
       <GitHistoryModal commits={gitHistory} onClose={() => setGitHistory(null)} />
+      <ReleaseNotes open={releaseOpen} onClose={() => setReleaseOpen(false)} />
       <DiffReview open={reviewOpen} cwd="." onClose={() => setReviewOpen(false)} />
     </div>
   );
