@@ -442,9 +442,11 @@ export function App() {
     return () => media.removeEventListener('change', apply);
   }, [settings.followSystemTheme]);
 
-  // Notable events flow to the Output channel.
+  // Notable events flow to the Output channels: general logs to Log, window
+  // lifecycle to Window, so the panel's channel selector has more than one entry.
   useEffect(() => {
     appendLog('vsclaude ready.');
+    appendLog('Renderer window opened.', 'info', 'Window');
   }, []);
   useEffect(() => {
     if (ws.error) {
@@ -714,7 +716,7 @@ export function App() {
         file,
         fileBasename: file ? basePathName(file) : '',
       });
-      appendLog(`Running task: ${command}`);
+      appendLog(`Running task: ${command}`, 'info', 'Tasks');
       requestRunInTerminal(command, task.label);
     };
     r.register({

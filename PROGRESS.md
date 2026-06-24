@@ -20,7 +20,20 @@ tasks.json loading, git push/pull/fetch, commit amend, commit revert, on-save tr
 settings JSON editor, reset layout, task variables, task groups, files.exclude,
 at-symbol navigation, hex view, notification toasts, inlay hints, menu bar,
 edit menu, minimap config, diff settings, process info, snippet browser,
-accessibility help, git remotes, problems filter.
+accessibility help, git remotes, problems filter, output channels.
+
+## Slice 72: output channels (done)
+
+Multiple output channels (catalog 5.21; the row moved to Done).
+
+- **Channels** (`output-log.ts`): a log entry carries an optional channel; logChannels
+  and filterLogByChannel join the existing level filter. Unit tested.
+- **Routing**: general logs go to Log, window lifecycle to Window, task runs to Tasks.
+- **Panel**: OutputPanel gained a channel selector alongside the level filter.
+- **Quality**: 384 unit tests (383 plus 1, with the existing append test updated for the
+  channel field), typecheck, lint clean (no Rust change), the renderer build succeeds, and
+  55 Playwright e2e pass (the new one switches from Log to Window). Matrix 5.21
+  output-channels row moved to Done.
 
 ## Slice 71: problems panel filtering (done)
 

@@ -573,6 +573,21 @@ test.describe('vsclaude shell', () => {
     await expect(notes.getByRole('heading', { name: 'Source control' })).toBeVisible();
   });
 
+  test('the output panel switches between channels', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('view output');
+    await page.keyboard.press('Enter');
+    const panel = page.getByRole('region', { name: 'Output' });
+    await expect(panel).toBeVisible();
+    await expect(panel.getByText('vsclaude ready.').first()).toBeVisible();
+    await panel.getByRole('combobox', { name: 'Output channel' }).selectOption('Window');
+    await expect(panel.getByText('Renderer window opened.').first()).toBeVisible();
+    await expect(panel.getByText('vsclaude ready.')).toHaveCount(0);
+  });
+
   test('the outline view lists markdown headings', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('button', { name: 'README.md', exact: true }).click();

@@ -1,5 +1,14 @@
-import { useState, useSyncExternalStore } from 'react';
-import { clearLog, filterLog, getLog, subscribeLog, type LogLevel } from '../lib/output-log';
+import { useMemo, useState, useSyncExternalStore } from 'react';
+import {
+  clearLog,
+  DEFAULT_CHANNEL,
+  filterLog,
+  filterLogByChannel,
+  getLog,
+  logChannels,
+  subscribeLog,
+  type LogLevel,
+} from '../lib/output-log';
 
 export interface OutputPanelProps {
   onClose: () => void;
@@ -19,12 +28,30 @@ const LEVELS: Array<{ value: LogLevel | 'all'; label: string }> = [
 export function OutputPanel({ onClose }: OutputPanelProps) {
   const entries = useSyncExternalStore(subscribeLog, getLog, getLog);
   const [level, setLevel] = useState<LogLevel | 'all'>('all');
-  const visible = filterLog(entries, level);
+  const [channel, setChannel] = useState<string>(DEFAULT_CHANNEL);
+  const channels = useMemo(() => {
+    const found = logChannels(entries);
+    return found.length > 0 ? found : [DEFAULT_CHANNEL];
+  }, [entries]);
+  const active = channels.includes(channel) ? channel : channels[0] ?? DEFAULT_CHANNEL;
+  const visible = filterLog(filterLogByChannel(entries, active), level);
 
   return (
     <section className="output" role="region" aria-label="Output">
       <header className="output__header">
         <h2 className="output__title">Output</h2>
+        <select
+          className="output__filter"
+          aria-label="Output channel"
+          value={active}
+          onChange={(e) => setChannel(e.target.value)}
+        >
+          {channels.map((c) => (
+            <option key={c} value={c}>
+              {c}
+            </option>
+          ))}
+        </select>
         <select
           className="output__filter"
           aria-label="Filter by level"

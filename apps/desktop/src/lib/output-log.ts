@@ -9,6 +9,15 @@ export type LogLevel = 'info' | 'warn' | 'error';
 export interface LogEntry {
   level: LogLevel;
   message: string;
+  /** The output channel this entry belongs to. Defaults to "Log". */
+  channel?: string;
+}
+
+/** The default channel name for entries logged without one. */
+export const DEFAULT_CHANNEL = 'Log';
+
+function channelOf(entry: LogEntry): string {
+  return entry.channel ?? DEFAULT_CHANNEL;
 }
 
 const MAX_LINES = 500;
@@ -20,9 +29,9 @@ function emit(): void {
   for (const listener of listeners) listener();
 }
 
-/** Append a log entry, dropping the oldest once the cap is reached. */
-export function appendLog(message: string, level: LogLevel = 'info'): void {
-  entries = [...entries, { level, message }];
+/** Append a log entry to a channel, dropping the oldest once the cap is reached. */
+export function appendLog(message: string, level: LogLevel = 'info', channel: string = DEFAULT_CHANNEL): void {
+  entries = [...entries, { level, message, channel }];
   if (entries.length > MAX_LINES) {
     entries = entries.slice(entries.length - MAX_LINES);
   }
@@ -37,6 +46,21 @@ export function getLog(): readonly LogEntry[] {
 /** Entries at a given level, or all of them. Pure. */
 export function filterLog(source: readonly LogEntry[], level: LogLevel | 'all'): LogEntry[] {
   return level === 'all' ? [...source] : source.filter((entry) => entry.level === level);
+}
+
+/** The distinct channel names present, in first-seen order. Pure. */
+export function logChannels(source: readonly LogEntry[]): string[] {
+  const seen: string[] = [];
+  for (const entry of source) {
+    const channel = channelOf(entry);
+    if (!seen.includes(channel)) seen.push(channel);
+  }
+  return seen;
+}
+
+/** Entries belonging to a channel. Pure. */
+export function filterLogByChannel(source: readonly LogEntry[], channel: string): LogEntry[] {
+  return source.filter((entry) => channelOf(entry) === channel);
 }
 
 /** Clear the log. */

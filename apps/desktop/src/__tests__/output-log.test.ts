@@ -1,5 +1,13 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { appendLog, clearLog, filterLog, getLog, subscribeLog } from '../lib/output-log';
+import {
+  appendLog,
+  clearLog,
+  filterLog,
+  filterLogByChannel,
+  getLog,
+  logChannels,
+  subscribeLog,
+} from '../lib/output-log';
 
 describe('output log', () => {
   afterEach(() => clearLog());
@@ -10,8 +18,8 @@ describe('output log', () => {
     appendLog('one');
     appendLog('boom', 'error');
     expect(getLog()).toEqual([
-      { level: 'info', message: 'one' },
-      { level: 'error', message: 'boom' },
+      { level: 'info', message: 'one', channel: 'Log' },
+      { level: 'error', message: 'boom', channel: 'Log' },
     ]);
     expect(listener).toHaveBeenCalledTimes(2);
     unsubscribe();
@@ -34,6 +42,15 @@ describe('output log', () => {
     expect(filterLog(getLog(), 'all')).toHaveLength(3);
     expect(filterLog(getLog(), 'warn').map((e) => e.message)).toEqual(['b']);
     expect(filterLog(getLog(), 'error').map((e) => e.message)).toEqual(['c']);
+  });
+
+  it('lists distinct channels in first-seen order and filters by channel', () => {
+    appendLog('a');
+    appendLog('task started', 'info', 'Tasks');
+    appendLog('b');
+    expect(logChannels(getLog())).toEqual(['Log', 'Tasks']);
+    expect(filterLogByChannel(getLog(), 'Tasks').map((e) => e.message)).toEqual(['task started']);
+    expect(filterLogByChannel(getLog(), 'Log').map((e) => e.message)).toEqual(['a', 'b']);
   });
 
   it('clears the log', () => {
