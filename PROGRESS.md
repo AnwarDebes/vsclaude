@@ -5,12 +5,27 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus twenty-five parity slices, the last twenty-four
+2026-06-24. Session 3 (Step 0 plus twenty-six parity slices, the last twenty-five
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
 stash, zen mode, breadcrumbs, tasks, activity-bar badges, output panel, untitled,
-more editor settings, markdown preview, document links, color decorators.
+more editor settings, markdown preview, document links, color decorators, outline.
+
+## Slice 26: outline view and markdown document symbols (done)
+
+An Outline view and a symbol source (catalog 5.3 and 5.5).
+
+- **Symbols** (`lib/symbols.ts`): `markdownSymbols` extracts headings (level and
+  line), skipping fenced code. 4 unit tests.
+- **Provider**: monaco-setup.ts registers a markdown DocumentSymbolProvider over it,
+  so Go to Symbol and the breadcrumb work in .md.
+- **Outline** (`OutlinePanel.tsx`): a bottom-drawer view (View: Outline) listing the
+  active file's symbols, indented by level, that reveals a line on click.
+- **Quality**: 308 unit tests (304 plus 4), typecheck, lint clean (no Rust change),
+  the renderer build succeeds, and 29 Playwright e2e pass (the new one lists the demo
+  README headings). Matrix 5.3 outline-source and 5.5 outline-view rows moved to
+  Partial.
 
 ## Slice 25: color decorators (done)
 

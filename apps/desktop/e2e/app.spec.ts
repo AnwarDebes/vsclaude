@@ -334,6 +334,20 @@ test.describe('vsclaude shell', () => {
     await expect(settings.getByText('Render Whitespace', { exact: true })).toBeVisible();
   });
 
+  test('the outline view lists markdown headings', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'README.md', exact: true }).click();
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('view outline');
+    await page.keyboard.press('Enter');
+    const outline = page.getByRole('region', { name: 'Outline' });
+    await expect(outline).toBeVisible();
+    await expect(outline.getByRole('button', { name: 'Aurora' })).toBeVisible();
+    await expect(outline.getByRole('button', { name: 'Getting started' })).toBeVisible();
+  });
+
   test('markdown preview renders the active markdown file', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('button', { name: 'README.md', exact: true }).click();

@@ -12,6 +12,7 @@ import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
 import { loader } from '@monaco-editor/react';
 import { findLinks } from './links';
 import { findColors, toHex } from './colors';
+import { markdownSymbols } from './symbols';
 
 declare global {
   interface Window {
@@ -100,5 +101,20 @@ for (const language of COLOR_LANGUAGES) {
     },
   });
 }
+
+// A document-symbol outline for Markdown (headings), so Go to Symbol and the
+// breadcrumb work in .md files.
+monaco.languages.registerDocumentSymbolProvider('markdown', {
+  provideDocumentSymbols(model) {
+    return markdownSymbols(model.getValue()).map((symbol) => ({
+      name: symbol.name,
+      detail: '',
+      kind: monaco.languages.SymbolKind.String,
+      tags: [],
+      range: new monaco.Range(symbol.line, 1, symbol.line, model.getLineMaxColumn(symbol.line)),
+      selectionRange: new monaco.Range(symbol.line, 1, symbol.line, 1),
+    }));
+  },
+});
 
 export { monaco };

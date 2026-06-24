@@ -34,6 +34,7 @@ import { activeViewFor } from './lib/activity-view';
 import { Breadcrumbs } from './components/Breadcrumbs';
 import { ProblemsPanel } from './components/ProblemsPanel';
 import { OutputPanel } from './components/OutputPanel';
+import { OutlinePanel } from './components/OutlinePanel';
 import { appendLog } from './lib/output-log';
 import { SearchPanel } from './components/SearchPanel';
 import { SourceControlPanel } from './components/SourceControlPanel';
@@ -103,9 +104,9 @@ export function App() {
   const [openFile, setOpenFile] = useState('src/auth/login-form.tsx');
   const [editedContents, setEditedContents] = useState<Record<string, string>>({});
   const [reviewOpen, setReviewOpen] = useState(false);
-  const [bottomPanel, setBottomPanel] = useState<'none' | 'problems' | 'search' | 'scm' | 'output'>(
-    'none',
-  );
+  const [bottomPanel, setBottomPanel] = useState<
+    'none' | 'problems' | 'search' | 'scm' | 'output' | 'outline'
+  >('none');
   const [gitNonce, setGitNonce] = useState(0);
   const [diffTarget, setDiffTarget] = useState<DiffTarget | null>(null);
   const [markdownTarget, setMarkdownTarget] = useState<MarkdownTarget | null>(null);
@@ -532,6 +533,12 @@ export function App() {
       run: () => setBottomPanel((p) => (p === 'output' ? 'none' : 'output')),
     });
     r.register({
+      id: 'view-outline',
+      title: 'View: Outline',
+      keywords: ['outline', 'symbols', 'headings', 'structure'],
+      run: () => setBottomPanel((p) => (p === 'outline' ? 'none' : 'outline')),
+    });
+    r.register({
       id: 'toggle-zen',
       title: 'View: Toggle Zen Mode',
       keywords: ['zen', 'distraction', 'focus', 'fullscreen', 'hide'],
@@ -863,6 +870,15 @@ export function App() {
         />
       ) : bottomPanel === 'output' ? (
         <OutputPanel onClose={() => setBottomPanel('none')} />
+      ) : bottomPanel === 'outline' ? (
+        <OutlinePanel
+          path={hasWorkspace ? ws.activePath : openFile}
+          content={
+            hasWorkspace ? ws.activeDoc?.draft ?? '' : editedContents[openFile] ?? demoContentFor(openFile)
+          }
+          onReveal={(line) => gotoLine(line, 1)}
+          onClose={() => setBottomPanel('none')}
+        />
       ) : null}
 
       <StatusBar items={statusItems} onCommand={(id) => void registry.run(id)} />
