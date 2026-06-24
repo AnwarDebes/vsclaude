@@ -24,7 +24,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.7 | File explorer and workspace management | 6 | 4 | 4 | 3 |
 | 5.8 | Search and replace across files | 5 | 2 | 5 | 0 |
 | 5.9 | Source control and git | 7 | 10 | 7 | 0 |
-| 5.10 | Integrated terminal | 6 | 7 | 5 | 0 |
+| 5.10 | Integrated terminal | 6 | 8 | 4 | 0 |
 | 5.11 | Tasks (VS Code task support) | 0 | 7 | 3 | 0 |
 | 5.12 | Debugging (Debug Adapter Protocol) | 0 | 0 | 10 | 0 |
 | 5.13 | Snippets and Emmet | 1 | 3 | 1 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 6 | 7 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 3 | 5 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 99 | 117 | 112 | 5 |
+| TOTAL | | 99 | 118 | 111 | 5 |
 
 ## Legend
 
@@ -285,7 +285,7 @@ The terminal has a real PTY backend (portable-pty via Rust), a typed IPC protoco
 | Single terminal display and interaction | Done | TerminalPanel.tsx xterm Terminal with FitAddon; keystrokes to ptyWrite; output from pty:data; resize and exit handled. | |
 | Multiple terminals and tabs | Done | TerminalTabs.tsx renders a tab bar with new, switch, and close over a pure tabs reducer in @vsclaude/terminal (tabs.ts); each tab owns its own PTY-backed TerminalPanel, kept mounted so scrollback survives. The Terminal: New Terminal command also opens one. | |
 | Terminal profiles (bash/zsh/pwsh/cmd/git bash/custom) | Partial | pty_create accepts a shell override; detection for Windows and Unix; ipc.ts allows shell param. | No profile UI, stored list, or shell switcher. |
-| Shell integration (command decorations, nav, exit-code, cwd) | Missing | No decorations or exit-code rendering; pty:exit carries code but is not shown. | No command separators, exit-code status, cwd inference, or recent-command pickers. |
+| Shell integration (command decorations, nav, exit-code, cwd) | Partial | On exit the terminal writes the exit code, colored red for a failure (exitMessage and exitIsFailure in lib/terminal-exit.ts, unit tested). | No command separators, cwd inference, or recent-command pickers. |
 | Clickable links (paths, line:col, URLs) | Partial | TerminalPanel.tsx loads the web-links addon, so URLs in terminal output are clickable. | No file-path or line:col link detection. |
 | Find in terminal | Done | TerminalPanel.tsx loads the search addon and opens a find bar on Ctrl or Cmd plus F (intercepted via attachCustomKeyEventHandler) with next, previous, and match highlighting. An e2e opens it. | |
 | Copy, paste, copy-on-selection | Partial | The terminal context menu offers Copy (term.getSelection to the clipboard), Paste (clipboard to the pty), and Select All. | No copy-on-selection toggle. |

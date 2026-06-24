@@ -21,7 +21,18 @@ settings JSON editor, reset layout, task variables, task groups, files.exclude,
 at-symbol navigation, hex view, notification toasts, inlay hints, menu bar,
 edit menu, minimap config, diff settings, process info, snippet browser,
 accessibility help, git remotes, problems filter, output channels, editor font,
-diff change counter.
+diff change counter, terminal exit code.
+
+## Slice 75: terminal exit code (done)
+
+Show the shell exit code (catalog 5.10).
+
+- **Message** (`lib/terminal-exit.ts` exitMessage and exitIsFailure): the terminal now
+  writes Process completed, Process exited with code N, or Process exited, colored red on
+  a nonzero code. 4 unit tests.
+- **Quality**: 389 unit tests (385 plus 4), typecheck, lint clean (no Rust change), the
+  renderer build succeeds, and 55 Playwright e2e pass (the exit path is native, so the
+  pure tests cover it). Matrix 5.10 shell-integration row moved to Partial.
 
 ## Slice 74: diff change counter (done)
 

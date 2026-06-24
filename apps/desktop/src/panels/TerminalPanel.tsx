@@ -5,6 +5,7 @@ import { SearchAddon } from '@xterm/addon-search';
 import { WebLinksAddon } from '@xterm/addon-web-links';
 import '@xterm/xterm/css/xterm.css';
 import { isTauri, onPtyData, onPtyExit, ptyCreate, ptyKill, ptyResize, ptyWrite } from '../lib/tauri';
+import { exitIsFailure, exitMessage } from '../lib/terminal-exit';
 
 interface TerminalPanelProps {
   /** Lines to show in the browser fallback (the agent's command activity). */
@@ -77,7 +78,9 @@ export function TerminalPanel({ fallbackLines, cwd, initialCommand }: TerminalPa
             if (p.ptyId === ptyId) term.write(p.data);
           });
           unlistenExit = await onPtyExit((p) => {
-            if (p.ptyId === ptyId) term.writeln('\r\n\x1b[2m[process exited]\x1b[0m');
+            if (p.ptyId !== ptyId) return;
+            const color = exitIsFailure(p.exitCode) ? '\x1b[31m' : '\x1b[2m';
+            term.writeln(`\r\n${color}${exitMessage(p.exitCode)}\x1b[0m`);
           });
           term.onData((d) => {
             if (ptyId) void ptyWrite(ptyId, d);
