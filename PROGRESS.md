@@ -5,11 +5,26 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus sixteen parity slices, the last fifteen
+2026-06-24. Session 3 (Step 0 plus seventeen parity slices, the last sixteen
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
-stash, zen mode.
+stash, zen mode, breadcrumbs.
+
+## Slice 17: breadcrumbs (done)
+
+A path bar above the editor (catalog 5.5).
+
+- **Segments** (`lib/breadcrumbs.ts`): `breadcrumbSegments` splits a path into
+  cumulative crumbs, stripping the workspace root so the trail stays relative. 4
+  unit tests.
+- **Breadcrumbs** (`Breadcrumbs.tsx`): the folders and file name above the editor;
+  the file segment opens the document symbol picker (Go to Symbol). The editor and
+  breadcrumbs are wrapped in an editor-wrap flex column.
+- **Quality**: 268 unit tests (264 plus 4), typecheck, lint clean (no Rust change),
+  the renderer build succeeds, and 23 Playwright e2e pass (the new one opens a file
+  and checks the trail; all prior flows still pass through the layout change).
+  Matrix 5.5 breadcrumbs row moved to Partial.
 
 ## Slice 16: zen mode (done)
 

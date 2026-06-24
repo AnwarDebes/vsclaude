@@ -19,7 +19,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.2 | Code intelligence (LSP language features) | 0 | 7 | 17 | 0 |
 | 5.3 | Editor advanced surface | 6 | 4 | 2 | 0 |
 | 5.4 | Diff and merge | 3 | 3 | 2 | 1 |
-| 5.5 | Workbench layout and navigation | 6 | 10 | 11 | 0 |
+| 5.5 | Workbench layout and navigation | 6 | 11 | 10 | 0 |
 | 5.6 | Quick open and command palette | 7 | 0 | 4 | 0 |
 | 5.7 | File explorer and workspace management | 6 | 2 | 6 | 3 |
 | 5.8 | Search and replace across files | 5 | 1 | 6 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 6 | 8 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 1 | 7 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 3 | 5 | 0 |
-| TOTAL | | 77 | 84 | 163 | 5 |
+| TOTAL | | 77 | 85 | 162 | 5 |
 
 ## Legend
 
@@ -180,7 +180,7 @@ vsclaude uses a fixed, presentation-mode-driven layout rather than the dockable 
 | Focused / zen editor expansion | Partial | Minimal mode shows only center editor. | No per-panel maximize button or transition animation. |
 | Command palette (fuzzy search, run commands) | Done | CommandPalette.tsx (Ctrl/Cmd+K, fuzzy, arrows, Enter); CommandRegistry ranks; commands in App.tsx. | |
 | Search/replace functionality | Partial | Quick-open ships: Ctrl/Cmd+P file open, : go-to-line, and the > command route (CommandPalette.tsx, see 5.6). Monaco's in-file find is on by default. | Project-wide search and replace across files (5.8), and @ or # symbol search, are still missing. |
-| Breadcrumbs / path navigation | Missing | Spec 7.1 mentions breadcrumbs as a Monaco feature; no breadcrumb element in renderer. | No breadcrumb trail or clickable path nav. |
+| Breadcrumbs / path navigation | Partial | Breadcrumbs.tsx renders the active file's folders and name above the editor (breadcrumbSegments, root-relative); the file segment opens the document symbol picker. | No folder dropdown pickers in the trail. |
 | Keyboard shortcuts and customization | Missing | CommandPalette.tsx and WorkspaceEditor.tsx hardcode keys; no rebinding. | No keybindings.json, editor, or shortcut help view. |
 
 ## 5.6 Quick open and command palette

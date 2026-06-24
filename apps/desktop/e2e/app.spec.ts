@@ -278,6 +278,15 @@ test.describe('vsclaude shell', () => {
     await expect(page.locator('.app-header')).toBeVisible();
   });
 
+  test('breadcrumbs show the active file path', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'session.ts', exact: true }).click();
+    const crumbs = page.getByRole('navigation', { name: 'Breadcrumbs' });
+    await expect(crumbs).toBeVisible();
+    await expect(crumbs.getByText('auth', { exact: true })).toBeVisible();
+    await expect(crumbs.getByRole('button', { name: /session\.ts/ })).toBeVisible();
+  });
+
   test('opens the diff review overlay from the command palette', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByText('vsclaude').first()).toBeVisible();

@@ -31,6 +31,7 @@ import { CommandPalette, openPalette } from './components/CommandPalette';
 import { StatusBar, useEditorStatus, useGitStatus } from './components/StatusBar';
 import { ActivityBar } from './components/ActivityBar';
 import { activeViewFor } from './lib/activity-view';
+import { Breadcrumbs } from './components/Breadcrumbs';
 import { ProblemsPanel } from './components/ProblemsPanel';
 import { SearchPanel } from './components/SearchPanel';
 import { SourceControlPanel } from './components/SourceControlPanel';
@@ -677,16 +678,25 @@ export function App() {
               tokens={session.tokens}
             />
           ) : isEditorMode ? (
-            hasWorkspace ? (
-              <WorkspaceEditor ws={ws} />
-            ) : (
-              <EditorPanel
-                path={openFile}
-                value={content}
-                onChange={(v) => setEditedContents((m) => ({ ...m, [openFile]: v }))}
-                onSave={(v) => setEditedContents((m) => ({ ...m, [openFile]: v }))}
-              />
-            )
+            <div className="editor-wrap">
+              {(hasWorkspace ? ws.activePath : openFile) ? (
+                <Breadcrumbs
+                  path={(hasWorkspace ? ws.activePath : openFile) as string}
+                  root={hasWorkspace ? ws.roots[0]?.path : undefined}
+                  onSymbols={() => runEditorAction('editor.action.quickOutline')}
+                />
+              ) : null}
+              {hasWorkspace ? (
+                <WorkspaceEditor ws={ws} />
+              ) : (
+                <EditorPanel
+                  path={openFile}
+                  value={content}
+                  onChange={(v) => setEditedContents((m) => ({ ...m, [openFile]: v }))}
+                  onSave={(v) => setEditedContents((m) => ({ ...m, [openFile]: v }))}
+                />
+              )}
+            </div>
           ) : (
             pixie
           )}
