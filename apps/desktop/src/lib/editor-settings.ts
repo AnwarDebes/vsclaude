@@ -16,6 +16,8 @@ export interface MonacoEditorOptions {
   rulers: number[];
   renderWhitespace: 'none' | 'selection' | 'all';
   cursorStyle: 'line' | 'block' | 'underline';
+  lineHeight: number;
+  fontWeight: string;
 }
 
 /** Map the editor settings to Monaco's option names. */
@@ -30,6 +32,8 @@ export function editorSettingsToMonaco(settings: EditorSettings): MonacoEditorOp
     rulers: settings.rulers > 0 ? [settings.rulers] : [],
     renderWhitespace: settings.renderWhitespace,
     cursorStyle: settings.cursorStyle,
+    lineHeight: settings.lineHeight,
+    fontWeight: settings.fontWeight,
   };
 }
 

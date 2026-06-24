@@ -332,6 +332,8 @@ test.describe('vsclaude shell', () => {
     await expect(settings.getByText('Ruler Column', { exact: true })).toBeVisible();
     await settings.getByRole('textbox', { name: /search settings/i }).fill('whitespace');
     await expect(settings.getByText('Render Whitespace', { exact: true })).toBeVisible();
+    await settings.getByRole('textbox', { name: /search settings/i }).fill('line height');
+    await expect(settings.getByText('Line Height', { exact: true })).toBeVisible();
   });
 
   test('the notification center collects messages', async ({ page }) => {

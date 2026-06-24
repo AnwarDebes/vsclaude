@@ -95,6 +95,9 @@ export interface EditorSettings {
   rulers: number;
   renderWhitespace: 'none' | 'selection' | 'all';
   cursorStyle: 'line' | 'block' | 'underline';
+  /** Line height in pixels, or 0 to derive it from the font size. */
+  lineHeight: number;
+  fontWeight: 'normal' | '500' | '600' | 'bold';
 }
 
 /** User-level application settings. */
@@ -129,6 +132,8 @@ export const DEFAULT_SETTINGS: AppSettings = {
     rulers: 0,
     renderWhitespace: 'selection',
     cursorStyle: 'line',
+    lineHeight: 0,
+    fontWeight: 'normal',
   },
   defaultProvider: 'claude-code',
   models: {},

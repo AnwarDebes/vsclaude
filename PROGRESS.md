@@ -5,14 +5,25 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus thirty-four parity slices, the last thirty-three
+2026-06-24. Session 3 (Step 0 plus thirty-five parity slices, the last thirty-four
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
 stash, zen mode, breadcrumbs, tasks, activity-bar badges, output panel, untitled,
 more editor settings, markdown preview, document links, color decorators, outline,
 git history, release notes, notification center, branch delete and rename, git tags,
-gitignore action, svg preview, snippets.
+gitignore action, svg preview, snippets, line height and font weight.
+
+## Slice 35: editor line height and font weight (done)
+
+Two appearance settings (catalog 5.16; both rows moved to Done).
+
+- **Settings**: AppSettings.editor gains lineHeight (0 derives from font size) and
+  fontWeight (normal, medium, semibold, bold), mapped to Monaco (editorSettingsToMonaco)
+  and editable in the Settings panel.
+- **Quality**: 327 unit tests, typecheck, lint clean (no Rust change), the renderer
+  build succeeds, and 33 Playwright e2e pass (the settings e2e now also finds Line
+  Height). Matrix 5.16 line-height and font-weight rows moved to Done.
 
 ## Slice 34: built-in snippets (done)
 

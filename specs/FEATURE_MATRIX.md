@@ -30,7 +30,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.13 | Snippets and Emmet | 1 | 2 | 2 | 0 |
 | 5.14 | Settings and configuration | 2 | 2 | 5 | 1 |
 | 5.15 | Keybindings and keymaps | 3 | 2 | 6 | 0 |
-| 5.16 | Themes and appearance | 11 | 3 | 8 | 0 |
+| 5.16 | Themes and appearance | 13 | 3 | 6 | 0 |
 | 5.17 | Extensions and plugin ecosystem | 5 | 2 | 11 | 0 |
 | 5.18 | Notebooks | 0 | 0 | 6 | 0 |
 | 5.19 | Remote development and tunnels | 0 | 0 | 6 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 10 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 2 | 6 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 3 | 5 | 0 |
-| TOTAL | | 79 | 100 | 145 | 5 |
+| TOTAL | | 81 | 100 | 143 | 5 |
 
 ## Legend
 
@@ -400,8 +400,8 @@ vsclaude has a strong design-token system and bundled themes. Theme selection (f
 | Editor font size customization | Done | AppSettings.editor.fontSize, edited in the Settings panel (8 to 32) and applied live to Monaco. | |
 | Editor font family customization | Partial | EditorPanel.tsx hardcodes fontFamily; no override field. | Not user-configurable. |
 | Editor font ligatures toggle | Partial | EditorPanel.tsx hardcodes fontLigatures true. | No user toggle. |
-| Editor line height customization | Missing | No lineHeight option or AppSettings field. | No line-height customization. |
-| Editor font weight customization | Missing | No fontWeight option or field. | Not customizable. |
+| Editor line height customization | Done | The editor.lineHeight setting (settings-schema.ts) maps to Monaco's lineHeight (editorSettingsToMonaco); 0 derives it from the font size. Unit tested. | |
+| Editor font weight customization | Done | The editor.fontWeight setting (normal, medium, semibold, bold) maps to Monaco's fontWeight (editorSettingsToMonaco). Unit tested. | |
 | Editor wheel/scroll zoom | Missing | No explicit Ctrl+Scroll zoom feature or UI. | Not exposed or documented. |
 | Editor tab size and indentation settings | Done | AppSettings.editor.tabSize and insertSpaces, edited in the Settings panel and applied to Monaco. | |
 | Editor word wrap setting | Done | AppSettings.editor.wordWrap, toggled in the Settings panel and applied to Monaco. | |

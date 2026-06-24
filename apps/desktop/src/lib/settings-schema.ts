@@ -130,6 +130,32 @@ export const SETTINGS_SCHEMA: readonly SettingDef[] = [
     set: (s, v) => ({ ...s, editor: { ...s.editor, cursorStyle: v as 'line' | 'block' | 'underline' } }),
   },
   {
+    id: 'editor.lineHeight',
+    category: 'Editor',
+    label: 'Line Height',
+    description: 'Editor line height in pixels, or 0 to derive it from the font size.',
+    control: { kind: 'number', min: 0, max: 40 },
+    get: (s) => s.editor.lineHeight,
+    set: (s, v) => ({ ...s, editor: { ...s.editor, lineHeight: Number(v) } }),
+  },
+  {
+    id: 'editor.fontWeight',
+    category: 'Editor',
+    label: 'Font Weight',
+    description: 'The weight of the editor font.',
+    control: {
+      kind: 'select',
+      options: [
+        { value: 'normal', label: 'Normal' },
+        { value: '500', label: 'Medium' },
+        { value: '600', label: 'Semibold' },
+        { value: 'bold', label: 'Bold' },
+      ],
+    },
+    get: (s) => s.editor.fontWeight,
+    set: (s, v) => ({ ...s, editor: { ...s.editor, fontWeight: v as 'normal' | '500' | '600' | 'bold' } }),
+  },
+  {
     id: 'appearance.theme',
     category: 'Appearance',
     label: 'Color Theme',

@@ -25,6 +25,8 @@ describe('editorSettingsToMonaco', () => {
       rulers: [],
       renderWhitespace: 'selection',
       cursorStyle: 'line',
+      lineHeight: 0,
+      fontWeight: 'normal',
     });
   });
 
