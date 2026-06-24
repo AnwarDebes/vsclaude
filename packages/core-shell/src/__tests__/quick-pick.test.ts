@@ -59,6 +59,11 @@ describe('parsePaletteInput', () => {
     expect(parsePaletteInput(':42', 'files')).toEqual({ mode: 'goto', query: '', line: 42 });
   });
 
+  it('routes a leading @ to symbol mode', () => {
+    expect(parsePaletteInput('@', 'commands')).toEqual({ mode: 'symbols', query: '' });
+    expect(parsePaletteInput('@form', 'files')).toEqual({ mode: 'symbols', query: 'form' });
+  });
+
   it('parses :line:column', () => {
     expect(parsePaletteInput(':42:8', 'commands')).toEqual({ mode: 'goto', query: '', line: 42, column: 8 });
   });
@@ -72,8 +77,7 @@ describe('parsePaletteInput', () => {
     expect(parsePaletteInput('swarm', 'commands')).toEqual({ mode: 'commands', query: 'swarm' });
   });
 
-  it('reserves @ and # for later: they fall through to the base mode', () => {
-    expect(parsePaletteInput('@symbol', 'files')).toEqual({ mode: 'files', query: '@symbol' });
+  it('reserves # for later: it falls through to the base mode', () => {
     expect(parsePaletteInput('#workspace', 'commands')).toEqual({ mode: 'commands', query: '#workspace' });
   });
 });

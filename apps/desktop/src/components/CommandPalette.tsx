@@ -26,6 +26,8 @@ export interface CommandPaletteProps {
   onOpenFile?: (path: string) => void;
   /** Jump the active editor to a line and column in go-to mode. */
   onGotoLine?: (line: number, column?: number) => void;
+  /** Open Go to Symbol in the active editor (symbol mode). */
+  onGotoSymbol?: () => void;
   /** Called when file mode opens, so the index can be refreshed. */
   onRefreshFiles?: () => void;
 }
@@ -55,6 +57,7 @@ export function CommandPalette({
   files = [],
   onOpenFile,
   onGotoLine,
+  onGotoSymbol,
   onRefreshFiles,
 }: CommandPaletteProps) {
   const [open, setOpen] = useState(false);
@@ -154,6 +157,16 @@ export function CommandPalette({
         run: () => onOpenFile?.(item.id),
       }));
     }
+    // Symbol mode: a single row that opens Go to Symbol in the active editor.
+    if (parsed.mode === 'symbols') {
+      return [
+        {
+          id: 'goto-symbol',
+          label: 'Go to Symbol in Editor',
+          run: () => onGotoSymbol?.(),
+        },
+      ];
+    }
     // Go-to-line mode: a single actionable row once a line number is present.
     if (parsed.line !== undefined) {
       const target = parsed.column !== undefined ? `${parsed.line}:${parsed.column}` : `${parsed.line}`;
@@ -166,7 +179,7 @@ export function CommandPalette({
       ];
     }
     return [];
-  }, [parsed, registry, files, onOpenFile, onGotoLine]);
+  }, [parsed, registry, files, onOpenFile, onGotoLine, onGotoSymbol]);
 
   if (!open) return null;
 
@@ -176,7 +189,9 @@ export function CommandPalette({
       ? 'Type a command...'
       : parsed.mode === 'files'
         ? 'Search files by name...'
-        : 'Go to line and column...';
+        : parsed.mode === 'symbols'
+          ? 'Go to symbol in the editor...'
+          : 'Go to line and column...';
   const emptyMessage =
     parsed.mode === 'commands'
       ? 'No matching commands'

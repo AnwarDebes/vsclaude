@@ -1017,6 +1017,7 @@ export function App() {
         files={paletteFiles}
         onOpenFile={openFileFromPalette}
         onGotoLine={(line, column) => gotoLine(line, column)}
+        onGotoSymbol={() => runEditorAction('editor.action.quickOutline')}
         onRefreshFiles={hasWorkspace ? fileIndex.refresh : undefined}
       />
       {settingsOpen ? (

@@ -5,7 +5,7 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus fifty-eight parity slices, the last fifty-seven
+2026-06-24. Session 3 (Step 0 plus fifty-nine parity slices, the last fifty-eight
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
@@ -17,7 +17,21 @@ wheel zoom, follow system theme, command categories, output log levels, diff set
 json schemas, bracket guides and large-file mode, in-file find, terminal find,
 terminal menu, terminal tab rename, explorer problem decorations, search history,
 tasks.json loading, git push/pull/fetch, commit amend, commit revert, on-save trim,
-settings JSON editor, reset layout, task variables, task groups, files.exclude.
+settings JSON editor, reset layout, task variables, task groups, files.exclude,
+at-symbol navigation.
+
+## Slice 59: @ symbol navigation in the palette (done)
+
+Go to Symbol via @ (catalog 5.6).
+
+- **Parser** (`core-shell/quick-pick.ts`): parsePaletteInput now routes a leading @ to
+  a symbols mode (unit tested).
+- **Palette**: in symbols mode the palette offers Go to Symbol in Editor, which runs
+  Monaco's quickOutline (using the markdown symbol provider and the TS or JS worker).
+- **Quality**: 363 unit tests (after updating the core-shell reserved-prefix test for @),
+  typecheck, lint clean (no Rust change), the renderer build succeeds, and 45 Playwright
+  e2e pass (the new one types @ and sees the symbol entry). Matrix 5.6 @ row moved to
+  Partial.
 
 ## Slice 58: files.exclude noise filtering (done)
 
