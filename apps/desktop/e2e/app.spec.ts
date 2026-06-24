@@ -536,6 +536,19 @@ test.describe('vsclaude shell', () => {
     await expect(outline.getByRole('button', { name: 'Getting started' })).toBeVisible();
   });
 
+  test('the hex view shows the active file as a hex dump', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'README.md', exact: true }).click();
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('view hex');
+    await page.keyboard.press('Enter');
+    const hex = page.getByRole('dialog', { name: /hex view of readme/i });
+    await expect(hex).toBeVisible();
+    await expect(hex.getByText(/00000000/)).toBeVisible();
+  });
+
   test('svg preview renders the active svg as an image', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('button', { name: 'logo.svg', exact: true }).click();

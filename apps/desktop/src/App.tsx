@@ -55,6 +55,7 @@ import { DiffModal, type DiffTarget } from './components/DiffModal';
 import { MarkdownPreview, type MarkdownTarget } from './components/MarkdownPreview';
 import { ImagePreview, type ImageTarget } from './components/ImagePreview';
 import { isSvgPath, svgDataUrl } from './lib/preview';
+import { HexView, type HexTarget } from './components/HexView';
 import { themeForSystem } from './lib/system-theme';
 import { DiffReview } from './components/DiffReview';
 import { Narration } from './components/Narration';
@@ -125,6 +126,7 @@ export function App() {
   const [diffTarget, setDiffTarget] = useState<DiffTarget | null>(null);
   const [markdownTarget, setMarkdownTarget] = useState<MarkdownTarget | null>(null);
   const [imageTarget, setImageTarget] = useState<ImageTarget | null>(null);
+  const [hexTarget, setHexTarget] = useState<HexTarget | null>(null);
   const [gitHistory, setGitHistory] = useState<GitCommit[] | null>(null);
   const [tagsOpen, setTagsOpen] = useState(false);
   const [npmTasks, setNpmTasks] = useState<NpmTask[]>([]);
@@ -550,6 +552,22 @@ export function App() {
           ? ws.activeDoc?.draft ?? ''
           : editedContents[openFile] ?? demoContentFor(openFile);
         setImageTarget({ name: basePathName(path), src: svgDataUrl(svg) });
+      },
+    });
+    r.register({
+      id: 'view-hex',
+      title: 'View: Hex',
+      keywords: ['hex', 'binary', 'bytes', 'dump'],
+      run: () => {
+        const path = hasWorkspace ? ws.activePath : openFile;
+        if (!path) {
+          addNotification('info', 'Open a file to view it as hex.');
+          return;
+        }
+        const content = hasWorkspace
+          ? ws.activeDoc?.draft ?? ''
+          : editedContents[openFile] ?? demoContentFor(openFile);
+        setHexTarget({ name: basePathName(path), content });
       },
     });
     r.register({
@@ -1041,6 +1059,7 @@ export function App() {
       <DiffModal target={diffTarget} onClose={() => setDiffTarget(null)} />
       <MarkdownPreview target={markdownTarget} onClose={() => setMarkdownTarget(null)} />
       <ImagePreview target={imageTarget} onClose={() => setImageTarget(null)} />
+      <HexView target={hexTarget} onClose={() => setHexTarget(null)} />
       <GitHistoryModal
         commits={gitHistory}
         repo={hasWorkspace ? ws.roots[0]?.path ?? null : null}

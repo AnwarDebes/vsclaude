@@ -5,7 +5,7 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus fifty-nine parity slices, the last fifty-eight
+2026-06-24. Session 3 (Step 0 plus sixty parity slices, the last fifty-nine
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
@@ -18,7 +18,18 @@ json schemas, bracket guides and large-file mode, in-file find, terminal find,
 terminal menu, terminal tab rename, explorer problem decorations, search history,
 tasks.json loading, git push/pull/fetch, commit amend, commit revert, on-save trim,
 settings JSON editor, reset layout, task variables, task groups, files.exclude,
-at-symbol navigation.
+at-symbol navigation, hex view.
+
+## Slice 60: hex viewer (done)
+
+A hex dump of the active file (catalog 5.22).
+
+- **Dump** (`lib/hex.ts` hexDump): offset, hex bytes, and a printable-ASCII gutter,
+  16 bytes per row. 4 unit tests.
+- **View** (`HexView.tsx`): View: Hex shows the active file as a hex dump.
+- **Quality**: 367 unit tests (363 plus 4), typecheck, lint clean (no Rust change), the
+  renderer build succeeds, and 46 Playwright e2e pass (the new one opens the hex view of
+  the demo README). Matrix 5.22 hex-viewer row moved to Partial.
 
 ## Slice 59: @ symbol navigation in the palette (done)
 

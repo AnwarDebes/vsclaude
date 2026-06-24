@@ -36,9 +36,9 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.19 | Remote development and tunnels | 0 | 0 | 6 | 0 |
 | 5.20 | Accessibility (full) | 1 | 11 | 4 | 0 |
 | 5.21 | Productivity and workspace lifecycle | 3 | 10 | 4 | 0 |
-| 5.22 | Custom editors, webviews, and previews | 2 | 2 | 6 | 0 |
+| 5.22 | Custom editors, webviews, and previews | 2 | 3 | 5 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 4 | 4 | 0 |
-| TOTAL | | 91 | 117 | 116 | 5 |
+| TOTAL | | 91 | 118 | 115 | 5 |
 
 ## Legend
 
@@ -520,7 +520,7 @@ The repository shows minimal custom-editor and webview capability. It supports o
 | Image preview (inline plus viewer) | Missing | ExplorerPanel handles the tree; EditorPanel dispatches to Monaco by extension only. | No image rendering, zoom/pan, or dimensions. |
 | SVG viewer (zoom/pan) | Partial | Image: Open Preview renders an active .svg through a safe data URL in an ImagePreview viewer (lib/preview.ts, unit tested). | No zoom, pan, or metadata, and raster images are not yet previewed. |
 | Audio/video media player | Missing | No media elements or handlers in components or panels. | No audio/video player or controls. |
-| Hex viewer and binary editor | Missing | EditorPanel renders text only; no binary handlers. | No hex dump, byte editing, or endianness toggle. |
+| Hex viewer and binary editor | Partial | View: Hex shows a hex dump of the active file (hexDump in lib/hex.ts, unit tested) in HexView. An e2e covers it. | Read-only, no byte editing or endianness toggle, and bytes are derived from code units rather than a true binary read. |
 | Custom data contribution (HTML/CSS) | Missing | No customData files; plugin contributions list states/themes/panels/providers/visualizations only. | No HTML/CSS schema contribution or validation. |
 | Preview tabs (single-click ephemeral) | Partial | Spec 5.2 specifies them; tabs.ts has no preview field; WorkspaceEditor.tsx has basic tab management. | No preview state, italic styling, replacement, or promotion. |
 | Built-in language syntax highlighting (Monaco default) | Done | monaco-setup.ts loads workers; EditorPanel.tsx LANG_BY_EXT; Monaco bundles grammars. | |
