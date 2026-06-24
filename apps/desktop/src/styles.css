@@ -871,6 +871,60 @@ body {
   font-size: 0.85rem;
 }
 
+.menubar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: var(--space-lg);
+  margin-right: auto;
+}
+.menubar__menu {
+  position: relative;
+}
+.menubar__button {
+  font: inherit;
+  font-size: 0.84rem;
+  color: var(--color-text);
+  background: transparent;
+  border: none;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+.menubar__button:hover,
+.menubar__button[aria-expanded='true'] {
+  background: var(--color-surface-elevated);
+}
+.menubar__dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-xs);
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 18px 44px -20px rgba(0, 0, 0, 0.75);
+  z-index: var(--z-popover, 200);
+}
+.menubar__item {
+  font: inherit;
+  font-size: 0.82rem;
+  text-align: left;
+  color: var(--color-text);
+  background: transparent;
+  border: none;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+.menubar__item:hover {
+  background: var(--color-accent-muted);
+}
+
 .app-header__controls {
   display: flex;
   gap: var(--space-sm);

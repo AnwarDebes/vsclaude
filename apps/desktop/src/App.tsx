@@ -28,6 +28,7 @@ import { applyTheme, loadAppSettings, saveAppSettings } from './lib/theme';
 import { PixieStage } from './components/PixieStage';
 import { PixieActionSprite } from './components/ActionIcon';
 import { SettingsBar } from './components/SettingsBar';
+import { MenuBar } from './components/MenuBar';
 import { CommandPalette, openPalette } from './components/CommandPalette';
 import { StatusBar, useEditorStatus, useGitStatus } from './components/StatusBar';
 import { ActivityBar } from './components/ActivityBar';
@@ -898,6 +899,7 @@ export function App() {
           <span className="app-brand__name">vsclaude</span>
           <span className="app-brand__tag">Claude Code, in motion</span>
         </div>
+        <MenuBar onRun={(id) => void registry.run(id)} />
         <SettingsBar
           settings={settings}
           onSettings={setSettings}

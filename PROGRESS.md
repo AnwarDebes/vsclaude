@@ -18,7 +18,19 @@ json schemas, bracket guides and large-file mode, in-file find, terminal find,
 terminal menu, terminal tab rename, explorer problem decorations, search history,
 tasks.json loading, git push/pull/fetch, commit amend, commit revert, on-save trim,
 settings JSON editor, reset layout, task variables, task groups, files.exclude,
-at-symbol navigation, hex view, notification toasts, inlay hints.
+at-symbol navigation, hex view, notification toasts, inlay hints, menu bar.
+
+## Slice 63: a menu bar (done)
+
+File, View, Go, and Help menus (catalog 5.5).
+
+- **Data** (`lib/menus.ts` MENU_BAR): each menu lists items that run a registry command
+  by id. Unit tested (structure and unique commands).
+- **Component** (`MenuBar.tsx`): dropdown menus in the header; choosing an item runs the
+  command; click-away or Escape closes.
+- **Quality**: 372 unit tests (369 plus 3), typecheck, lint clean (no Rust change), the
+  renderer build succeeds, and 48 Playwright e2e pass (the new one opens Release Notes
+  from the Help menu). Matrix 5.5 title-bar/menu-bar row moved to Partial.
 
 ## Slice 62: TS and JS inlay hints (done)
 

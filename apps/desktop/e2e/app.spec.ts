@@ -522,6 +522,15 @@ test.describe('vsclaude shell', () => {
     await expect(modal.getByRole('textbox', { name: 'Settings JSON' })).toHaveValue(/themeId/);
   });
 
+  test('the menu bar opens release notes from the Help menu', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Help', exact: true }).click();
+    const menu = page.getByRole('menu', { name: 'Help' });
+    await expect(menu).toBeVisible();
+    await menu.getByRole('menuitem', { name: 'Release Notes' }).click();
+    await expect(page.getByRole('dialog', { name: 'Release Notes' })).toBeVisible();
+  });
+
   test('release notes open from the command palette', async ({ page }) => {
     await page.goto('/');
     await page.getByText('Claude Code, in motion').click();
