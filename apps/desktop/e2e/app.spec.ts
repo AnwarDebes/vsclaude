@@ -294,6 +294,20 @@ test.describe('vsclaude shell', () => {
     await expect(page.getByRole('region', { name: /problems/i })).toBeVisible();
   });
 
+  test('the output panel shows the log channel', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('output');
+    await page.keyboard.press('Enter');
+    const output = page.getByRole('region', { name: 'Output' });
+    await expect(output).toBeVisible();
+    await expect(output.getByText(/vsclaude ready/i).first()).toBeVisible();
+    await output.getByRole('button', { name: /close output panel/i }).click();
+    await expect(page.getByRole('region', { name: 'Output' })).toHaveCount(0);
+  });
+
   test('opens the diff review overlay from the command palette', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByText('vsclaude').first()).toBeVisible();

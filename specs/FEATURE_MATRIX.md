@@ -35,10 +35,10 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.18 | Notebooks | 0 | 0 | 6 | 0 |
 | 5.19 | Remote development and tunnels | 0 | 0 | 6 | 0 |
 | 5.20 | Accessibility (full) | 1 | 11 | 4 | 0 |
-| 5.21 | Productivity and workspace lifecycle | 3 | 6 | 8 | 0 |
+| 5.21 | Productivity and workspace lifecycle | 3 | 7 | 7 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 1 | 7 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 3 | 5 | 0 |
-| TOTAL | | 77 | 88 | 159 | 5 |
+| TOTAL | | 77 | 89 | 158 | 5 |
 
 ## Legend
 
@@ -503,7 +503,7 @@ The repository implements a substantial subset of productivity features. Core ca
 | Error/info/warning notifications (toasts) | Done | App.tsx workspace-toast role='alert'; useWorkspace.ts error state and clearError; styles.css. | |
 | Notification center / history | Missing | Toast dismisses with no history; no center component. | No persistent notification log or drawer. |
 | Progress indicators and cancellation | Partial | SettingsBar progress indicator; Pixie state transitions; session pause/restart in App.tsx. | No general progress API or cancellation token; cannot cancel in-flight operations. |
-| Output channels with log level filtering | Missing | TerminalPanel shows agent command output; no per-channel logging or level UI. | No output channel abstraction or filtering. |
+| Output channels with log level filtering | Partial | OutputPanel.tsx renders an in-memory log channel (output-log.ts, capped, with Clear), opened by View: Output or Ctrl or Cmd plus Shift plus U; the app logs startup, errors, and task runs. | One channel only; no per-channel selection or log-level filtering. |
 | Problems panel with filtering | Partial | ProblemsPanel.tsx aggregates and groups diagnostics by file (see 5.5 and 5.2). | No filtering by severity or by text yet. |
 | Welcome page and Get Started walkthroughs | Partial | WelcomePanel.tsx is a Welcome page with Start actions (welcomeQuickActions), recent projects, and shortcut tips, opened by the Help: Welcome command. | No auto-show on first run and no interactive multi-step walkthroughs. |
 | What-is-new and release notes | Missing | No release-notes UI, version tracking, or changelog component. | No release notes or version-aware UI. |

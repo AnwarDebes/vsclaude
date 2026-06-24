@@ -5,11 +5,24 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus nineteen parity slices, the last eighteen
+2026-06-24. Session 3 (Step 0 plus twenty parity slices, the last nineteen
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
-stash, zen mode, breadcrumbs, tasks, activity-bar badges.
+stash, zen mode, breadcrumbs, tasks, activity-bar badges, output panel.
+
+## Slice 20: the Output panel (done)
+
+A log channel (catalog 5.21).
+
+- **Log store** (`lib/output-log.ts`): an in-memory, capped (500-line) log with
+  append, clear, and subscribe. 3 unit tests.
+- **OutputPanel** (`OutputPanel.tsx`): a bottom-drawer view of the channel with a
+  Clear, opened by View: Output or Ctrl or Cmd plus Shift plus U. App logs startup,
+  workspace errors, and task runs.
+- **Quality**: 278 unit tests (275 plus 3), typecheck, lint clean (no Rust change),
+  the renderer build succeeds, and 25 Playwright e2e pass (the new one opens Output
+  and reads the log). Matrix 5.21 output-channels row moved to Partial.
 
 ## Slice 19: activity-bar badges and a Problems item (done)
 

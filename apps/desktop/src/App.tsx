@@ -33,6 +33,8 @@ import { ActivityBar } from './components/ActivityBar';
 import { activeViewFor } from './lib/activity-view';
 import { Breadcrumbs } from './components/Breadcrumbs';
 import { ProblemsPanel } from './components/ProblemsPanel';
+import { OutputPanel } from './components/OutputPanel';
+import { appendLog } from './lib/output-log';
 import { SearchPanel } from './components/SearchPanel';
 import { SourceControlPanel } from './components/SourceControlPanel';
 import { SettingsPanel } from './components/SettingsPanel';
@@ -99,7 +101,9 @@ export function App() {
   const [openFile, setOpenFile] = useState('src/auth/login-form.tsx');
   const [editedContents, setEditedContents] = useState<Record<string, string>>({});
   const [reviewOpen, setReviewOpen] = useState(false);
-  const [bottomPanel, setBottomPanel] = useState<'none' | 'problems' | 'search' | 'scm'>('none');
+  const [bottomPanel, setBottomPanel] = useState<'none' | 'problems' | 'search' | 'scm' | 'output'>(
+    'none',
+  );
   const [gitNonce, setGitNonce] = useState(0);
   const [diffTarget, setDiffTarget] = useState<DiffTarget | null>(null);
   const [npmTasks, setNpmTasks] = useState<NpmTask[]>([]);
@@ -377,6 +381,14 @@ export function App() {
     };
   }, [hasWorkspace, ws.available, ws.roots]);
 
+  // Notable events flow to the Output channel.
+  useEffect(() => {
+    appendLog('vsclaude ready.');
+  }, []);
+  useEffect(() => {
+    if (ws.error) appendLog(`Error: ${ws.error}`);
+  }, [ws.error]);
+
   // The bottom drawer shortcuts, matching VS Code: Ctrl or Cmd plus Shift plus M
   // for Problems and plus Shift plus F for Search. One slot, so each toggles.
   useEffect(() => {
@@ -401,6 +413,9 @@ export function App() {
       } else if (key === 'g') {
         e.preventDefault();
         setBottomPanel((p) => (p === 'scm' ? 'none' : 'scm'));
+      } else if (key === 'u') {
+        e.preventDefault();
+        setBottomPanel((p) => (p === 'output' ? 'none' : 'output'));
       }
     };
     window.addEventListener('keydown', onKey);
@@ -490,6 +505,13 @@ export function App() {
       run: () => setWelcomeOpen(true),
     });
     r.register({
+      id: 'view-output',
+      title: 'View: Output',
+      keywords: ['output', 'log', 'console', 'channel'],
+      keybinding: 'Ctrl+Shift+U',
+      run: () => setBottomPanel((p) => (p === 'output' ? 'none' : 'output')),
+    });
+    r.register({
       id: 'toggle-zen',
       title: 'View: Toggle Zen Mode',
       keywords: ['zen', 'distraction', 'focus', 'fullscreen', 'hide'],
@@ -501,7 +523,10 @@ export function App() {
         id: `task-${task.id}`,
         title: `Run Task: ${task.label}`,
         keywords: ['task', 'run', 'npm', 'script', task.label],
-        run: () => requestRunInTerminal(task.command, task.label),
+        run: () => {
+          appendLog(`Running task: ${task.command}`);
+          requestRunInTerminal(task.command, task.label);
+        },
       });
     }
     // The editor command surface: Monaco's built-in editing actions, run on the
@@ -786,6 +811,8 @@ export function App() {
           onClose={() => setBottomPanel('none')}
           onChanged={() => setGitNonce((n) => n + 1)}
         />
+      ) : bottomPanel === 'output' ? (
+        <OutputPanel onClose={() => setBottomPanel('none')} />
       ) : null}
 
       <StatusBar items={statusItems} onCommand={(id) => void registry.run(id)} />

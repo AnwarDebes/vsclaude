@@ -270,6 +270,61 @@ body {
   font-size: 0.72rem;
 }
 
+/* Output panel ------------------------------------------------------------- */
+.output {
+  position: fixed;
+  left: 48px;
+  right: 0;
+  bottom: 24px;
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface-elevated);
+  border-top: 1px solid var(--color-border);
+  box-shadow: 0 -20px 40px -30px rgba(0, 0, 0, 0.6);
+  z-index: var(--z-popover, 200);
+}
+.output__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 6px var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+}
+.output__title {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0;
+  color: var(--color-text-muted);
+}
+.output__action {
+  font: inherit;
+  font-size: 0.72rem;
+  color: var(--color-accent);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.output__close {
+  margin-left: auto;
+}
+.output__body {
+  flex: 1 1 auto;
+  overflow: auto;
+  padding: 6px var(--space-md);
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.78rem;
+  color: var(--color-text);
+}
+.output__line {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.output__empty {
+  color: var(--color-text-muted);
+}
+
 /* Search panel ------------------------------------------------------------- */
 .search {
   position: fixed;

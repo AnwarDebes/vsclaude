@@ -4,7 +4,9 @@
  */
 export type ActivityView = 'explorer' | 'search' | 'scm' | 'problems';
 
-export function activeViewFor(bottomPanel: 'none' | 'problems' | 'search' | 'scm'): ActivityView {
+export function activeViewFor(
+  bottomPanel: 'none' | 'problems' | 'search' | 'scm' | 'output',
+): ActivityView {
   if (bottomPanel === 'search') return 'search';
   if (bottomPanel === 'scm') return 'scm';
   if (bottomPanel === 'problems') return 'problems';
