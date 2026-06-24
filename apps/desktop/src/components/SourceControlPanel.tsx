@@ -16,6 +16,9 @@ import {
   gitDeleteBranch,
   gitRenameBranch,
   gitIgnoreAdd,
+  gitFetch,
+  gitPull,
+  gitPush,
   gitStage,
   gitStash,
   gitStashList,
@@ -112,6 +115,9 @@ export function SourceControlPanel({ repo, onDiff, onClose, onChanged }: SourceC
     repo && message.trim() && act(() => gitCommitStaged(repo, message.trim()).then(() => setMessage('')));
   const stashAll = () => repo && act(() => gitStash(repo));
   const popStash = () => repo && act(() => gitStashPop(repo));
+  const fetch = () => repo && act(() => gitFetch(repo));
+  const pull = () => repo && act(() => gitPull(repo));
+  const push = () => repo && act(() => gitPush(repo));
   const checkout = (branch: string) =>
     repo &&
     act(() => gitCheckout(repo, branch)).then(() => {
@@ -301,6 +307,18 @@ export function SourceControlPanel({ repo, onDiff, onClose, onChanged }: SourceC
               ) : null}
             </div>
           ) : null}
+
+          <div className="scm__syncrow" role="group" aria-label="Sync">
+            <button type="button" className="scm__groupaction" disabled={busy} onClick={() => void fetch()}>
+              Fetch
+            </button>
+            <button type="button" className="scm__groupaction" disabled={busy} onClick={() => void pull()}>
+              Pull
+            </button>
+            <button type="button" className="scm__groupaction" disabled={busy} onClick={() => void push()}>
+              Push
+            </button>
+          </div>
 
           <div className="scm__group">
             <div className="scm__grouphead">

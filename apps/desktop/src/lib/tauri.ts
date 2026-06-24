@@ -112,3 +112,6 @@ export const gitDeleteTag = (cwd: string, name: string): Promise<void> =>
   invoke('git_delete_tag', { cwd, name });
 export const gitIgnoreAdd = (cwd: string, pattern: string): Promise<void> =>
   invoke('git_ignore_add', { cwd, pattern });
+export const gitFetch = (cwd: string): Promise<string> => invoke('git_fetch', { cwd });
+export const gitPull = (cwd: string): Promise<string> => invoke('git_pull', { cwd });
+export const gitPush = (cwd: string): Promise<string> => invoke('git_push', { cwd });

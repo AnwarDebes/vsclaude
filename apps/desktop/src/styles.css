@@ -715,6 +715,16 @@ body {
 .scm__stashrow .scm__groupaction {
   margin-left: 0;
 }
+.scm__syncrow {
+  display: flex;
+  gap: var(--space-md);
+  padding: 0 var(--space-md) var(--space-sm);
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: var(--space-sm);
+}
+.scm__syncrow .scm__groupaction {
+  margin-left: 0;
+}
 .scm__group {
   padding: 4px 0;
 }

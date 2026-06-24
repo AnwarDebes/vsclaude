@@ -5,7 +5,7 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus forty-nine parity slices, the last forty-eight
+2026-06-24. Session 3 (Step 0 plus fifty parity slices, the last forty-nine
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
@@ -16,7 +16,20 @@ gitignore action, svg preview, snippets, line height and font weight, ui scale a
 wheel zoom, follow system theme, command categories, output log levels, diff setting,
 json schemas, bracket guides and large-file mode, in-file find, terminal find,
 terminal menu, terminal tab rename, explorer problem decorations, search history,
-tasks.json loading.
+tasks.json loading, git push/pull/fetch.
+
+## Slice 50: git push, pull, fetch (done)
+
+Network git operations (catalog 5.9; row moved to Done).
+
+- **Native** (`git.rs`): git_fetch, git_pull (fast-forward only), and git_push,
+  registered in lib.rs. A new cargo test pushes from one repo and fetch/pulls into a
+  clone through a local bare remote (13 cargo tests now).
+- **UI**: the SourceControlPanel gains Fetch, Pull, and Push buttons. Authentication
+  uses git's own credential helper or ssh-agent.
+- **Quality**: 346 unit tests, typecheck, lint, cargo clean, the renderer build
+  succeeds, and 40 Playwright e2e pass (the operations are native-gated, so the cargo
+  test covers them). Matrix 5.9 push/pull/fetch row moved to Done.
 
 ## Slice 49: tasks.json loading (done)
 

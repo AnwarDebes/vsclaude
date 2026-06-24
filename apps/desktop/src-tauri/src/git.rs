@@ -154,6 +154,24 @@ pub fn git_ignore_add(cwd: String, pattern: String) -> Result<(), String> {
     Ok(())
 }
 
+/// Fetch from the default remote.
+#[tauri::command]
+pub fn git_fetch(cwd: String) -> Result<String, String> {
+    run_git(&cwd, &["fetch"])
+}
+
+/// Pull (fast-forward only) from the upstream branch.
+#[tauri::command]
+pub fn git_pull(cwd: String) -> Result<String, String> {
+    run_git(&cwd, &["pull", "--ff-only"])
+}
+
+/// Push the current branch to its upstream.
+#[tauri::command]
+pub fn git_push(cwd: String) -> Result<String, String> {
+    run_git(&cwd, &["push"])
+}
+
 /// List tags, newest first.
 #[tauri::command]
 pub fn git_tags(cwd: String) -> Result<Vec<String>, String> {
@@ -314,6 +332,51 @@ mod tests {
         assert_eq!(git_stash_list(cwd.clone()).unwrap().trim(), "");
 
         let _ = fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn push_fetch_and_pull_through_a_bare_remote() {
+        let tmp = std::env::temp_dir();
+        let remote = tmp.join("vsclaude-git-remote.git");
+        let dir_a = tmp.join("vsclaude-git-push-a");
+        let dir_b = tmp.join("vsclaude-git-push-b");
+        for path in [&remote, &dir_a, &dir_b] {
+            let _ = fs::remove_dir_all(path);
+        }
+        fs::create_dir_all(&dir_a).unwrap();
+        let tmp_cwd = tmp.to_str().unwrap();
+
+        run_git(tmp_cwd, &["init", "--bare", "-q", remote.to_str().unwrap()]).unwrap();
+
+        // Repo A: commit and push, setting the upstream.
+        let a = dir_a.to_str().unwrap().to_string();
+        run_git(&a, &["init", "-q"]).unwrap();
+        run_git(&a, &["config", "user.email", "t@example.com"]).unwrap();
+        run_git(&a, &["config", "user.name", "T"]).unwrap();
+        run_git(&a, &["remote", "add", "origin", remote.to_str().unwrap()]).unwrap();
+        fs::write(dir_a.join("a.txt"), "one").unwrap();
+        git_stage(a.clone(), vec!["a.txt".to_string()]).unwrap();
+        git_commit_staged(a.clone(), "first".to_string()).unwrap();
+        run_git(&a, &["push", "-u", "origin", "HEAD"]).unwrap();
+
+        // Repo B: clone the remote.
+        run_git(tmp_cwd, &["clone", "-q", remote.to_str().unwrap(), dir_b.to_str().unwrap()]).unwrap();
+        let b = dir_b.to_str().unwrap().to_string();
+
+        // A commits again and pushes through git_push.
+        fs::write(dir_a.join("b.txt"), "two").unwrap();
+        git_stage(a.clone(), vec!["b.txt".to_string()]).unwrap();
+        git_commit_staged(a.clone(), "second".to_string()).unwrap();
+        git_push(a.clone()).unwrap();
+
+        // B fetches and fast-forward pulls, so it now has the second commit.
+        git_fetch(b.clone()).unwrap();
+        git_pull(b.clone()).unwrap();
+        assert!(dir_b.join("b.txt").exists());
+
+        for path in [&remote, &dir_a, &dir_b] {
+            let _ = fs::remove_dir_all(path);
+        }
     }
 
     #[test]

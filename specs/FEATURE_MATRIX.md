@@ -23,7 +23,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.6 | Quick open and command palette | 7 | 1 | 3 | 0 |
 | 5.7 | File explorer and workspace management | 6 | 3 | 5 | 3 |
 | 5.8 | Search and replace across files | 5 | 2 | 5 | 0 |
-| 5.9 | Source control and git | 6 | 8 | 10 | 0 |
+| 5.9 | Source control and git | 7 | 7 | 10 | 0 |
 | 5.10 | Integrated terminal | 6 | 7 | 6 | 0 |
 | 5.11 | Tasks (VS Code task support) | 0 | 5 | 4 | 0 |
 | 5.12 | Debugging (Debug Adapter Protocol) | 0 | 0 | 9 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 10 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 2 | 6 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 4 | 4 | 0 |
-| TOTAL | | 90 | 109 | 125 | 5 |
+| TOTAL | | 91 | 108 | 125 | 5 |
 
 ## Legend
 
@@ -257,7 +257,7 @@ vsclaude now has a working Source Control panel for the daily git workflow: stag
 | Commit amend | Missing | No git_amend command or confirmation-token infrastructure. | No amend, token gating, or re-read invariant. |
 | Branch operations (create/checkout/delete/rename) | Done | git.rs git_branches, git_checkout, git_create_branch, git_delete_branch, and git_rename_branch (cargo tested); the SourceControlPanel branch picker switches, creates, deletes a branch, and renames the current one. | |
 | Merge, rebase, cherry-pick, revert | Missing | No merge/rebase/cherry-pick/revert commands; operation state read-only. | No commands to trigger or continue/abort. |
-| Push, pull, fetch, sync with ahead/behind | Partial | Ahead/behind parsed and shown (parse.ts, summarize.ts); no push/pull/fetch commands. | No network IPC or credential flow. |
+| Push, pull, fetch, sync with ahead/behind | Done | git.rs git_fetch, git_pull (fast-forward only), and git_push (cargo tested over a bare remote); the SourceControlPanel has Fetch, Pull, and Push buttons; ahead/behind are shown. Authentication uses git's own credential helper or ssh-agent. | |
 | Remotes (add/remove/rename/tracking) | Missing | No remote commands or UI. | No remote management. |
 | Stash (create/apply/pop/drop/list/include-untracked) | Partial | git.rs git_stash (push -u, include untracked), git_stash_pop, and git_stash_list; the Source Control panel has Stash Changes and Pop Stash buttons with a count (countStashes). Cargo and unit tested. | No apply, drop, named stash, or stash list view. |
 | Tags (create/delete/push/list) | Partial | git.rs git_tags, git_create_tag (annotated or lightweight), and git_delete_tag (cargo tested); the GitTagsModal (Git: Tags) lists, creates, and deletes tags. | No tag push or tagging a specific commit. |
