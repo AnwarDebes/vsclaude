@@ -5,11 +5,22 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus twenty parity slices, the last nineteen
+2026-06-24. Session 3 (Step 0 plus twenty-one parity slices, the last twenty
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
-stash, zen mode, breadcrumbs, tasks, activity-bar badges, output panel.
+stash, zen mode, breadcrumbs, tasks, activity-bar badges, output panel, untitled.
+
+## Slice 21: untitled scratchpad files (done)
+
+A scratchpad when no folder is open (catalog 5.21).
+
+- **Helper** (`lib/untitled.ts`): `untitledName` and `isUntitled`. 2 unit tests.
+- **Command**: with no folder open, New Untitled File opens an editable Untitled-N
+  in the editor (the counterpart of New File in a workspace).
+- **Quality**: 280 unit tests (278 plus 2), typecheck, lint clean (no Rust change),
+  the renderer build succeeds, and 26 Playwright e2e pass (the new one opens a
+  scratchpad and checks the breadcrumb). Matrix 5.21 untitled row moved to Partial.
 
 ## Slice 20: the Output panel (done)
 

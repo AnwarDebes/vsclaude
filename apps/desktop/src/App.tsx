@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { AppSettings, PresentationMode } from '@vsclaude/contracts';
 import {
   CommandRegistry,
@@ -53,6 +53,7 @@ import { TimelinePanel } from './panels/TimelinePanel';
 import { TokenPanel } from './panels/TokenPanel';
 import { TerminalTabs, requestNewTerminal, requestRunInTerminal } from './components/TerminalTabs';
 import { detectNpmTasks, type NpmTask } from './lib/tasks';
+import { untitledName } from './lib/untitled';
 
 const STATE_LABELS: Record<string, string> = {
   idle: 'resting',
@@ -111,6 +112,7 @@ export function App() {
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const [welcomeOpen, setWelcomeOpen] = useState(false);
   const [zenMode, setZenMode] = useState(false);
+  const untitledCounter = useRef(0);
   const live = useLiveProvider();
   const { available: liveAvailable, start: liveStart } = live;
   const usingLive = live.events.length > 0;
@@ -562,6 +564,24 @@ export function App() {
       keywords: ['git', 'diff', 'commit', 'review', 'accept'],
       run: () => setReviewOpen(true),
     });
+    if (!hasWorkspace) {
+      r.register({
+        id: 'new-untitled',
+        title: 'New Untitled File',
+        keywords: ['new', 'untitled', 'scratchpad', 'file'],
+        run: () => {
+          untitledCounter.current += 1;
+          const path = untitledName(untitledCounter.current);
+          setEditedContents((m) => ({ ...m, [path]: '' }));
+          setOpenFile(path);
+          setSettings((s) =>
+            s.presentationMode === 'companion' || s.presentationMode === 'cozy'
+              ? s
+              : { ...s, presentationMode: 'companion' },
+          );
+        },
+      });
+    }
     if (ws.available) {
       r.register({
         id: 'open-folder',

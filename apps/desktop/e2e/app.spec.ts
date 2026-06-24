@@ -308,6 +308,18 @@ test.describe('vsclaude shell', () => {
     await expect(page.getByRole('region', { name: 'Output' })).toHaveCount(0);
   });
 
+  test('new untitled file opens a scratchpad', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('new untitled');
+    await page.keyboard.press('Enter');
+    const crumbs = page.getByRole('navigation', { name: 'Breadcrumbs' });
+    await expect(crumbs.getByText(/Untitled-1/)).toBeVisible();
+    await expect(page.locator('.editor-panel')).toBeVisible();
+  });
+
   test('opens the diff review overlay from the command palette', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByText('vsclaude').first()).toBeVisible();
