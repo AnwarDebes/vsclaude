@@ -1,11 +1,15 @@
 import type { ReactNode } from 'react';
-import type { ActivityView } from '../lib/activity-view';
+import { formatBadge, type ActivityView } from '../lib/activity-view';
 
 export interface ActivityBarProps {
   activeView: ActivityView;
+  /** Count badges, shown when greater than zero. */
+  problemsCount?: number;
+  changesCount?: number;
   onExplorer: () => void;
   onSearch: () => void;
   onSourceControl: () => void;
+  onProblems: () => void;
   onSettings: () => void;
   onShortcuts: () => void;
 }
@@ -45,6 +49,13 @@ const Icon = {
       <line x1="4" y1="9.5" x2="12" y2="9.5" stroke="currentColor" strokeWidth="1.2" />
     </svg>
   ),
+  problems: (
+    <svg viewBox="0 0 16 16" aria-hidden focusable="false">
+      <path d="M8 2.5l5.5 10h-11z" fill="none" stroke="currentColor" strokeWidth="1.2" />
+      <line x1="8" y1="6.5" x2="8" y2="9.5" stroke="currentColor" strokeWidth="1.2" />
+      <circle cx="8" cy="11.2" r="0.7" fill="currentColor" />
+    </svg>
+  ),
 };
 
 /**
@@ -54,24 +65,35 @@ const Icon = {
  */
 export function ActivityBar({
   activeView,
+  problemsCount = 0,
+  changesCount = 0,
   onExplorer,
   onSearch,
   onSourceControl,
+  onProblems,
   onSettings,
   onShortcuts,
 }: ActivityBarProps) {
-  const item = (key: ActivityView | 'settings' | 'shortcuts', label: string, icon: ReactNode, onClick: () => void) => {
+  const item = (
+    key: ActivityView | 'settings' | 'shortcuts',
+    label: string,
+    icon: ReactNode,
+    onClick: () => void,
+    badge?: number,
+  ) => {
     const active = key === activeView;
+    const badgeText = badge !== undefined ? formatBadge(badge) : undefined;
     return (
       <button
         type="button"
         className={`activity-bar__item${active ? ' is-active' : ''}`}
-        aria-label={label}
+        aria-label={badgeText ? `${label} (${badge})` : label}
         title={label}
         aria-pressed={active}
         onClick={onClick}
       >
         {icon}
+        {badgeText ? <span className="activity-bar__badge">{badgeText}</span> : null}
       </button>
     );
   };
@@ -80,7 +102,8 @@ export function ActivityBar({
     <nav className="activity-bar" aria-label="Activity Bar">
       {item('explorer', 'Explorer', Icon.explorer, onExplorer)}
       {item('search', 'Search', Icon.search, onSearch)}
-      {item('scm', 'Source Control', Icon.scm, onSourceControl)}
+      {item('scm', 'Source Control', Icon.scm, onSourceControl, changesCount)}
+      {item('problems', 'Problems', Icon.problems, onProblems, problemsCount)}
       <div className="activity-bar__spacer" />
       {item('settings', 'Settings', Icon.settings, onSettings)}
       {item('shortcuts', 'Keyboard Shortcuts', Icon.keyboard, onShortcuts)}

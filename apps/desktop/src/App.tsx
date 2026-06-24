@@ -156,6 +156,7 @@ export function App() {
   const editorStatus = useEditorStatus();
   const gitSummary = useGitStatus(hasWorkspace ? ws.roots[0]?.path ?? null : null, gitNonce);
   const diagnostics = useDiagnostics();
+  const diagnosticCounts = summarizeDiagnostics(diagnostics);
 
   const openProblem = useCallback(
     (resource: string, line: number, column: number) => {
@@ -680,9 +681,12 @@ export function App() {
       <div className="app-body">
         <ActivityBar
           activeView={activeViewFor(bottomPanel)}
+          problemsCount={diagnosticCounts.error + diagnosticCounts.warning}
+          changesCount={gitSummary?.changes ?? 0}
           onExplorer={() => setSettings((s) => ({ ...s, presentationMode: 'companion' }))}
           onSearch={() => setBottomPanel((p) => (p === 'search' ? 'none' : 'search'))}
           onSourceControl={() => setBottomPanel((p) => (p === 'scm' ? 'none' : 'scm'))}
+          onProblems={() => setBottomPanel((p) => (p === 'problems' ? 'none' : 'problems'))}
           onSettings={() => setSettingsOpen(true)}
           onShortcuts={() => setShortcutsOpen(true)}
         />

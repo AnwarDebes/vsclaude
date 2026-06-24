@@ -5,11 +5,24 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus eighteen parity slices, the last seventeen
+2026-06-24. Session 3 (Step 0 plus nineteen parity slices, the last eighteen
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
-stash, zen mode, breadcrumbs, tasks.
+stash, zen mode, breadcrumbs, tasks, activity-bar badges.
+
+## Slice 19: activity-bar badges and a Problems item (done)
+
+Enriches the activity bar (catalog 5.5; the roll-up stays Partial since view
+containers are not yet relocatable).
+
+- **Helper** (`lib/activity-view.ts`): `formatBadge` (hides zero, caps above 99),
+  and `activeViewFor` now covers Problems. Tests updated and extended.
+- **ActivityBar**: a Problems item, and count badges on Source Control (changed
+  files) and Problems (errors plus warnings).
+- **Quality**: 275 unit tests (273 plus 2), typecheck, lint clean (no Rust change),
+  the renderer build succeeds, and 24 Playwright e2e pass (the new one opens the
+  Problems panel from the activity bar).
 
 ## Slice 18: tasks (npm scripts) (done)
 

@@ -287,6 +287,13 @@ test.describe('vsclaude shell', () => {
     await expect(crumbs.getByRole('button', { name: /session\.ts/ })).toBeVisible();
   });
 
+  test('activity bar Problems item opens the Problems panel', async ({ page }) => {
+    await page.goto('/');
+    const rail = page.getByRole('navigation', { name: 'Activity Bar' });
+    await rail.getByRole('button', { name: /problems/i }).click();
+    await expect(page.getByRole('region', { name: /problems/i })).toBeVisible();
+  });
+
   test('opens the diff review overlay from the command palette', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByText('vsclaude').first()).toBeVisible();
