@@ -24,7 +24,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.7 | File explorer and workspace management | 6 | 1 | 7 | 3 |
 | 5.8 | Search and replace across files | 5 | 1 | 6 | 0 |
 | 5.9 | Source control and git | 5 | 6 | 13 | 0 |
-| 5.10 | Integrated terminal | 2 | 3 | 14 | 0 |
+| 5.10 | Integrated terminal | 3 | 3 | 13 | 0 |
 | 5.11 | Tasks (VS Code task support) | 0 | 2 | 7 | 0 |
 | 5.12 | Debugging (Debug Adapter Protocol) | 0 | 0 | 9 | 0 |
 | 5.13 | Snippets and Emmet | 1 | 1 | 3 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 5 | 9 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 1 | 7 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 3 | 5 | 0 |
-| TOTAL | | 75 | 78 | 171 | 5 |
+| TOTAL | | 76 | 78 | 170 | 5 |
 
 ## Legend
 
@@ -277,13 +277,13 @@ vsclaude now has a working Source Control panel for the daily git workflow: stag
 
 ## 5.10 Integrated terminal
 
-The terminal is foundational but minimal: a real PTY backend (portable-pty via Rust), a typed IPC protocol, and a working xterm.js surface with basic input and output. It lacks nearly all productivity features: no tabs, splits, profiles UI, shell integration, find, copy-on-selection, link detection (the spec promises WebLinksAddon but it is unwired), or rename/customization. Multi-terminal session types exist in session.ts but are not exposed. Only FitAddon is loaded.
+The terminal has a real PTY backend (portable-pty via Rust), a typed IPC protocol, an xterm.js surface, and now multiple terminals with a tab bar (new, switch, close) backed by a pure tabs reducer in @vsclaude/terminal, each tab owning its own PTY. It still lacks most other productivity features: splits within a tab, a profiles UI, shell integration, find, copy-on-selection, link detection (the spec promises WebLinksAddon but it is unwired), rename and customization, and persistence across reloads. Only FitAddon is loaded.
 
 | Capability | Status | Evidence | What is missing |
 | --- | --- | --- | --- |
 | PTY core and shell invocation | Done | pty.rs full lifecycle (create/write/resize/kill) with shell detection and event bridge; session.ts TerminalSession. | |
 | Single terminal display and interaction | Done | TerminalPanel.tsx xterm Terminal with FitAddon; keystrokes to ptyWrite; output from pty:data; resize and exit handled. | |
-| Multiple terminals and tabs | Missing | session.ts has lifecycle but no tab UI; TerminalPanel.tsx is a single component; registry exists in pty.rs but renderer cannot enumerate. | No tab bar, new-tab button, or multi-session management. |
+| Multiple terminals and tabs | Done | TerminalTabs.tsx renders a tab bar with new, switch, and close over a pure tabs reducer in @vsclaude/terminal (tabs.ts); each tab owns its own PTY-backed TerminalPanel, kept mounted so scrollback survives. The Terminal: New Terminal command also opens one. | |
 | Terminal profiles (bash/zsh/pwsh/cmd/git bash/custom) | Partial | pty_create accepts a shell override; detection for Windows and Unix; ipc.ts allows shell param. | No profile UI, stored list, or shell switcher. |
 | Shell integration (command decorations, nav, exit-code, cwd) | Missing | No decorations or exit-code rendering; pty:exit carries code but is not shown. | No command separators, exit-code status, cwd inference, or recent-command pickers. |
 | Clickable links (paths, line:col, URLs) | Missing | TerminalPanel.tsx does not load WebLinksAddon; spec mentions it in pseudocode only. | No link detection, URL opening, or path parsing. |

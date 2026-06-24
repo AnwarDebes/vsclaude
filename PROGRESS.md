@@ -5,9 +5,25 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus ten parity slices, the last nine self-paced by
+2026-06-24. Session 3 (Step 0 plus eleven parity slices, the last ten self-paced by
 an autonomous /loop): quick open, status bar, problems, search, source control,
-editor commands, diff editor, settings, Monaco theme binding, keyboard shortcuts.
+editor commands, diff editor, settings, Monaco theme binding, keyboard shortcuts,
+terminal tabs.
+
+## Slice 11: multiple terminals with a tab bar (done)
+
+The first terminal productivity feature of catalog 5.10.
+
+- **Pure tabs model** (`@vsclaude/terminal` `tabs.ts`): a reducer over the open
+  terminals and the active one (open, close with neighbor focus, activate, rename).
+  8 unit tests. The desktop app now depends on `@vsclaude/terminal`.
+- **TerminalTabs** (`TerminalTabs.tsx`): a tab bar with new, switch, and close, and
+  a stack of TerminalPanels (one PTY each) that stay mounted (inactive hidden, not
+  unmounted) so scrollback survives switching. A Terminal: New Terminal command and
+  a requestNewTerminal event also open one.
+- **Quality**: 252 unit tests (244 plus 8), typecheck, lint clean (no Rust change),
+  the renderer build succeeds, and 18 Playwright e2e pass (the new one adds, switches,
+  and closes terminal tabs). Matrix 5.10 multiple-terminals row moved to Done.
 
 ## Slice 10: keyboard shortcuts reference (done)
 

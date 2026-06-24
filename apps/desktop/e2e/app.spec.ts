@@ -206,6 +206,22 @@ test.describe('vsclaude shell', () => {
     await expect(page.getByRole('dialog', { name: 'Keyboard Shortcuts' })).toHaveCount(0);
   });
 
+  test('terminal: a new terminal adds a tab and closing removes it', async ({ page }) => {
+    await page.goto('/');
+    const tablist = page.getByRole('tablist', { name: 'Terminals' });
+    await expect(tablist).toBeVisible();
+    await expect(tablist.getByRole('tab')).toHaveCount(1);
+    await tablist.getByRole('button', { name: 'New Terminal' }).click();
+    await expect(tablist.getByRole('tab')).toHaveCount(2);
+    await expect(tablist.getByRole('tab', { name: 'Terminal 2' })).toHaveAttribute('aria-selected', 'true');
+    // Switch back to the first terminal.
+    await tablist.getByRole('tab', { name: 'Terminal 1' }).click();
+    await expect(tablist.getByRole('tab', { name: 'Terminal 1' })).toHaveAttribute('aria-selected', 'true');
+    // Close the second terminal.
+    await tablist.getByRole('button', { name: 'Close Terminal 2' }).click();
+    await expect(tablist.getByRole('tab')).toHaveCount(1);
+  });
+
   test('opens the diff review overlay from the command palette', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByText('vsclaude').first()).toBeVisible();

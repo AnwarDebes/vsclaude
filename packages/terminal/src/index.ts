@@ -36,3 +36,13 @@ export {
   type PtyDataEvent,
   type PtyExitEvent,
 } from './session.js';
+
+export {
+  type TerminalTab,
+  type TerminalTabsState,
+  EMPTY_TERMINAL_TABS,
+  openTerminal,
+  closeTerminal,
+  activateTerminal,
+  renameTerminal,
+} from './tabs.js';

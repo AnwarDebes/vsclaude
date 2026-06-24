@@ -98,6 +98,9 @@ importers:
       '@vsclaude/swarm':
         specifier: workspace:*
         version: link:../../packages/swarm
+      '@vsclaude/terminal':
+        specifier: workspace:*
+        version: link:../../packages/terminal
       '@xterm/addon-fit':
         specifier: ^0.11.0
         version: 0.11.0

@@ -44,7 +44,7 @@ import { WorkspaceEditor } from './components/WorkspaceEditor';
 import { SwarmPanel } from './panels/SwarmPanel';
 import { TimelinePanel } from './panels/TimelinePanel';
 import { TokenPanel } from './panels/TokenPanel';
-import { TerminalPanel } from './panels/TerminalPanel';
+import { TerminalTabs, requestNewTerminal } from './components/TerminalTabs';
 
 const STATE_LABELS: Record<string, string> = {
   idle: 'resting',
@@ -407,6 +407,12 @@ export function App() {
       keywords: ['keybindings', 'shortcuts', 'keys', 'reference'],
       run: () => setShortcutsOpen(true),
     });
+    r.register({
+      id: 'terminal-new',
+      title: 'Terminal: New Terminal',
+      keywords: ['terminal', 'shell', 'console', 'new'],
+      run: requestNewTerminal,
+    });
     // The editor command surface: Monaco's built-in editing actions, run on the
     // active editor through the bridge, so they are discoverable in the palette.
     for (const cmd of EDITOR_COMMANDS) {
@@ -638,7 +644,7 @@ export function App() {
 
       {showBottom ? (
         <footer className="app-bottom">
-          <TerminalPanel fallbackLines={terminalLines} />
+          <TerminalTabs fallbackLines={terminalLines} />
           <TokenPanel tokens={session.tokens} tree={session.tree} />
           <Narration narration={session.narration} />
         </footer>
