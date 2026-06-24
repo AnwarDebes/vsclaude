@@ -82,7 +82,7 @@ export function filterQuickPick<T extends QuickPickItem>(
 }
 
 /** Which kind of list the palette should show for the current input. */
-export type PaletteMode = 'commands' | 'files' | 'goto' | 'symbols';
+export type PaletteMode = 'commands' | 'files' | 'goto' | 'symbols' | 'wsymbols';
 
 /** The parsed intent of a palette input string. */
 export interface ParsedPaletteInput {
@@ -105,8 +105,7 @@ export interface ParsedPaletteInput {
  * - Anything else stays in `base`, the mode the palette was opened in.
  *
  * A leading `@` means document-symbol navigation (Go to Symbol in the active
- * editor). The `#` prefix is reserved for workspace symbols and is not handled
- * yet; it falls through to the base mode like ordinary text.
+ * editor) and `#` means workspace-symbol search across indexed files.
  */
 export function parsePaletteInput(
   raw: string,
@@ -117,6 +116,9 @@ export function parsePaletteInput(
   }
   if (raw.startsWith('@')) {
     return { mode: 'symbols', query: raw.slice(1).trim() };
+  }
+  if (raw.startsWith('#')) {
+    return { mode: 'wsymbols', query: raw.slice(1).trim() };
   }
   if (raw.startsWith(':')) {
     const rest = raw.slice(1).trim();

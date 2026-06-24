@@ -21,7 +21,21 @@ settings JSON editor, reset layout, task variables, task groups, files.exclude,
 at-symbol navigation, hex view, notification toasts, inlay hints, menu bar,
 edit menu, minimap config, diff settings, process info, snippet browser,
 accessibility help, git remotes, problems filter, output channels, editor font,
-diff change counter, terminal exit code.
+diff change counter, terminal exit code, workspace symbols.
+
+## Slice 76: workspace symbol search (done)
+
+Search symbols across files with # (catalog 5.6).
+
+- **Index** (`lib/workspace-symbols.ts`): buildWorkspaceSymbols extracts markdown headings
+  and top-level code declarations (codeSymbols, no-indent regex so nested locals are
+  skipped); filterWorkspaceSymbols matches by name. 7 unit tests.
+- **Palette**: parsePaletteInput routes # to a wsymbols mode; CommandPalette lists matching
+  symbols and opens the file. App builds the index from the demo file contents.
+- **Quality**: 394 unit tests (389 plus 5, after updating the core-shell reserved-# test),
+  typecheck, lint clean (no Rust change), the renderer build succeeds, and 56 Playwright
+  e2e pass (the new one searches #LoginForm). Matrix 5.6 workspace-symbols row moved to
+  Partial.
 
 ## Slice 75: terminal exit code (done)
 

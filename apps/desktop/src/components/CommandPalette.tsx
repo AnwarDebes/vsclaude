@@ -6,6 +6,7 @@ import {
   type QuickPickItem,
 } from '@vsclaude/core-shell';
 import { splitCommandTitle } from '../lib/command-title';
+import { filterWorkspaceSymbols, type WorkspaceSymbol } from '../lib/workspace-symbols';
 
 /** One rendered row, independent of which mode produced it. */
 interface Row {
@@ -28,6 +29,8 @@ export interface CommandPaletteProps {
   onGotoLine?: (line: number, column?: number) => void;
   /** Open Go to Symbol in the active editor (symbol mode). */
   onGotoSymbol?: () => void;
+  /** The workspace-symbol index for `#` mode. */
+  workspaceSymbols?: readonly WorkspaceSymbol[];
   /** Called when file mode opens, so the index can be refreshed. */
   onRefreshFiles?: () => void;
 }
@@ -58,6 +61,7 @@ export function CommandPalette({
   onOpenFile,
   onGotoLine,
   onGotoSymbol,
+  workspaceSymbols = [],
   onRefreshFiles,
 }: CommandPaletteProps) {
   const [open, setOpen] = useState(false);
@@ -157,6 +161,15 @@ export function CommandPalette({
         run: () => onOpenFile?.(item.id),
       }));
     }
+    // Workspace-symbol mode: matching symbols across the indexed files.
+    if (parsed.mode === 'wsymbols') {
+      return filterWorkspaceSymbols(workspaceSymbols, parsed.query, LIMIT).map((symbol) => ({
+        id: `${symbol.file}:${symbol.line}:${symbol.name}`,
+        label: symbol.name,
+        description: symbol.file,
+        run: () => onOpenFile?.(symbol.file),
+      }));
+    }
     // Symbol mode: a single row that opens Go to Symbol in the active editor.
     if (parsed.mode === 'symbols') {
       return [
@@ -179,7 +192,7 @@ export function CommandPalette({
       ];
     }
     return [];
-  }, [parsed, registry, files, onOpenFile, onGotoLine, onGotoSymbol]);
+  }, [parsed, registry, files, onOpenFile, onGotoLine, onGotoSymbol, workspaceSymbols]);
 
   if (!open) return null;
 
@@ -191,13 +204,17 @@ export function CommandPalette({
         ? 'Search files by name...'
         : parsed.mode === 'symbols'
           ? 'Go to symbol in the editor...'
-          : 'Go to line and column...';
+          : parsed.mode === 'wsymbols'
+            ? 'Go to symbol in the workspace...'
+            : 'Go to line and column...';
   const emptyMessage =
     parsed.mode === 'commands'
       ? 'No matching commands'
       : parsed.mode === 'goto'
         ? 'Type a line number, for example 42'
-        : 'No matching files';
+        : parsed.mode === 'wsymbols'
+          ? 'No matching symbols'
+          : 'No matching files';
 
   const clampedActive = Math.min(active, Math.max(0, rows.length - 1));
   const activeId = rows[clampedActive] ? `palette-opt-${clampedActive}` : undefined;

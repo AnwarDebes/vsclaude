@@ -443,6 +443,15 @@ test.describe('vsclaude shell', () => {
     await expect(page.getByRole('textbox', { name: 'Find' })).toBeVisible();
   });
 
+  test('the palette searches workspace symbols on #', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('#LoginForm');
+    await expect(palette.getByRole('option', { name: /LoginForm/ })).toBeVisible();
+  });
+
   test('the palette offers go to symbol on @', async ({ page }) => {
     await page.goto('/');
     await page.getByText('Claude Code, in motion').click();

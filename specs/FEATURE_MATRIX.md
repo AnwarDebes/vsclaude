@@ -20,7 +20,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.3 | Editor advanced surface | 8 | 4 | 0 | 0 |
 | 5.4 | Diff and merge | 5 | 2 | 2 | 1 |
 | 5.5 | Workbench layout and navigation | 6 | 14 | 8 | 0 |
-| 5.6 | Quick open and command palette | 7 | 2 | 2 | 0 |
+| 5.6 | Quick open and command palette | 7 | 3 | 1 | 0 |
 | 5.7 | File explorer and workspace management | 6 | 4 | 4 | 3 |
 | 5.8 | Search and replace across files | 5 | 2 | 5 | 0 |
 | 5.9 | Source control and git | 7 | 10 | 7 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 6 | 7 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 3 | 5 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 99 | 118 | 111 | 5 |
+| TOTAL | | 99 | 119 | 110 | 5 |
 
 ## Legend
 
@@ -193,7 +193,7 @@ The palette is now unified: Ctrl or Cmd plus K opens command mode and Ctrl or Cm
 | Recently-used command/project ordering | Done | App.tsx registers Open Recent from ws.recents; recents.ts RecentProject with timestamps and de-dup; useWorkspace.ts exposes recents. | |
 | Quick open files by name with Ctrl+P | Done | CommandPalette.tsx file mode on Ctrl/Cmd+P; useFileIndex.ts walks roots via fs.walk (IPC v4, fs_ops.rs fs_walk); demo files used when no workspace; e2e covers it. | |
 | Symbol navigation in current file with @ | Partial | Typing @ in the palette opens Go to Symbol in the active editor (parsePaletteInput symbols mode, unit tested; CommandPalette runs Monaco's quickOutline, which uses the markdown DocumentSymbolProvider and the TS or JS worker). An e2e covers the palette entry. | The palette hands off to Monaco's picker rather than listing symbols inline. |
-| Workspace symbols search with # | Missing | # reserved in the router but not handled; no WorkspaceSymbolProvider. | Deferred to 5.2: needs a workspace-symbol provider. |
+| Workspace symbols search with # | Partial | Typing # in the palette searches a workspace-symbol index (buildWorkspaceSymbols over the file contents: markdown headings and top-level code declarations via codeSymbols; filterWorkspaceSymbols; all unit tested); selecting opens the file. An e2e covers it. | Built from the demo file contents only (a real workspace needs the core to supply file bodies); selecting opens the file but does not yet jump to the symbol line. |
 | Go to line/column with : | Done | parsePaletteInput parses :line and :line:column; editor-bridge.ts gotoLine reveals and selects in the active Monaco editor; unit tested. | |
 | Commands via > prefix | Done | parsePaletteInput routes > to command mode inside the unified palette; e2e switches files to commands with >. | |
 | Keybinding display in palette | Done | Command.keybinding field (command-registry.ts); CommandPalette renders it right-aligned; Go to File and Show All Commands carry real shortcuts. | |

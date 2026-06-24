@@ -24,7 +24,8 @@ import { applyMonacoTheme } from './lib/monaco-theme';
 import { EDITOR_COMMANDS } from './lib/editor-commands';
 import { useDiagnostics } from './lib/useDiagnostics';
 import { demoFiles } from './session/demo-session';
-import { demoContentFor } from './session/demo-files';
+import { demoContentFor, demoFileContents } from './session/demo-files';
+import { buildWorkspaceSymbols } from './lib/workspace-symbols';
 import { applyTheme, loadAppSettings, saveAppSettings } from './lib/theme';
 import { PixieStage } from './components/PixieStage';
 import { PixieActionSprite } from './components/ActionIcon';
@@ -178,6 +179,13 @@ export function App() {
   );
 
   const paletteFiles = hasWorkspace ? fileIndex.items : demoFileItems;
+
+  // The workspace-symbol index for the `#` palette mode. Built from the demo file
+  // contents; a real workspace would need the core to supply file bodies.
+  const workspaceSymbolIndex = useMemo(
+    () => (hasWorkspace ? [] : buildWorkspaceSymbols(demoFileContents)),
+    [hasWorkspace],
+  );
 
   const openFileFromPalette = useCallback(
     (path: string) => {
@@ -1108,6 +1116,7 @@ export function App() {
         onOpenFile={openFileFromPalette}
         onGotoLine={(line, column) => gotoLine(line, column)}
         onGotoSymbol={() => runEditorAction('editor.action.quickOutline')}
+        workspaceSymbols={workspaceSymbolIndex}
         onRefreshFiles={hasWorkspace ? fileIndex.refresh : undefined}
       />
       {settingsOpen ? (

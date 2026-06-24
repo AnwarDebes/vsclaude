@@ -77,7 +77,8 @@ describe('parsePaletteInput', () => {
     expect(parsePaletteInput('swarm', 'commands')).toEqual({ mode: 'commands', query: 'swarm' });
   });
 
-  it('reserves # for later: it falls through to the base mode', () => {
-    expect(parsePaletteInput('#workspace', 'commands')).toEqual({ mode: 'commands', query: '#workspace' });
+  it('routes a leading # to workspace-symbol mode', () => {
+    expect(parsePaletteInput('#', 'commands')).toEqual({ mode: 'wsymbols', query: '' });
+    expect(parsePaletteInput('#Login', 'files')).toEqual({ mode: 'wsymbols', query: 'Login' });
   });
 });
