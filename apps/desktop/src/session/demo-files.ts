@@ -4,6 +4,11 @@
  * fs.writeFile); this map is only the offline starting point.
  */
 export const demoFileContents: Record<string, string> = {
+  'logo.svg': `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" rx="12" fill="#4f7cff" />
+  <circle cx="32" cy="32" r="14" fill="#ffffff" />
+</svg>
+`,
   'src/auth/login-form.tsx': `import { useState } from 'react';
 import { useAuth } from './use-auth';
 

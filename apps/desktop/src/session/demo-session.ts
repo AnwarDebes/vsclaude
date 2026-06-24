@@ -83,5 +83,6 @@ export const demoFiles = [
   { name: 'App.tsx', path: 'src/App.tsx', kind: 'file' as const },
   { name: 'main.tsx', path: 'src/main.tsx', kind: 'file' as const },
   { name: 'README.md', path: 'README.md', kind: 'file' as const },
+  { name: 'logo.svg', path: 'logo.svg', kind: 'file' as const },
   { name: 'package.json', path: 'package.json', kind: 'file' as const },
 ];

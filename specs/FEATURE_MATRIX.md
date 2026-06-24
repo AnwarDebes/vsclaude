@@ -36,9 +36,9 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.19 | Remote development and tunnels | 0 | 0 | 6 | 0 |
 | 5.20 | Accessibility (full) | 1 | 11 | 4 | 0 |
 | 5.21 | Productivity and workspace lifecycle | 3 | 10 | 4 | 0 |
-| 5.22 | Custom editors, webviews, and previews | 2 | 1 | 7 | 0 |
+| 5.22 | Custom editors, webviews, and previews | 2 | 2 | 6 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 3 | 5 | 0 |
-| TOTAL | | 79 | 98 | 147 | 5 |
+| TOTAL | | 79 | 99 | 146 | 5 |
 
 ## Legend
 
@@ -518,7 +518,7 @@ The repository shows minimal custom-editor and webview capability. It supports o
 | Custom editor API (document model plus backup) | Missing | No DocumentModel, CustomEditor, or backup interfaces; EditorPanel.tsx wraps Monaco with language detection only. | No document model, backup/autosave, registration, or binary editor. |
 | Webview API (messaging, state, CSP) | Missing | No webview or messaging infrastructure; ipc.ts has only file/fs/session/pty channels. | No webview creation, message passing, state, CSP, or events. |
 | Image preview (inline plus viewer) | Missing | ExplorerPanel handles the tree; EditorPanel dispatches to Monaco by extension only. | No image rendering, zoom/pan, or dimensions. |
-| SVG viewer (zoom/pan) | Missing | No SVG rendering; LANG_BY_EXT has no SVG entry. | No SVG render, zoom/pan, or metadata. |
+| SVG viewer (zoom/pan) | Partial | Image: Open Preview renders an active .svg through a safe data URL in an ImagePreview viewer (lib/preview.ts, unit tested). | No zoom, pan, or metadata, and raster images are not yet previewed. |
 | Audio/video media player | Missing | No media elements or handlers in components or panels. | No audio/video player or controls. |
 | Hex viewer and binary editor | Missing | EditorPanel renders text only; no binary handlers. | No hex dump, byte editing, or endianness toggle. |
 | Custom data contribution (HTML/CSS) | Missing | No customData files; plugin contributions list states/themes/panels/providers/visualizations only. | No HTML/CSS schema contribution or validation. |

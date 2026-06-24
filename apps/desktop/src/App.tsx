@@ -50,6 +50,8 @@ import { addNotification } from './lib/notifications';
 import { welcomeQuickActions, type WelcomeActionId } from './lib/welcome';
 import { DiffModal, type DiffTarget } from './components/DiffModal';
 import { MarkdownPreview, type MarkdownTarget } from './components/MarkdownPreview';
+import { ImagePreview, type ImageTarget } from './components/ImagePreview';
+import { isSvgPath, svgDataUrl } from './lib/preview';
 import { DiffReview } from './components/DiffReview';
 import { Narration } from './components/Narration';
 import { ExplorerPanel } from './panels/ExplorerPanel';
@@ -116,6 +118,7 @@ export function App() {
   const [gitNonce, setGitNonce] = useState(0);
   const [diffTarget, setDiffTarget] = useState<DiffTarget | null>(null);
   const [markdownTarget, setMarkdownTarget] = useState<MarkdownTarget | null>(null);
+  const [imageTarget, setImageTarget] = useState<ImageTarget | null>(null);
   const [gitHistory, setGitHistory] = useState<GitCommit[] | null>(null);
   const [tagsOpen, setTagsOpen] = useState(false);
   const [npmTasks, setNpmTasks] = useState<NpmTask[]>([]);
@@ -511,6 +514,22 @@ export function App() {
           ? ws.activeDoc?.draft ?? ''
           : editedContents[openFile] ?? demoContentFor(openFile);
         setMarkdownTarget({ name: basePathName(path), markdown: md });
+      },
+    });
+    r.register({
+      id: 'image-preview',
+      title: 'Image: Open Preview',
+      keywords: ['image', 'svg', 'preview', 'picture'],
+      run: () => {
+        const path = hasWorkspace ? ws.activePath : openFile;
+        if (!path || !isSvgPath(path)) {
+          addNotification('info', 'Open an SVG file to preview it.');
+          return;
+        }
+        const svg = hasWorkspace
+          ? ws.activeDoc?.draft ?? ''
+          : editedContents[openFile] ?? demoContentFor(openFile);
+        setImageTarget({ name: basePathName(path), src: svgDataUrl(svg) });
       },
     });
     r.register({
@@ -965,6 +984,7 @@ export function App() {
       ) : null}
       <DiffModal target={diffTarget} onClose={() => setDiffTarget(null)} />
       <MarkdownPreview target={markdownTarget} onClose={() => setMarkdownTarget(null)} />
+      <ImagePreview target={imageTarget} onClose={() => setImageTarget(null)} />
       <GitHistoryModal commits={gitHistory} onClose={() => setGitHistory(null)} />
       <GitTagsModal
         open={tagsOpen}

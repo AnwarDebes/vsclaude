@@ -5,14 +5,26 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus thirty-two parity slices, the last thirty-one
+2026-06-24. Session 3 (Step 0 plus thirty-three parity slices, the last thirty-two
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
 stash, zen mode, breadcrumbs, tasks, activity-bar badges, output panel, untitled,
 more editor settings, markdown preview, document links, color decorators, outline,
 git history, release notes, notification center, branch delete and rename, git tags,
-gitignore action.
+gitignore action, svg preview.
+
+## Slice 33: svg preview (done)
+
+A safe SVG viewer (catalog 5.22).
+
+- **Helpers** (`lib/preview.ts`): `isSvgPath` and `svgDataUrl` (an image data URL, so
+  the SVG renders without executing any embedded script). 3 unit tests.
+- **Viewer** (`ImagePreview.tsx`): Image: Open Preview shows the active .svg in an
+  <img> over a checkerboard. A demo logo.svg was added.
+- **Quality**: 323 unit tests (320 plus 3), typecheck, lint clean (no Rust change),
+  the renderer build succeeds, and 33 Playwright e2e pass (the new one previews the
+  demo SVG and checks the image src). Matrix 5.22 SVG-viewer row moved to Partial.
 
 ## Slice 32: add-to-gitignore action (done)
 

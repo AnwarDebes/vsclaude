@@ -391,6 +391,21 @@ test.describe('vsclaude shell', () => {
     await expect(outline.getByRole('button', { name: 'Getting started' })).toBeVisible();
   });
 
+  test('svg preview renders the active svg as an image', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'logo.svg', exact: true }).click();
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('image preview');
+    await page.keyboard.press('Enter');
+    const preview = page.getByRole('dialog', { name: /preview of logo\.svg/i });
+    await expect(preview).toBeVisible();
+    const img = preview.getByRole('img', { name: 'logo.svg' });
+    await expect(img).toBeVisible();
+    await expect(img).toHaveAttribute('src', /^data:image\/svg\+xml/);
+  });
+
   test('markdown preview renders the active markdown file', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('button', { name: 'README.md', exact: true }).click();
