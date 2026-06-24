@@ -42,6 +42,8 @@ export {
   parsePaletteInput,
 } from './quick-pick.js';
 
+export { type StatusBarItem, orderStatusItems } from './status-bar.js';
+
 export {
   defaultLayout,
   layoutForMode,

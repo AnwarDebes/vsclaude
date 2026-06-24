@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { AppSettings, PresentationMode } from '@vsclaude/contracts';
-import { CommandRegistry, type QuickPickItem } from '@vsclaude/core-shell';
+import { CommandRegistry, type QuickPickItem, type StatusBarItem } from '@vsclaude/core-shell';
 import { bundledThemeIds } from '@vsclaude/design-system';
 import { useSession } from './session/useSession';
 import { useLiveProvider } from './session/useLiveProvider';
@@ -14,6 +14,7 @@ import { PixieStage } from './components/PixieStage';
 import { PixieActionSprite } from './components/ActionIcon';
 import { SettingsBar } from './components/SettingsBar';
 import { CommandPalette, openPalette } from './components/CommandPalette';
+import { StatusBar, useEditorStatus, useGitStatus } from './components/StatusBar';
 import { DiffReview } from './components/DiffReview';
 import { Narration } from './components/Narration';
 import { ExplorerPanel } from './panels/ExplorerPanel';
@@ -44,6 +45,22 @@ const STATE_LABELS: Record<string, string> = {
   confused: 'puzzled',
   sleeping: 'resting',
 };
+
+const LANGUAGE_LABELS: Record<string, string> = {
+  typescript: 'TypeScript',
+  javascript: 'JavaScript',
+  json: 'JSON',
+  css: 'CSS',
+  html: 'HTML',
+  markdown: 'Markdown',
+  rust: 'Rust',
+  plaintext: 'Plain Text',
+};
+
+/** A friendly display name for a Monaco language id. */
+function languageLabel(id: string): string {
+  return LANGUAGE_LABELS[id] ?? id.charAt(0).toUpperCase() + id.slice(1);
+}
 
 /**
  * The vsclaude shell: a cozy, multi-panel IDE driven end to end by the real
@@ -102,6 +119,85 @@ export function App() {
     [hasWorkspace, ws],
   );
 
+  const editorStatus = useEditorStatus();
+  const gitSummary = useGitStatus(hasWorkspace ? ws.roots[0]?.path ?? null : null);
+
+  const statusItems = useMemo<StatusBarItem[]>(() => {
+    const items: StatusBarItem[] = [];
+    if (gitSummary) {
+      const sync =
+        gitSummary.ahead || gitSummary.behind ? ` +${gitSummary.ahead}/-${gitSummary.behind}` : '';
+      items.push({
+        id: 'git.branch',
+        side: 'left',
+        priority: 100,
+        text: `${gitSummary.branch}${sync}`,
+        tooltip: `Git: ${gitSummary.changes} changed file${gitSummary.changes === 1 ? '' : 's'}`,
+        ariaLabel: `Branch ${gitSummary.branch}, ${gitSummary.changes} changes. Open review.`,
+        command: 'review-changes',
+      });
+    }
+    if (hasWorkspace) {
+      const first = ws.roots[0];
+      if (first) {
+        const extra = ws.roots.length > 1 ? ` +${ws.roots.length - 1}` : '';
+        items.push({
+          id: 'workspace.name',
+          side: 'left',
+          priority: 50,
+          text: `${first.name}${extra}`,
+          ariaLabel: `Workspace ${first.name}`,
+        });
+      }
+    }
+    if (editorStatus) {
+      if (editorStatus.selectionCount > 0) {
+        items.push({
+          id: 'editor.selection',
+          side: 'right',
+          priority: 60,
+          text: `(${editorStatus.selectionCount} selected)`,
+          ariaLabel: `${editorStatus.selectionCount} characters selected`,
+        });
+      }
+      items.push({
+        id: 'editor.position',
+        side: 'right',
+        priority: 50,
+        text: `Ln ${editorStatus.line}, Col ${editorStatus.column}`,
+        tooltip: 'Go to Line/Column',
+        command: 'go-to-line',
+        ariaLabel: `Line ${editorStatus.line}, column ${editorStatus.column}. Go to line.`,
+      });
+      items.push({
+        id: 'editor.indent',
+        side: 'right',
+        priority: 40,
+        text: editorStatus.indent.insertSpaces
+          ? `Spaces: ${editorStatus.indent.tabSize}`
+          : `Tab Size: ${editorStatus.indent.tabSize}`,
+        ariaLabel: editorStatus.indent.insertSpaces
+          ? `Indentation, ${editorStatus.indent.tabSize} spaces`
+          : `Indentation, tab size ${editorStatus.indent.tabSize}`,
+      });
+      items.push({
+        id: 'editor.eol',
+        side: 'right',
+        priority: 30,
+        text: editorStatus.eol,
+        ariaLabel: `End of line ${editorStatus.eol}`,
+      });
+      items.push({
+        id: 'editor.language',
+        side: 'right',
+        priority: 20,
+        text: languageLabel(editorStatus.language),
+        ariaLabel: `Language ${languageLabel(editorStatus.language)}`,
+      });
+    }
+    return items;
+  }, [editorStatus, gitSummary, hasWorkspace, ws.roots]);
+
   useEffect(() => {
     applyTheme(settings);
     saveAppSettings(settings);
@@ -129,6 +225,13 @@ export function App() {
       keywords: ['command', 'palette'],
       keybinding: 'Ctrl+K',
       run: () => openPalette('commands'),
+    });
+    r.register({
+      id: 'go-to-line',
+      title: 'Go to Line/Column',
+      keywords: ['line', 'column', 'jump', 'goto'],
+      keybinding: 'Ctrl+G',
+      run: () => openPalette('files', ':'),
     });
     r.register({
       id: 'run-agent',
@@ -357,6 +460,8 @@ export function App() {
           <Narration narration={session.narration} />
         </footer>
       )}
+
+      <StatusBar items={statusItems} onCommand={(id) => void registry.run(id)} />
 
       {ws.error ? (
         <div className="workspace-toast" role="alert">

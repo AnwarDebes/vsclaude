@@ -34,10 +34,11 @@ const OPEN_EVENT = 'vsclaude:palette-open';
 /**
  * Open the palette in a given mode from anywhere (for example a command). This is
  * the same entry point the Ctrl or Cmd plus K and plus P shortcuts use, so a
- * command that calls it can honestly advertise that shortcut.
+ * command that calls it can honestly advertise that shortcut. An optional `seed`
+ * pre-fills the input, for example ":" to land directly in go-to-line.
  */
-export function openPalette(mode: 'commands' | 'files'): void {
-  window.dispatchEvent(new CustomEvent(OPEN_EVENT, { detail: { mode } }));
+export function openPalette(mode: 'commands' | 'files', seed = ''): void {
+  window.dispatchEvent(new CustomEvent(OPEN_EVENT, { detail: { mode, seed } }));
 }
 
 /**
@@ -68,10 +69,10 @@ export function CommandPalette({
   baseRef.current = base;
   refreshRef.current = onRefreshFiles;
 
-  const openTo = useCallback((next: 'commands' | 'files') => {
+  const openTo = useCallback((next: 'commands' | 'files', seed = '') => {
     baseRef.current = next;
     setBase(next);
-    setQuery('');
+    setQuery(seed);
     setActive(0);
     setOpen(true);
     if (next === 'files') refreshRef.current?.();
@@ -97,13 +98,17 @@ export function CommandPalette({
       } else if ((e.ctrlKey || e.metaKey) && key === 'p') {
         e.preventDefault();
         toggleTo('files');
+      } else if ((e.ctrlKey || e.metaKey) && key === 'g') {
+        // Go to line: open the palette seeded into go-to-line mode.
+        e.preventDefault();
+        openTo('files', ':');
       } else if (e.key === 'Escape') {
         setOpen(false);
       }
     };
     const onOpenRequest = (e: Event) => {
-      const detail = (e as CustomEvent<{ mode?: 'commands' | 'files' }>).detail;
-      openTo(detail?.mode === 'files' ? 'files' : 'commands');
+      const detail = (e as CustomEvent<{ mode?: 'commands' | 'files'; seed?: string }>).detail;
+      openTo(detail?.mode === 'files' ? 'files' : 'commands', detail?.seed ?? '');
     };
     window.addEventListener('keydown', onKey);
     window.addEventListener(OPEN_EVENT, onOpenRequest);

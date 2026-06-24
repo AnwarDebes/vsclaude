@@ -1,7 +1,12 @@
 import { useRef, useEffect } from 'react';
 import Editor, { type OnMount } from '@monaco-editor/react';
 import '../lib/monaco-setup';
-import { setActiveEditor, clearActiveEditor, type BridgeEditor } from '../lib/editor-bridge';
+import {
+  setActiveEditor,
+  clearActiveEditor,
+  setEditorStatus,
+  type BridgeEditor,
+} from '../lib/editor-bridge';
 
 interface EditorPanelProps {
   path?: string;
@@ -47,13 +52,42 @@ export function EditorPanel({ path, value, language, onChange, onSave }: EditorP
     const bridge = editor as unknown as BridgeEditor;
     editorRef.current = bridge;
     setActiveEditor(bridge);
-    editor.onDidFocusEditorText(() => setActiveEditor(bridge));
+
+    // Publish a status snapshot for the status bar and keep it live.
+    const publishStatus = () => {
+      const model = editor.getModel();
+      const pos = editor.getPosition();
+      const selection = editor.getSelection();
+      const selectionCount = model && selection ? model.getValueInRange(selection).length : 0;
+      const options = model?.getOptions();
+      setEditorStatus({
+        line: pos?.lineNumber ?? 1,
+        column: pos?.column ?? 1,
+        selectionCount,
+        language: model?.getLanguageId() ?? 'plaintext',
+        eol: model?.getEOL() === '\r\n' ? 'CRLF' : 'LF',
+        indent: {
+          insertSpaces: options?.insertSpaces ?? true,
+          tabSize: options?.tabSize ?? 2,
+        },
+      });
+    };
+    editor.onDidFocusEditorText(() => {
+      setActiveEditor(bridge);
+      publishStatus();
+    });
+    editor.onDidChangeCursorPosition(publishStatus);
+    editor.onDidChangeCursorSelection(publishStatus);
+    editor.onDidChangeModelContent(publishStatus);
+    editor.onDidChangeModel(publishStatus);
+    publishStatus();
   };
 
-  // Stop claiming the active editor once this panel unmounts.
+  // Stop claiming the active editor and clear the status once this panel unmounts.
   useEffect(
     () => () => {
       if (editorRef.current) clearActiveEditor(editorRef.current);
+      setEditorStatus(null);
     },
     [],
   );

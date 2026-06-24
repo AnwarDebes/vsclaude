@@ -68,6 +68,20 @@ test.describe('vsclaude shell', () => {
     await expect(page.getByRole('region', { name: /agent swarm/i })).toBeVisible();
   });
 
+  test('status bar shows the cursor position and language and opens go-to-line', async ({ page }) => {
+    await page.goto('/');
+    const statusBar = page.getByRole('group', { name: /status bar/i });
+    await expect(statusBar).toBeVisible();
+    // The editor mounts and publishes its status to the bar.
+    await expect(statusBar.getByText(/Ln \d+, Col \d+/)).toBeVisible({ timeout: 15_000 });
+    await expect(statusBar.getByText('TypeScript')).toBeVisible();
+    // Clicking the cursor position opens the palette seeded into go-to-line.
+    await statusBar.getByRole('button', { name: /go to line/i }).click();
+    const palette = page.getByRole('dialog', { name: /go to file/i });
+    await expect(palette).toBeVisible();
+    await expect(palette.getByPlaceholder(/go to line and column/i)).toBeVisible();
+  });
+
   test('opens the diff review overlay from the command palette', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByText('vsclaude').first()).toBeVisible();

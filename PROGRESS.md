@@ -5,7 +5,32 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus the first parity slice: quick open).
+2026-06-24. Session 3 (Step 0 plus two parity slices: quick open, status bar).
+
+## Slice 2: the workbench status bar (done)
+
+The spec is `specs/STATUS_BAR.md`; this opens up catalog 5.5 and gives later
+features (problems, search, task and debug state) a home to contribute to.
+
+- **Status-bar model** (`@vsclaude/core-shell`): `status-bar.ts` adds a
+  `StatusBarItem` shape and an `orderStatusItems` helper (filter by side, sort by
+  priority with a stable id tie break). Reusable and unit tested.
+- **Editor-status store** (`editor-bridge.ts`): alongside the active editor it now
+  publishes a small `EditorStatus` snapshot (line, column, selection count,
+  language, EOL, indentation) with a subscribe API. EditorPanel publishes it on
+  mount and on cursor, selection, content, and model changes, and clears it on
+  unmount. 2 more unit tests.
+- **Status bar** (`StatusBar.tsx`): an always-present bottom strip in every
+  presentation mode. Left: branch and change count (via the same porcelain path
+  the review overlay uses, native only) and the workspace name. Right: language,
+  EOL, indentation, cursor position, and a selection count. The cursor item opens
+  go-to-line (new Ctrl or Cmd plus G, also a Go to Line/Column command), and the
+  branch item opens the review overlay.
+- **Quality**: 200 unit tests (193 plus 7), typecheck, lint, and `cargo check`
+  clean (no Rust change this slice), the renderer build succeeds, and 9 Playwright
+  e2e pass (the new one asserts the bar shows the cursor position and language and
+  that clicking the cursor opens go-to-line). Matrix 5.5 moved to Done 4, Partial
+  8, Missing 15.
 
 ## Slice 1: quick open and the quick-pick framework (done)
 

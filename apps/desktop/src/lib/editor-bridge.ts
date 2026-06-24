@@ -18,7 +18,29 @@ export interface BridgeEditor {
   focus(): void;
 }
 
+/** A snapshot of the active editor's state, for the status bar. */
+export interface EditorStatus {
+  /** One-based caret line. */
+  readonly line: number;
+  /** One-based caret column. */
+  readonly column: number;
+  /** Number of selected characters across all selections; 0 when none. */
+  readonly selectionCount: number;
+  /** Monaco language id, for example "typescript". */
+  readonly language: string;
+  /** End-of-line style of the model. */
+  readonly eol: 'LF' | 'CRLF';
+  /** Indentation in effect for the model. */
+  readonly indent: { readonly insertSpaces: boolean; readonly tabSize: number };
+}
+
 let activeEditor: BridgeEditor | null = null;
+let editorStatus: EditorStatus | null = null;
+const statusListeners = new Set<() => void>();
+
+function emitStatus(): void {
+  for (const listener of statusListeners) listener();
+}
 
 /** Publish the editor that should receive palette actions. */
 export function setActiveEditor(editor: BridgeEditor): void {
@@ -30,6 +52,25 @@ export function clearActiveEditor(editor: BridgeEditor): void {
   if (activeEditor === editor) {
     activeEditor = null;
   }
+}
+
+/** Publish the latest editor status snapshot (or null when no editor is active). */
+export function setEditorStatus(next: EditorStatus | null): void {
+  editorStatus = next;
+  emitStatus();
+}
+
+/** The current editor status snapshot, or null. */
+export function getEditorStatus(): EditorStatus | null {
+  return editorStatus;
+}
+
+/** Subscribe to status changes. Returns an unsubscribe function. */
+export function subscribeEditorStatus(listener: () => void): () => void {
+  statusListeners.add(listener);
+  return () => {
+    statusListeners.delete(listener);
+  };
 }
 
 /** The current active editor, or null when no editor is mounted. */

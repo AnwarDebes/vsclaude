@@ -1,10 +1,14 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   clearActiveEditor,
   getActiveEditor,
+  getEditorStatus,
   gotoLine,
   setActiveEditor,
+  setEditorStatus,
+  subscribeEditorStatus,
   type BridgeEditor,
+  type EditorStatus,
 } from '../lib/editor-bridge';
 
 function fakeEditor(lineCount = 100) {
@@ -72,5 +76,37 @@ describe('editor bridge', () => {
     expect(getActiveEditor()).toBe(second);
     clearActiveEditor(second);
     expect(getActiveEditor()).toBeNull();
+  });
+});
+
+describe('editor status store', () => {
+  const sample: EditorStatus = {
+    line: 12,
+    column: 4,
+    selectionCount: 0,
+    language: 'typescript',
+    eol: 'LF',
+    indent: { insertSpaces: true, tabSize: 2 },
+  };
+
+  beforeEach(() => {
+    setEditorStatus(null);
+  });
+
+  it('publishes and reads the latest snapshot', () => {
+    expect(getEditorStatus()).toBeNull();
+    setEditorStatus(sample);
+    expect(getEditorStatus()).toEqual(sample);
+  });
+
+  it('notifies subscribers on change and stops after unsubscribe', () => {
+    const listener = vi.fn();
+    const unsubscribe = subscribeEditorStatus(listener);
+    setEditorStatus(sample);
+    setEditorStatus(null);
+    expect(listener).toHaveBeenCalledTimes(2);
+    unsubscribe();
+    setEditorStatus(sample);
+    expect(listener).toHaveBeenCalledTimes(2);
   });
 });

@@ -19,7 +19,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.2 | Code intelligence (LSP language features) | 0 | 5 | 19 | 0 |
 | 5.3 | Editor advanced surface | 6 | 4 | 2 | 0 |
 | 5.4 | Diff and merge | 1 | 1 | 6 | 1 |
-| 5.5 | Workbench layout and navigation | 4 | 6 | 17 | 0 |
+| 5.5 | Workbench layout and navigation | 4 | 8 | 15 | 0 |
 | 5.6 | Quick open and command palette | 7 | 0 | 4 | 0 |
 | 5.7 | File explorer and workspace management | 6 | 1 | 7 | 3 |
 | 5.8 | Search and replace across files | 1 | 1 | 10 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 4 | 10 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 1 | 2 | 7 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 3 | 5 | 0 |
-| TOTAL | | 54 | 75 | 195 | 5 |
+| TOTAL | | 54 | 77 | 193 | 5 |
 
 ## Legend
 
@@ -150,7 +150,7 @@ The diff and merge subsystem is minimal. Only a text-based diff viewer for git r
 
 ## 5.5 Workbench layout and navigation
 
-vsclaude uses a fixed, presentation-mode-driven layout rather than the dockable workbench VS Code provides. The core panel tree (panel-tree.ts) supports arbitrary splits but is not wired to the renderer. The app uses a hardcoded grid with fixed positions that change across five presentation modes (companion, stage, swarm, minimal, cozy). Editor tabs support keyboard navigation but only standard tabs, with no pinned, preview, or split groups. Floating windows, dockable panels, an activity bar, a status bar, problems and outline views, and split-group navigation are specified but unimplemented.
+vsclaude uses a fixed, presentation-mode-driven layout rather than the dockable workbench VS Code provides. The core panel tree (panel-tree.ts) supports arbitrary splits but is not wired to the renderer. The app uses a hardcoded grid with fixed positions that change across five presentation modes (companion, stage, swarm, minimal, cozy). A real status bar now ships (branch and change count on the left; language, end-of-line, indentation, cursor position, and selection on the right), driven by a reusable status-bar-item model and a live editor-status store; see specs/STATUS_BAR.md. Editor tabs support keyboard navigation but only standard tabs, with no pinned, preview, or split groups. Floating windows, dockable panels, an activity bar, problems and outline views, and split-group navigation are specified but unimplemented.
 
 | Capability | Status | Evidence | What is missing |
 | --- | --- | --- | --- |
@@ -166,7 +166,7 @@ vsclaude uses a fixed, presentation-mode-driven layout rather than the dockable 
 | Sash resizing (visual splitter) | Missing | No sash elements; fixed grid columns; ResizeObserver only in TerminalPanel.tsx. | No draggable splitters; layout not user-resizable. |
 | Outline / Document Symbol view | Missing | No Outline panel; breadcrumbs/symbols are Monaco features only. | No Outline panel. |
 | Problems / Diagnostics view | Missing | No Problems panel or diagnostics collection. | No problems view or count badge. |
-| Status bar (language, encoding, EOL, indent, cursor, branch, errors) | Missing | No status bar; SettingsBar.tsx is a header control bar. | No status bar with any of these fields. |
+| Status bar (language, encoding, EOL, indent, cursor, branch, errors) | Partial | StatusBar.tsx renders branch and change count, language, EOL, indentation, cursor position, and selection, from core-shell orderStatusItems and the editor-bridge status store; cursor opens go-to-line and branch opens review. | Encoding indicator and error/warning counts (need the diagnostics surface, 5.2); items are not yet clickable pickers. |
 | Open Editors / Open Documents view | Missing | Tabs show open files inline; no separate list view. | No Open Editors view. |
 | Drag-drop editors between groups | Missing | No multi-group support; no tab reorder via drag. | No drag between groups or tab reorder. |
 | Drag-drop views between containers | Missing | Panels hardcoded per mode; no relocation API. | No relocating views between sidebars or panel. |
@@ -179,7 +179,7 @@ vsclaude uses a fixed, presentation-mode-driven layout rather than the dockable 
 | Show/hide individual views independently | Partial | Mode switching shows/hides panels conditionally. | No per-view toggle; visibility coupled to mode. |
 | Focused / zen editor expansion | Partial | Minimal mode shows only center editor. | No per-panel maximize button or transition animation. |
 | Command palette (fuzzy search, run commands) | Done | CommandPalette.tsx (Ctrl/Cmd+K, fuzzy, arrows, Enter); CommandRegistry ranks; commands in App.tsx. | |
-| Search/replace functionality | Missing | No search box, global search/replace, quick-open, symbol search, or line nav. | No editor search, Ctrl+P, @, :, or > quick-open. |
+| Search/replace functionality | Partial | Quick-open ships: Ctrl/Cmd+P file open, : go-to-line, and the > command route (CommandPalette.tsx, see 5.6). Monaco's in-file find is on by default. | Project-wide search and replace across files (5.8), and @ or # symbol search, are still missing. |
 | Breadcrumbs / path navigation | Missing | Spec 7.1 mentions breadcrumbs as a Monaco feature; no breadcrumb element in renderer. | No breadcrumb trail or clickable path nav. |
 | Keyboard shortcuts and customization | Missing | CommandPalette.tsx and WorkspaceEditor.tsx hardcode keys; no rebinding. | No keybindings.json, editor, or shortcut help view. |
 
