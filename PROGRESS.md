@@ -5,13 +5,27 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus thirty parity slices, the last twenty-nine
+2026-06-24. Session 3 (Step 0 plus thirty-one parity slices, the last thirty
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
 stash, zen mode, breadcrumbs, tasks, activity-bar badges, output panel, untitled,
 more editor settings, markdown preview, document links, color decorators, outline,
-git history, release notes, notification center, branch delete and rename.
+git history, release notes, notification center, branch delete and rename, git tags.
+
+## Slice 31: git tags (done)
+
+Tag management (catalog 5.9; row moved to Partial).
+
+- **Native** (`git.rs`): git_tags (newest first), git_create_tag (annotated or
+  lightweight), git_delete_tag, registered in lib.rs. A new cargo test creates, lists,
+  and deletes tags (11 cargo tests now).
+- **UI** (`GitTagsModal.tsx`): Git: Tags opens a dialog that lists tags and lets you
+  create and delete them.
+- **Quality**: 320 unit tests, typecheck, lint, cargo clean, the renderer build
+  succeeds, and 32 Playwright e2e pass (the new one opens the dialog; it shows the
+  no-folder note in the browser, and the cargo tests cover the real operations).
+  Matrix 5.9 tags row moved to Partial.
 
 ## Slice 30: branch delete and rename (done)
 

@@ -84,6 +84,9 @@ pub fn run() {
             git::git_log,
             git::git_delete_branch,
             git::git_rename_branch,
+            git::git_tags,
+            git::git_create_tag,
+            git::git_delete_tag,
         ])
         .run(tauri::generate_context!())
         .expect("error while running the vsclaude application");

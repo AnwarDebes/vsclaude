@@ -132,6 +132,30 @@ pub fn git_create_branch(cwd: String, name: String) -> Result<(), String> {
 }
 
 /// Stash the working-tree changes, including untracked files.
+/// List tags, newest first.
+#[tauri::command]
+pub fn git_tags(cwd: String) -> Result<Vec<String>, String> {
+    let out = run_git(&cwd, &["tag", "--list", "--sort=-creatordate"])?;
+    Ok(out.lines().filter(|l| !l.is_empty()).map(|l| l.to_string()).collect())
+}
+
+/// Create a tag. Annotated when a message is given, lightweight otherwise.
+#[tauri::command]
+pub fn git_create_tag(cwd: String, name: String, message: Option<String>) -> Result<(), String> {
+    match message {
+        Some(m) if !m.is_empty() => run_git(&cwd, &["tag", "-a", &name, "-m", &m])?,
+        _ => run_git(&cwd, &["tag", &name])?,
+    };
+    Ok(())
+}
+
+/// Delete a tag.
+#[tauri::command]
+pub fn git_delete_tag(cwd: String, name: String) -> Result<(), String> {
+    run_git(&cwd, &["tag", "-d", &name])?;
+    Ok(())
+}
+
 /// Delete a branch. Safe delete: git refuses if it has unmerged commits.
 #[tauri::command]
 pub fn git_delete_branch(cwd: String, name: String) -> Result<(), String> {
@@ -266,6 +290,28 @@ mod tests {
         git_stash_pop(cwd.clone()).unwrap();
         assert!(git_status(cwd.clone()).unwrap().contains("a.txt"));
         assert_eq!(git_stash_list(cwd.clone()).unwrap().trim(), "");
+
+        let _ = fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn create_list_and_delete_tags() {
+        let dir = init_repo("tags");
+        let cwd = dir.to_str().unwrap().to_string();
+        fs::write(dir.join("a.txt"), "one").unwrap();
+        git_stage(cwd.clone(), vec!["a.txt".to_string()]).unwrap();
+        git_commit_staged(cwd.clone(), "init".to_string()).unwrap();
+
+        git_create_tag(cwd.clone(), "v1.0".to_string(), None).unwrap();
+        git_create_tag(cwd.clone(), "v1.1".to_string(), Some("release".to_string())).unwrap();
+        let tags = git_tags(cwd.clone()).unwrap();
+        assert!(tags.iter().any(|t| t == "v1.0"));
+        assert!(tags.iter().any(|t| t == "v1.1"));
+
+        git_delete_tag(cwd.clone(), "v1.0".to_string()).unwrap();
+        let after = git_tags(cwd.clone()).unwrap();
+        assert!(!after.iter().any(|t| t == "v1.0"));
+        assert!(after.iter().any(|t| t == "v1.1"));
 
         let _ = fs::remove_dir_all(&dir);
     }

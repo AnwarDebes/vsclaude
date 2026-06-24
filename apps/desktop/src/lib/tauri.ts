@@ -104,3 +104,9 @@ export interface GitCommit {
 }
 export const gitLog = (cwd: string, limit?: number): Promise<GitCommit[]> =>
   invoke('git_log', { cwd, limit });
+
+export const gitTags = (cwd: string): Promise<string[]> => invoke('git_tags', { cwd });
+export const gitCreateTag = (cwd: string, name: string, message?: string): Promise<void> =>
+  invoke('git_create_tag', { cwd, name, message });
+export const gitDeleteTag = (cwd: string, name: string): Promise<void> =>
+  invoke('git_delete_tag', { cwd, name });

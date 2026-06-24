@@ -39,6 +39,7 @@ import { appendLog } from './lib/output-log';
 import { SearchPanel } from './components/SearchPanel';
 import { SourceControlPanel } from './components/SourceControlPanel';
 import { GitHistoryModal } from './components/GitHistoryModal';
+import { GitTagsModal } from './components/GitTagsModal';
 import { gitLog, type GitCommit } from './lib/tauri';
 import { SettingsPanel } from './components/SettingsPanel';
 import { KeyboardShortcuts } from './components/KeyboardShortcuts';
@@ -116,6 +117,7 @@ export function App() {
   const [diffTarget, setDiffTarget] = useState<DiffTarget | null>(null);
   const [markdownTarget, setMarkdownTarget] = useState<MarkdownTarget | null>(null);
   const [gitHistory, setGitHistory] = useState<GitCommit[] | null>(null);
+  const [tagsOpen, setTagsOpen] = useState(false);
   const [npmTasks, setNpmTasks] = useState<NpmTask[]>([]);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
@@ -613,6 +615,12 @@ export function App() {
       run: () => setReviewOpen(true),
     });
     r.register({
+      id: 'git-tags',
+      title: 'Git: Tags',
+      keywords: ['git', 'tags', 'tag', 'release', 'version'],
+      run: () => setTagsOpen(true),
+    });
+    r.register({
       id: 'git-history',
       title: 'Git: View History',
       keywords: ['git', 'history', 'log', 'commits'],
@@ -958,6 +966,11 @@ export function App() {
       <DiffModal target={diffTarget} onClose={() => setDiffTarget(null)} />
       <MarkdownPreview target={markdownTarget} onClose={() => setMarkdownTarget(null)} />
       <GitHistoryModal commits={gitHistory} onClose={() => setGitHistory(null)} />
+      <GitTagsModal
+        open={tagsOpen}
+        repo={hasWorkspace ? ws.roots[0]?.path ?? null : null}
+        onClose={() => setTagsOpen(false)}
+      />
       <ReleaseNotes open={releaseOpen} onClose={() => setReleaseOpen(false)} />
       <NotificationCenter open={notificationsOpen} onClose={() => setNotificationsOpen(false)} />
       <DiffReview open={reviewOpen} cwd="." onClose={() => setReviewOpen(false)} />
