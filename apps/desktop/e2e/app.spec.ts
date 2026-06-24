@@ -256,6 +256,13 @@ test.describe('vsclaude shell', () => {
     await expect(page.getByRole('dialog', { name: 'Settings' })).toBeVisible();
   });
 
+  test('the explorer decorates files that have problems', async ({ page }) => {
+    await page.goto('/');
+    // The default open file imports unresolved modules, so the language worker
+    // reports errors and the explorer marks it.
+    await expect(page.locator('.explorer-row__problem').first()).toBeVisible({ timeout: 20000 });
+  });
+
   test('the explorer shows file-type icons', async ({ page }) => {
     await page.goto('/');
     const row = page.getByRole('button', { name: 'session.ts', exact: true });

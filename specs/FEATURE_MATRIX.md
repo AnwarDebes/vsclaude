@@ -21,7 +21,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.4 | Diff and merge | 3 | 4 | 1 | 1 |
 | 5.5 | Workbench layout and navigation | 6 | 12 | 9 | 0 |
 | 5.6 | Quick open and command palette | 7 | 1 | 3 | 0 |
-| 5.7 | File explorer and workspace management | 6 | 2 | 6 | 3 |
+| 5.7 | File explorer and workspace management | 6 | 3 | 5 | 3 |
 | 5.8 | Search and replace across files | 5 | 1 | 6 | 0 |
 | 5.9 | Source control and git | 6 | 8 | 10 | 0 |
 | 5.10 | Integrated terminal | 6 | 7 | 6 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 10 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 2 | 6 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 4 | 4 | 0 |
-| TOTAL | | 90 | 106 | 128 | 5 |
+| TOTAL | | 90 | 107 | 127 | 5 |
 
 ## Legend
 
@@ -214,7 +214,7 @@ Phase A1 is substantially complete: a working file tree, lazy loading, full CRUD
 | Workspace files (.code-workspace) and per-root settings | Not planned | WORKSPACE_AND_FILES.md defers to Editor Spec A2/A3; A1 uses absolute paths. | Tracked as A2-plus; no workspace file format in A1. |
 | File nesting rules and compact folder display | Not planned | No nesting or compact-folder code or spec mention. | Not implemented and not in the planned spec. |
 | File decorations for git status | Missing | WorkspaceExplorer.tsx renders only dirty and type glyphs; git status only in DiffReview modal. | No git status colors/badges in the tree. |
-| File decorations for problems/errors | Missing | No problem/diagnostic indicators in explorer components. | No error/warning decorations; diagnostics deferred to A3. |
+| File decorations for problems/errors | Partial | ExplorerPanel.tsx shows an error or warning dot per file from the diagnostics (filesWithProblems, unit tested); an e2e covers it. | Only the open file has markers (Monaco validates open models), so no cross-file decorations. |
 | Auto-reveal active file | Missing | No reveal logic; explorer tracks active path but does not expand parents. | No auto-expand of parent directories on editor switch. |
 | files.exclude, search.exclude, watcherExclude | Missing | No exclusion patterns; WORKSPACE_AND_FILES.md section 5 defers gitignore filtering. | No exclusion settings; noise dirs still listed. |
 | Open Editors section with dirty indicators and headers | Done | WorkspaceEditor.tsx tablist shows open docs, active class, dirty span, close button, roving keyboard nav. | |

@@ -5,7 +5,7 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus forty-six parity slices, the last forty-five
+2026-06-24. Session 3 (Step 0 plus forty-seven parity slices, the last forty-six
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
@@ -15,7 +15,20 @@ git history, release notes, notification center, branch delete and rename, git t
 gitignore action, svg preview, snippets, line height and font weight, ui scale and
 wheel zoom, follow system theme, command categories, output log levels, diff setting,
 json schemas, bracket guides and large-file mode, in-file find, terminal find,
-terminal menu, terminal tab rename.
+terminal menu, terminal tab rename, explorer problem decorations.
+
+## Slice 47: explorer problem decorations (done)
+
+Problem dots in the explorer (catalog 5.7).
+
+- **Helper** (`lib/problem-decorations.ts`): `filesWithProblems` reduces diagnostics
+  to a per-file worst severity (error wins over warning). 3 unit tests.
+- **Decoration**: ExplorerPanel shows an error or warning dot per file, fed from the
+  live diagnostics.
+- **Quality**: 339 unit tests (336 plus 3), typecheck, lint clean (no Rust change),
+  the renderer build succeeds, and 39 Playwright e2e pass (the new one waits for the
+  demo file's unresolved-import errors to mark it). Matrix 5.7 problem-decorations row
+  moved to Partial.
 
 ## Slice 46: terminal tab rename (done)
 

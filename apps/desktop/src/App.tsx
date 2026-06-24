@@ -47,6 +47,7 @@ import { WelcomePanel } from './components/WelcomePanel';
 import { ReleaseNotes } from './components/ReleaseNotes';
 import { NotificationCenter } from './components/NotificationCenter';
 import { addNotification } from './lib/notifications';
+import { filesWithProblems } from './lib/problem-decorations';
 import { welcomeQuickActions, type WelcomeActionId } from './lib/welcome';
 import { DiffModal, type DiffTarget } from './components/DiffModal';
 import { MarkdownPreview, type MarkdownTarget } from './components/MarkdownPreview';
@@ -180,6 +181,7 @@ export function App() {
   const gitSummary = useGitStatus(hasWorkspace ? ws.roots[0]?.path ?? null : null, gitNonce);
   const diagnostics = useDiagnostics();
   const diagnosticCounts = summarizeDiagnostics(diagnostics);
+  const fileProblems = filesWithProblems(diagnostics);
 
   const openProblem = useCallback(
     (resource: string, line: number, column: number) => {
@@ -857,6 +859,7 @@ export function App() {
               files={demoFiles}
               activePath={activePath}
               openPath={openFile}
+              problems={fileProblems}
               onSelect={setOpenFile}
             />
           )

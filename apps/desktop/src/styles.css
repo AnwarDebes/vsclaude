@@ -2953,6 +2953,19 @@ body {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.explorer-row__problem {
+  flex: 0 0 auto;
+  width: 7px;
+  height: 7px;
+  margin-right: 6px;
+  border-radius: 50%;
+}
+.explorer-row__problem--error {
+  background: #d9534f;
+}
+.explorer-row__problem--warning {
+  background: #d9a441;
+}
 .explorer-row__dirty {
   width: 7px;
   height: 7px;
