@@ -30,7 +30,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.13 | Snippets and Emmet | 1 | 1 | 3 | 0 |
 | 5.14 | Settings and configuration | 2 | 2 | 5 | 1 |
 | 5.15 | Keybindings and keymaps | 2 | 2 | 7 | 0 |
-| 5.16 | Themes and appearance | 10 | 2 | 10 | 0 |
+| 5.16 | Themes and appearance | 11 | 2 | 9 | 0 |
 | 5.17 | Extensions and plugin ecosystem | 5 | 2 | 11 | 0 |
 | 5.18 | Notebooks | 0 | 0 | 6 | 0 |
 | 5.19 | Remote development and tunnels | 0 | 0 | 6 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 5 | 9 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 1 | 7 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 3 | 5 | 0 |
-| TOTAL | | 73 | 78 | 173 | 5 |
+| TOTAL | | 74 | 78 | 172 | 5 |
 
 ## Legend
 
@@ -383,7 +383,7 @@ vsclaude has a hardcoded global keymap for accessibility (Ctrl/Cmd+K for the pal
 
 ## 5.16 Themes and appearance
 
-vsclaude has a strong design-token system and bundled themes, but many appearance customizations in the spec are unimplemented. The current build provides theme selection (four bundled themes plus a plugin API for custom themes), accessibility modes (high-contrast, color-blind-safe, reduced-motion), and fixed editor font settings. It lacks user-configurable font size, line height, ligature toggle, UI scale, system-theme following, token color customization, and workbench color customization. Monaco's theme and options are hardcoded.
+vsclaude has a strong design-token system and bundled themes. Theme selection (four bundled themes plus a plugin API for custom themes), accessibility modes (high-contrast, color-blind-safe, reduced-motion), and now user-configurable editor settings (font size, tab size, word wrap, minimap, line numbers via the Settings panel) all work. The Monaco editor and diff editor now follow the app theme: monaco-theme.ts defines a Monaco theme from each bundled theme's tokens and switches on a settings change. Remaining: font family, line height, ligature, and weight customization, UI scale, following the OS system theme, and token and workbench color customization.
 
 | Capability | Status | Evidence | What is missing |
 | --- | --- | --- | --- |
@@ -408,7 +408,7 @@ vsclaude has a strong design-token system and bundled themes, but many appearanc
 | Editor minimap visibility | Done | AppSettings.editor.minimap, toggled in the Settings panel and applied to Monaco. | |
 | Follow OS system theme | Missing | Spec mentions followSystemTheme; not in AppSettings; no OS listener. | No OS theme detection or auto switch. |
 | UI scale customization | Missing | Spec mentions uiScale 0.8 to 1.5; no field or zoom UI. | No UI scale setting. |
-| Monaco editor theme binding to app theme | Missing | EditorPanel.tsx hardcodes vs-dark; ignores AppSettings.themeId. | Monaco stays dark when app theme changes; no binding. |
+| Monaco editor theme binding to app theme | Done | monaco-theme.ts defines a Monaco theme from each bundled theme's tokens and switches on settings change; EditorPanel and DiffView read the bound theme; e2e verifies the editor follows light and dark. | |
 | Custom theme file import/export | Missing | Spec describes JSON themes with validation; no import/export; plugin themes runtime-only. | No custom theme file create/import/export. |
 
 ## 5.17 Extensions and plugin ecosystem

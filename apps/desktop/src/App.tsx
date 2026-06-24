@@ -18,6 +18,7 @@ import { useWorkspace } from './workspace/useWorkspace';
 import { useFileIndex } from './workspace/useFileIndex';
 import { gotoLine, runEditorAction } from './lib/editor-bridge';
 import { setEditorSettings } from './lib/editor-settings';
+import { applyMonacoTheme } from './lib/monaco-theme';
 import { EDITOR_COMMANDS } from './lib/editor-commands';
 import { useDiagnostics } from './lib/useDiagnostics';
 import { demoFiles } from './session/demo-session';
@@ -305,6 +306,7 @@ export function App() {
     applyTheme(settings);
     saveAppSettings(settings);
     setEditorSettings(settings.editor);
+    applyMonacoTheme(settings);
   }, [settings]);
 
   // The bottom drawer shortcuts, matching VS Code: Ctrl or Cmd plus Shift plus M

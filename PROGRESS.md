@@ -5,9 +5,27 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus eight parity slices, the last seven self-paced
-by an autonomous /loop): quick open, status bar, problems, search, source control,
-editor commands, diff editor, settings.
+2026-06-24. Session 3 (Step 0 plus nine parity slices, the last eight self-paced by
+an autonomous /loop): quick open, status bar, problems, search, source control,
+editor commands, diff editor, settings, Monaco theme binding.
+
+## Slice 9: Monaco theme binding (done)
+
+The editor and diff editor now follow the app theme instead of hardcoding vs-dark
+(catalog 5.16).
+
+- **Pure mapper** (`lib/monaco-base-theme.ts`): `monacoBaseTheme` maps a theme's
+  appearance and high-contrast flag to a Monaco base (vs, vs-dark, hc-black). Kept
+  separate from Monaco so it is unit testable. 2 unit tests.
+- **Theme binding** (`lib/monaco-theme.ts`): defines a Monaco theme from every
+  bundled theme's tokens (which are hex) at module load, exposes the current theme
+  through a store and `useMonacoTheme`, and `applyMonacoTheme` resolves the app
+  theme and switches Monaco on a settings change. EditorPanel and DiffView read the
+  bound theme.
+- **Quality**: 240 unit tests (238 plus 2), typecheck, lint clean (no Rust change),
+  the renderer build succeeds, and 16 Playwright e2e pass (the new one switches the
+  app theme and asserts the editor follows from a vs-dark to a vs base). Matrix 5.16
+  Monaco-theme-binding row moved to Done.
 
 ## Slice 8: editor settings and a Settings panel (done)
 

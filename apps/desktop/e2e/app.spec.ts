@@ -177,6 +177,16 @@ test.describe('vsclaude shell', () => {
     await expect(page.getByRole('dialog', { name: 'Settings' })).toHaveCount(0);
   });
 
+  test('the editor theme follows the app theme', async ({ page }) => {
+    await page.goto('/');
+    // Default is cozy-dark, a vs-dark base.
+    await expect(page.locator('.monaco-editor.vs-dark').first()).toBeVisible({ timeout: 15_000 });
+    // Switch to the light theme and the editor follows to the vs base.
+    await page.getByRole('combobox', { name: 'Theme' }).selectOption('cozy-light');
+    await expect(page.locator('.monaco-editor.vs').first()).toBeVisible();
+    await expect(page.locator('.monaco-editor.vs-dark')).toHaveCount(0);
+  });
+
   test('opens the diff review overlay from the command palette', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByText('vsclaude').first()).toBeVisible();

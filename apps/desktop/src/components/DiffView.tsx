@@ -1,5 +1,6 @@
 import { DiffEditor } from '@monaco-editor/react';
 import '../lib/monaco-setup';
+import { useMonacoTheme } from '../lib/monaco-theme';
 
 export interface DiffViewProps {
   original: string;
@@ -16,10 +17,11 @@ export interface DiffViewProps {
  * offline, like the main editor.
  */
 export function DiffView({ original, modified, language, sideBySide = true }: DiffViewProps) {
+  const monacoTheme = useMonacoTheme();
   return (
     <DiffEditor
       height="100%"
-      theme="vs-dark"
+      theme={monacoTheme}
       language={language}
       original={original}
       modified={modified}

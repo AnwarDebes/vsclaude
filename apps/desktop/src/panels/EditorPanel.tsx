@@ -12,6 +12,7 @@ import {
   getEditorSettings,
   subscribeEditorSettings,
 } from '../lib/editor-settings';
+import { useMonacoTheme } from '../lib/monaco-theme';
 import { languageForPath } from '../lib/language';
 
 interface EditorPanelProps {
@@ -31,6 +32,7 @@ interface EditorPanelProps {
 export function EditorPanel({ path, value, language, onChange, onSave }: EditorPanelProps) {
   const editorRef = useRef<BridgeEditor | null>(null);
   const settings = useSyncExternalStore(subscribeEditorSettings, getEditorSettings, getEditorSettings);
+  const monacoTheme = useMonacoTheme();
 
   const onMount: OnMount = (editor, monacoInstance) => {
     editor.addCommand(monacoInstance.KeyMod.CtrlCmd | monacoInstance.KeyCode.KeyS, () => {
@@ -85,7 +87,7 @@ export function EditorPanel({ path, value, language, onChange, onSave }: EditorP
     <div className="editor-panel">
       <Editor
         height="100%"
-        theme="vs-dark"
+        theme={monacoTheme}
         path={path}
         language={languageForPath(path, language)}
         value={value}
