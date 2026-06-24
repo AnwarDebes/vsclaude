@@ -5,7 +5,7 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus forty-seven parity slices, the last forty-six
+2026-06-24. Session 3 (Step 0 plus forty-eight parity slices, the last forty-seven
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
@@ -15,7 +15,19 @@ git history, release notes, notification center, branch delete and rename, git t
 gitignore action, svg preview, snippets, line height and font weight, ui scale and
 wheel zoom, follow system theme, command categories, output log levels, diff setting,
 json schemas, bracket guides and large-file mode, in-file find, terminal find,
-terminal menu, terminal tab rename, explorer problem decorations.
+terminal menu, terminal tab rename, explorer problem decorations, search history.
+
+## Slice 48: search history (done)
+
+Recent-query recall (catalog 5.8).
+
+- **Helper** (`lib/search-history.ts`): `pushSearchHistory` (dedup, cap 20,
+  most-recent-first). 4 unit tests.
+- **UI**: the search box pushes a query to history on Enter; Up and Down recall
+  previous queries.
+- **Quality**: 343 unit tests (339 plus 4), typecheck, lint clean (no Rust change),
+  the renderer build succeeds, and 40 Playwright e2e pass (the new one cycles the
+  history with the arrow keys). Matrix 5.8 search-history row moved to Partial.
 
 ## Slice 47: explorer problem decorations (done)
 

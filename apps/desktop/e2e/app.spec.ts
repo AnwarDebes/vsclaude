@@ -385,6 +385,22 @@ test.describe('vsclaude shell', () => {
     await expect(page.getByRole('textbox', { name: 'Find in terminal' })).toBeVisible();
   });
 
+  test('search recalls recent queries with the arrow keys', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('navigation', { name: 'Activity Bar' }).getByRole('button', { name: 'Search' }).click();
+    const input = page.getByRole('textbox', { name: 'Search' });
+    await expect(input).toBeVisible();
+    await input.fill('alpha');
+    await input.press('Enter');
+    await input.fill('beta');
+    await input.press('Enter');
+    await input.fill('');
+    await input.press('ArrowUp');
+    await expect(input).toHaveValue('beta');
+    await input.press('ArrowUp');
+    await expect(input).toHaveValue('alpha');
+  });
+
   test('the editor opens the find widget with Ctrl+F', async ({ page }) => {
     await page.goto('/');
     const editor = page.locator('.monaco-editor').first();

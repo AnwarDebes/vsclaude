@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 import type { SearchResult } from '@vsclaude/contracts';
 import { basePathName } from '@vsclaude/editor';
 import { isTauri } from '../lib/tauri';
+import { pushSearchHistory } from '../lib/search-history';
 import { searchFind } from '../workspace/searchClient';
 import { splitLineByRanges, summarizeSearch } from '../workspace/searchModel';
 
@@ -36,6 +37,25 @@ export function SearchPanel({ root, onOpen, onClose }: SearchPanelProps) {
   const [result, setResult] = useState<SearchResult | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [history, setHistory] = useState<string[]>([]);
+  const [historyIndex, setHistoryIndex] = useState(-1);
+
+  const onQueryKeyDown = (e: ReactKeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      setHistory((h) => pushSearchHistory(h, query));
+      setHistoryIndex(-1);
+    } else if (e.key === 'ArrowUp' && history.length > 0) {
+      e.preventDefault();
+      const next = Math.min(historyIndex + 1, history.length - 1);
+      setHistoryIndex(next);
+      setQuery(history[next] ?? '');
+    } else if (e.key === 'ArrowDown' && historyIndex >= 0) {
+      e.preventDefault();
+      const next = historyIndex - 1;
+      setHistoryIndex(next);
+      setQuery(next < 0 ? '' : history[next] ?? '');
+    }
+  };
 
   useEffect(() => {
     if (!isTauri() || !root || query.trim().length === 0) {
@@ -97,6 +117,7 @@ export function SearchPanel({ root, onOpen, onClose }: SearchPanelProps) {
             placeholder="Search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={onQueryKeyDown}
             autoFocus
           />
           <div className="search__toggles" role="group" aria-label="Search options">

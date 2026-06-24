@@ -22,7 +22,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.5 | Workbench layout and navigation | 6 | 12 | 9 | 0 |
 | 5.6 | Quick open and command palette | 7 | 1 | 3 | 0 |
 | 5.7 | File explorer and workspace management | 6 | 3 | 5 | 3 |
-| 5.8 | Search and replace across files | 5 | 1 | 6 | 0 |
+| 5.8 | Search and replace across files | 5 | 2 | 5 | 0 |
 | 5.9 | Source control and git | 6 | 8 | 10 | 0 |
 | 5.10 | Integrated terminal | 6 | 7 | 6 | 0 |
 | 5.11 | Tasks (VS Code task support) | 0 | 4 | 5 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 10 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 2 | 6 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 4 | 4 | 0 |
-| TOTAL | | 90 | 107 | 127 | 5 |
+| TOTAL | | 90 | 108 | 126 | 5 |
 
 ## Legend
 
@@ -239,7 +239,7 @@ Project-wide search now ships. The `search.find` IPC command (protocol v5) runs 
 | Search toggles (regex, case, whole-word) | Done | SearchPanel.tsx toggle buttons feed SearchOptions; the Rust matcher honors regex, case_insensitive, and word. | |
 | Include/exclude globs and gitignore | Done | SearchOptions includeGlobs and excludeGlobs map to ignore OverrideBuilder; WalkBuilder respects .gitignore; Rust test covers it. | |
 | Open-editors and folder scope toggle | Missing | No scope selector or scope management. | No scope radio/dropdown or selection-aware search. |
-| Search history | Missing | No search-history state or persistence. | No recall of previous queries. |
+| Search history | Partial | SearchPanel keeps a recent-query history (pushSearchHistory, unit tested); Up and Down in the search box recall previous queries. An e2e covers it. | History is per-session, not persisted across reloads. |
 | Search in selection | Missing | No selection-boundary detection for search. | No search-in-selection toggle. |
 | Search Editor (persistent view) | Missing | Tab kinds list file/diff/agent-diff/welcome only; no search kind. | No persistent editable results view. |
 | Toggle details (expand/collapse context) | Missing | No detail expansion or context rendering. | No summary/detail toggle or context lines. |
