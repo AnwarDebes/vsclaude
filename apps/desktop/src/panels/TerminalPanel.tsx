@@ -8,6 +8,8 @@ interface TerminalPanelProps {
   /** Lines to show in the browser fallback (the agent's command activity). */
   fallbackLines?: string[];
   cwd?: string;
+  /** A command run once the shell is ready (for example a task). */
+  initialCommand?: string;
 }
 
 /**
@@ -15,7 +17,7 @@ interface TerminalPanelProps {
  * Rust PTY and streams it through xterm with full input. In the browser it shows
  * the agent's command activity as a read-only log.
  */
-export function TerminalPanel({ fallbackLines, cwd }: TerminalPanelProps) {
+export function TerminalPanel({ fallbackLines, cwd, initialCommand }: TerminalPanelProps) {
   const hostRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -55,6 +57,8 @@ export function TerminalPanel({ fallbackLines, cwd }: TerminalPanelProps) {
           term.onData((d) => {
             if (ptyId) void ptyWrite(ptyId, d);
           });
+          // Run the requested command (for example a task) once the shell is up.
+          if (initialCommand) void ptyWrite(ptyId, `${initialCommand}\r`);
         } catch (err) {
           term.writeln(`\x1b[31mcould not start the shell: ${String(err)}\x1b[0m`);
         }

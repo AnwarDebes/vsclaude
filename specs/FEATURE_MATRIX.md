@@ -24,8 +24,8 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.7 | File explorer and workspace management | 6 | 2 | 6 | 3 |
 | 5.8 | Search and replace across files | 5 | 1 | 6 | 0 |
 | 5.9 | Source control and git | 5 | 7 | 12 | 0 |
-| 5.10 | Integrated terminal | 3 | 3 | 13 | 0 |
-| 5.11 | Tasks (VS Code task support) | 0 | 2 | 7 | 0 |
+| 5.10 | Integrated terminal | 3 | 4 | 12 | 0 |
+| 5.11 | Tasks (VS Code task support) | 0 | 4 | 5 | 0 |
 | 5.12 | Debugging (Debug Adapter Protocol) | 0 | 0 | 9 | 0 |
 | 5.13 | Snippets and Emmet | 1 | 1 | 3 | 0 |
 | 5.14 | Settings and configuration | 2 | 2 | 5 | 1 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 6 | 8 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 1 | 7 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 3 | 5 | 0 |
-| TOTAL | | 77 | 85 | 162 | 5 |
+| TOTAL | | 77 | 88 | 159 | 5 |
 
 ## Legend
 
@@ -296,19 +296,19 @@ The terminal has a real PTY backend (portable-pty via Rust), a typed IPC protoco
 | Persistence and reconnection across reloads | Missing | TerminalPanel creates a PTY on mount and kills on unmount; no pty_list to re-attach. | No session persistence or recovery. |
 | Process revival | Missing | pty_kill on unmount; no background process kept alive. | No detach-and-reattach flow. |
 | Env var collections from features/plugins | Missing | pty_create accepts env in some paths but not in the UI; no plugin injection. | No env UI or plugin env collection. |
-| Send-text and run-command interfaces | Missing | pty_write exists but is not exposed as a send-text command. | No send-to-terminal action or run-command picker. |
+| Send-text and run-command interfaces | Partial | requestRunInTerminal opens a new terminal that runs a command (TerminalPanel initialCommand); used by Run Task. | No send-to-active-terminal or run-recent-command picker. |
 | Quick-fix surface | Missing | No output parsing or quick-fix UI. | No lightbulb or error-pattern detection. |
 | xterm addon ecosystem integration | Partial | FitAddon loaded; spec references Webgl, Unicode11, WebLinks, Serialize, but only FitAddon runs. | Webgl, Unicode11, WebLinks, and Serialize addons not loaded. |
 
 ## 5.11 Tasks (VS Code task support)
 
-VS Code task support is entirely absent. There is no tasks.json parsing, task runner, problem matchers, auto-detection, grouping, compound tasks, or related infrastructure. The command palette can classify command keywords (build, test, install) from running commands, but that is distinct from a declarative task system. There is no plan to add tasks; vsclaude centers on agent-driven commands in the terminal and event stream, not user task definitions.
+Task support has started: npm scripts are auto-detected from the workspace package.json (detectNpmTasks) and surface as Run Task commands in the palette, each running in a new terminal. There is still no tasks.json parsing, problem matchers, task groups, default build and test tasks, compound tasks, or background and watch tasks.
 
 | Capability | Status | Evidence | What is missing |
 | --- | --- | --- | --- |
 | tasks.json file format and loading | Missing | No code parses or loads tasks.json; zero matches. | No tasks.json loader. |
-| Task auto-detection (npm scripts, gradle, etc.) | Missing | classify.ts detects keywords on running commands, not pre-run discovery. | No script scanner or build-system detection. |
-| Task quick-pick UI and palette integration | Missing | command-registry.ts is generic; no task discovery or definition-file integration. | No task list UI; palette runs registered commands only. |
+| Task auto-detection (npm scripts, gradle, etc.) | Partial | detectNpmTasks (lib/tasks.ts) reads the workspace package.json scripts; App registers each as a Run Task command. Unit tested. | Only npm scripts; no gradle, make, or other build systems. |
+| Task quick-pick UI and palette integration | Partial | Detected tasks appear as Run Task: <name> commands in the palette, each running in a new terminal (requestRunInTerminal). | No dedicated task picker view, task groups, or default build and test tasks. |
 | Task groups (build, test) and default task | Missing | Classification is post-hoc, not declarative. | No task groups or default task. |
 | Compound tasks and dependencies | Missing | Terminal runs one command per command_run event. | No sequencing or dependency declarations. |
 | Problem matchers (output parsing into Problems panel) | Missing | Terminal spec states it does not parse output for meaning; no matcher logic in packages/editor/src. | No regex output parsing or error extraction. |

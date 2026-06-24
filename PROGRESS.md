@@ -5,11 +5,26 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus seventeen parity slices, the last sixteen
+2026-06-24. Session 3 (Step 0 plus eighteen parity slices, the last seventeen
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
-stash, zen mode, breadcrumbs.
+stash, zen mode, breadcrumbs, tasks.
+
+## Slice 18: tasks (npm scripts) (done)
+
+Task auto-detection and run-in-terminal (catalog 5.11, plus terminal send-text 5.10).
+
+- **Detection** (`lib/tasks.ts`): `detectNpmTasks` reads package.json scripts into
+  tasks that run `npm run <name>`, defensively (bad JSON yields none). 4 unit tests.
+- **Run in terminal**: the terminal tabs model gains an optional `command`,
+  TerminalPanel runs an `initialCommand` once the shell is up, and
+  `requestRunInTerminal` opens a new terminal that runs a command. 1 more tabs test.
+- **Palette**: App reads the workspace package.json and registers each script as a
+  Run Task: <name> command that runs it in a new terminal.
+- **Quality**: 273 unit tests (268 plus 5) and 8 cargo tests, typecheck, lint clean
+  (no Rust change), the renderer build succeeds, and 23 Playwright e2e pass. Matrix
+  5.11 auto-detection and quick-pick rows and 5.10 send-text moved to Partial.
 
 ## Slice 17: breadcrumbs (done)
 

@@ -64,6 +64,12 @@ describe('terminal tabs model', () => {
     expect(state.activeId).toBe('c');
   });
 
+  it('carries an optional command for a task terminal', () => {
+    const state = openTerminal(EMPTY_TERMINAL_TABS, { id: 'task', title: 'build', command: 'npm run build' });
+    expect(state.tabs[0]?.command).toBe('npm run build');
+    expect(state.activeId).toBe('task');
+  });
+
   it('ignores operations on unknown ids', () => {
     const state = withThree();
     expect(closeTerminal(state, 'zzz')).toBe(state);

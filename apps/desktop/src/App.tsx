@@ -49,7 +49,8 @@ import { WorkspaceEditor } from './components/WorkspaceEditor';
 import { SwarmPanel } from './panels/SwarmPanel';
 import { TimelinePanel } from './panels/TimelinePanel';
 import { TokenPanel } from './panels/TokenPanel';
-import { TerminalTabs, requestNewTerminal } from './components/TerminalTabs';
+import { TerminalTabs, requestNewTerminal, requestRunInTerminal } from './components/TerminalTabs';
+import { detectNpmTasks, type NpmTask } from './lib/tasks';
 
 const STATE_LABELS: Record<string, string> = {
   idle: 'resting',
@@ -101,6 +102,7 @@ export function App() {
   const [bottomPanel, setBottomPanel] = useState<'none' | 'problems' | 'search' | 'scm'>('none');
   const [gitNonce, setGitNonce] = useState(0);
   const [diffTarget, setDiffTarget] = useState<DiffTarget | null>(null);
+  const [npmTasks, setNpmTasks] = useState<NpmTask[]>([]);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const [welcomeOpen, setWelcomeOpen] = useState(false);
@@ -354,6 +356,26 @@ export function App() {
     applyMonacoTheme(settings);
   }, [settings]);
 
+  // Detect npm scripts from the open workspace so they appear as Run Task commands.
+  useEffect(() => {
+    const repo = hasWorkspace ? ws.roots[0]?.path ?? null : null;
+    if (!ws.available || !repo) {
+      setNpmTasks([]);
+      return;
+    }
+    let cancelled = false;
+    void readFile(`${repo}/package.json`)
+      .then(({ content }) => {
+        if (!cancelled) setNpmTasks(detectNpmTasks(content));
+      })
+      .catch(() => {
+        if (!cancelled) setNpmTasks([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [hasWorkspace, ws.available, ws.roots]);
+
   // The bottom drawer shortcuts, matching VS Code: Ctrl or Cmd plus Shift plus M
   // for Problems and plus Shift plus F for Search. One slot, so each toggles.
   useEffect(() => {
@@ -472,6 +494,15 @@ export function App() {
       keywords: ['zen', 'distraction', 'focus', 'fullscreen', 'hide'],
       run: () => setZenMode((z) => !z),
     });
+    // Detected npm scripts, each runnable in a new terminal.
+    for (const task of npmTasks) {
+      r.register({
+        id: `task-${task.id}`,
+        title: `Run Task: ${task.label}`,
+        keywords: ['task', 'run', 'npm', 'script', task.label],
+        run: () => requestRunInTerminal(task.command, task.label),
+      });
+    }
     // The editor command surface: Monaco's built-in editing actions, run on the
     // active editor through the bridge, so they are discoverable in the palette.
     for (const cmd of EDITOR_COMMANDS) {
@@ -578,7 +609,7 @@ export function App() {
       run: () => setSettings((s) => ({ ...s, sound: { ...s.sound, enabled: !s.sound.enabled } })),
     });
     return r;
-  }, [playing, setPlaying, restart, liveAvailable, liveStart, hasWorkspace, ws, compareWithSaved]);
+  }, [playing, setPlaying, restart, liveAvailable, liveStart, hasWorkspace, ws, compareWithSaved, npmTasks]);
 
   const mode = settings.presentationMode;
   const isEditorMode = mode === 'companion' || mode === 'cozy';

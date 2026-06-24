@@ -10,6 +10,8 @@
 export interface TerminalTab {
   readonly id: string;
   readonly title: string;
+  /** A command to run when the terminal opens (for example a task). */
+  readonly command?: string;
 }
 
 /** The set of open terminals and the active one. */

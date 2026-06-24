@@ -9,10 +9,16 @@ import {
 import { TerminalPanel } from '../panels/TerminalPanel';
 
 const NEW_TERMINAL_EVENT = 'vsclaude:terminal-new';
+const RUN_TERMINAL_EVENT = 'vsclaude:terminal-run';
 
 /** Open a new terminal from anywhere (for example a command). */
 export function requestNewTerminal(): void {
   window.dispatchEvent(new CustomEvent(NEW_TERMINAL_EVENT));
+}
+
+/** Open a new terminal that runs a command, with a title (for example a task). */
+export function requestRunInTerminal(command: string, title: string): void {
+  window.dispatchEvent(new CustomEvent(RUN_TERMINAL_EVENT, { detail: { command, title } }));
 }
 
 export interface TerminalTabsProps {
@@ -32,16 +38,26 @@ export function TerminalTabs({ fallbackLines, cwd }: TerminalTabsProps) {
     openTerminal(EMPTY_TERMINAL_TABS, { id: 'term-1', title: 'Terminal 1' }),
   );
 
-  const addTerminal = useCallback(() => {
+  const addTerminal = useCallback((command?: string, title?: string) => {
     counter.current += 1;
     const n = counter.current;
-    setState((s) => openTerminal(s, { id: `term-${n}`, title: `Terminal ${n}` }));
+    setState((s) =>
+      openTerminal(s, { id: `term-${n}`, title: title ?? `Terminal ${n}`, command }),
+    );
   }, []);
 
   useEffect(() => {
-    const handler = () => addTerminal();
-    window.addEventListener(NEW_TERMINAL_EVENT, handler);
-    return () => window.removeEventListener(NEW_TERMINAL_EVENT, handler);
+    const onNew = () => addTerminal();
+    const onRun = (e: Event) => {
+      const detail = (e as CustomEvent<{ command?: string; title?: string }>).detail;
+      if (detail?.command) addTerminal(detail.command, detail.title);
+    };
+    window.addEventListener(NEW_TERMINAL_EVENT, onNew);
+    window.addEventListener(RUN_TERMINAL_EVENT, onRun);
+    return () => {
+      window.removeEventListener(NEW_TERMINAL_EVENT, onNew);
+      window.removeEventListener(RUN_TERMINAL_EVENT, onRun);
+    };
   }, [addTerminal]);
 
   const firstId = state.tabs[0]?.id;
@@ -80,7 +96,7 @@ export function TerminalTabs({ fallbackLines, cwd }: TerminalTabsProps) {
           className="terminal-tab__new"
           aria-label="New Terminal"
           title="New Terminal"
-          onClick={addTerminal}
+          onClick={() => addTerminal()}
         >
           {'+'}
         </button>
@@ -93,7 +109,11 @@ export function TerminalTabs({ fallbackLines, cwd }: TerminalTabsProps) {
             role="tabpanel"
             aria-hidden={tab.id !== state.activeId}
           >
-            <TerminalPanel fallbackLines={tab.id === firstId ? fallbackLines : []} cwd={cwd} />
+            <TerminalPanel
+              fallbackLines={tab.id === firstId ? fallbackLines : []}
+              cwd={cwd}
+              initialCommand={tab.command}
+            />
           </div>
         ))}
       </div>
