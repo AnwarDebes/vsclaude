@@ -2153,6 +2153,46 @@ body {
   color: var(--color-text-muted);
 }
 
+/* Notification toast */
+.toast {
+  position: fixed;
+  right: 12px;
+  top: 12px;
+  z-index: calc(var(--z-popover, 200) + 1);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  max-width: 340px;
+  padding: 10px var(--space-md);
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  box-shadow: 0 16px 40px -18px rgba(0, 0, 0, 0.7);
+}
+.toast--warning {
+  border-left-color: #d9a441;
+}
+.toast--error {
+  border-left-color: #d9534f;
+}
+.toast__message {
+  flex: 1 1 auto;
+  font-size: 0.84rem;
+}
+.toast__dismiss {
+  flex: 0 0 auto;
+  font: inherit;
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.toast__dismiss:hover {
+  color: var(--color-text);
+}
+
 /* Notification center */
 .notif-overlay {
   position: fixed;

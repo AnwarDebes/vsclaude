@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import type { AppSettings, PresentationMode } from '@vsclaude/contracts';
 import { DEFAULT_SETTINGS } from '@vsclaude/contracts';
 import {
@@ -48,7 +48,8 @@ import { KeyboardShortcuts } from './components/KeyboardShortcuts';
 import { WelcomePanel } from './components/WelcomePanel';
 import { ReleaseNotes } from './components/ReleaseNotes';
 import { NotificationCenter } from './components/NotificationCenter';
-import { addNotification } from './lib/notifications';
+import { NotificationToast } from './components/NotificationToast';
+import { addNotification, getNotifications, subscribeNotifications } from './lib/notifications';
 import { filesWithProblems } from './lib/problem-decorations';
 import { welcomeQuickActions, type WelcomeActionId } from './lib/welcome';
 import { DiffModal, type DiffTarget } from './components/DiffModal';
@@ -259,6 +260,8 @@ export function App() {
     }
   }, [hasWorkspace, ws.activeDoc, openFile, editedContents]);
 
+  const notifications = useSyncExternalStore(subscribeNotifications, getNotifications, getNotifications);
+
   const statusItems = useMemo<StatusBarItem[]>(() => {
     const items: StatusBarItem[] = [];
     const counts = summarizeDiagnostics(diagnostics);
@@ -343,8 +346,17 @@ export function App() {
         ariaLabel: `Language ${languageLabel(editorStatus.language)}`,
       });
     }
+    items.push({
+      id: 'notifications',
+      side: 'right',
+      priority: 5,
+      text: notifications.length > 0 ? `Notifications: ${notifications.length}` : 'Notifications',
+      tooltip: 'Show notifications',
+      ariaLabel: `${notifications.length} notifications. Show the notification center.`,
+      command: 'show-notifications',
+    });
     return items;
-  }, [editorStatus, gitSummary, diagnostics, hasWorkspace, ws.roots]);
+  }, [editorStatus, gitSummary, diagnostics, hasWorkspace, ws.roots, notifications]);
 
   const welcomeActions = useMemo(
     () => welcomeQuickActions({ canOpenFolder: ws.available, hasWorkspace, liveAvailable }),
@@ -1076,6 +1088,7 @@ export function App() {
       />
       <ReleaseNotes open={releaseOpen} onClose={() => setReleaseOpen(false)} />
       <NotificationCenter open={notificationsOpen} onClose={() => setNotificationsOpen(false)} />
+      <NotificationToast />
       <SettingsJsonModal
         open={settingsJsonOpen}
         settings={settings}

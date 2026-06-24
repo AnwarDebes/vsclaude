@@ -5,7 +5,7 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus sixty parity slices, the last fifty-nine
+2026-06-24. Session 3 (Step 0 plus sixty-one parity slices, the last sixty
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
@@ -18,7 +18,19 @@ json schemas, bracket guides and large-file mode, in-file find, terminal find,
 terminal menu, terminal tab rename, explorer problem decorations, search history,
 tasks.json loading, git push/pull/fetch, commit amend, commit revert, on-save trim,
 settings JSON editor, reset layout, task variables, task groups, files.exclude,
-at-symbol navigation, hex view.
+at-symbol navigation, hex view, notification toasts.
+
+## Slice 61: notification toasts and a status-bar bell (done)
+
+Completes the notification UX (catalog 5.21; the row moved to Done).
+
+- **Toast** (`NotificationToast.tsx`): a transient toast for the newest notification,
+  auto-dismissing after five seconds.
+- **Bell**: a status-bar item shows the notification count and opens the center.
+- **Quality**: 367 unit tests, typecheck, lint clean (no Rust change), the renderer
+  build succeeds, and 47 Playwright e2e pass (the new one posts a notification, sees
+  the toast, and opens the center from the bell). Matrix 5.21 notification-center row
+  moved to Done.
 
 ## Slice 60: hex viewer (done)
 

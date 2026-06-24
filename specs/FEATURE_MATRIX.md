@@ -35,10 +35,10 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.18 | Notebooks | 0 | 0 | 6 | 0 |
 | 5.19 | Remote development and tunnels | 0 | 0 | 6 | 0 |
 | 5.20 | Accessibility (full) | 1 | 11 | 4 | 0 |
-| 5.21 | Productivity and workspace lifecycle | 3 | 10 | 4 | 0 |
+| 5.21 | Productivity and workspace lifecycle | 4 | 9 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 3 | 5 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 4 | 4 | 0 |
-| TOTAL | | 91 | 118 | 115 | 5 |
+| TOTAL | | 92 | 117 | 115 | 5 |
 
 ## Legend
 
@@ -501,7 +501,7 @@ The repository implements a substantial subset of productivity features. Core ca
 | Window restore and open tabs persistence | Partial | useWorkspace.ts persists open roots across reloads. | No tab order, splits, active editor, or view state restored. |
 | Untitled editors and scratchpad | Partial | With no folder open, New Untitled File opens an editable Untitled-N scratchpad in the editor (lib/untitled.ts, App.tsx). | No untitled editors alongside an open workspace, and no save-as for an untitled. |
 | Error/info/warning notifications (toasts) | Done | App.tsx workspace-toast role='alert'; useWorkspace.ts error state and clearError; styles.css. | |
-| Notification center / history | Partial | notifications.ts is a capped store (unit tested); NotificationCenter.tsx lists the history newest-first with per-item dismiss and clear-all, opened by Notifications: Show; workspace errors and some actions post to it. | No transient toasts or status-bar bell indicator. |
+| Notification center / history | Done | notifications.ts is a capped store (unit tested); NotificationCenter lists the history with dismiss and clear-all (Notifications: Show); NotificationToast shows a transient toast for the newest notification; a status-bar bell shows the count and opens the center. An e2e covers the toast and bell. | |
 | Progress indicators and cancellation | Partial | SettingsBar progress indicator; Pixie state transitions; session pause/restart in App.tsx. | No general progress API or cancellation token; cannot cancel in-flight operations. |
 | Output channels with log level filtering | Partial | OutputPanel.tsx renders an in-memory log channel (output-log.ts, capped, with Clear), opened by View: Output or Ctrl or Cmd plus Shift plus U; the app logs startup, errors, and task runs. | One channel only; no per-channel selection or log-level filtering. |
 | Problems panel with filtering | Partial | ProblemsPanel.tsx aggregates and groups diagnostics by file (see 5.5 and 5.2). | No filtering by severity or by text yet. |
