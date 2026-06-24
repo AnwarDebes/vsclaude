@@ -19,7 +19,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.2 | Code intelligence (LSP language features) | 1 | 9 | 14 | 0 |
 | 5.3 | Editor advanced surface | 7 | 5 | 0 | 0 |
 | 5.4 | Diff and merge | 3 | 4 | 1 | 1 |
-| 5.5 | Workbench layout and navigation | 6 | 12 | 9 | 0 |
+| 5.5 | Workbench layout and navigation | 6 | 13 | 8 | 0 |
 | 5.6 | Quick open and command palette | 7 | 1 | 3 | 0 |
 | 5.7 | File explorer and workspace management | 6 | 3 | 5 | 3 |
 | 5.8 | Search and replace across files | 5 | 2 | 5 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 10 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 2 | 6 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 4 | 4 | 0 |
-| TOTAL | | 91 | 112 | 121 | 5 |
+| TOTAL | | 91 | 113 | 120 | 5 |
 
 ## Legend
 
@@ -175,7 +175,7 @@ vsclaude uses a fixed, presentation-mode-driven layout rather than the dockable 
 | Full screen / distraction-free | Partial | Zen mode is the distraction-free path (just the editor). | No OS full-screen (F11) toggle through the Fullscreen API or the window. |
 | Custom title bar / menu bar | Missing | App.tsx renders a brand header; SettingsBar.tsx has control buttons, no menus. | No File/Edit/View menu bar or customizable title bar. |
 | Layout persistence across sessions | Partial | useWorkspace.ts persists root paths and recents; App.tsx restores presentationMode. | No split sizes, panel positions, tab order, or active tab persisted. |
-| Reset layout to defaults | Missing | No reset-layout command or button. | No reset to factory layout. |
+| Reset layout to defaults | Partial | View: Reset Layout restores the default presentation mode, closes the bottom drawer, and exits zen mode. An e2e covers it. | No panel-size or view-location reset, since those positions are fixed. |
 | Show/hide individual views independently | Partial | Mode switching shows/hides panels conditionally. | No per-view toggle; visibility coupled to mode. |
 | Focused / zen editor expansion | Partial | Minimal mode shows only center editor. | No per-panel maximize button or transition animation. |
 | Command palette (fuzzy search, run commands) | Done | CommandPalette.tsx (Ctrl/Cmd+K, fuzzy, arrows, Enter); CommandRegistry ranks; commands in App.tsx. | |
@@ -474,11 +474,11 @@ The repository implements foundational accessibility but remains incomplete agai
 | Reduced-motion mode with meaning preserved | Partial | styles.css honors prefers-reduced-motion; App.tsx sets data-reduced-motion; theme.ts resolves to high-contrast; toggle persists. | No Rive/sprite pausing, guaranteed state labels, collapsed motion tokens, or CI motion tests. |
 | High-contrast and color-blind-safe themes | Done | design-tokens.ts defines both; resolve-theme.ts forces them; App.tsx and SettingsBar.tsx apply and toggle. | |
 | No information by color alone | Partial | Status uses color plus icon; diff uses +/- prefixes; dirty marker has dot plus sr-only label; swarm uses icon plus label. | No CVD simulation tests, verified high-contrast opaque overlays, or enforced icon-plus-shape-plus-text rules. |
-| Scalable UI respecting OS text size and zoom | Partial | rem units throughout; grid/flex reflow; sr-only clip technique; theme.ts sets document font-size. | No uiScale setting or control; no 200% zoom or text-spacing tests. |
+| Scalable UI respecting OS text size and zoom | Partial | rem units throughout; grid/flex reflow; sr-only clip technique; theme.ts sets document font-size; the workbench.uiScale setting zooms the app shell. | No 200% zoom or text-spacing tests. |
 | Focus management with roving tabindex and restoration | Partial | WorkspaceExplorer.tsx and WorkspaceEditor.tsx implement roving tabindex; CommandPalette list selection. | No reusable roving/focus-trap hooks, modal focus restore, or per-mode focus order. |
 | Keyboard alternatives to drag-and-drop | Partial | WorkspaceExplorer.tsx drag-drop exists; a comment notes keyboard equivalent as future work. | No keyboard move/resize bindings or documented drag alternatives. |
 | Audio cues and signals (optional) | Partial | App.tsx sound toggle; SettingsBar.tsx button; SoundSettings flag. Infrastructure is a stub. | No Tone.js cues, per-signal config, or non-visual channel for permissions/errors. |
-| Accessibility preferences persisted and OS-aware | Partial | AppSettings has reducedMotion, colorBlindSafe, sound; theme.ts persists; resolve-theme.ts respects them. | No a11y prefs hook with OS media queries, resolution order, narration verbosity, uiScale, or forced-colors handling. |
+| Accessibility preferences persisted and OS-aware | Partial | AppSettings has reducedMotion, colorBlindSafe, sound, uiScale, and followSystemTheme (which uses an OS prefers-color-scheme listener); theme.ts persists; resolve-theme.ts respects them. | No a11y prefs hook with full OS media queries, narration verbosity, or forced-colors handling. |
 | Accessibility testing and CI gates | Missing | addon-a11y present but no axe-core, vitest-axe, narrator, focus, or keyboard e2e tests. | No axe integration, contrast checker, narrator tests, announcer tests, keyboard/reduced-motion e2e, CVD snapshots, or reflow tests. |
 | Permission request dialog accessibility | Missing | No permission dialog component; DiffReview has role='dialog' but no permission safety pattern. | No alertdialog, aria-modal, focus trap/restore, safe default focus, or assertive narration with tool/inputs. |
 | ARIA patterns for chat, terminal, editor, swarm | Partial | Terminal section aria-label; editor tablist/tab/tabpanel/status; swarm cards with status labels. | No chat live region, terminal screen-reader mode, swarm tree hierarchy, diff line-count labels, or token meter values. |

@@ -5,7 +5,7 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus fifty-four parity slices, the last fifty-three
+2026-06-24. Session 3 (Step 0 plus fifty-five parity slices, the last fifty-four
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
@@ -17,7 +17,18 @@ wheel zoom, follow system theme, command categories, output log levels, diff set
 json schemas, bracket guides and large-file mode, in-file find, terminal find,
 terminal menu, terminal tab rename, explorer problem decorations, search history,
 tasks.json loading, git push/pull/fetch, commit amend, commit revert, on-save trim,
-settings JSON editor.
+settings JSON editor, reset layout.
+
+## Slice 55: reset layout command (done)
+
+Restore the default layout (catalog 5.5).
+
+- **Command**: View: Reset Layout restores the default presentation mode, closes the
+  bottom drawer, and exits zen mode.
+- **Quality**: 354 unit tests, typecheck, lint clean (no Rust change), the renderer
+  build succeeds, and 42 Playwright e2e pass (the new one opens a drawer then resets).
+  Matrix 5.5 reset-layout row moved to Partial; two stale 5.20 evidence notes (uiScale
+  now exists) refreshed.
 
 ## Slice 54: settings JSON editor (done)
 

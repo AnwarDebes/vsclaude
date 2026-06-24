@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { AppSettings, PresentationMode } from '@vsclaude/contracts';
+import { DEFAULT_SETTINGS } from '@vsclaude/contracts';
 import {
   CommandRegistry,
   summarizeDiagnostics,
@@ -604,6 +605,16 @@ export function App() {
       title: 'View: Outline',
       keywords: ['outline', 'symbols', 'headings', 'structure'],
       run: () => setBottomPanel((p) => (p === 'outline' ? 'none' : 'outline')),
+    });
+    r.register({
+      id: 'view-reset-layout',
+      title: 'View: Reset Layout',
+      keywords: ['reset', 'layout', 'default', 'restore', 'view'],
+      run: () => {
+        setBottomPanel('none');
+        setZenMode(false);
+        setSettings((s) => ({ ...s, presentationMode: DEFAULT_SETTINGS.presentationMode }));
+      },
     });
     r.register({
       id: 'toggle-zen',

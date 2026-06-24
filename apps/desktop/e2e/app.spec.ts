@@ -294,6 +294,19 @@ test.describe('vsclaude shell', () => {
     await expect(crumbs.getByRole('button', { name: /session\.ts/ })).toBeVisible();
   });
 
+  test('reset layout closes open drawers', async ({ page }) => {
+    await page.goto('/');
+    const rail = page.getByRole('navigation', { name: 'Activity Bar' });
+    await rail.getByRole('button', { name: /problems/i }).click();
+    await expect(page.getByRole('region', { name: /problems/i })).toBeVisible();
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('reset layout');
+    await page.keyboard.press('Enter');
+    await expect(page.getByRole('region', { name: /problems/i })).toHaveCount(0);
+  });
+
   test('activity bar Problems item opens the Problems panel', async ({ page }) => {
     await page.goto('/');
     const rail = page.getByRole('navigation', { name: 'Activity Bar' });
