@@ -5,12 +5,25 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus twenty-three parity slices, the last twenty-two
+2026-06-24. Session 3 (Step 0 plus twenty-four parity slices, the last twenty-three
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
 stash, zen mode, breadcrumbs, tasks, activity-bar badges, output panel, untitled,
-more editor settings, markdown preview.
+more editor settings, markdown preview, document links.
+
+## Slice 24: document links (done)
+
+Clickable URLs in the editor (catalog 5.2).
+
+- **Detection** (`lib/links.ts`): `findLinks` finds http, https, and bare www URLs
+  in a line, strips trailing prose punctuation, and returns offsets. 5 unit tests.
+- **Provider**: monaco-setup.ts registers a DocumentLinkProvider over findLinks for
+  many languages, so URLs become clickable in any file.
+- **Quality**: 296 unit tests (291 plus 5), typecheck, lint clean (no Rust change),
+  the renderer build succeeds, and 28 Playwright e2e pass (no regression from the
+  provider). Matrix 5.2 document-links row moved to Partial. (Monaco link clicking
+  is not browser-e2e-able; the pure detection is unit tested.)
 
 ## Slice 23: markdown preview (done)
 

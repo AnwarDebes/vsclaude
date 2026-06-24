@@ -16,7 +16,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | Section | Title | Done | Partial | Missing | Not planned |
 | --- | --- | --- | --- | --- | --- |
 | 5.1 | Text editing core | 8 | 14 | 5 | 0 |
-| 5.2 | Code intelligence (LSP language features) | 0 | 8 | 16 | 0 |
+| 5.2 | Code intelligence (LSP language features) | 0 | 9 | 15 | 0 |
 | 5.3 | Editor advanced surface | 7 | 4 | 1 | 0 |
 | 5.4 | Diff and merge | 3 | 3 | 2 | 1 |
 | 5.5 | Workbench layout and navigation | 6 | 11 | 10 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 8 | 6 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 1 | 7 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 3 | 5 | 0 |
-| TOTAL | | 78 | 91 | 155 | 5 |
+| TOTAL | | 78 | 92 | 154 | 5 |
 
 ## Legend
 
@@ -99,7 +99,7 @@ vsclaude implements a limited set of code intelligence features, relying on Mona
 | Semantic highlighting (over TextMate) | Missing | semanticHighlighting not enabled; no SemanticTokensProvider. | Only TextMate; needs bridge. |
 | Document and workspace symbols | Partial | Spec mentions breadcrumbs and @ quick-open, but no symbol providers registered. | No symbol picker; workspace symbol search absent. |
 | Call hierarchy and type hierarchy | Missing | No hierarchy providers or UI. | No hierarchy views. |
-| Document links and highlights | Missing | No DocumentLink or DocumentHighlight provider. | No link or highlight support. |
+| Document links and highlights | Partial | monaco-setup.ts registers a DocumentLinkProvider over findLinks (lib/links.ts) for many languages, making URLs clickable. Unit tested. | No document-highlight provider (matching-symbol highlights). |
 | Folding and selection ranges from language | Partial | Monaco default folding enabled; no FoldingRangeProvider override. | No language-specific richer folding ranges. |
 | CodeLens | Missing | No CodeLensProvider or lens UI. | No CodeLens. |
 | Inlay hints | Missing | inlayHints unset; no provider. | No inlay hints. |
