@@ -23,7 +23,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.6 | Quick open and command palette | 7 | 0 | 4 | 0 |
 | 5.7 | File explorer and workspace management | 6 | 2 | 6 | 3 |
 | 5.8 | Search and replace across files | 5 | 1 | 6 | 0 |
-| 5.9 | Source control and git | 6 | 7 | 11 | 0 |
+| 5.9 | Source control and git | 6 | 8 | 10 | 0 |
 | 5.10 | Integrated terminal | 3 | 4 | 12 | 0 |
 | 5.11 | Tasks (VS Code task support) | 0 | 4 | 5 | 0 |
 | 5.12 | Debugging (Debug Adapter Protocol) | 0 | 0 | 9 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 10 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 1 | 7 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 3 | 5 | 0 |
-| TOTAL | | 79 | 97 | 148 | 5 |
+| TOTAL | | 79 | 98 | 147 | 5 |
 
 ## Legend
 
@@ -265,7 +265,7 @@ vsclaude now has a working Source Control panel for the daily git workflow: stag
 | History, commit graph, per-file history, Timeline | Partial | git.rs git_log returns recent commits (cargo tested); Git: View History opens a commit list (GitHistoryModal) with relative dates (relativeTime, unit tested); TimelinePanel still shows agent events. | No commit graph, per-file history, or pagination. |
 | Merge conflict resolution (merge editor, inline markers) | Missing | Status model can hold conflicted files but no resolution UI or marker parser. | No conflict markers, merge editor, or resolve actions. |
 | Gutter decorations (added/modified/deleted, peek diff) | Missing | DiffReview shows file-level badges only; no line gutter marks. | No change-tracking gutter or peek diff in the editor. |
-| Gitignore awareness and add-to-gitignore action | Missing | Parser ignores ignored-file lines; no add-to-gitignore command. | No gitignore action. |
+| Gitignore awareness and add-to-gitignore action | Partial | git.rs git_ignore_add appends a pattern to .gitignore (creating it) without duplicates (cargo tested); the SourceControlPanel shows an Ignore action on untracked files. | No ignored-files view or edit-from-editor flow. |
 | Submodules | Missing | No submodule commands; spec section 17 marks them a non-goal. | Out of scope per spec. |
 | Worktrees | Missing | No worktree commands. | Likely out of scope; not in spec. |
 | Commit signing and credential flow | Partial | Shell fallback would honor commit.gpgsign; no key/credential UI; signoff field unused. | No GPG key selection, credential prompts, or signoff checkbox. |

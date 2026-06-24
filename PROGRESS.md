@@ -5,13 +5,26 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus thirty-one parity slices, the last thirty
+2026-06-24. Session 3 (Step 0 plus thirty-two parity slices, the last thirty-one
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
 stash, zen mode, breadcrumbs, tasks, activity-bar badges, output panel, untitled,
 more editor settings, markdown preview, document links, color decorators, outline,
-git history, release notes, notification center, branch delete and rename, git tags.
+git history, release notes, notification center, branch delete and rename, git tags,
+gitignore action.
+
+## Slice 32: add-to-gitignore action (done)
+
+Ignore untracked files (catalog 5.9; row moved to Partial).
+
+- **Native** (`git.rs` git_ignore_add): appends a pattern to .gitignore (creating it)
+  without duplicates, registered in lib.rs. A new cargo test covers append and dedup
+  (12 cargo tests now).
+- **UI**: untracked files in the SourceControlPanel gain an Ignore action.
+- **Quality**: 320 unit tests, typecheck, lint, cargo clean, the renderer build
+  succeeds, and 32 Playwright e2e pass (no regression; the action is native-gated,
+  so the cargo test covers it). Matrix 5.9 gitignore row moved to Partial.
 
 ## Slice 31: git tags (done)
 

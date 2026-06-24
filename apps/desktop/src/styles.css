@@ -789,6 +789,9 @@ body {
 .scm__action:hover {
   color: var(--color-accent);
 }
+.scm__action--text {
+  font-size: 0.72rem;
+}
 .scm__note,
 .scm__error {
   padding: var(--space-md);

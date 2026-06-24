@@ -110,3 +110,5 @@ export const gitCreateTag = (cwd: string, name: string, message?: string): Promi
   invoke('git_create_tag', { cwd, name, message });
 export const gitDeleteTag = (cwd: string, name: string): Promise<void> =>
   invoke('git_delete_tag', { cwd, name });
+export const gitIgnoreAdd = (cwd: string, pattern: string): Promise<void> =>
+  invoke('git_ignore_add', { cwd, pattern });

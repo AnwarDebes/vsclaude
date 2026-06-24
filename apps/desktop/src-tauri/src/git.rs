@@ -132,6 +132,28 @@ pub fn git_create_branch(cwd: String, name: String) -> Result<(), String> {
 }
 
 /// Stash the working-tree changes, including untracked files.
+/// Append a pattern to .gitignore (creating the file), skipping duplicates.
+#[tauri::command]
+pub fn git_ignore_add(cwd: String, pattern: String) -> Result<(), String> {
+    let entry = pattern.trim().to_string();
+    if entry.is_empty() {
+        return Err("empty pattern".to_string());
+    }
+    let path = std::path::Path::new(&cwd).join(".gitignore");
+    let existing = std::fs::read_to_string(&path).unwrap_or_default();
+    if existing.lines().any(|l| l.trim() == entry) {
+        return Ok(());
+    }
+    let mut content = existing;
+    if !content.is_empty() && !content.ends_with('\n') {
+        content.push('\n');
+    }
+    content.push_str(&entry);
+    content.push('\n');
+    std::fs::write(&path, content).map_err(|e| e.to_string())?;
+    Ok(())
+}
+
 /// List tags, newest first.
 #[tauri::command]
 pub fn git_tags(cwd: String) -> Result<Vec<String>, String> {
@@ -291,6 +313,19 @@ mod tests {
         assert!(git_status(cwd.clone()).unwrap().contains("a.txt"));
         assert_eq!(git_stash_list(cwd.clone()).unwrap().trim(), "");
 
+        let _ = fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn ignore_add_appends_without_duplicates() {
+        let dir = init_repo("ignore");
+        let cwd = dir.to_str().unwrap().to_string();
+        git_ignore_add(cwd.clone(), "node_modules".to_string()).unwrap();
+        git_ignore_add(cwd.clone(), "node_modules".to_string()).unwrap();
+        git_ignore_add(cwd.clone(), "dist".to_string()).unwrap();
+        let content = std::fs::read_to_string(dir.join(".gitignore")).unwrap();
+        let lines: Vec<&str> = content.lines().filter(|l| !l.is_empty()).collect();
+        assert_eq!(lines, vec!["node_modules", "dist"]);
         let _ = fs::remove_dir_all(&dir);
     }
 

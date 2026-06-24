@@ -15,6 +15,7 @@ import {
   gitCreateBranch,
   gitDeleteBranch,
   gitRenameBranch,
+  gitIgnoreAdd,
   gitStage,
   gitStash,
   gitStashList,
@@ -104,6 +105,7 @@ export function SourceControlPanel({ repo, onDiff, onClose, onChanged }: SourceC
     [repo, refresh, onChanged],
   );
 
+  const ignore = (path: string) => repo && act(() => gitIgnoreAdd(repo, path));
   const stage = (paths: string[]) => repo && act(() => gitStage(repo, paths));
   const unstage = (paths: string[]) => repo && act(() => gitUnstage(repo, paths));
   const commit = () =>
@@ -152,6 +154,17 @@ export function SourceControlPanel({ repo, onDiff, onClose, onChanged }: SourceC
           <span className="scm__filename">{basePathName(change.path)}</span>
           <span className="scm__filedir">{dirOf(change.path)}</span>
         </button>
+        {action === 'stage' && code === '??' ? (
+          <button
+            type="button"
+            className="scm__action scm__action--text"
+            aria-label={`Ignore ${change.path}`}
+            disabled={busy}
+            onClick={() => void ignore(change.path)}
+          >
+            Ignore
+          </button>
+        ) : null}
         <button
           type="button"
           className="scm__action"
