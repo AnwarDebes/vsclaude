@@ -1,12 +1,22 @@
 import { describe, expect, it } from 'vitest';
-import { detectNpmTasks, parseTasksJson } from '../lib/tasks';
+import { classifyTaskGroup, detectNpmTasks, parseTasksJson } from '../lib/tasks';
+
+describe('classifyTaskGroup', () => {
+  it('classifies build and test names', () => {
+    expect(classifyTaskGroup('build')).toBe('build');
+    expect(classifyTaskGroup('build:web')).toBe('build');
+    expect(classifyTaskGroup('test')).toBe('test');
+    expect(classifyTaskGroup('test:unit')).toBe('test');
+    expect(classifyTaskGroup('lint')).toBeUndefined();
+  });
+});
 
 describe('detectNpmTasks', () => {
   it('turns each npm script into a task that runs npm run <name>', () => {
-    const json = JSON.stringify({ scripts: { build: 'tsc -b', test: 'vitest' } });
+    const json = JSON.stringify({ scripts: { build: 'tsc -b', dev: 'vite' } });
     expect(detectNpmTasks(json)).toEqual([
-      { id: 'build', label: 'build', command: 'npm run build' },
-      { id: 'test', label: 'test', command: 'npm run test' },
+      { id: 'build', label: 'build', command: 'npm run build', group: 'build' },
+      { id: 'dev', label: 'dev', command: 'npm run dev', group: undefined },
     ]);
   });
 
@@ -48,5 +58,16 @@ describe('parseTasksJson', () => {
   it('returns nothing for invalid JSON or no tasks array', () => {
     expect(parseTasksJson('{ not json')).toEqual([]);
     expect(parseTasksJson(JSON.stringify({ version: '2.0.0' }))).toEqual([]);
+  });
+
+  it('reads the task group as a string or an object', () => {
+    const json = JSON.stringify({
+      tasks: [
+        { label: 'b', command: 'make', group: 'build' },
+        { label: 't', command: 'ctest', group: { kind: 'test', isDefault: true } },
+        { label: 'x', command: 'echo' },
+      ],
+    });
+    expect(parseTasksJson(json).map((t) => t.group)).toEqual(['build', 'test', undefined]);
   });
 });

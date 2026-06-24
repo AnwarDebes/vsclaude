@@ -436,6 +436,21 @@ test.describe('vsclaude shell', () => {
     await expect(option.getByText('View History', { exact: true })).toBeVisible();
   });
 
+  test('run build task reports when none is configured', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    const runCommand = async (query: string) => {
+      await page.keyboard.press('Control+KeyK');
+      const palette = page.getByRole('dialog', { name: /command palette/i });
+      await palette.getByPlaceholder(/type a command/i).fill(query);
+      await page.keyboard.press('Enter');
+    };
+    await runCommand('tasks run build');
+    await runCommand('notifications show');
+    const center = page.getByRole('dialog', { name: 'Notifications' });
+    await expect(center.getByText(/no build task found/i)).toBeVisible();
+  });
+
   test('the notification center collects messages', async ({ page }) => {
     await page.goto('/');
     await page.getByText('Claude Code, in motion').click();

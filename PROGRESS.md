@@ -5,7 +5,7 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus fifty-six parity slices, the last fifty-five
+2026-06-24. Session 3 (Step 0 plus fifty-seven parity slices, the last fifty-six
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
@@ -17,7 +17,21 @@ wheel zoom, follow system theme, command categories, output log levels, diff set
 json schemas, bracket guides and large-file mode, in-file find, terminal find,
 terminal menu, terminal tab rename, explorer problem decorations, search history,
 tasks.json loading, git push/pull/fetch, commit amend, commit revert, on-save trim,
-settings JSON editor, reset layout, task variables.
+settings JSON editor, reset layout, task variables, task groups.
+
+## Slice 57: task groups and a default build task (done)
+
+Build and test groups (catalog 5.11).
+
+- **Groups** (`lib/tasks.ts`): tasks carry a build or test group; parseTasksJson reads
+  the tasks.json group (string or object), and classifyTaskGroup classifies script
+  names. Unit tested.
+- **Command**: Tasks: Run Build Task runs the first build-group task, or reports when
+  there is none.
+- **Quality**: 360 unit tests (358 plus 2, after updating the existing detectNpmTasks
+  test for the new group), typecheck, lint clean (no Rust change), the renderer build
+  succeeds, and 43 Playwright e2e pass (the new one runs build with no task and reads the
+  notification). Matrix 5.11 task-groups row moved to Partial.
 
 ## Slice 56: task variable substitution (done)
 

@@ -25,7 +25,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.8 | Search and replace across files | 5 | 2 | 5 | 0 |
 | 5.9 | Source control and git | 7 | 9 | 8 | 0 |
 | 5.10 | Integrated terminal | 6 | 7 | 6 | 0 |
-| 5.11 | Tasks (VS Code task support) | 0 | 6 | 3 | 0 |
+| 5.11 | Tasks (VS Code task support) | 0 | 7 | 2 | 0 |
 | 5.12 | Debugging (Debug Adapter Protocol) | 0 | 0 | 9 | 0 |
 | 5.13 | Snippets and Emmet | 1 | 2 | 2 | 0 |
 | 5.14 | Settings and configuration | 2 | 3 | 4 | 1 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 10 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 2 | 6 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 4 | 4 | 0 |
-| TOTAL | | 91 | 114 | 119 | 5 |
+| TOTAL | | 91 | 115 | 118 | 5 |
 
 ## Legend
 
@@ -309,7 +309,7 @@ Task support has started: npm scripts are auto-detected from the workspace packa
 | tasks.json file format and loading | Partial | lib/tasks.ts parseTasksJson reads .vscode/tasks.json (label, command, args), unit tested; App loads it alongside package.json scripts and registers Run Task commands. | Command tasks only; no problem matchers, task type semantics, or variable substitution. |
 | Task auto-detection (npm scripts, gradle, etc.) | Partial | detectNpmTasks (lib/tasks.ts) reads the workspace package.json scripts; App registers each as a Run Task command. Unit tested. | Only npm scripts; no gradle, make, or other build systems. |
 | Task quick-pick UI and palette integration | Partial | Detected tasks appear as Run Task: <name> commands in the palette, each running in a new terminal (requestRunInTerminal). | No dedicated task picker view, task groups, or default build and test tasks. |
-| Task groups (build, test) and default task | Missing | Classification is post-hoc, not declarative. | No task groups or default task. |
+| Task groups (build, test) and default task | Partial | Tasks carry a build or test group (parseTasksJson reads the tasks.json group; detectNpmTasks classifies script names via classifyTaskGroup, unit tested); Tasks: Run Build Task runs the first build-group task. | No persisted default task and no Ctrl or Cmd plus Shift plus B keybinding wired. |
 | Compound tasks and dependencies | Missing | Terminal runs one command per command_run event. | No sequencing or dependency declarations. |
 | Problem matchers (output parsing into Problems panel) | Missing | Terminal spec states it does not parse output for meaning; no matcher logic in packages/editor/src. | No regex output parsing or error extraction. |
 | Background/watch tasks with begin/end patterns | Missing | Long-lived commands run via command_run but with no background designation. | No background flag or began/ended detection. |

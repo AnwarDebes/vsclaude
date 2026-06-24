@@ -624,22 +624,33 @@ export function App() {
       run: () => setZenMode((z) => !z),
     });
     // Detected npm scripts, each runnable in a new terminal.
+    const runTask = (task: NpmTask) => {
+      const repo = hasWorkspace ? ws.roots[0]?.path ?? '' : '';
+      const file = hasWorkspace ? ws.activePath ?? '' : openFile;
+      const command = substituteVariables(task.command, {
+        workspaceFolder: repo,
+        file,
+        fileBasename: file ? basePathName(file) : '',
+      });
+      appendLog(`Running task: ${command}`);
+      requestRunInTerminal(command, task.label);
+    };
+    r.register({
+      id: 'tasks-run-build',
+      title: 'Tasks: Run Build Task',
+      keywords: ['task', 'run', 'build', 'compile'],
+      run: () => {
+        const build = npmTasks.find((t) => t.group === 'build');
+        if (build) runTask(build);
+        else addNotification('info', 'No build task found in this folder.');
+      },
+    });
     for (const task of npmTasks) {
       r.register({
         id: `task-${task.id}`,
         title: `Run Task: ${task.label}`,
         keywords: ['task', 'run', 'npm', 'script', task.label],
-        run: () => {
-          const repo = hasWorkspace ? ws.roots[0]?.path ?? '' : '';
-          const file = hasWorkspace ? ws.activePath ?? '' : openFile;
-          const command = substituteVariables(task.command, {
-            workspaceFolder: repo,
-            file,
-            fileBasename: file ? basePathName(file) : '',
-          });
-          appendLog(`Running task: ${command}`);
-          requestRunInTerminal(command, task.label);
-        },
+        run: () => runTask(task),
       });
     }
     // The editor command surface: Monaco's built-in editing actions, run on the
