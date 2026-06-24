@@ -754,6 +754,21 @@ test.describe('vsclaude shell', () => {
     await expect(preview.getByText('Zoom 125%')).toBeVisible();
   });
 
+  test('media player opens an audio file with controls', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'chime.wav', exact: true }).click();
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('media open player');
+    await page.keyboard.press('Enter');
+    const player = page.getByRole('dialog', { name: /media player for chime\.wav/i });
+    await expect(player).toBeVisible();
+    const audio = player.getByLabel('chime.wav');
+    await expect(audio).toHaveAttribute('controls', '');
+    await expect(audio).toHaveAttribute('src', /^data:audio\/wav/);
+  });
+
   test('markdown preview renders the active markdown file', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('button', { name: 'README.md', exact: true }).click();

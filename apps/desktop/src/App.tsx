@@ -63,6 +63,8 @@ import { DiffModal, type DiffTarget } from './components/DiffModal';
 import { MarkdownPreview, type MarkdownTarget } from './components/MarkdownPreview';
 import { ImagePreview, type ImageTarget } from './components/ImagePreview';
 import { isImagePath, isSvgPath, svgDataUrl } from './lib/preview';
+import { MediaPlayer, type MediaTarget } from './components/MediaPlayer';
+import { isMediaPath, mediaKind } from './lib/media';
 import { HexView, type HexTarget } from './components/HexView';
 import { ProcessInfoModal } from './components/ProcessInfoModal';
 import { AccessibilityHelp } from './components/AccessibilityHelp';
@@ -136,6 +138,7 @@ export function App() {
   const [diffTarget, setDiffTarget] = useState<DiffTarget | null>(null);
   const [markdownTarget, setMarkdownTarget] = useState<MarkdownTarget | null>(null);
   const [imageTarget, setImageTarget] = useState<ImageTarget | null>(null);
+  const [mediaTarget, setMediaTarget] = useState<MediaTarget | null>(null);
   const [hexTarget, setHexTarget] = useState<HexTarget | null>(null);
   const [processInfoOpen, setProcessInfoOpen] = useState(false);
   const [snippetsOpen, setSnippetsOpen] = useState(false);
@@ -600,6 +603,30 @@ export function App() {
           return;
         }
         setImageTarget({ name: basePathName(path), src });
+      },
+    });
+    r.register({
+      id: 'media-open',
+      title: 'Media: Open Player',
+      keywords: ['media', 'audio', 'video', 'play', 'sound'],
+      run: () => {
+        const path = hasWorkspace ? ws.activePath : openFile;
+        const kind = path ? mediaKind(path) : null;
+        if (!path || !kind || !isMediaPath(path)) {
+          addNotification('info', 'Open an audio or video file to play it.');
+          return;
+        }
+        const content = hasWorkspace
+          ? ws.activeDoc?.draft ?? ''
+          : editedContents[openFile] ?? demoContentFor(openFile);
+        // Media is binary; the source must already be a data URL. The native file
+        // read is text-only (read_to_string), so a real media file is not yet
+        // playable: the browser demo stores a data URL.
+        if (!content.startsWith('data:')) {
+          addNotification('info', 'Native media playback is not wired yet.');
+          return;
+        }
+        setMediaTarget({ name: basePathName(path), src: content, kind });
       },
     });
     r.register({
@@ -1178,6 +1205,7 @@ export function App() {
       <DiffModal target={diffTarget} onClose={() => setDiffTarget(null)} />
       <MarkdownPreview target={markdownTarget} onClose={() => setMarkdownTarget(null)} />
       <ImagePreview target={imageTarget} onClose={() => setImageTarget(null)} />
+      <MediaPlayer target={mediaTarget} onClose={() => setMediaTarget(null)} />
       <HexView target={hexTarget} onClose={() => setHexTarget(null)} />
       <ProcessInfoModal open={processInfoOpen} onClose={() => setProcessInfoOpen(false)} />
       <AccessibilityHelp open={a11yHelpOpen} onClose={() => setA11yHelpOpen(false)} />

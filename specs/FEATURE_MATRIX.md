@@ -36,9 +36,9 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.19 | Remote development and tunnels | 0 | 0 | 6 | 0 |
 | 5.20 | Accessibility (full) | 1 | 13 | 2 | 0 |
 | 5.21 | Productivity and workspace lifecycle | 6 | 7 | 4 | 0 |
-| 5.22 | Custom editors, webviews, and previews | 2 | 4 | 4 | 0 |
+| 5.22 | Custom editors, webviews, and previews | 2 | 5 | 3 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 100 | 124 | 104 | 5 |
+| TOTAL | | 100 | 125 | 103 | 5 |
 
 ## Legend
 
@@ -511,7 +511,7 @@ The repository implements a substantial subset of productivity features. Core ca
 
 ## 5.22 Custom editors, webviews, and previews
 
-The repository has a growing preview surface (an image viewer for raster and SVG files with dimensions and zoom, and a read-only hex dump) on top of text-based Monaco editing with language-specific highlighting. Still absent are custom document models, backup systems, webview messaging, content security policies, an audio/video player, and custom data contributions. The agent-edit and diff surface (spec section 11) is designed but the code shows only basic edit visualization with text diffs. Preview tabs exist in the spec but the implementation has basic tab management without preview semantics.
+The repository has a growing preview surface (an image viewer for raster and SVG files with dimensions and zoom, and a read-only hex dump) on top of text-based Monaco editing with language-specific highlighting. Still absent are custom document models, backup systems, webview messaging, content security policies, and custom data contributions. The agent-edit and diff surface (spec section 11) is designed but the code shows only basic edit visualization with text diffs. Preview tabs exist in the spec but the implementation has basic tab management without preview semantics.
 
 | Capability | Status | Evidence | What is missing |
 | --- | --- | --- | --- |
@@ -519,7 +519,7 @@ The repository has a growing preview surface (an image viewer for raster and SVG
 | Webview API (messaging, state, CSP) | Missing | No webview or messaging infrastructure; ipc.ts has only file/fs/session/pty channels. | No webview creation, message passing, state, CSP, or events. |
 | Image preview (inline plus viewer) | Partial | Image: Open Preview renders raster images (lib/preview.ts isRasterImagePath and isImagePath, unit tested) in the ImagePreview viewer, which reports natural pixel dimensions on load and supports clamped zoom in and out (clampZoom and zoomPercent, unit tested); an e2e covers a PNG. | No pan or rotate. Native raster preview is not yet wired (the file read is text-only via read_to_string, which rejects binary), so raster works only from a data URL in the browser demo; the native command shows a notice instead of a broken image. |
 | SVG viewer (zoom/pan) | Partial | Image: Open Preview renders an active .svg through a safe data URL in the shared ImagePreview viewer (lib/preview.ts, unit tested), which now offers zoom in and out and reports dimensions. | No pan or rotate. |
-| Audio/video media player | Missing | No media elements or handlers in components or panels. | No audio/video player or controls. |
+| Audio/video media player | Partial | Media: Open Player opens audio and video files (lib/media.ts isMediaPath and mediaKind, unit tested) in a MediaPlayer with native browser controls; an e2e covers a WAV. | No playlist, captions, or playback-speed control. Native playback is not yet wired (the file read is text-only via read_to_string), so media works only from a data URL in the browser demo; the native command shows a notice. |
 | Hex viewer and binary editor | Partial | View: Hex shows a hex dump of the active file (hexDump in lib/hex.ts, unit tested) in HexView. An e2e covers it. | Read-only, no byte editing or endianness toggle, and bytes are derived from code units rather than a true binary read. |
 | Custom data contribution (HTML/CSS) | Missing | No customData files; plugin contributions list states/themes/panels/providers/visualizations only. | No HTML/CSS schema contribution or validation. |
 | Preview tabs (single-click ephemeral) | Partial | Spec 5.2 specifies them; tabs.ts has no preview field; WorkspaceEditor.tsx has basic tab management. | No preview state, italic styling, replacement, or promotion. |

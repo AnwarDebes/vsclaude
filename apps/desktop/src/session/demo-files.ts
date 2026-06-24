@@ -14,6 +14,10 @@ export const demoFileContents: Record<string, string> = {
   // is read from disk instead.
   'assets/pixie.png':
     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAIElEQVR42mPwr/n/nxLMMGoAdgNwgVED6GnAaEokzQAAPDf0SxcD/9EAAAAASUVORK5CYII=',
+  // A short WAV tone (data URL) so the Media player can demo audio playback in the
+  // browser. In the native app a real media file is read from disk instead.
+  'assets/chime.wav':
+    'data:audio/wav;base64,UklGRhQBAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YfAAAACAjZmip6ejmo6Bc2deWFhcZHB9i5ehpqeknJGDdmlfWVhbYm16iJWfpqelnpOGeGthWlhaYWt4hpOepaemn5WIem1iW1hZX2l2g5GcpKemoZeLfXBkXFhYXmdzgY6ao6enopmNf3JmXVhYXGVxfoyYoaeno5uPgnRoXllYW2NufImWoKanpJ2ShXdqYFlYWmFseYeUnqWopZ6Uh3lsYVpYWWBqd4WSnaSnpqCWiXxuY1tYWV5odIKPm6Onp6GYjH5xZVxYWF1mcoCNmaKnp6OajoFzZ15YWFxkcH2Ll6Gmp6SckYN2aV9ZWFtibXqIlZ8=',
   'src/auth/login-form.tsx': `import { useState } from 'react';
 import { useAuth } from './use-auth';
 

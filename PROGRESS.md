@@ -24,6 +24,20 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 84: audio and video media player (done)
+
+A media player for audio and video files (catalog 5.22).
+
+- **Detector** (`lib/media.ts`): `isAudioPath`, `isVideoPath`, `isMediaPath`, and
+  `mediaKind` classify by extension. Pure and unit tested.
+- **Player** (`MediaPlayer.tsx`): renders native `<audio>` or `<video>` controls and
+  shows a message on load failure; Media: Open Player opens the active media file. A
+  short demo WAV (`assets/chime.wav`) drives the browser e2e. Native playback is gated
+  with a notice (the file read is text-only), so media is browser-demo-only for now.
+- **Quality**: unit tests, typecheck, lint clean (no Rust change), the renderer build
+  succeeds, and the e2e asserts the audio element and controls. Matrix 5.22
+  audio/video row moved Missing to Partial.
+
 ## Slice 83: raster image preview with dimensions and zoom (done)
 
 Extend the image viewer beyond SVG (catalog 5.22).
