@@ -5,7 +5,7 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus forty-two parity slices, the last forty-one
+2026-06-24. Session 3 (Step 0 plus forty-three parity slices, the last forty-two
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
@@ -14,7 +14,19 @@ more editor settings, markdown preview, document links, color decorators, outlin
 git history, release notes, notification center, branch delete and rename, git tags,
 gitignore action, svg preview, snippets, line height and font weight, ui scale and
 wheel zoom, follow system theme, command categories, output log levels, diff setting,
-json schemas, bracket guides and large-file mode.
+json schemas, bracket guides and large-file mode, in-file find.
+
+## Slice 43: in-file find and replace (done)
+
+Verifies Monaco's find/replace (catalog 5.1; the row moved to Done).
+
+- **Config**: EditorPanel sets find.seedSearchStringFromSelection and
+  autoFindInSelection, making seed-from-selection and find-in-selection explicit on
+  top of Monaco's built-in find and replace widget (Ctrl+F, Ctrl+H: regex, case,
+  whole-word, counter, navigation, preserve-case).
+- **Quality**: 336 unit tests, typecheck, lint clean (no Rust change), the renderer
+  build succeeds, and 35 Playwright e2e pass (the new one opens the find widget with
+  Ctrl+F). Matrix 5.1 in-file find row moved to Done.
 
 ## Slice 42: bracket pair guides and large-file optimizations (done)
 

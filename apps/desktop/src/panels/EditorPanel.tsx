@@ -103,6 +103,7 @@ export function EditorPanel({ path, value, language, onChange, onSave }: EditorP
           cursorBlinking: 'smooth',
           largeFileOptimizations: true,
           maxTokenizationLineLength: 20000,
+          find: { seedSearchStringFromSelection: 'always', autoFindInSelection: 'multiline' },
           ...editorSettingsToMonaco(settings),
         }}
       />

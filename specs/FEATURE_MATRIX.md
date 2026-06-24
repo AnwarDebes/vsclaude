@@ -15,7 +15,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 
 | Section | Title | Done | Partial | Missing | Not planned |
 | --- | --- | --- | --- | --- | --- |
-| 5.1 | Text editing core | 10 | 14 | 3 | 0 |
+| 5.1 | Text editing core | 11 | 14 | 2 | 0 |
 | 5.2 | Code intelligence (LSP language features) | 1 | 9 | 14 | 0 |
 | 5.3 | Editor advanced surface | 7 | 5 | 0 | 0 |
 | 5.4 | Diff and merge | 3 | 4 | 1 | 1 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 10 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 2 | 6 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 4 | 4 | 0 |
-| TOTAL | | 86 | 103 | 135 | 5 |
+| TOTAL | | 87 | 103 | 134 | 5 |
 
 ## Legend
 
@@ -56,7 +56,7 @@ The editor integrates Monaco 0.55.1, and its editing actions are now exposed: a 
 | Basic cursor and selection | Done | EditorPanel.tsx passes through Monaco; single cursor and selection work via standard input. | |
 | Multi-cursor (add above/below, next/all occurrences) | Done | editor-commands.ts registers Add Cursor Above and Below, Add Cursors to Line Ends, Add Selection to Next Find Match, and Select All Occurrences in the palette, run via runEditorAction. | |
 | Column/box selection | Partial | EDITOR_SPEC.md line 310 notes column selection; Monaco supports it by default. | No explicit config or UI; depends on unverified defaults. |
-| Find and replace in file (regex, case, whole word, in-selection, count, seed, preserve case) | Missing | No find/replace UI in EditorPanel.tsx; spec sections 8.1-8.2 cover only global search and quick-open. | No in-file widget, no Ctrl+H, no toggles, counter, navigation, or selection seeding. |
+| Find and replace in file (regex, case, whole word, in-selection, count, seed, preserve case) | Done | Monaco's find and replace widget is active (Ctrl+F, Ctrl+H) with regex, case, whole-word, in-selection, a match counter, navigation, and preserve-case; EditorPanel.tsx sets seedSearchStringFromSelection and autoFindInSelection. An e2e opens the widget. | |
 | Smart expand/shrink selection by syntax | Done | editor-commands.ts registers Expand Selection and Shrink Selection (editor.action.smartSelect.expand and shrink). | |
 | Line operations (move/copy, delete, insert, join, indent/outdent, transpose, sort, trim) | Done | editor-commands.ts registers delete, move up and down, copy up and down, insert above and below, join, indent and outdent, transpose, sort ascending and descending, and trim trailing whitespace. | |
 | Case transforms (upper/lower/title) | Done | editor-commands.ts registers Transform to Uppercase, Lowercase, and Title Case. | |

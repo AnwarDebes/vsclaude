@@ -347,6 +347,15 @@ test.describe('vsclaude shell', () => {
     await expect(settings.getByText('Bracket Pair Guides', { exact: true })).toBeVisible();
   });
 
+  test('the editor opens the find widget with Ctrl+F', async ({ page }) => {
+    await page.goto('/');
+    const editor = page.locator('.monaco-editor').first();
+    await expect(editor).toBeVisible();
+    await editor.click();
+    await page.keyboard.press('Control+KeyF');
+    await expect(page.getByRole('textbox', { name: 'Find' })).toBeVisible();
+  });
+
   test('the palette shows a command category badge', async ({ page }) => {
     await page.goto('/');
     await page.getByText('Claude Code, in motion').click();
