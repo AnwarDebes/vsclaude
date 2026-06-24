@@ -4,6 +4,7 @@ import {
   closeTerminal,
   EMPTY_TERMINAL_TABS,
   openTerminal,
+  renameTerminal,
   type TerminalTabsState,
 } from '@vsclaude/terminal';
 import { TerminalPanel } from '../panels/TerminalPanel';
@@ -37,6 +38,21 @@ export function TerminalTabs({ fallbackLines, cwd }: TerminalTabsProps) {
   const [state, setState] = useState<TerminalTabsState>(() =>
     openTerminal(EMPTY_TERMINAL_TABS, { id: 'term-1', title: 'Terminal 1' }),
   );
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editValue, setEditValue] = useState('');
+
+  const startRename = (id: string, title: string) => {
+    setEditingId(id);
+    setEditValue(title);
+  };
+  const commitRename = () => {
+    if (editingId && editValue.trim()) {
+      const id = editingId;
+      const title = editValue.trim();
+      setState((s) => renameTerminal(s, id, title));
+    }
+    setEditingId(null);
+  };
 
   const addTerminal = useCallback((command?: string, title?: string) => {
     counter.current += 1;
@@ -69,15 +85,36 @@ export function TerminalTabs({ fallbackLines, cwd }: TerminalTabsProps) {
           const isActive = tab.id === state.activeId;
           return (
             <div key={tab.id} className={`terminal-tab${isActive ? ' is-active' : ''}`}>
-              <button
-                type="button"
-                role="tab"
-                aria-selected={isActive}
-                className="terminal-tab__label"
-                onClick={() => setState((s) => activateTerminal(s, tab.id))}
-              >
-                {tab.title}
-              </button>
+              {editingId === tab.id ? (
+                <input
+                  className="terminal-tab__rename"
+                  aria-label="Rename terminal"
+                  value={editValue}
+                  autoFocus
+                  onChange={(e) => setEditValue(e.target.value)}
+                  onBlur={commitRename}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      commitRename();
+                    } else if (e.key === 'Escape') {
+                      e.preventDefault();
+                      setEditingId(null);
+                    }
+                  }}
+                />
+              ) : (
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  className="terminal-tab__label"
+                  onClick={() => setState((s) => activateTerminal(s, tab.id))}
+                  onDoubleClick={() => startRename(tab.id, tab.title)}
+                >
+                  {tab.title}
+                </button>
+              )}
               {state.tabs.length > 1 ? (
                 <button
                   type="button"

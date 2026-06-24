@@ -347,6 +347,17 @@ test.describe('vsclaude shell', () => {
     await expect(settings.getByText('Bracket Pair Guides', { exact: true })).toBeVisible();
   });
 
+  test('a terminal tab can be renamed by double-click', async ({ page }) => {
+    await page.goto('/');
+    const tab = page.getByRole('tab', { name: 'Terminal 1' });
+    await expect(tab).toBeVisible();
+    await tab.dblclick();
+    const input = page.getByRole('textbox', { name: 'Rename terminal' });
+    await input.fill('Build');
+    await input.press('Enter');
+    await expect(page.getByRole('tab', { name: 'Build' })).toBeVisible();
+  });
+
   test('the terminal has a right-click menu with Clear', async ({ page }) => {
     await page.goto('/');
     const host = page.locator('.terminal-host').first();

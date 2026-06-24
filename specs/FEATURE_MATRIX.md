@@ -24,7 +24,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.7 | File explorer and workspace management | 6 | 2 | 6 | 3 |
 | 5.8 | Search and replace across files | 5 | 1 | 6 | 0 |
 | 5.9 | Source control and git | 6 | 8 | 10 | 0 |
-| 5.10 | Integrated terminal | 6 | 6 | 7 | 0 |
+| 5.10 | Integrated terminal | 6 | 7 | 6 | 0 |
 | 5.11 | Tasks (VS Code task support) | 0 | 4 | 5 | 0 |
 | 5.12 | Debugging (Debug Adapter Protocol) | 0 | 0 | 9 | 0 |
 | 5.13 | Snippets and Emmet | 1 | 2 | 2 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 10 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 2 | 6 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 4 | 4 | 0 |
-| TOTAL | | 90 | 105 | 129 | 5 |
+| TOTAL | | 90 | 106 | 128 | 5 |
 
 ## Legend
 
@@ -290,7 +290,7 @@ The terminal has a real PTY backend (portable-pty via Rust), a typed IPC protoco
 | Find in terminal | Done | TerminalPanel.tsx loads the search addon and opens a find bar on Ctrl or Cmd plus F (intercepted via attachCustomKeyEventHandler) with next, previous, and match highlighting. An e2e opens it. | |
 | Copy, paste, copy-on-selection | Partial | The terminal context menu offers Copy (term.getSelection to the clipboard), Paste (clipboard to the pty), and Select All. | No copy-on-selection toggle. |
 | Right-click options (context menu) | Done | TerminalPanel.tsx onContextMenu opens a menu with Copy, Paste, Select All, and Clear. An e2e opens it. | |
-| Rename, change icon/color, tab description | Missing | No rename, icon, color, or description UI; no tab metadata. | No tab customization. |
+| Rename, change icon/color, tab description | Partial | Double-clicking a terminal tab renames it inline (renameTerminal reducer, unit tested). An e2e covers it. | No tab icon, color, or description. |
 | Sticky scroll and scrollback config | Partial | FitAddon plus xterm default scrollback (10,000). | No scrollback limit picker or sticky-scroll toggle. |
 | Clear terminal | Done | The terminal context menu Clear calls term.clear(). | |
 | Persistence and reconnection across reloads | Missing | TerminalPanel creates a PTY on mount and kills on unmount; no pty_list to re-attach. | No session persistence or recovery. |

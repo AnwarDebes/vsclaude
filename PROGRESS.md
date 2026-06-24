@@ -5,7 +5,7 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus forty-five parity slices, the last forty-four
+2026-06-24. Session 3 (Step 0 plus forty-six parity slices, the last forty-five
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
@@ -15,7 +15,17 @@ git history, release notes, notification center, branch delete and rename, git t
 gitignore action, svg preview, snippets, line height and font weight, ui scale and
 wheel zoom, follow system theme, command categories, output log levels, diff setting,
 json schemas, bracket guides and large-file mode, in-file find, terminal find,
-terminal menu.
+terminal menu, terminal tab rename.
+
+## Slice 46: terminal tab rename (done)
+
+Inline tab rename (catalog 5.10).
+
+- **UI**: double-clicking a terminal tab opens an inline input; Enter commits via the
+  existing renameTerminal reducer (already unit tested), Escape cancels.
+- **Quality**: 336 unit tests, typecheck, lint clean (no Rust change), the renderer
+  build succeeds, and 38 Playwright e2e pass (the new one renames a tab to Build).
+  Matrix 5.10 tab-rename row moved to Partial.
 
 ## Slice 45: terminal context menu and clear (done)
 

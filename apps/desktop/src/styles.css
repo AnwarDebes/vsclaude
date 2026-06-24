@@ -1347,6 +1347,16 @@ body {
 .terminal-tab.is-active .terminal-tab__label {
   color: var(--color-accent);
 }
+.terminal-tab__rename {
+  font: inherit;
+  font-size: 0.72rem;
+  width: 90px;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-sm, 4px);
+  padding: 2px 6px;
+}
 .terminal-tab__close {
   font: inherit;
   font-size: 0.8rem;
