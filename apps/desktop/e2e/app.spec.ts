@@ -645,6 +645,16 @@ test.describe('vsclaude shell', () => {
     await expect(panel.getByText('vsclaude ready.')).toHaveCount(0);
   });
 
+  test('the narration log opens as a log region', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('narration log');
+    await page.keyboard.press('Enter');
+    await expect(page.getByRole('log', { name: 'Narration log' })).toBeVisible();
+  });
+
   test('the outline view lists markdown headings', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('button', { name: 'README.md', exact: true }).click();

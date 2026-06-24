@@ -45,6 +45,7 @@ export const MENU_BAR: readonly Menu[] = [
       { label: 'Source Control', command: 'view-scm' },
       { label: 'Output', command: 'view-output' },
       { label: 'Outline', command: 'view-outline' },
+      { label: 'Narration Log', command: 'view-narration-log' },
       { label: 'Zen Mode', command: 'toggle-zen' },
       { label: 'Reset Layout', command: 'view-reset-layout' },
     ],

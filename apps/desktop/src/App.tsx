@@ -39,6 +39,7 @@ import { Breadcrumbs } from './components/Breadcrumbs';
 import { ProblemsPanel } from './components/ProblemsPanel';
 import { OutputPanel } from './components/OutputPanel';
 import { OutlinePanel } from './components/OutlinePanel';
+import { NarrationLog } from './components/NarrationLog';
 import { appendLog } from './lib/output-log';
 import { SearchPanel } from './components/SearchPanel';
 import { SourceControlPanel } from './components/SourceControlPanel';
@@ -129,7 +130,7 @@ export function App() {
   const [editedContents, setEditedContents] = useState<Record<string, string>>({});
   const [reviewOpen, setReviewOpen] = useState(false);
   const [bottomPanel, setBottomPanel] = useState<
-    'none' | 'problems' | 'search' | 'scm' | 'output' | 'outline'
+    'none' | 'problems' | 'search' | 'scm' | 'output' | 'outline' | 'narration'
   >('none');
   const [gitNonce, setGitNonce] = useState(0);
   const [diffTarget, setDiffTarget] = useState<DiffTarget | null>(null);
@@ -710,6 +711,12 @@ export function App() {
       run: () => setBottomPanel((p) => (p === 'outline' ? 'none' : 'outline')),
     });
     r.register({
+      id: 'view-narration-log',
+      title: 'View: Narration Log',
+      keywords: ['narration', 'log', 'accessibility', 'captions', 'history', 'screen', 'reader'],
+      run: () => setBottomPanel((p) => (p === 'narration' ? 'none' : 'narration')),
+    });
+    r.register({
       id: 'view-reset-layout',
       title: 'View: Reset Layout',
       keywords: ['reset', 'layout', 'default', 'restore', 'view'],
@@ -1114,6 +1121,8 @@ export function App() {
           onReveal={(line) => gotoLine(line, 1)}
           onClose={() => setBottomPanel('none')}
         />
+      ) : bottomPanel === 'narration' ? (
+        <NarrationLog narration={session.narration} onClose={() => setBottomPanel('none')} />
       ) : null}
 
       <StatusBar items={statusItems} onCommand={(id) => void registry.run(id)} />

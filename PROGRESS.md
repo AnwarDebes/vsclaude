@@ -22,7 +22,17 @@ at-symbol navigation, hex view, notification toasts, inlay hints, menu bar,
 edit menu, minimap config, diff settings, process info, snippet browser,
 accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
-git stash manager, theme export, auto-reveal.
+git stash manager, theme export, auto-reveal, narration log.
+
+## Slice 81: narration log panel (done)
+
+An accessible narration history (catalog 5.20).
+
+- **Panel** (`NarrationLog.tsx`, role='log'): View: Narration Log opens a bottom-drawer
+  log of the narration captions, also in the View menu.
+- **Quality**: 400 unit tests, typecheck, lint clean (no Rust change), the renderer build
+  succeeds, and 61 Playwright e2e pass (the new one opens the log region). Matrix 5.20
+  narration-log row moved to Partial.
 
 ## Slice 80: auto-reveal active file (done)
 

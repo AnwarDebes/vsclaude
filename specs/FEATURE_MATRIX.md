@@ -34,11 +34,11 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.17 | Extensions and plugin ecosystem | 5 | 2 | 11 | 0 |
 | 5.18 | Notebooks | 0 | 0 | 6 | 0 |
 | 5.19 | Remote development and tunnels | 0 | 0 | 6 | 0 |
-| 5.20 | Accessibility (full) | 1 | 12 | 3 | 0 |
+| 5.20 | Accessibility (full) | 1 | 13 | 2 | 0 |
 | 5.21 | Productivity and workspace lifecycle | 6 | 7 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 3 | 5 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 100 | 121 | 107 | 5 |
+| TOTAL | | 100 | 122 | 106 | 5 |
 
 ## Legend
 
@@ -482,7 +482,7 @@ The repository implements foundational accessibility but remains incomplete agai
 | Accessibility testing and CI gates | Missing | addon-a11y present but no axe-core, vitest-axe, narrator, focus, or keyboard e2e tests. | No axe integration, contrast checker, narrator tests, announcer tests, keyboard/reduced-motion e2e, CVD snapshots, or reflow tests. |
 | Permission request dialog accessibility | Missing | No permission dialog component; DiffReview has role='dialog' but no permission safety pattern. | No alertdialog, aria-modal, focus trap/restore, safe default focus, or assertive narration with tool/inputs. |
 | ARIA patterns for chat, terminal, editor, swarm | Partial | Terminal section aria-label; editor tablist/tab/tabpanel/status; swarm cards with status labels. | No chat live region, terminal screen-reader mode, swarm tree hierarchy, diff line-count labels, or token meter values. |
-| Narration log panel accessible history (Ctrl+.) | Missing | Narration.tsx shows a caption plus log but not a separate drawer; no Ctrl/Cmd+. command; entries are strings. | No log panel with role='log' and timestamps, Ctrl/Cmd+. command, or jump-to-event rows. |
+| Narration log panel accessible history (Ctrl+.) | Partial | View: Narration Log opens a bottom-drawer log region (NarrationLog, role='log') listing the narration captions, reachable from the View menu. An e2e opens it. | No Ctrl or Cmd plus dot keybinding (it would conflict with Monaco code actions), timestamps, or jump-to-event rows. |
 | Accessible keyboard help and context-sensitive help | Partial | Help: Accessibility Help opens an aria-modal dialog (AccessibilityHelp) of keyboard and screen-reader guidance (ACCESSIBILITY_HELP, unit tested), reachable from the Help menu. An e2e opens it. | Not context-sensitive per region; static guidance rather than per-focus help. |
 
 ## 5.21 Productivity and workspace lifecycle
