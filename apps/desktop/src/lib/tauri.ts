@@ -85,3 +85,6 @@ export const gitCheckout = (cwd: string, branch: string): Promise<void> =>
   invoke('git_checkout', { cwd, branch });
 export const gitCreateBranch = (cwd: string, name: string): Promise<void> =>
   invoke('git_create_branch', { cwd, name });
+export const gitStash = (cwd: string): Promise<void> => invoke('git_stash', { cwd });
+export const gitStashPop = (cwd: string): Promise<void> => invoke('git_stash_pop', { cwd });
+export const gitStashList = (cwd: string): Promise<string> => invoke('git_stash_list', { cwd });

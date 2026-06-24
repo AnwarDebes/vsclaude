@@ -3,6 +3,7 @@ import { isAgentEvent, isAgentEventType } from '@vsclaude/contracts';
 import {
   branchLabel,
   captionForAction,
+  countStashes,
   diffSidesForCode,
   gitActionEvent,
   isGitAction,
@@ -143,6 +144,18 @@ describe('diffSidesForCode', () => {
 
   it('drops the working side for a deleted file', () => {
     expect(diffSidesForCode('D ')).toEqual({ head: true, working: false });
+  });
+});
+
+describe('countStashes', () => {
+  it('counts one per non-empty line', () => {
+    const out = 'stash@{0}: WIP on main: abc Work\nstash@{1}: WIP on main: def More\n';
+    expect(countStashes(out)).toBe(2);
+  });
+
+  it('is zero for empty output', () => {
+    expect(countStashes('')).toBe(0);
+    expect(countStashes('\n  \n')).toBe(0);
   });
 });
 

@@ -543,6 +543,14 @@ body {
 .scm__message:focus {
   border-color: var(--color-accent);
 }
+.scm__stashrow {
+  display: flex;
+  gap: var(--space-md);
+  padding: 0 var(--space-md) var(--space-sm);
+}
+.scm__stashrow .scm__groupaction {
+  margin-left: 0;
+}
 .scm__group {
   padding: 4px 0;
 }

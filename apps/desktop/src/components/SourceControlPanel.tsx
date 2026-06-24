@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
+  countStashes,
   parsePorcelainStatus,
   scmGroups,
   type GitFileChange,
@@ -13,6 +14,9 @@ import {
   gitCommitStaged,
   gitCreateBranch,
   gitStage,
+  gitStash,
+  gitStashList,
+  gitStashPop,
   gitStatus,
   gitUnstage,
   isTauri,
@@ -43,6 +47,7 @@ function dirOf(path: string): string {
 export function SourceControlPanel({ repo, onDiff, onClose, onChanged }: SourceControlPanelProps) {
   const [status, setStatus] = useState<GitStatusModel | null>(null);
   const [branches, setBranches] = useState<BranchList | null>(null);
+  const [stashCount, setStashCount] = useState(0);
   const [message, setMessage] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -56,9 +61,14 @@ export function SourceControlPanel({ repo, onDiff, onClose, onChanged }: SourceC
       return;
     }
     try {
-      const [statusText, branchList] = await Promise.all([gitStatus(repo), gitBranches(repo)]);
+      const [statusText, branchList, stashText] = await Promise.all([
+        gitStatus(repo),
+        gitBranches(repo),
+        gitStashList(repo),
+      ]);
       setStatus(parsePorcelainStatus(statusText));
       setBranches(branchList);
+      setStashCount(countStashes(stashText));
       setError(null);
     } catch (e) {
       setError(String(e));
@@ -96,6 +106,8 @@ export function SourceControlPanel({ repo, onDiff, onClose, onChanged }: SourceC
   const unstage = (paths: string[]) => repo && act(() => gitUnstage(repo, paths));
   const commit = () =>
     repo && message.trim() && act(() => gitCommitStaged(repo, message.trim()).then(() => setMessage('')));
+  const stashAll = () => repo && act(() => gitStash(repo));
+  const popStash = () => repo && act(() => gitStashPop(repo));
   const checkout = (branch: string) =>
     repo &&
     act(() => gitCheckout(repo, branch)).then(() => {
@@ -231,6 +243,21 @@ export function SourceControlPanel({ repo, onDiff, onClose, onChanged }: SourceC
               Commit
             </button>
           </div>
+
+          {groups.staged.length + groups.changes.length > 0 || stashCount > 0 ? (
+            <div className="scm__stashrow">
+              {groups.staged.length + groups.changes.length > 0 ? (
+                <button type="button" className="scm__groupaction" disabled={busy} onClick={() => void stashAll()}>
+                  Stash Changes
+                </button>
+              ) : null}
+              {stashCount > 0 ? (
+                <button type="button" className="scm__groupaction" disabled={busy} onClick={() => void popStash()}>
+                  Pop Stash ({stashCount})
+                </button>
+              ) : null}
+            </div>
+          ) : null}
 
           <div className="scm__group">
             <div className="scm__grouphead">

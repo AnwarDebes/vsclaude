@@ -23,7 +23,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.6 | Quick open and command palette | 7 | 0 | 4 | 0 |
 | 5.7 | File explorer and workspace management | 6 | 2 | 6 | 3 |
 | 5.8 | Search and replace across files | 5 | 1 | 6 | 0 |
-| 5.9 | Source control and git | 5 | 6 | 13 | 0 |
+| 5.9 | Source control and git | 5 | 7 | 12 | 0 |
 | 5.10 | Integrated terminal | 3 | 3 | 13 | 0 |
 | 5.11 | Tasks (VS Code task support) | 0 | 2 | 7 | 0 |
 | 5.12 | Debugging (Debug Adapter Protocol) | 0 | 0 | 9 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 6 | 8 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 1 | 7 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 3 | 5 | 0 |
-| TOTAL | | 76 | 82 | 166 | 5 |
+| TOTAL | | 76 | 83 | 165 | 5 |
 
 ## Legend
 
@@ -246,7 +246,7 @@ Project-wide search now ships. The `search.find` IPC command (protocol v5) runs 
 
 ## 5.9 Source control and git
 
-vsclaude now has a working Source Control panel for the daily git workflow: staged and changes groups, per-file and bulk stage and unstage, a staged commit, and a branch picker that switches or creates a branch (see specs/SOURCE_CONTROL.md). It sits in the shared bottom drawer (Ctrl or Cmd plus Shift plus G) and refreshes the status-bar branch through a shared nonce. The review overlay still offers the commit-all flow, and status and branch come from the porcelain parser. Network operations (push, pull, fetch), hunk-level staging, destructive actions with confirmation gating, history and blame, conflict resolution, and the diff editor on a file remain.
+vsclaude now has a working Source Control panel for the daily git workflow: staged and changes groups, per-file and bulk stage and unstage, a staged commit, and a branch picker that switches or creates a branch (see specs/SOURCE_CONTROL.md). It sits in the shared bottom drawer (Ctrl or Cmd plus Shift plus G) and refreshes the status-bar branch through a shared nonce. The review overlay still offers the commit-all flow, and status and branch come from the porcelain parser. Stash is supported too (push with untracked, pop, list, with a count in the panel). Network operations (push, pull, fetch), hunk-level staging, destructive actions with confirmation gating, history and blame, and conflict resolution remain.
 
 | Capability | Status | Evidence | What is missing |
 | --- | --- | --- | --- |
@@ -259,7 +259,7 @@ vsclaude now has a working Source Control panel for the daily git workflow: stag
 | Merge, rebase, cherry-pick, revert | Missing | No merge/rebase/cherry-pick/revert commands; operation state read-only. | No commands to trigger or continue/abort. |
 | Push, pull, fetch, sync with ahead/behind | Partial | Ahead/behind parsed and shown (parse.ts, summarize.ts); no push/pull/fetch commands. | No network IPC or credential flow. |
 | Remotes (add/remove/rename/tracking) | Missing | No remote commands or UI. | No remote management. |
-| Stash (create/apply/pop/drop/list/include-untracked) | Missing | No stash commands despite spec section 13 backup use. | No stash management or UI. |
+| Stash (create/apply/pop/drop/list/include-untracked) | Partial | git.rs git_stash (push -u, include untracked), git_stash_pop, and git_stash_list; the Source Control panel has Stash Changes and Pop Stash buttons with a count (countStashes). Cargo and unit tested. | No apply, drop, named stash, or stash list view. |
 | Tags (create/delete/push/list) | Missing | No tag commands; tag exists only as a narration kind. | No tag operations or UI. |
 | Blame (inline, gutter, annotation) | Missing | No git_blame; spec section 17 lists blame as a non-goal for v1. | Out of scope for phase 0. |
 | History, commit graph, per-file history, Timeline | Partial | events.ts supports status narration; TimelinePanel shows agent events, not commits. | No git_log, pagination, per-file history, or graph. |

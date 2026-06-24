@@ -78,6 +78,9 @@ pub fn run() {
             git::git_branches,
             git::git_checkout,
             git::git_create_branch,
+            git::git_stash,
+            git::git_stash_pop,
+            git::git_stash_list,
         ])
         .run(tauri::generate_context!())
         .expect("error while running the vsclaude application");

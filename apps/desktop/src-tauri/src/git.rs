@@ -131,6 +131,24 @@ pub fn git_create_branch(cwd: String, name: String) -> Result<(), String> {
     run_git(&cwd, &["checkout", "-b", &name]).map(|_| ())
 }
 
+/// Stash the working-tree changes, including untracked files.
+#[tauri::command]
+pub fn git_stash(cwd: String) -> Result<(), String> {
+    run_git(&cwd, &["stash", "push", "-u"]).map(|_| ())
+}
+
+/// Restore the most recent stash back into the working tree.
+#[tauri::command]
+pub fn git_stash_pop(cwd: String) -> Result<(), String> {
+    run_git(&cwd, &["stash", "pop"]).map(|_| ())
+}
+
+/// The raw `git stash list` output; the renderer counts the entries.
+#[tauri::command]
+pub fn git_stash_list(cwd: String) -> Result<String, String> {
+    run_git(&cwd, &["stash", "list"])
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -171,6 +189,29 @@ mod tests {
         let switched = git_branches(cwd.clone()).unwrap();
         assert_eq!(switched.current.as_deref(), Some("feature"));
         assert!(switched.branches.iter().any(|b| b == "feature"));
+
+        let _ = fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn stash_hides_changes_and_pop_restores_them() {
+        let dir = init_repo("stash");
+        let cwd = dir.to_str().unwrap().to_string();
+        fs::write(dir.join("a.txt"), "one").unwrap();
+        git_stage(cwd.clone(), vec!["a.txt".to_string()]).unwrap();
+        git_commit_staged(cwd.clone(), "first".to_string()).unwrap();
+
+        fs::write(dir.join("a.txt"), "two").unwrap();
+        assert!(git_status(cwd.clone()).unwrap().contains("a.txt"));
+
+        git_stash(cwd.clone()).unwrap();
+        // The working tree is clean and the change is on the stash.
+        assert!(!git_status(cwd.clone()).unwrap().contains("a.txt"));
+        assert!(git_stash_list(cwd.clone()).unwrap().contains("stash@{0}"));
+
+        git_stash_pop(cwd.clone()).unwrap();
+        assert!(git_status(cwd.clone()).unwrap().contains("a.txt"));
+        assert_eq!(git_stash_list(cwd.clone()).unwrap().trim(), "");
 
         let _ = fs::remove_dir_all(&dir);
     }

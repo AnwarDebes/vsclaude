@@ -5,10 +5,25 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus fourteen parity slices, the last thirteen
+2026-06-24. Session 3 (Step 0 plus fifteen parity slices, the last fourteen
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
-keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons.
+keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git stash.
+
+## Slice 15: git stash (done)
+
+Stash support in Source Control (catalog 5.9).
+
+- **Rust** (`git.rs`): git_stash (push -u, include untracked), git_stash_pop, and
+  git_stash_list, thin CLI wrappers. A cargo test stashes a change, asserts the
+  tree is clean and the stash exists, pops, and asserts the change is back.
+- **Parser** (`@vsclaude/git`): `countStashes` counts the stash-list entries. 2
+  unit tests.
+- **Source Control panel**: Stash Changes and Pop Stash (with a count) buttons,
+  refreshed with the status.
+- **Quality**: 264 unit tests (262 plus 2) and 8 cargo tests (5 search plus 3 git),
+  typecheck, lint, and `cargo check` clean, the renderer build succeeds, and 21
+  Playwright e2e pass. Matrix 5.9 stash row moved to Partial.
 
 ## Slice 14: file-type icons (done)
 

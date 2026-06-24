@@ -29,6 +29,11 @@ export function scmChangeCount(model: GitStatusModel): number {
   return model.staged.length + model.unstaged.length + model.untracked.length;
 }
 
+/** Count the entries in `git stash list` output (one per non-empty line). */
+export function countStashes(listOutput: string): number {
+  return listOutput.split('\n').filter((line) => line.trim().length > 0).length;
+}
+
 /**
  * Which sides a diff has for a given porcelain status code. An added or untracked
  * file has no committed (HEAD) side; a deleted file has no working-tree side.
