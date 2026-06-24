@@ -101,6 +101,8 @@ export function EditorPanel({ path, value, language, onChange, onSave }: EditorP
           automaticLayout: true,
           smoothScrolling: true,
           cursorBlinking: 'smooth',
+          largeFileOptimizations: true,
+          maxTokenizationLineLength: 20000,
           ...editorSettingsToMonaco(settings),
         }}
       />

@@ -28,6 +28,7 @@ describe('editorSettingsToMonaco', () => {
       lineHeight: 0,
       fontWeight: 'normal',
       mouseWheelZoom: false,
+      guides: { bracketPairs: true },
     });
   });
 

@@ -102,6 +102,8 @@ export interface EditorSettings {
   mouseWheelZoom: boolean;
   /** Ignore trailing-whitespace-only changes in the diff editor. */
   diffIgnoreTrimWhitespace: boolean;
+  /** Draw vertical guides for matching bracket pairs. */
+  bracketPairGuides: boolean;
 }
 
 /** User-level application settings. */
@@ -146,6 +148,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
     fontWeight: 'normal',
     mouseWheelZoom: false,
     diffIgnoreTrimWhitespace: true,
+    bracketPairGuides: true,
   },
   defaultProvider: 'claude-code',
   models: {},

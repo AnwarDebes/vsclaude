@@ -5,7 +5,7 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus forty-one parity slices, the last forty
+2026-06-24. Session 3 (Step 0 plus forty-two parity slices, the last forty-one
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
@@ -14,7 +14,19 @@ more editor settings, markdown preview, document links, color decorators, outlin
 git history, release notes, notification center, branch delete and rename, git tags,
 gitignore action, svg preview, snippets, line height and font weight, ui scale and
 wheel zoom, follow system theme, command categories, output log levels, diff setting,
-json schemas.
+json schemas, bracket guides and large-file mode.
+
+## Slice 42: bracket pair guides and large-file optimizations (done)
+
+Two text-editing wins (catalog 5.1; both rows moved to Done).
+
+- **Setting**: AppSettings.editor gains bracketPairGuides, mapped to Monaco's
+  guides.bracketPairs (on by default) and editable in the Settings panel.
+- **Base options**: EditorPanel sets largeFileOptimizations and a
+  maxTokenizationLineLength of 20000.
+- **Quality**: 336 unit tests, typecheck, lint clean (no Rust change), the renderer
+  build succeeds, and 34 Playwright e2e pass (the settings e2e now also finds Bracket
+  Pair Guides). Matrix 5.1 bracket-guides and large-file rows moved to Done.
 
 ## Slice 41: JSON schemas for package.json and tsconfig.json (done)
 

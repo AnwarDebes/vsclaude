@@ -174,6 +174,15 @@ export const SETTINGS_SCHEMA: readonly SettingDef[] = [
     set: (s, v) => ({ ...s, editor: { ...s.editor, diffIgnoreTrimWhitespace: Boolean(v) } }),
   },
   {
+    id: 'editor.bracketPairGuides',
+    category: 'Editor',
+    label: 'Bracket Pair Guides',
+    description: 'Draw vertical guides for matching bracket pairs.',
+    control: { kind: 'boolean' },
+    get: (s) => s.editor.bracketPairGuides,
+    set: (s, v) => ({ ...s, editor: { ...s.editor, bracketPairGuides: Boolean(v) } }),
+  },
+  {
     id: 'workbench.uiScale',
     category: 'Appearance',
     label: 'UI Scale',

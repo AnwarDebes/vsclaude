@@ -15,7 +15,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 
 | Section | Title | Done | Partial | Missing | Not planned |
 | --- | --- | --- | --- | --- | --- |
-| 5.1 | Text editing core | 8 | 14 | 5 | 0 |
+| 5.1 | Text editing core | 10 | 14 | 3 | 0 |
 | 5.2 | Code intelligence (LSP language features) | 1 | 9 | 14 | 0 |
 | 5.3 | Editor advanced surface | 7 | 5 | 0 | 0 |
 | 5.4 | Diff and merge | 3 | 4 | 1 | 1 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 10 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 2 | 6 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 4 | 4 | 0 |
-| TOTAL | | 84 | 103 | 137 | 5 |
+| TOTAL | | 86 | 103 | 135 | 5 |
 
 ## Legend
 
@@ -64,7 +64,7 @@ The editor integrates Monaco 0.55.1, and its editing actions are now exposed: a 
 | Auto-closing brackets and quotes | Partial | Monaco default-on; EditorPanel.tsx sets neither autoClosingBrackets nor autoClosingQuotes. | No explicit config or user toggle. |
 | Auto-surround and bracket pair selection | Partial | Monaco supports auto-surround by default; no explicit config. | No config, no verification, no UI toggle. |
 | Bracket matching and pair colorization | Partial | Spec 7.1 line 306 marks colorization default on; EditorPanel.tsx does not disable it. | Enabled by default but not configured or exposed; no toggle. |
-| Bracket pair guides | Missing | No mention in spec 7.1; no bracketPairGuides config. | Not explicitly enabled or configured. |
+| Bracket pair guides | Done | The editor.bracketPairGuides setting maps to Monaco's guides.bracketPairs (editorSettingsToMonaco), on by default. Unit tested. | |
 | Indentation (detect, spaces/tabs, convert, tab size, guides) | Partial | EditorPanel.tsx sets tabSize: 2; no detectIndentation or insertSpaces. | No auto-detect, no insertSpaces toggle, no convert command, no explicit guide config. |
 | Whitespace and control char rendering, render final newline | Partial | renderWhitespace is now a setting (none, selection, all) applied to Monaco. | Control-character rendering and render-final-newline are not configurable. |
 | Cursor styles, blink rate, smooth caret, surrounding lines | Partial | cursorStyle is now a setting (line, block, underline); cursorBlinking is smooth and the caret animates. | No cursorSurroundingLines or blink-rate setting. |
@@ -74,7 +74,7 @@ The editor integrates Monaco 0.55.1, and its editing actions are now exposed: a 
 | EOL handling (LF/CRLF detect, convert, platform default) | Partial | FilePayload reports eol (spec 3.2/11.1); EditorPanel.tsx exposes no EOL UI. | Core reads EOL but no selection, conversion, or platform-default UI. |
 | Encoding (detect, reopen with, save with, guess) | Partial | FilePayload includes encoding (spec 3.2); EditorPanel.tsx has no encoding option. | Detected but no picker, reopen-with, or save-as-encoding. |
 | Trim auto whitespace, insert final newline, trimFinalNewlines | Missing | None of these options in EditorPanel.tsx; not in spec. | No trim-trailing, final-newline insertion, or trimFinalNewlines. |
-| Large-file optimizations and tokenization limit | Missing | No largeFileOptimizations or maxTokenizationLineLength in EditorPanel.tsx. | No large-file mode or tokenization limit. |
+| Large-file optimizations and tokenization limit | Done | EditorPanel.tsx sets largeFileOptimizations true and maxTokenizationLineLength 20000. | |
 | Read-only editors and read-only regions | Partial | FilePayload has readonly (spec 3.2); only diff tabs are read-only; main editor ignores the flag. | Main EditorPanel does not respect the readonly flag. |
 | Line numbers, folding, minimap, breadcrumbs, sticky scroll | Partial | EditorPanel.tsx enables minimap; folding/breadcrumbs/sticky scroll are Monaco defaults (spec 7.1). | Not explicitly configured; no UI toggle or verification. |
 | Syntax highlighting and language support | Done | EditorPanel.tsx LANG_BY_EXT for TS/TSX/JS/JSX/JSON/CSS/HTML/MD/Rust; monaco-setup.ts loads workers. | |

@@ -19,6 +19,7 @@ export interface MonacoEditorOptions {
   lineHeight: number;
   fontWeight: string;
   mouseWheelZoom: boolean;
+  guides: { bracketPairs: boolean };
 }
 
 /** Map the editor settings to Monaco's option names. */
@@ -36,6 +37,7 @@ export function editorSettingsToMonaco(settings: EditorSettings): MonacoEditorOp
     lineHeight: settings.lineHeight,
     fontWeight: settings.fontWeight,
     mouseWheelZoom: settings.mouseWheelZoom,
+    guides: { bracketPairs: settings.bracketPairGuides },
   };
 }
 
