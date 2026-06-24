@@ -341,6 +341,8 @@ test.describe('vsclaude shell', () => {
     await expect(settings.getByText('UI Scale', { exact: true })).toBeVisible();
     await settings.getByRole('textbox', { name: /search settings/i }).fill('system theme');
     await expect(settings.getByText('Follow System Theme', { exact: true })).toBeVisible();
+    await settings.getByRole('textbox', { name: /search settings/i }).fill('diff ignore');
+    await expect(settings.getByText('Diff Ignore Trailing Whitespace', { exact: true })).toBeVisible();
   });
 
   test('the palette shows a command category badge', async ({ page }) => {

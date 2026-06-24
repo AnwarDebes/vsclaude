@@ -100,6 +100,8 @@ export interface EditorSettings {
   fontWeight: 'normal' | '500' | '600' | 'bold';
   /** Zoom the editor font with Ctrl and the mouse wheel. */
   mouseWheelZoom: boolean;
+  /** Ignore trailing-whitespace-only changes in the diff editor. */
+  diffIgnoreTrimWhitespace: boolean;
 }
 
 /** User-level application settings. */
@@ -143,6 +145,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
     lineHeight: 0,
     fontWeight: 'normal',
     mouseWheelZoom: false,
+    diffIgnoreTrimWhitespace: true,
   },
   defaultProvider: 'claude-code',
   models: {},

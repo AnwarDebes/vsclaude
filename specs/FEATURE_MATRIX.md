@@ -18,7 +18,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.1 | Text editing core | 8 | 14 | 5 | 0 |
 | 5.2 | Code intelligence (LSP language features) | 0 | 10 | 14 | 0 |
 | 5.3 | Editor advanced surface | 7 | 5 | 0 | 0 |
-| 5.4 | Diff and merge | 3 | 3 | 2 | 1 |
+| 5.4 | Diff and merge | 3 | 4 | 1 | 1 |
 | 5.5 | Workbench layout and navigation | 6 | 12 | 9 | 0 |
 | 5.6 | Quick open and command palette | 7 | 1 | 3 | 0 |
 | 5.7 | File explorer and workspace management | 6 | 2 | 6 | 3 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 10 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 2 | 6 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 4 | 4 | 0 |
-| TOTAL | | 83 | 103 | 138 | 5 |
+| TOTAL | | 83 | 104 | 137 | 5 |
 
 ## Legend
 
@@ -146,7 +146,7 @@ A real Monaco diff editor now ships (DiffView.tsx and DiffModal.tsx): side-by-si
 | Compare feature (select, with saved, across workspace, folders) | Partial | Compare with Saved (App.tsx compareWithSaved) diffs the editor's unsaved changes against disk, in the workspace and the demo. | No select-for-compare between two arbitrary files, and no folder comparison. |
 | Three-way merge editor (current/incoming/result) | Not planned | GIT_SPEC section 17 states the merge editor is its own spec, a non-goal for git. | Out of scope for current phase. |
 | Inline merge-conflict decorations and accept actions | Missing | No conflict decorations or resolution buttons; model.ts has no conflicted state. | No conflict highlighting, accept buttons, or conflict detection. |
-| Diff settings (ignore trim whitespace, side-by-side threshold, max compute time) | Missing | No diff settings in DiffReview.tsx or EditorPanel.tsx. | No whitespace, algorithm, threshold, or compute-limit options. |
+| Diff settings (ignore trim whitespace, side-by-side threshold, max compute time) | Partial | The editor.diffIgnoreTrimWhitespace setting feeds DiffView's Monaco ignoreTrimWhitespace option (DiffView reads the editor-settings store). | No side-by-side threshold, diff algorithm, or compute-limit options. |
 
 ## 5.5 Workbench layout and navigation
 

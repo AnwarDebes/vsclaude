@@ -5,7 +5,7 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus thirty-nine parity slices, the last thirty-eight
+2026-06-24. Session 3 (Step 0 plus forty parity slices, the last thirty-nine
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
@@ -13,7 +13,18 @@ stash, zen mode, breadcrumbs, tasks, activity-bar badges, output panel, untitled
 more editor settings, markdown preview, document links, color decorators, outline,
 git history, release notes, notification center, branch delete and rename, git tags,
 gitignore action, svg preview, snippets, line height and font weight, ui scale and
-wheel zoom, follow system theme, command categories, output log levels.
+wheel zoom, follow system theme, command categories, output log levels, diff setting.
+
+## Slice 40: diff ignore-trailing-whitespace setting (done)
+
+A diff setting (catalog 5.4).
+
+- **Setting**: AppSettings.editor gains diffIgnoreTrimWhitespace; DiffView reads the
+  editor-settings store and feeds Monaco's ignoreTrimWhitespace, editable in the
+  Settings panel.
+- **Quality**: 333 unit tests, typecheck, lint clean (no Rust change), the renderer
+  build succeeds, and 34 Playwright e2e pass (the settings e2e now also finds Diff
+  Ignore Trailing Whitespace). Matrix 5.4 diff-settings row moved to Partial.
 
 ## Slice 39: output log levels and filter (done)
 

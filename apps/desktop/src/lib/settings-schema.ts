@@ -165,6 +165,15 @@ export const SETTINGS_SCHEMA: readonly SettingDef[] = [
     set: (s, v) => ({ ...s, editor: { ...s.editor, mouseWheelZoom: Boolean(v) } }),
   },
   {
+    id: 'editor.diffIgnoreTrimWhitespace',
+    category: 'Editor',
+    label: 'Diff Ignore Trailing Whitespace',
+    description: 'Ignore trailing-whitespace-only changes in the diff editor.',
+    control: { kind: 'boolean' },
+    get: (s) => s.editor.diffIgnoreTrimWhitespace,
+    set: (s, v) => ({ ...s, editor: { ...s.editor, diffIgnoreTrimWhitespace: Boolean(v) } }),
+  },
+  {
     id: 'workbench.uiScale',
     category: 'Appearance',
     label: 'UI Scale',

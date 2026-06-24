@@ -1,6 +1,8 @@
+import { useSyncExternalStore } from 'react';
 import { DiffEditor } from '@monaco-editor/react';
 import '../lib/monaco-setup';
 import { useMonacoTheme } from '../lib/monaco-theme';
+import { getEditorSettings, subscribeEditorSettings } from '../lib/editor-settings';
 
 export interface DiffViewProps {
   original: string;
@@ -18,6 +20,7 @@ export interface DiffViewProps {
  */
 export function DiffView({ original, modified, language, sideBySide = true }: DiffViewProps) {
   const monacoTheme = useMonacoTheme();
+  const settings = useSyncExternalStore(subscribeEditorSettings, getEditorSettings, getEditorSettings);
   return (
     <DiffEditor
       height="100%"
@@ -35,6 +38,7 @@ export function DiffView({ original, modified, language, sideBySide = true }: Di
         fontFamily: "'JetBrains Mono', 'Cascadia Code', ui-monospace, monospace",
         scrollBeyondLastLine: false,
         hideUnchangedRegions: { enabled: true },
+        ignoreTrimWhitespace: settings.diffIgnoreTrimWhitespace,
       }}
     />
   );
