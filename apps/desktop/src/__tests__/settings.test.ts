@@ -22,7 +22,15 @@ describe('editorSettingsToMonaco', () => {
       wordWrap: 'off',
       minimap: { enabled: true },
       lineNumbers: 'on',
+      rulers: [],
+      renderWhitespace: 'selection',
+      cursorStyle: 'line',
     });
+  });
+
+  it('maps a ruler column to a Monaco rulers array', () => {
+    expect(editorSettingsToMonaco({ ...DEFAULT_SETTINGS.editor, rulers: 80 }).rulers).toEqual([80]);
+    expect(editorSettingsToMonaco({ ...DEFAULT_SETTINGS.editor, rulers: 0 }).rulers).toEqual([]);
   });
 
   it('maps word wrap and minimap booleans to Monaco shapes', () => {

@@ -17,7 +17,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | --- | --- | --- | --- | --- | --- |
 | 5.1 | Text editing core | 8 | 14 | 5 | 0 |
 | 5.2 | Code intelligence (LSP language features) | 0 | 7 | 17 | 0 |
-| 5.3 | Editor advanced surface | 6 | 4 | 2 | 0 |
+| 5.3 | Editor advanced surface | 7 | 4 | 1 | 0 |
 | 5.4 | Diff and merge | 3 | 3 | 2 | 1 |
 | 5.5 | Workbench layout and navigation | 6 | 11 | 10 | 0 |
 | 5.6 | Quick open and command palette | 7 | 0 | 4 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 8 | 6 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 1 | 7 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 3 | 5 | 0 |
-| TOTAL | | 77 | 90 | 157 | 5 |
+| TOTAL | | 78 | 90 | 156 | 5 |
 
 ## Legend
 
@@ -66,8 +66,8 @@ The editor integrates Monaco 0.55.1, and its editing actions are now exposed: a 
 | Bracket matching and pair colorization | Partial | Spec 7.1 line 306 marks colorization default on; EditorPanel.tsx does not disable it. | Enabled by default but not configured or exposed; no toggle. |
 | Bracket pair guides | Missing | No mention in spec 7.1; no bracketPairGuides config. | Not explicitly enabled or configured. |
 | Indentation (detect, spaces/tabs, convert, tab size, guides) | Partial | EditorPanel.tsx sets tabSize: 2; no detectIndentation or insertSpaces. | No auto-detect, no insertSpaces toggle, no convert command, no explicit guide config. |
-| Whitespace and control char rendering, render final newline | Partial | EditorPanel.tsx sets renderWhitespace: 'selection'; renderFinalNewline and renderControlCharacters not set. | Only selection mode; no show-all/trailing; final newline and control chars unset. |
-| Cursor styles, blink rate, smooth caret, surrounding lines | Partial | EditorPanel.tsx sets cursorBlinking: 'smooth'; other cursor options unset. | No cursorStyle, cursorSurroundingLines, or surrounding-line styling. |
+| Whitespace and control char rendering, render final newline | Partial | renderWhitespace is now a setting (none, selection, all) applied to Monaco. | Control-character rendering and render-final-newline are not configurable. |
+| Cursor styles, blink rate, smooth caret, surrounding lines | Partial | cursorStyle is now a setting (line, block, underline); cursorBlinking is smooth and the caret animates. | No cursorSurroundingLines or blink-rate setting. |
 | Smooth scrolling, fast scroll, scroll beyond last line, wheel zoom | Partial | EditorPanel.tsx sets smoothScrolling: true, scrollBeyondLastLine: false. | fastScrollSensitivity and wheel-zoom unset; scrollBeyondLastLine differs from VS Code default. |
 | Drag-drop text, copy/cut whole line, multi-paste | Partial | Monaco default behaviors not disabled in EditorPanel.tsx. | Defaults likely on but unverified; multi-paste not in specs. |
 | Undo/redo and undo stops, soft undo across saves | Missing | No undo config in EditorPanel.tsx; no undo-history sync in IPC. | No soft undo, no undo stops API, no persistence. |
@@ -122,7 +122,7 @@ The editor uses Monaco 0.55.1 with minimal configuration. Only the minimap is ex
 | Sticky scroll (enclosing scopes pinned) | Done | Spec line 308; Monaco default on; not disabled in EditorPanel.tsx. | |
 | Code folding (language-aware, manual, regions, fold/unfold all, by level) | Done | Spec line 306; Monaco default on; keyboard shortcuts work. | (No custom fold-all UI buttons, but core feature is present.) |
 | Line numbers (absolute/relative/interval/off) | Done | Monaco lineNumbers default on; not disabled. | (No UI toggle for mode switching.) |
-| Rulers at columns | Missing | No ruler option in EditorPanel.tsx options. | rulers array not configured. |
+| Rulers at columns | Done | The editor.rulers setting (settings-schema.ts) maps to Monaco's rulers array (editorSettingsToMonaco); 0 means none. Unit tested. | |
 | Breadcrumbs (path plus symbol nav plus dropdowns) | Done | Spec line 305; Monaco breadcrumbs default on; not disabled. | (No custom styling beyond defaults.) |
 | Inline diagnostics plus squiggle/gutter icons | Partial | Monaco shows squiggles when workers provide them; TS/JS workers configured. | No custom diagnostic provider; only TS/JS; no toggle or gutter config. |
 | Hover controls, def-on-hover preview, click-to-peek | Partial | Monaco hovers default on; TS worker provides hovers; spec 7.3 registration surface unwired. | No definition/references provider; no peek or Ctrl+Click-to-def. |

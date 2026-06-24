@@ -5,11 +5,23 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus twenty-one parity slices, the last twenty
+2026-06-24. Session 3 (Step 0 plus twenty-two parity slices, the last twenty-one
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
-stash, zen mode, breadcrumbs, tasks, activity-bar badges, output panel, untitled.
+stash, zen mode, breadcrumbs, tasks, activity-bar badges, output panel, untitled,
+more editor settings.
+
+## Slice 22: more editor settings (rulers, whitespace, cursor) (done)
+
+Extends the configurable editor (catalog 5.3 and 5.1).
+
+- **Settings**: AppSettings.editor gains rulers (0 for none), renderWhitespace
+  (none, selection, all), and cursorStyle (line, block, underline), mapped to
+  Monaco (editorSettingsToMonaco) and editable in the Settings panel.
+- **Quality**: 281 unit tests (280 plus 1), typecheck, lint clean (no Rust change),
+  the renderer build succeeds, and 27 Playwright e2e pass (the new one finds the
+  ruler and whitespace settings). Matrix 5.3 rulers row moved to Done.
 
 ## Slice 21: untitled scratchpad files (done)
 

@@ -91,6 +91,10 @@ export interface EditorSettings {
   wordWrap: boolean;
   minimap: boolean;
   lineNumbers: 'on' | 'off' | 'relative';
+  /** A vertical ruler at this column, or 0 for none. */
+  rulers: number;
+  renderWhitespace: 'none' | 'selection' | 'all';
+  cursorStyle: 'line' | 'block' | 'underline';
 }
 
 /** User-level application settings. */
@@ -115,7 +119,17 @@ export const DEFAULT_SETTINGS: AppSettings = {
   reducedMotion: false,
   colorBlindSafe: false,
   sound: { enabled: false, masterVolume: 0.6, typing: true, ambient: false },
-  editor: { fontSize: 13, tabSize: 2, insertSpaces: true, wordWrap: false, minimap: true, lineNumbers: 'on' },
+  editor: {
+    fontSize: 13,
+    tabSize: 2,
+    insertSpaces: true,
+    wordWrap: false,
+    minimap: true,
+    lineNumbers: 'on',
+    rulers: 0,
+    renderWhitespace: 'selection',
+    cursorStyle: 'line',
+  },
   defaultProvider: 'claude-code',
   models: {},
   telemetry: false,

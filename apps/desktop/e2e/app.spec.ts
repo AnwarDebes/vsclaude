@@ -320,6 +320,20 @@ test.describe('vsclaude shell', () => {
     await expect(page.locator('.editor-panel')).toBeVisible();
   });
 
+  test('settings expose the ruler and whitespace editor options', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('open settings');
+    await page.keyboard.press('Enter');
+    const settings = page.getByRole('dialog', { name: 'Settings' });
+    await settings.getByRole('textbox', { name: /search settings/i }).fill('ruler');
+    await expect(settings.getByText('Ruler Column', { exact: true })).toBeVisible();
+    await settings.getByRole('textbox', { name: /search settings/i }).fill('whitespace');
+    await expect(settings.getByText('Render Whitespace', { exact: true })).toBeVisible();
+  });
+
   test('opens the diff review overlay from the command palette', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByText('vsclaude').first()).toBeVisible();

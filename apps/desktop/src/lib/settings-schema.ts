@@ -89,6 +89,47 @@ export const SETTINGS_SCHEMA: readonly SettingDef[] = [
     set: (s, v) => ({ ...s, editor: { ...s.editor, lineNumbers: v as 'on' | 'off' | 'relative' } }),
   },
   {
+    id: 'editor.rulers',
+    category: 'Editor',
+    label: 'Ruler Column',
+    description: 'Show a vertical ruler at this column, or 0 for none.',
+    control: { kind: 'number', min: 0, max: 200 },
+    get: (s) => s.editor.rulers,
+    set: (s, v) => ({ ...s, editor: { ...s.editor, rulers: Number(v) } }),
+  },
+  {
+    id: 'editor.renderWhitespace',
+    category: 'Editor',
+    label: 'Render Whitespace',
+    description: 'When to show whitespace characters.',
+    control: {
+      kind: 'select',
+      options: [
+        { value: 'none', label: 'None' },
+        { value: 'selection', label: 'Selection' },
+        { value: 'all', label: 'All' },
+      ],
+    },
+    get: (s) => s.editor.renderWhitespace,
+    set: (s, v) => ({ ...s, editor: { ...s.editor, renderWhitespace: v as 'none' | 'selection' | 'all' } }),
+  },
+  {
+    id: 'editor.cursorStyle',
+    category: 'Editor',
+    label: 'Cursor Style',
+    description: 'The shape of the editor caret.',
+    control: {
+      kind: 'select',
+      options: [
+        { value: 'line', label: 'Line' },
+        { value: 'block', label: 'Block' },
+        { value: 'underline', label: 'Underline' },
+      ],
+    },
+    get: (s) => s.editor.cursorStyle,
+    set: (s, v) => ({ ...s, editor: { ...s.editor, cursorStyle: v as 'line' | 'block' | 'underline' } }),
+  },
+  {
     id: 'appearance.theme',
     category: 'Appearance',
     label: 'Color Theme',

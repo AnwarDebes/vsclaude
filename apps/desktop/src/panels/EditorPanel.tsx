@@ -99,7 +99,6 @@ export function EditorPanel({ path, value, language, onChange, onSave }: EditorP
           fontLigatures: true,
           scrollBeyondLastLine: false,
           automaticLayout: true,
-          renderWhitespace: 'selection',
           smoothScrolling: true,
           cursorBlinking: 'smooth',
           ...editorSettingsToMonaco(settings),

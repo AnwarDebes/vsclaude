@@ -13,6 +13,9 @@ export interface MonacoEditorOptions {
   wordWrap: 'on' | 'off';
   minimap: { enabled: boolean };
   lineNumbers: 'on' | 'off' | 'relative';
+  rulers: number[];
+  renderWhitespace: 'none' | 'selection' | 'all';
+  cursorStyle: 'line' | 'block' | 'underline';
 }
 
 /** Map the editor settings to Monaco's option names. */
@@ -24,6 +27,9 @@ export function editorSettingsToMonaco(settings: EditorSettings): MonacoEditorOp
     wordWrap: settings.wordWrap ? 'on' : 'off',
     minimap: { enabled: settings.minimap },
     lineNumbers: settings.lineNumbers,
+    rulers: settings.rulers > 0 ? [settings.rulers] : [],
+    renderWhitespace: settings.renderWhitespace,
+    cursorStyle: settings.cursorStyle,
   };
 }
 
