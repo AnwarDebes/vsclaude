@@ -152,6 +152,8 @@ test.describe('vsclaude shell', () => {
     const diff = page.getByRole('dialog', { name: /diff of/i });
     await expect(diff).toBeVisible();
     await expect(page.locator('.monaco-diff-editor')).toBeVisible({ timeout: 15_000 });
+    // The change counter reports the diff size (zero or more changes).
+    await expect(diff.locator('.diff-modal__changes')).toHaveText(/change/i, { timeout: 15_000 });
     // Toggle to inline and back, then close.
     await diff.getByRole('button', { name: 'Inline' }).click();
     await diff.getByRole('button', { name: /close diff/i }).click();

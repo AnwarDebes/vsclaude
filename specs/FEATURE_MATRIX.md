@@ -18,7 +18,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.1 | Text editing core | 11 | 16 | 0 | 0 |
 | 5.2 | Code intelligence (LSP language features) | 1 | 10 | 13 | 0 |
 | 5.3 | Editor advanced surface | 8 | 4 | 0 | 0 |
-| 5.4 | Diff and merge | 4 | 3 | 2 | 1 |
+| 5.4 | Diff and merge | 5 | 2 | 2 | 1 |
 | 5.5 | Workbench layout and navigation | 6 | 14 | 8 | 0 |
 | 5.6 | Quick open and command palette | 7 | 2 | 2 | 0 |
 | 5.7 | File explorer and workspace management | 6 | 4 | 4 | 3 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 6 | 7 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 3 | 5 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 98 | 118 | 112 | 5 |
+| TOTAL | | 99 | 117 | 112 | 5 |
 
 ## Legend
 
@@ -139,7 +139,7 @@ A real Monaco diff editor now ships (DiffView.tsx and DiffModal.tsx): side-by-si
 | --- | --- | --- | --- |
 | Basic text diff viewer | Done | DiffReview.tsx renders unified diff with colored lines; git.rs provides gitDiff(); file list and commit UI present. | |
 | Monaco diff editor (side-by-side and inline) | Done | DiffView.tsx wraps the Monaco DiffEditor; DiffModal.tsx toggles side-by-side and inline; e2e opens it via Compare with Saved. | |
-| Diff change navigation and counter | Partial | The Monaco diff editor provides built-in change navigation (F7 and Shift+F7). | No explicit change counter or overview-ruler control in the modal chrome. |
+| Diff change navigation and counter | Done | The Monaco diff editor provides built-in change navigation (F7 and Shift+F7); the DiffModal chrome shows a live change counter from the editor's getLineChanges (DiffView reports it via onChangeCount). An e2e asserts the counter. | (No overview-ruler control toggle, but navigation and a counter are present.) |
 | Per-hunk accept/reject and gutter controls | Missing | The diff editor is read-only; no per-hunk apply. | No hunk accept/reject, gutter decorations, or partial apply. |
 | Collapse unchanged regions in diff | Done | DiffView.tsx enables hideUnchangedRegions on the Monaco diff editor. | |
 | Accessible diff viewer | Partial | DiffReview.tsx has role='dialog' and header aria-label; diff lines are plain spans. | Lines lack ARIA live regions and semantic labels; no screen-reader hunk descriptions. |

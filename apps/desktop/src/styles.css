@@ -3197,6 +3197,11 @@ body {
   align-items: center;
   gap: 6px;
 }
+.diff-modal__changes {
+  margin-right: var(--space-sm);
+  font-size: 0.74rem;
+  color: var(--color-text-muted);
+}
 .chip--on {
   background: var(--color-accent-muted);
   color: var(--color-accent);

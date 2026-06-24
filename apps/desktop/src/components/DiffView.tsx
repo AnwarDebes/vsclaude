@@ -4,12 +4,20 @@ import '../lib/monaco-setup';
 import { useMonacoTheme } from '../lib/monaco-theme';
 import { getEditorSettings, subscribeEditorSettings } from '../lib/editor-settings';
 
+/** A loose view of the Monaco diff editor: the methods the change counter uses. */
+interface DiffEditorHandle {
+  getLineChanges(): unknown[] | null;
+  onDidUpdateDiff(listener: () => void): void;
+}
+
 export interface DiffViewProps {
   original: string;
   modified: string;
   language?: string;
   /** Side-by-side when true, inline when false. */
   sideBySide?: boolean;
+  /** Report the number of changed regions as the diff is (re)computed. */
+  onChangeCount?: (count: number) => void;
 }
 
 /**
@@ -18,9 +26,14 @@ export interface DiffViewProps {
  * for reviewing a change, not editing it. The local monaco-setup import keeps it
  * offline, like the main editor.
  */
-export function DiffView({ original, modified, language, sideBySide = true }: DiffViewProps) {
+export function DiffView({ original, modified, language, sideBySide = true, onChangeCount }: DiffViewProps) {
   const monacoTheme = useMonacoTheme();
   const settings = useSyncExternalStore(subscribeEditorSettings, getEditorSettings, getEditorSettings);
+  const onMount = (editor: DiffEditorHandle) => {
+    const report = () => onChangeCount?.(editor.getLineChanges()?.length ?? 0);
+    editor.onDidUpdateDiff(report);
+    report();
+  };
   return (
     <DiffEditor
       height="100%"
@@ -28,6 +41,7 @@ export function DiffView({ original, modified, language, sideBySide = true }: Di
       language={language}
       original={original}
       modified={modified}
+      onMount={onMount}
       loading={<div className="editor-loading">Loading diff...</div>}
       options={{
         readOnly: true,

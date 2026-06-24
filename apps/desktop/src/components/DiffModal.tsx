@@ -22,6 +22,7 @@ export interface DiffModalProps {
  */
 export function DiffModal({ target, onClose }: DiffModalProps) {
   const [sideBySide, setSideBySide] = useState(true);
+  const [changeCount, setChangeCount] = useState<number | null>(null);
 
   useEffect(() => {
     if (!target) return;
@@ -43,6 +44,13 @@ export function DiffModal({ target, onClose }: DiffModalProps) {
             {target.subtitle ? <span className="diff-modal__subtitle">{target.subtitle}</span> : null}
           </h2>
           <div className="diff-modal__actions">
+            <span className="diff-modal__changes" aria-live="polite">
+              {changeCount === null
+                ? ''
+                : changeCount === 0
+                  ? 'No changes'
+                  : `${changeCount} change${changeCount === 1 ? '' : 's'}`}
+            </span>
             <button
               type="button"
               className={`chip${sideBySide ? ' chip--on' : ''}`}
@@ -70,6 +78,7 @@ export function DiffModal({ target, onClose }: DiffModalProps) {
             modified={target.modified}
             language={target.language}
             sideBySide={sideBySide}
+            onChangeCount={setChangeCount}
           />
         </div>
       </div>

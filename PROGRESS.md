@@ -20,7 +20,19 @@ tasks.json loading, git push/pull/fetch, commit amend, commit revert, on-save tr
 settings JSON editor, reset layout, task variables, task groups, files.exclude,
 at-symbol navigation, hex view, notification toasts, inlay hints, menu bar,
 edit menu, minimap config, diff settings, process info, snippet browser,
-accessibility help, git remotes, problems filter, output channels, editor font.
+accessibility help, git remotes, problems filter, output channels, editor font,
+diff change counter.
+
+## Slice 74: diff change counter (done)
+
+A change counter in the diff modal (catalog 5.4; the row moved to Done).
+
+- **Counter**: DiffView reports the number of changed regions from Monaco's getLineChanges
+  (via onChangeCount, refreshed on the diff-updated event); the DiffModal chrome shows it
+  (No changes, or N changes).
+- **Quality**: 385 unit tests, typecheck, lint clean (no Rust change), the renderer build
+  succeeds, and 55 Playwright e2e pass (the compare-with-saved e2e now also asserts the
+  counter). Matrix 5.4 change-navigation-and-counter row moved to Done.
 
 ## Slice 73: editor font family and ligatures settings (done)
 
