@@ -5,13 +5,26 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus twenty-eight parity slices, the last twenty-seven
+2026-06-24. Session 3 (Step 0 plus twenty-nine parity slices, the last twenty-eight
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
 stash, zen mode, breadcrumbs, tasks, activity-bar badges, output panel, untitled,
 more editor settings, markdown preview, document links, color decorators, outline,
-git history, release notes.
+git history, release notes, notification center.
+
+## Slice 29: notification center (done)
+
+A notification history (catalog 5.21).
+
+- **Store** (`lib/notifications.ts`): a capped (100) newest-first store with add,
+  dismiss, clear, and subscribe. 4 unit tests.
+- **Center** (`NotificationCenter.tsx`): a panel (Notifications: Show) listing the
+  history with per-item Dismiss and Clear all. Workspace errors and a couple of
+  actions (git history without a folder, Markdown preview without a .md) post to it.
+- **Quality**: 320 unit tests (316 plus 4), typecheck, lint clean (no Rust change),
+  the renderer build succeeds, and 31 Playwright e2e pass (the new one posts a message
+  and reads it in the center). Matrix 5.21 notification-center row moved to Partial.
 
 ## Slice 28: a What's New / Release Notes panel (done)
 

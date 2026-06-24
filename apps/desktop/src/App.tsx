@@ -44,6 +44,8 @@ import { SettingsPanel } from './components/SettingsPanel';
 import { KeyboardShortcuts } from './components/KeyboardShortcuts';
 import { WelcomePanel } from './components/WelcomePanel';
 import { ReleaseNotes } from './components/ReleaseNotes';
+import { NotificationCenter } from './components/NotificationCenter';
+import { addNotification } from './lib/notifications';
 import { welcomeQuickActions, type WelcomeActionId } from './lib/welcome';
 import { DiffModal, type DiffTarget } from './components/DiffModal';
 import { MarkdownPreview, type MarkdownTarget } from './components/MarkdownPreview';
@@ -119,6 +121,7 @@ export function App() {
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const [welcomeOpen, setWelcomeOpen] = useState(false);
   const [releaseOpen, setReleaseOpen] = useState(false);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [zenMode, setZenMode] = useState(false);
   const untitledCounter = useRef(0);
   const live = useLiveProvider();
@@ -396,7 +399,10 @@ export function App() {
     appendLog('vsclaude ready.');
   }, []);
   useEffect(() => {
-    if (ws.error) appendLog(`Error: ${ws.error}`);
+    if (ws.error) {
+      appendLog(`Error: ${ws.error}`);
+      addNotification('error', ws.error);
+    }
   }, [ws.error]);
 
   // The bottom drawer shortcuts, matching VS Code: Ctrl or Cmd plus Shift plus M
@@ -496,7 +502,7 @@ export function App() {
       run: () => {
         const path = hasWorkspace ? ws.activePath : openFile;
         if (!path || !path.toLowerCase().endsWith('.md')) {
-          appendLog('Open a Markdown file to preview it.');
+          addNotification('info', 'Open a Markdown file to preview it.');
           return;
         }
         const md = hasWorkspace
@@ -529,6 +535,12 @@ export function App() {
       title: 'Help: Release Notes',
       keywords: ['release', 'notes', 'changelog', 'whats', 'new', 'about'],
       run: () => setReleaseOpen(true),
+    });
+    r.register({
+      id: 'show-notifications',
+      title: 'Notifications: Show',
+      keywords: ['notifications', 'alerts', 'messages', 'center', 'bell'],
+      run: () => setNotificationsOpen(true),
     });
     r.register({
       id: 'help-welcome',
@@ -607,7 +619,7 @@ export function App() {
       run: () => {
         const repo = hasWorkspace ? ws.roots[0]?.path ?? null : null;
         if (!repo) {
-          appendLog('Open a folder to view its git history.');
+          addNotification('info', 'Open a folder to view its git history.');
           return;
         }
         void gitLog(repo)
@@ -947,6 +959,7 @@ export function App() {
       <MarkdownPreview target={markdownTarget} onClose={() => setMarkdownTarget(null)} />
       <GitHistoryModal commits={gitHistory} onClose={() => setGitHistory(null)} />
       <ReleaseNotes open={releaseOpen} onClose={() => setReleaseOpen(false)} />
+      <NotificationCenter open={notificationsOpen} onClose={() => setNotificationsOpen(false)} />
       <DiffReview open={reviewOpen} cwd="." onClose={() => setReviewOpen(false)} />
     </div>
   );

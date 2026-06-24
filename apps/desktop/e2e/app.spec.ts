@@ -334,6 +334,25 @@ test.describe('vsclaude shell', () => {
     await expect(settings.getByText('Render Whitespace', { exact: true })).toBeVisible();
   });
 
+  test('the notification center collects messages', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    const runCommand = async (query: string) => {
+      await page.keyboard.press('Control+KeyK');
+      const palette = page.getByRole('dialog', { name: /command palette/i });
+      await palette.getByPlaceholder(/type a command/i).fill(query);
+      await page.keyboard.press('Enter');
+    };
+    // With no folder open this posts an info notification.
+    await runCommand('git history');
+    await runCommand('notifications show');
+    const center = page.getByRole('dialog', { name: 'Notifications' });
+    await expect(center).toBeVisible();
+    await expect(center.getByText('Open a folder to view its git history.')).toBeVisible();
+    await center.getByRole('button', { name: 'Dismiss notification' }).click();
+    await expect(center.getByText('No notifications.')).toBeVisible();
+  });
+
   test('release notes open from the command palette', async ({ page }) => {
     await page.goto('/');
     await page.getByText('Claude Code, in motion').click();
