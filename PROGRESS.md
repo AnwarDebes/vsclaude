@@ -5,7 +5,7 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus forty-eight parity slices, the last forty-seven
+2026-06-24. Session 3 (Step 0 plus forty-nine parity slices, the last forty-eight
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
@@ -15,7 +15,20 @@ git history, release notes, notification center, branch delete and rename, git t
 gitignore action, svg preview, snippets, line height and font weight, ui scale and
 wheel zoom, follow system theme, command categories, output log levels, diff setting,
 json schemas, bracket guides and large-file mode, in-file find, terminal find,
-terminal menu, terminal tab rename, explorer problem decorations, search history.
+terminal menu, terminal tab rename, explorer problem decorations, search history,
+tasks.json loading.
+
+## Slice 49: tasks.json loading (done)
+
+VS Code task files (catalog 5.11).
+
+- **Parser** (`lib/tasks.ts` parseTasksJson): reads .vscode/tasks.json (label,
+  command, args), defensively. 3 unit tests.
+- **Loading**: App reads .vscode/tasks.json alongside package.json and registers each
+  as a Run Task command.
+- **Quality**: 346 unit tests (343 plus 3), typecheck, lint clean (no Rust change),
+  the renderer build succeeds, and 40 Playwright e2e pass (the loading is native-gated,
+  so the parser unit tests cover it). Matrix 5.11 tasks.json row moved to Partial.
 
 ## Slice 48: search history (done)
 

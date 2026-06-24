@@ -25,7 +25,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.8 | Search and replace across files | 5 | 2 | 5 | 0 |
 | 5.9 | Source control and git | 6 | 8 | 10 | 0 |
 | 5.10 | Integrated terminal | 6 | 7 | 6 | 0 |
-| 5.11 | Tasks (VS Code task support) | 0 | 4 | 5 | 0 |
+| 5.11 | Tasks (VS Code task support) | 0 | 5 | 4 | 0 |
 | 5.12 | Debugging (Debug Adapter Protocol) | 0 | 0 | 9 | 0 |
 | 5.13 | Snippets and Emmet | 1 | 2 | 2 | 0 |
 | 5.14 | Settings and configuration | 2 | 2 | 5 | 1 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 10 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 2 | 6 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 4 | 4 | 0 |
-| TOTAL | | 90 | 108 | 126 | 5 |
+| TOTAL | | 90 | 109 | 125 | 5 |
 
 ## Legend
 
@@ -306,7 +306,7 @@ Task support has started: npm scripts are auto-detected from the workspace packa
 
 | Capability | Status | Evidence | What is missing |
 | --- | --- | --- | --- |
-| tasks.json file format and loading | Missing | No code parses or loads tasks.json; zero matches. | No tasks.json loader. |
+| tasks.json file format and loading | Partial | lib/tasks.ts parseTasksJson reads .vscode/tasks.json (label, command, args), unit tested; App loads it alongside package.json scripts and registers Run Task commands. | Command tasks only; no problem matchers, task type semantics, or variable substitution. |
 | Task auto-detection (npm scripts, gradle, etc.) | Partial | detectNpmTasks (lib/tasks.ts) reads the workspace package.json scripts; App registers each as a Run Task command. Unit tested. | Only npm scripts; no gradle, make, or other build systems. |
 | Task quick-pick UI and palette integration | Partial | Detected tasks appear as Run Task: <name> commands in the palette, each running in a new terminal (requestRunInTerminal). | No dedicated task picker view, task groups, or default build and test tasks. |
 | Task groups (build, test) and default task | Missing | Classification is post-hoc, not declarative. | No task groups or default task. |

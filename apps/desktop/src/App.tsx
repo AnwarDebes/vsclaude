@@ -64,7 +64,7 @@ import { SwarmPanel } from './panels/SwarmPanel';
 import { TimelinePanel } from './panels/TimelinePanel';
 import { TokenPanel } from './panels/TokenPanel';
 import { TerminalTabs, requestNewTerminal, requestRunInTerminal } from './components/TerminalTabs';
-import { detectNpmTasks, type NpmTask } from './lib/tasks';
+import { detectNpmTasks, parseTasksJson, type NpmTask } from './lib/tasks';
 import { untitledName } from './lib/untitled';
 
 const STATE_LABELS: Record<string, string> = {
@@ -390,13 +390,15 @@ export function App() {
       return;
     }
     let cancelled = false;
-    void readFile(`${repo}/package.json`)
-      .then(({ content }) => {
-        if (!cancelled) setNpmTasks(detectNpmTasks(content));
-      })
-      .catch(() => {
-        if (!cancelled) setNpmTasks([]);
-      });
+    void Promise.allSettled([
+      readFile(`${repo}/package.json`),
+      readFile(`${repo}/.vscode/tasks.json`),
+    ]).then(([pkg, tasksJson]) => {
+      if (cancelled) return;
+      const npm = pkg.status === 'fulfilled' ? detectNpmTasks(pkg.value.content) : [];
+      const vscode = tasksJson.status === 'fulfilled' ? parseTasksJson(tasksJson.value.content) : [];
+      setNpmTasks([...npm, ...vscode]);
+    });
     return () => {
       cancelled = true;
     };
