@@ -13,6 +13,8 @@ interface ExplorerPanelProps {
   openPath?: string;
   /** Per-file problem severity, shown as a decoration. */
   problems?: Record<string, ProblemSeverity>;
+  /** The currently open editors, listed above the tree. */
+  openEditors?: ReadonlyArray<{ path: string; name: string }>;
   /** Called when a file (not a directory) is clicked. */
   onSelect?: (path: string) => void;
 }
@@ -22,7 +24,14 @@ interface ExplorerPanelProps {
  * sort before files, deep paths synthesize their parents, and collapsed folders
  * hide their descendants. The file the agent is touching is highlighted.
  */
-export function ExplorerPanel({ files, activePath, openPath, problems, onSelect }: ExplorerPanelProps) {
+export function ExplorerPanel({
+  files,
+  activePath,
+  openPath,
+  problems,
+  openEditors,
+  onSelect,
+}: ExplorerPanelProps) {
   const tree = useMemo(() => buildFileTree(files.filter((f) => !isExcludedPath(f.path))), [files]);
   const [expanded, setExpanded] = useState<ReadonlySet<string>>(() => collectDirectoryPaths(tree));
   const rows = useMemo(() => flattenVisible(tree, expanded), [tree, expanded]);
@@ -30,6 +39,25 @@ export function ExplorerPanel({ files, activePath, openPath, problems, onSelect 
   return (
     <nav className="explorer-panel" aria-label="Files">
       <h2 className="panel-title">Explorer</h2>
+      {openEditors && openEditors.length > 0 ? (
+        <section className="explorer-open" aria-label="Open Editors">
+          <h3 className="explorer-open__title">Open Editors</h3>
+          <ul className="explorer-open__list">
+            {openEditors.map((editor) => (
+              <li key={editor.path}>
+                <button
+                  type="button"
+                  className={`explorer-open__item${editor.path === openPath ? ' explorer-open__item--active' : ''}`}
+                  onClick={() => onSelect?.(editor.path)}
+                >
+                  <FileIcon name={editor.name} isDirectory={false} />
+                  <span className="explorer-open__name">{editor.name}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
       <ul className="explorer-list">
         {rows.map((row) => {
           const active = row.node.path === openPath || row.node.path === activePath;

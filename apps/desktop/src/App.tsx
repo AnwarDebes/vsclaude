@@ -999,6 +999,7 @@ export function App() {
               activePath={activePath}
               openPath={openFile}
               problems={fileProblems}
+              openEditors={openFile ? [{ path: openFile, name: basePathName(openFile) }] : []}
               onSelect={setOpenFile}
             />
           )

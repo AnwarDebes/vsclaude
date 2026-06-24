@@ -267,6 +267,13 @@ test.describe('vsclaude shell', () => {
     await expect(panel.getByText('No problems match the filter.')).toBeVisible();
   });
 
+  test('the explorer lists the open editor', async ({ page }) => {
+    await page.goto('/');
+    const openEditors = page.getByRole('region', { name: 'Open Editors' });
+    await expect(openEditors).toBeVisible();
+    await expect(openEditors.getByRole('button', { name: /login-form\.tsx/ })).toBeVisible();
+  });
+
   test('the explorer hides excluded noise directories', async ({ page }) => {
     await page.goto('/');
     const explorer = page.getByRole('navigation', { name: 'Files' });

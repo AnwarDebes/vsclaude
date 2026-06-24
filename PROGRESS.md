@@ -21,7 +21,17 @@ settings JSON editor, reset layout, task variables, task groups, files.exclude,
 at-symbol navigation, hex view, notification toasts, inlay hints, menu bar,
 edit menu, minimap config, diff settings, process info, snippet browser,
 accessibility help, git remotes, problems filter, output channels, editor font,
-diff change counter, terminal exit code, workspace symbols.
+diff change counter, terminal exit code, workspace symbols, open editors.
+
+## Slice 77: open editors view (done)
+
+An Open Editors section in the Explorer (catalog 5.5).
+
+- **View**: ExplorerPanel renders an Open Editors section above the tree listing the open
+  editor(s) and highlighting the active one; clicking switches.
+- **Quality**: 394 unit tests, typecheck, lint clean (no Rust change), the renderer build
+  succeeds, and 57 Playwright e2e pass (the new one sees the open file in the section).
+  Matrix 5.5 open-editors row moved to Partial.
 
 ## Slice 76: workspace symbol search (done)
 

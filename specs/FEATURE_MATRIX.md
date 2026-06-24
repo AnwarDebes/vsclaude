@@ -19,7 +19,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.2 | Code intelligence (LSP language features) | 1 | 10 | 13 | 0 |
 | 5.3 | Editor advanced surface | 8 | 4 | 0 | 0 |
 | 5.4 | Diff and merge | 5 | 2 | 2 | 1 |
-| 5.5 | Workbench layout and navigation | 6 | 14 | 8 | 0 |
+| 5.5 | Workbench layout and navigation | 6 | 15 | 7 | 0 |
 | 5.6 | Quick open and command palette | 7 | 3 | 1 | 0 |
 | 5.7 | File explorer and workspace management | 6 | 4 | 4 | 3 |
 | 5.8 | Search and replace across files | 5 | 2 | 5 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 6 | 7 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 3 | 5 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 99 | 119 | 110 | 5 |
+| TOTAL | | 99 | 120 | 109 | 5 |
 
 ## Legend
 
@@ -167,7 +167,7 @@ vsclaude uses a fixed, presentation-mode-driven layout rather than the dockable 
 | Outline / Document Symbol view | Partial | OutlinePanel.tsx is a drawer (View: Outline) listing the active file's symbols, indented by level, that reveals a line on click. | Markdown headings only; no other languages and no live follow-cursor highlight. |
 | Problems / Diagnostics view | Done | ProblemsPanel.tsx is a docked, grouped, jump-to-able panel; the status bar carries the error and warning count badge; View: Problems and Ctrl or Cmd plus Shift plus M toggle it. | |
 | Status bar (language, encoding, EOL, indent, cursor, branch, errors) | Partial | StatusBar.tsx renders the error and warning counts, branch and change count, language, EOL, indentation, cursor position, and selection, from core-shell orderStatusItems and the editor-bridge status store; cursor opens go-to-line, branch opens review, and the problems item toggles the panel. | Encoding indicator; the value items are not yet clickable pickers (language mode, EOL, indentation). |
-| Open Editors / Open Documents view | Missing | Tabs show open files inline; no separate list view. | No Open Editors view. |
+| Open Editors / Open Documents view | Partial | The Explorer shows an Open Editors section listing the open editor(s) and highlighting the active one; clicking switches. An e2e covers it. | In the demo it tracks a single editor; no per-tab close or dirty indicators yet. |
 | Drag-drop editors between groups | Missing | No multi-group support; no tab reorder via drag. | No drag between groups or tab reorder. |
 | Drag-drop views between containers | Missing | Panels hardcoded per mode; no relocation API. | No relocating views between sidebars or panel. |
 | Floating / auxiliary editor windows | Missing | No floating window support; single-window only. | No float of a view or editor group. |
