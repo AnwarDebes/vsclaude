@@ -154,6 +154,13 @@ pub fn git_ignore_add(cwd: String, pattern: String) -> Result<(), String> {
     Ok(())
 }
 
+/// Amend the last commit with the staged changes and a new message.
+#[tauri::command]
+pub fn git_commit_amend(cwd: String, message: String) -> Result<CommitResult, String> {
+    let output = run_git(&cwd, &["commit", "--amend", "-m", &message])?;
+    Ok(CommitResult { output })
+}
+
 /// Fetch from the default remote.
 #[tauri::command]
 pub fn git_fetch(cwd: String) -> Result<String, String> {
@@ -330,6 +337,27 @@ mod tests {
         git_stash_pop(cwd.clone()).unwrap();
         assert!(git_status(cwd.clone()).unwrap().contains("a.txt"));
         assert_eq!(git_stash_list(cwd.clone()).unwrap().trim(), "");
+
+        let _ = fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn amend_rewrites_the_last_commit() {
+        let dir = init_repo("amend");
+        let cwd = dir.to_str().unwrap().to_string();
+        fs::write(dir.join("a.txt"), "one").unwrap();
+        git_stage(cwd.clone(), vec!["a.txt".to_string()]).unwrap();
+        git_commit_staged(cwd.clone(), "typo".to_string()).unwrap();
+
+        fs::write(dir.join("b.txt"), "two").unwrap();
+        git_stage(cwd.clone(), vec!["b.txt".to_string()]).unwrap();
+        git_commit_amend(cwd.clone(), "fixed message".to_string()).unwrap();
+
+        let log = git_log(cwd.clone(), Some(10)).unwrap();
+        assert_eq!(log.len(), 1);
+        assert_eq!(log[0].subject, "fixed message");
+        // The amended commit absorbed b.txt, so the working tree is clean.
+        assert!(!git_status(cwd.clone()).unwrap().contains("b.txt"));
 
         let _ = fs::remove_dir_all(&dir);
     }

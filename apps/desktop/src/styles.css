@@ -715,6 +715,15 @@ body {
 .scm__stashrow .scm__groupaction {
   margin-left: 0;
 }
+.scm__amend {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 var(--space-md) var(--space-sm);
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
 .scm__syncrow {
   display: flex;
   gap: var(--space-md);

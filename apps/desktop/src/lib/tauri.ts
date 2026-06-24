@@ -74,6 +74,8 @@ export const gitUnstage = (cwd: string, paths: string[]): Promise<void> =>
   invoke('git_unstage', { cwd, paths });
 export const gitCommitStaged = (cwd: string, message: string): Promise<{ output: string }> =>
   invoke('git_commit_staged', { cwd, message });
+export const gitCommitAmend = (cwd: string, message: string): Promise<{ output: string }> =>
+  invoke('git_commit_amend', { cwd, message });
 
 export interface BranchList {
   current: string | null;

@@ -5,7 +5,7 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus fifty parity slices, the last forty-nine
+2026-06-24. Session 3 (Step 0 plus fifty-one parity slices, the last fifty
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
@@ -16,7 +16,19 @@ gitignore action, svg preview, snippets, line height and font weight, ui scale a
 wheel zoom, follow system theme, command categories, output log levels, diff setting,
 json schemas, bracket guides and large-file mode, in-file find, terminal find,
 terminal menu, terminal tab rename, explorer problem decorations, search history,
-tasks.json loading, git push/pull/fetch.
+tasks.json loading, git push/pull/fetch, commit amend.
+
+## Slice 51: git commit amend (done)
+
+Amend the last commit (catalog 5.9).
+
+- **Native** (`git.rs` git_commit_amend): amends with the staged changes and a new
+  message, registered in lib.rs. A new cargo test amends and checks the rewritten
+  commit (14 cargo tests now).
+- **UI**: the SourceControlPanel has an Amend last commit toggle.
+- **Quality**: 346 unit tests, typecheck, lint, cargo clean, the renderer build
+  succeeds, and 40 Playwright e2e pass (native-gated, so the cargo test covers it).
+  Matrix 5.9 commit-amend row moved to Partial.
 
 ## Slice 50: git push, pull, fetch (done)
 

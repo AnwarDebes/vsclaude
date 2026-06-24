@@ -16,6 +16,7 @@ import {
   gitDeleteBranch,
   gitRenameBranch,
   gitIgnoreAdd,
+  gitCommitAmend,
   gitFetch,
   gitPull,
   gitPush,
@@ -55,6 +56,7 @@ export function SourceControlPanel({ repo, onDiff, onClose, onChanged }: SourceC
   const [branches, setBranches] = useState<BranchList | null>(null);
   const [stashCount, setStashCount] = useState(0);
   const [message, setMessage] = useState('');
+  const [amend, setAmend] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [branchMenuOpen, setBranchMenuOpen] = useState(false);
@@ -111,8 +113,12 @@ export function SourceControlPanel({ repo, onDiff, onClose, onChanged }: SourceC
   const ignore = (path: string) => repo && act(() => gitIgnoreAdd(repo, path));
   const stage = (paths: string[]) => repo && act(() => gitStage(repo, paths));
   const unstage = (paths: string[]) => repo && act(() => gitUnstage(repo, paths));
-  const commit = () =>
-    repo && message.trim() && act(() => gitCommitStaged(repo, message.trim()).then(() => setMessage('')));
+  const commit = () => {
+    if (!repo || !message.trim()) return;
+    const text = message.trim();
+    const run = amend ? gitCommitAmend(repo, text) : gitCommitStaged(repo, text);
+    void act(() => run.then(() => setMessage('')));
+  };
   const stashAll = () => repo && act(() => gitStash(repo));
   const popStash = () => repo && act(() => gitStashPop(repo));
   const fetch = () => repo && act(() => gitFetch(repo));
@@ -286,12 +292,16 @@ export function SourceControlPanel({ repo, onDiff, onClose, onChanged }: SourceC
             <button
               type="button"
               className="btn scm__commitbtn"
-              disabled={busy || message.trim().length === 0 || groups.staged.length === 0}
+              disabled={busy || message.trim().length === 0 || (!amend && groups.staged.length === 0)}
               onClick={() => void commit()}
             >
-              Commit
+              {amend ? 'Amend' : 'Commit'}
             </button>
           </div>
+          <label className="scm__amend">
+            <input type="checkbox" checked={amend} onChange={(e) => setAmend(e.target.checked)} />
+            Amend last commit
+          </label>
 
           {groups.staged.length + groups.changes.length > 0 || stashCount > 0 ? (
             <div className="scm__stashrow">
