@@ -23,7 +23,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.6 | Quick open and command palette | 7 | 0 | 4 | 0 |
 | 5.7 | File explorer and workspace management | 6 | 1 | 7 | 3 |
 | 5.8 | Search and replace across files | 5 | 1 | 6 | 0 |
-| 5.9 | Source control and git | 4 | 4 | 16 | 0 |
+| 5.9 | Source control and git | 5 | 6 | 13 | 0 |
 | 5.10 | Integrated terminal | 2 | 3 | 14 | 0 |
 | 5.11 | Tasks (VS Code task support) | 0 | 2 | 7 | 0 |
 | 5.12 | Debugging (Debug Adapter Protocol) | 0 | 0 | 9 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 5 | 9 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 1 | 2 | 7 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 3 | 5 | 0 |
-| TOTAL | | 59 | 79 | 186 | 5 |
+| TOTAL | | 60 | 81 | 183 | 5 |
 
 ## Legend
 
@@ -246,16 +246,16 @@ Project-wide search now ships. The `search.find` IPC command (protocol v5) runs 
 
 ## 5.9 Source control and git
 
-vsclaude has a minimal git implementation focused on agent-driven workflows. Repository status (porcelain parsing) and a basic commit flow live in the DiffReview modal, with git_action events and status/branch labels for display. All branch operations, network operations, staging granularity beyond full-file, conflict resolution UI, history and blame, and a dedicated SCM panel are missing. GIT_SPEC designs these but they are not built; the spec is a roadmap, not a shipping implementation.
+vsclaude now has a working Source Control panel for the daily git workflow: staged and changes groups, per-file and bulk stage and unstage, a staged commit, and a branch picker that switches or creates a branch (see specs/SOURCE_CONTROL.md). It sits in the shared bottom drawer (Ctrl or Cmd plus Shift plus G) and refreshes the status-bar branch through a shared nonce. The review overlay still offers the commit-all flow, and status and branch come from the porcelain parser. Network operations (push, pull, fetch), hunk-level staging, destructive actions with confirmation gating, history and blame, conflict resolution, and the diff editor on a file remain.
 
 | Capability | Status | Evidence | What is missing |
 | --- | --- | --- | --- |
 | Git status and branch information | Done | git.rs git_status parses porcelain v1; parse.ts partitions staged/unstaged/untracked and branch/ahead/behind; summarize.ts labels; DiffReview displays. | |
 | Diff viewing (inline and full) | Done | git.rs git_diff; DiffReview.tsx renders line-by-line with kind classes. | |
 | Commit with message input | Done | git.rs git_commit stages all and commits; DiffReview.tsx message field with validation and refresh. | |
-| Staging and unstaging (file and hunk level) | Missing | No git_stage_paths/unstage/stage_hunk; git_commit always uses add -A. | No granular staging UI; hunk staging unwired. |
+| Staging and unstaging (file and hunk level) | Partial | git.rs git_stage, git_unstage, and git_commit_staged; SourceControlPanel.tsx stages and unstages per file and in bulk and commits the staged set. Cargo tested. | Hunk-level and line-level staging are not wired. |
 | Commit amend | Missing | No git_amend command or confirmation-token infrastructure. | No amend, token gating, or re-read invariant. |
-| Branch operations (create/checkout/delete/rename) | Missing | No branch IPC commands; no branch picker UI. | No branch info, create, switch, rename, or delete. |
+| Branch operations (create/checkout/delete/rename) | Partial | git.rs git_branches, git_checkout, and git_create_branch; SourceControlPanel.tsx has a filterable branch picker that switches and creates branches. Cargo tested. | Delete and rename are not wired. |
 | Merge, rebase, cherry-pick, revert | Missing | No merge/rebase/cherry-pick/revert commands; operation state read-only. | No commands to trigger or continue/abort. |
 | Push, pull, fetch, sync with ahead/behind | Partial | Ahead/behind parsed and shown (parse.ts, summarize.ts); no push/pull/fetch commands. | No network IPC or credential flow. |
 | Remotes (add/remove/rename/tracking) | Missing | No remote commands or UI. | No remote management. |
@@ -272,7 +272,7 @@ vsclaude has a minimal git implementation focused on agent-driven workflows. Rep
 | SCM provider API for non-git systems | Missing | Git hardcoded in git.rs; no provider abstraction. | No SVN/Mercurial/Perforce support. |
 | Destructive operation gating and confirmation tokens | Missing | Spec defines tokens; no generation/validation; DiffReview has no destructive actions. | No typed confirmation tokens for discard/reset/delete. |
 | git_action event integration with Pixie celebration | Done | events.ts gitActionEvent() builds git_action AgentEvent; demo session includes one. | |
-| SCM view/panel UI with grouped changes and status bar | Missing | Only the DiffReview modal exists; no persistent SCM panel. | No left-rail Git panel with staged/changes/history sections. |
+| SCM view/panel UI with grouped changes and status bar | Done | SourceControlPanel.tsx shows Staged Changes and Changes groups with per-file actions, a commit box, and a branch control; the status bar shows the branch and change count. | |
 | Live updates and .git watching | Partial | notify watcher exists in fs_ops.rs; DiffReview re-reads after commit and via refresh button. | No watcher scoped to .git or auto-refresh on .git changes. |
 
 ## 5.10 Integrated terminal

@@ -6,6 +6,8 @@ import {
   gitActionEvent,
   isGitAction,
   parsePorcelainStatus,
+  scmChangeCount,
+  scmGroups,
   summarizeStatus,
 } from '../index.js';
 
@@ -101,6 +103,29 @@ describe('summarizeStatus and branchLabel', () => {
     const behind = parsePorcelainStatus('## main...origin/main [ahead 1, behind 3]\n');
     expect(branchLabel(behind)).toBe('main ↑1 ↓3');
     expect(branchLabel(parsePorcelainStatus('## HEAD (no branch)\n'))).toBe('(detached)');
+  });
+});
+
+describe('scmGroups', () => {
+  it('splits a status into staged and changes (working plus untracked)', () => {
+    const groups = scmGroups(parsePorcelainStatus(SAMPLE));
+    expect(groups.staged.map((c) => c.path)).toEqual([
+      'src/new-feature.ts',
+      'src/another.ts',
+      'src/staged-edit.ts',
+      'src/both.ts',
+    ]);
+    expect(groups.changes.map((c) => c.path)).toEqual([
+      'src/working-edit.ts',
+      'src/both.ts',
+      'notes.md',
+      'scratch/tmp.txt',
+    ]);
+  });
+
+  it('counts all change entries', () => {
+    expect(scmChangeCount(parsePorcelainStatus(SAMPLE))).toBe(8);
+    expect(scmChangeCount(parsePorcelainStatus('## main\n'))).toBe(0);
   });
 });
 

@@ -68,3 +68,20 @@ export const gitHeadFile = (cwd: string, path: string): Promise<string> =>
   invoke('git_head_file', { cwd, path });
 export const gitCommit = (cwd: string, message: string): Promise<{ output: string }> =>
   invoke('git_commit', { cwd, message });
+export const gitStage = (cwd: string, paths: string[]): Promise<void> =>
+  invoke('git_stage', { cwd, paths });
+export const gitUnstage = (cwd: string, paths: string[]): Promise<void> =>
+  invoke('git_unstage', { cwd, paths });
+export const gitCommitStaged = (cwd: string, message: string): Promise<{ output: string }> =>
+  invoke('git_commit_staged', { cwd, message });
+
+export interface BranchList {
+  current: string | null;
+  branches: string[];
+  detached: boolean;
+}
+export const gitBranches = (cwd: string): Promise<BranchList> => invoke('git_branches', { cwd });
+export const gitCheckout = (cwd: string, branch: string): Promise<void> =>
+  invoke('git_checkout', { cwd, branch });
+export const gitCreateBranch = (cwd: string, name: string): Promise<void> =>
+  invoke('git_create_branch', { cwd, name });

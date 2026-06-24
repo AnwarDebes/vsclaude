@@ -26,7 +26,7 @@ export interface GitStatusSummary {
  * the bar simply omits the git item. Refreshes on mount and when the window
  * regains focus, which catches commits and branch switches made elsewhere.
  */
-export function useGitStatus(repoPath: string | null): GitStatusSummary | null {
+export function useGitStatus(repoPath: string | null, nonce = 0): GitStatusSummary | null {
   const [summary, setSummary] = useState<GitStatusSummary | null>(null);
   useEffect(() => {
     if (!isTauri() || !repoPath) {
@@ -55,7 +55,7 @@ export function useGitStatus(repoPath: string | null): GitStatusSummary | null {
       cancelled = true;
       window.removeEventListener('focus', onFocus);
     };
-  }, [repoPath]);
+  }, [repoPath, nonce]);
   return summary;
 }
 

@@ -17,6 +17,9 @@ export { parsePorcelainStatus } from './parse.js';
 
 export { summarizeStatus, branchLabel } from './summarize.js';
 
+export type { ScmGroups } from './scm.js';
+export { scmGroups, scmChangeCount } from './scm.js';
+
 export type { GitAction, GitActionContext } from './events.js';
 export {
   GIT_ACTIONS,

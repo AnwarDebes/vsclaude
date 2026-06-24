@@ -5,8 +5,32 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus four parity slices: quick open, status bar,
-problems and diagnostics, project-wide search).
+2026-06-24. Session 3 (Step 0 plus five parity slices: quick open, status bar,
+problems and diagnostics, project-wide search, source control).
+
+## Slice 5: the source control panel (done)
+
+The spec is `specs/SOURCE_CONTROL.md`; it ships the daily git workflow of 5.9.
+
+- **Rust git commands** (`src-tauri/src/git.rs`): `git_stage`, `git_unstage`,
+  `git_commit_staged`, `git_branches`, `git_checkout`, and `git_create_branch`,
+  thin CLI wrappers like the existing ones, reached through `lib/tauri.ts` (git has
+  always lived outside the typed IPC map). 2 cargo tests cover stage, commit,
+  branch, create, and unstage on a temp repo.
+- **Pure helper** (`@vsclaude/git`): `scmGroups` partitions the status model into
+  Staged Changes and Changes (working tree plus untracked), with `scmChangeCount`.
+  2 unit tests.
+- **Source Control panel** (`SourceControlPanel.tsx`): staged and changes groups
+  with per-file and bulk stage and unstage, a commit box that commits the staged
+  set, and a branch control with an inline filterable picker (reusing
+  filterQuickPick) that switches or creates a branch. Clicking a file opens it.
+- **Integration**: the bottom drawer is now a single slot among Problems, Search,
+  and Source Control (Ctrl or Cmd plus Shift plus M, plus F, plus G). A shared
+  refresh nonce keeps the status-bar branch fresh after a panel action.
+- **Quality**: 216 unit tests (214 plus 2) and 7 cargo tests (5 search plus 2 git),
+  typecheck, lint, and `cargo check` clean, the renderer build succeeds, and 12
+  Playwright e2e pass (the new one opens Source Control and checks the single slot).
+  Matrix 5.9 moved to Done 5, Partial 6, Missing 13.
 
 ## Slice 4: project-wide search (done)
 

@@ -112,6 +112,20 @@ test.describe('vsclaude shell', () => {
     await expect(page.getByRole('region', { name: /problems/i })).toBeVisible();
   });
 
+  test('source control: Ctrl+Shift+G opens the panel and shares the bottom slot', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.getByText('vsclaude').first()).toBeVisible();
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+Shift+KeyG');
+    const scm = page.getByRole('region', { name: 'Source Control' });
+    await expect(scm).toBeVisible();
+    await expect(scm.getByText(/open a folder under git/i)).toBeVisible();
+    // Opening Search closes Source Control: a single bottom slot.
+    await page.keyboard.press('Control+Shift+KeyF');
+    await expect(page.getByRole('region', { name: 'Source Control' })).toHaveCount(0);
+    await expect(page.getByRole('region', { name: 'Search' })).toBeVisible();
+  });
+
   test('opens the diff review overlay from the command palette', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByText('vsclaude').first()).toBeVisible();

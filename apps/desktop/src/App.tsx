@@ -23,6 +23,7 @@ import { CommandPalette, openPalette } from './components/CommandPalette';
 import { StatusBar, useEditorStatus, useGitStatus } from './components/StatusBar';
 import { ProblemsPanel } from './components/ProblemsPanel';
 import { SearchPanel } from './components/SearchPanel';
+import { SourceControlPanel } from './components/SourceControlPanel';
 import { DiffReview } from './components/DiffReview';
 import { Narration } from './components/Narration';
 import { ExplorerPanel } from './panels/ExplorerPanel';
@@ -81,7 +82,8 @@ export function App() {
   const [openFile, setOpenFile] = useState('src/auth/login-form.tsx');
   const [editedContents, setEditedContents] = useState<Record<string, string>>({});
   const [reviewOpen, setReviewOpen] = useState(false);
-  const [bottomPanel, setBottomPanel] = useState<'none' | 'problems' | 'search'>('none');
+  const [bottomPanel, setBottomPanel] = useState<'none' | 'problems' | 'search' | 'scm'>('none');
+  const [gitNonce, setGitNonce] = useState(0);
   const live = useLiveProvider();
   const { available: liveAvailable, start: liveStart } = live;
   const usingLive = live.events.length > 0;
@@ -129,7 +131,7 @@ export function App() {
   );
 
   const editorStatus = useEditorStatus();
-  const gitSummary = useGitStatus(hasWorkspace ? ws.roots[0]?.path ?? null : null);
+  const gitSummary = useGitStatus(hasWorkspace ? ws.roots[0]?.path ?? null : null, gitNonce);
   const diagnostics = useDiagnostics();
 
   const openProblem = useCallback(
@@ -244,6 +246,9 @@ export function App() {
       } else if (key === 'f') {
         e.preventDefault();
         setBottomPanel((p) => (p === 'search' ? 'none' : 'search'));
+      } else if (key === 'g') {
+        e.preventDefault();
+        setBottomPanel((p) => (p === 'scm' ? 'none' : 'scm'));
       }
     };
     window.addEventListener('keydown', onKey);
@@ -293,6 +298,13 @@ export function App() {
       keywords: ['search', 'find', 'files', 'grep', 'ripgrep'],
       keybinding: 'Ctrl+Shift+F',
       run: () => setBottomPanel((p) => (p === 'search' ? 'none' : 'search')),
+    });
+    r.register({
+      id: 'view-scm',
+      title: 'View: Source Control',
+      keywords: ['git', 'source', 'control', 'scm', 'stage', 'commit', 'branch'],
+      keybinding: 'Ctrl+Shift+G',
+      run: () => setBottomPanel((p) => (p === 'scm' ? 'none' : 'scm')),
     });
     r.register({
       id: 'run-agent',
@@ -533,6 +545,13 @@ export function App() {
           root={hasWorkspace ? ws.roots[0]?.path ?? null : null}
           onOpen={openProblem}
           onClose={() => setBottomPanel('none')}
+        />
+      ) : bottomPanel === 'scm' ? (
+        <SourceControlPanel
+          repo={hasWorkspace ? ws.roots[0]?.path ?? null : null}
+          onOpen={openProblem}
+          onClose={() => setBottomPanel('none')}
+          onChanged={() => setGitNonce((n) => n + 1)}
         />
       ) : null}
 
