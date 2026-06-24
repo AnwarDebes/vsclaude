@@ -5,13 +5,26 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus twenty-nine parity slices, the last twenty-eight
+2026-06-24. Session 3 (Step 0 plus thirty parity slices, the last twenty-nine
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
 stash, zen mode, breadcrumbs, tasks, activity-bar badges, output panel, untitled,
 more editor settings, markdown preview, document links, color decorators, outline,
-git history, release notes, notification center.
+git history, release notes, notification center, branch delete and rename.
+
+## Slice 30: branch delete and rename (done)
+
+Completes branch operations (catalog 5.9; row moved to Done).
+
+- **Native** (`git.rs`): git_delete_branch (safe delete) and git_rename_branch,
+  registered in lib.rs. A new cargo test renames then deletes a branch (10 cargo
+  tests now).
+- **UI**: the SourceControlPanel branch picker gains a per-branch Delete (on hover)
+  and a Rename for the current branch.
+- **Quality**: 320 unit tests, typecheck, lint, cargo clean, the renderer build
+  succeeds, and 31 Playwright e2e pass (no regression; git is native-gated, so the
+  cargo tests cover it). Matrix 5.9 branch-operations row moved to Done.
 
 ## Slice 29: notification center (done)
 

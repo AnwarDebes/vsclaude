@@ -23,7 +23,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.6 | Quick open and command palette | 7 | 0 | 4 | 0 |
 | 5.7 | File explorer and workspace management | 6 | 2 | 6 | 3 |
 | 5.8 | Search and replace across files | 5 | 1 | 6 | 0 |
-| 5.9 | Source control and git | 5 | 7 | 12 | 0 |
+| 5.9 | Source control and git | 6 | 6 | 12 | 0 |
 | 5.10 | Integrated terminal | 3 | 4 | 12 | 0 |
 | 5.11 | Tasks (VS Code task support) | 0 | 4 | 5 | 0 |
 | 5.12 | Debugging (Debug Adapter Protocol) | 0 | 0 | 9 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 10 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 1 | 7 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 3 | 5 | 0 |
-| TOTAL | | 78 | 97 | 149 | 5 |
+| TOTAL | | 79 | 96 | 149 | 5 |
 
 ## Legend
 
@@ -255,7 +255,7 @@ vsclaude now has a working Source Control panel for the daily git workflow: stag
 | Commit with message input | Done | git.rs git_commit stages all and commits; DiffReview.tsx message field with validation and refresh. | |
 | Staging and unstaging (file and hunk level) | Partial | git.rs git_stage, git_unstage, and git_commit_staged; SourceControlPanel.tsx stages and unstages per file and in bulk and commits the staged set. Cargo tested. | Hunk-level and line-level staging are not wired. |
 | Commit amend | Missing | No git_amend command or confirmation-token infrastructure. | No amend, token gating, or re-read invariant. |
-| Branch operations (create/checkout/delete/rename) | Partial | git.rs git_branches, git_checkout, and git_create_branch; SourceControlPanel.tsx has a filterable branch picker that switches and creates branches. Cargo tested. | Delete and rename are not wired. |
+| Branch operations (create/checkout/delete/rename) | Done | git.rs git_branches, git_checkout, git_create_branch, git_delete_branch, and git_rename_branch (cargo tested); the SourceControlPanel branch picker switches, creates, deletes a branch, and renames the current one. | |
 | Merge, rebase, cherry-pick, revert | Missing | No merge/rebase/cherry-pick/revert commands; operation state read-only. | No commands to trigger or continue/abort. |
 | Push, pull, fetch, sync with ahead/behind | Partial | Ahead/behind parsed and shown (parse.ts, summarize.ts); no push/pull/fetch commands. | No network IPC or credential flow. |
 | Remotes (add/remove/rename/tracking) | Missing | No remote commands or UI. | No remote management. |

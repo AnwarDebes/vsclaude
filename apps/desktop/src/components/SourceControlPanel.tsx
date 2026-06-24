@@ -13,6 +13,8 @@ import {
   gitCheckout,
   gitCommitStaged,
   gitCreateBranch,
+  gitDeleteBranch,
+  gitRenameBranch,
   gitStage,
   gitStash,
   gitStashList,
@@ -120,6 +122,12 @@ export function SourceControlPanel({ repo, onDiff, onClose, onChanged }: SourceC
       setBranchMenuOpen(false);
       setBranchFilter('');
     });
+  const deleteBranch = (name: string) => repo && act(() => gitDeleteBranch(repo, name));
+  const renameBranch = (from: string) => {
+    if (!repo) return;
+    const to = window.prompt('Rename branch to', from)?.trim();
+    if (to && to !== from) void act(() => gitRenameBranch(repo, from, to));
+  };
 
   const branchLabelText = branches?.current ?? (branches?.detached ? 'detached HEAD' : 'no branch');
   const branchItems = useMemo(
@@ -194,17 +202,39 @@ export function SourceControlPanel({ repo, onDiff, onClose, onChanged }: SourceC
             autoFocus
           />
           <ul className="scm__branchlist">
-            {branchItems.map((item) => (
-              <li key={item.id}>
-                <button
-                  type="button"
-                  className={`scm__branchitem${item.id === branches?.current ? ' is-current' : ''}`}
-                  onClick={() => void checkout(item.id)}
-                >
-                  {item.label}
-                </button>
-              </li>
-            ))}
+            {branchItems.map((item) => {
+              const isCurrent = item.id === branches?.current;
+              return (
+                <li key={item.id} className="scm__branchrow">
+                  <button
+                    type="button"
+                    className={`scm__branchitem${isCurrent ? ' is-current' : ''}`}
+                    onClick={() => void checkout(item.id)}
+                  >
+                    {item.label}
+                  </button>
+                  {isCurrent ? (
+                    <button
+                      type="button"
+                      className="scm__branchaction"
+                      aria-label={`Rename branch ${item.id}`}
+                      onClick={() => renameBranch(item.id)}
+                    >
+                      Rename
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      className="scm__branchaction"
+                      aria-label={`Delete branch ${item.id}`}
+                      onClick={() => void deleteBranch(item.id)}
+                    >
+                      Delete
+                    </button>
+                  )}
+                </li>
+              );
+            })}
             {canCreate ? (
               <li>
                 <button

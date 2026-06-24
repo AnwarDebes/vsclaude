@@ -621,7 +621,13 @@ body {
   max-height: 220px;
   overflow: auto;
 }
+.scm__branchrow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
 .scm__branchitem {
+  flex: 1 1 auto;
   width: 100%;
   text-align: left;
   font: inherit;
@@ -632,6 +638,23 @@ body {
   border-radius: var(--radius-sm, 4px);
   padding: 5px 8px;
   cursor: pointer;
+}
+.scm__branchaction {
+  flex: 0 0 auto;
+  font: inherit;
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  background: transparent;
+  border: none;
+  padding: 4px 6px;
+  cursor: pointer;
+  opacity: 0;
+}
+.scm__branchrow:hover .scm__branchaction {
+  opacity: 1;
+}
+.scm__branchaction:hover {
+  color: var(--color-text);
 }
 .scm__branchitem:hover {
   background: var(--color-accent-muted);

@@ -132,6 +132,20 @@ pub fn git_create_branch(cwd: String, name: String) -> Result<(), String> {
 }
 
 /// Stash the working-tree changes, including untracked files.
+/// Delete a branch. Safe delete: git refuses if it has unmerged commits.
+#[tauri::command]
+pub fn git_delete_branch(cwd: String, name: String) -> Result<(), String> {
+    run_git(&cwd, &["branch", "-d", &name])?;
+    Ok(())
+}
+
+/// Rename a branch.
+#[tauri::command]
+pub fn git_rename_branch(cwd: String, from: String, to: String) -> Result<(), String> {
+    run_git(&cwd, &["branch", "-m", &from, &to])?;
+    Ok(())
+}
+
 #[tauri::command]
 pub fn git_stash(cwd: String) -> Result<(), String> {
     run_git(&cwd, &["stash", "push", "-u"]).map(|_| ())
@@ -252,6 +266,30 @@ mod tests {
         git_stash_pop(cwd.clone()).unwrap();
         assert!(git_status(cwd.clone()).unwrap().contains("a.txt"));
         assert_eq!(git_stash_list(cwd.clone()).unwrap().trim(), "");
+
+        let _ = fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn rename_and_delete_branches() {
+        let dir = init_repo("branchops");
+        let cwd = dir.to_str().unwrap().to_string();
+        fs::write(dir.join("a.txt"), "one").unwrap();
+        git_stage(cwd.clone(), vec!["a.txt".to_string()]).unwrap();
+        git_commit_staged(cwd.clone(), "init".to_string()).unwrap();
+
+        let base = git_branches(cwd.clone()).unwrap().current.unwrap();
+
+        git_create_branch(cwd.clone(), "feature".to_string()).unwrap();
+        git_rename_branch(cwd.clone(), "feature".to_string(), "feature2".to_string()).unwrap();
+        let renamed = git_branches(cwd.clone()).unwrap();
+        assert!(renamed.branches.iter().any(|b| b == "feature2"));
+        assert!(!renamed.branches.iter().any(|b| b == "feature"));
+
+        git_checkout(cwd.clone(), base).unwrap();
+        git_delete_branch(cwd.clone(), "feature2".to_string()).unwrap();
+        let after = git_branches(cwd.clone()).unwrap();
+        assert!(!after.branches.iter().any(|b| b == "feature2"));
 
         let _ = fs::remove_dir_all(&dir);
     }
