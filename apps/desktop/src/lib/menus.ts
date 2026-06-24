@@ -25,6 +25,18 @@ export const MENU_BAR: readonly Menu[] = [
     ],
   },
   {
+    label: 'Edit',
+    items: [
+      { label: 'Undo', command: 'edit-undo' },
+      { label: 'Redo', command: 'edit-redo' },
+      { label: 'Cut', command: 'edit-cut' },
+      { label: 'Copy', command: 'edit-copy' },
+      { label: 'Paste', command: 'edit-paste' },
+      { label: 'Find', command: 'edit-find' },
+      { label: 'Replace', command: 'edit-replace' },
+    ],
+  },
+  {
     label: 'View',
     items: [
       { label: 'Command Palette', command: 'show-commands' },

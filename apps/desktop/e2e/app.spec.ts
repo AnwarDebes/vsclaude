@@ -522,6 +522,15 @@ test.describe('vsclaude shell', () => {
     await expect(modal.getByRole('textbox', { name: 'Settings JSON' })).toHaveValue(/themeId/);
   });
 
+  test('the Edit menu lists undo and redo', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Edit', exact: true }).click();
+    const menu = page.getByRole('menu', { name: 'Edit' });
+    await expect(menu).toBeVisible();
+    await expect(menu.getByRole('menuitem', { name: 'Undo' })).toBeVisible();
+    await expect(menu.getByRole('menuitem', { name: 'Redo' })).toBeVisible();
+  });
+
   test('the menu bar opens release notes from the Help menu', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('button', { name: 'Help', exact: true }).click();

@@ -620,6 +620,30 @@ export function App() {
       keywords: ['notifications', 'alerts', 'messages', 'center', 'bell'],
       run: () => setNotificationsOpen(true),
     });
+    const editActions: ReadonlyArray<{ id: string; title: string; action: string; keywords: string[] }> = [
+      { id: 'edit-undo', title: 'Edit: Undo', action: 'undo', keywords: ['undo', 'revert'] },
+      { id: 'edit-redo', title: 'Edit: Redo', action: 'redo', keywords: ['redo'] },
+      { id: 'edit-cut', title: 'Edit: Cut', action: 'editor.action.clipboardCutAction', keywords: ['cut'] },
+      { id: 'edit-copy', title: 'Edit: Copy', action: 'editor.action.clipboardCopyAction', keywords: ['copy'] },
+      { id: 'edit-paste', title: 'Edit: Paste', action: 'editor.action.clipboardPasteAction', keywords: ['paste'] },
+      { id: 'edit-find', title: 'Edit: Find', action: 'actions.find', keywords: ['find', 'search'] },
+      {
+        id: 'edit-replace',
+        title: 'Edit: Replace',
+        action: 'editor.action.startFindReplaceAction',
+        keywords: ['replace', 'find'],
+      },
+    ];
+    for (const e of editActions) {
+      r.register({
+        id: e.id,
+        title: e.title,
+        keywords: e.keywords,
+        run: () => {
+          runEditorAction(e.action);
+        },
+      });
+    }
     r.register({
       id: 'help-welcome',
       title: 'Help: Welcome',

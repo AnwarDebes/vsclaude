@@ -18,7 +18,20 @@ json schemas, bracket guides and large-file mode, in-file find, terminal find,
 terminal menu, terminal tab rename, explorer problem decorations, search history,
 tasks.json loading, git push/pull/fetch, commit amend, commit revert, on-save trim,
 settings JSON editor, reset layout, task variables, task groups, files.exclude,
-at-symbol navigation, hex view, notification toasts, inlay hints, menu bar.
+at-symbol navigation, hex view, notification toasts, inlay hints, menu bar,
+edit menu.
+
+## Slice 64: Edit menu and editing commands (done)
+
+Undo/redo and clipboard commands (catalog 5.1; section 5.1 now has no Missing rows).
+
+- **Commands**: Edit: Undo, Redo, Cut, Copy, Paste, Find, and Replace run Monaco's
+  editor actions on the active editor.
+- **Menu**: an Edit menu surfaces them in the menu bar.
+- **Quality**: 372 unit tests (the menu-structure test updated for the Edit menu),
+  typecheck, lint clean (no Rust change), the renderer build succeeds, and 49 Playwright
+  e2e pass (the new one opens the Edit menu and sees Undo and Redo). Matrix 5.1
+  undo/redo row moved to Partial, clearing the last 5.1 Missing.
 
 ## Slice 63: a menu bar (done)
 

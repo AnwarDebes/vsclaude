@@ -3,7 +3,7 @@ import { MENU_BAR } from '../lib/menus';
 
 describe('MENU_BAR', () => {
   it('has the expected top-level menus', () => {
-    expect(MENU_BAR.map((m) => m.label)).toEqual(['File', 'View', 'Go', 'Help']);
+    expect(MENU_BAR.map((m) => m.label)).toEqual(['File', 'Edit', 'View', 'Go', 'Help']);
   });
 
   it('gives every item a label and a command', () => {
