@@ -5,7 +5,7 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus sixty-one parity slices, the last sixty
+2026-06-24. Session 3 (Step 0 plus sixty-two parity slices, the last sixty-one
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
@@ -18,7 +18,20 @@ json schemas, bracket guides and large-file mode, in-file find, terminal find,
 terminal menu, terminal tab rename, explorer problem decorations, search history,
 tasks.json loading, git push/pull/fetch, commit amend, commit revert, on-save trim,
 settings JSON editor, reset layout, task variables, task groups, files.exclude,
-at-symbol navigation, hex view, notification toasts.
+at-symbol navigation, hex view, notification toasts, inlay hints.
+
+## Slice 62: TS and JS inlay hints (done)
+
+Inline parameter-name and type hints (catalog 5.2).
+
+- **Config** (`lib/inlay-hints.ts` TS_INLAY_HINTS): parameter names, parameter and
+  variable types, and return types. Unit tested.
+- **Wiring**: monaco-setup applies it to the TS and JS workers via setInlayHintsOptions
+  (with an ambient declare for the typescript contribution); EditorPanel turns on the
+  inlayHints editor option.
+- **Quality**: 369 unit tests (367 plus 2), typecheck, lint clean (no Rust change), the
+  renderer build succeeds, and 47 Playwright e2e pass. Matrix 5.2 inlay-hints row moved
+  to Partial.
 
 ## Slice 61: notification toasts and a status-bar bell (done)
 

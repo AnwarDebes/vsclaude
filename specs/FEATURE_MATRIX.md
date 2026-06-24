@@ -16,7 +16,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | Section | Title | Done | Partial | Missing | Not planned |
 | --- | --- | --- | --- | --- | --- |
 | 5.1 | Text editing core | 11 | 15 | 1 | 0 |
-| 5.2 | Code intelligence (LSP language features) | 1 | 9 | 14 | 0 |
+| 5.2 | Code intelligence (LSP language features) | 1 | 10 | 13 | 0 |
 | 5.3 | Editor advanced surface | 7 | 5 | 0 | 0 |
 | 5.4 | Diff and merge | 3 | 4 | 1 | 1 |
 | 5.5 | Workbench layout and navigation | 6 | 13 | 8 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 4 | 9 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 3 | 5 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 4 | 4 | 0 |
-| TOTAL | | 92 | 117 | 115 | 5 |
+| TOTAL | | 92 | 118 | 114 | 5 |
 
 ## Legend
 
@@ -102,7 +102,7 @@ vsclaude implements a limited set of code intelligence features, relying on Mona
 | Document links and highlights | Partial | monaco-setup.ts registers a DocumentLinkProvider over findLinks (lib/links.ts) for many languages, making URLs clickable. Unit tested. | No document-highlight provider (matching-symbol highlights). |
 | Folding and selection ranges from language | Partial | Monaco default folding enabled; no FoldingRangeProvider override. | No language-specific richer folding ranges. |
 | CodeLens | Missing | No CodeLensProvider or lens UI. | No CodeLens. |
-| Inlay hints | Missing | inlayHints unset; no provider. | No inlay hints. |
+| Inlay hints | Partial | EditorPanel enables inlayHints, and the TS and JS workers provide parameter-name and type hints via setInlayHintsOptions (TS_INLAY_HINTS, unit tested). | Hints come from the worker only; no custom InlayHintsProvider for other languages. |
 | Color decorators and inline color picker | Partial | monaco-setup.ts registers a DocumentColorProvider over findColors (lib/colors.ts) for many languages, showing a swatch and a picker for #hex and rgb()/rgba(). Unit tested. | Detection covers hex and rgb only (no hsl or named colors). |
 | Language servers (TS/JS, Python, Rust, JSON, HTML, CSS) and extensibility | Missing | No LSP bridge in src-tauri/src; spec 7.4 calls it a follow-up; WORKSPACE_AND_FILES.md defers LSP to A2. | No LSP integration; Python/Rust native support absent; A2 not started. |
 | Per-language config (comments, brackets, word patterns, on-enter) | Missing | No registerLanguageConfiguration calls. | No per-language behavior config. |

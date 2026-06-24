@@ -114,6 +114,7 @@ export function EditorPanel({ path, value, language, onChange, onSave }: EditorP
           cursorBlinking: 'smooth',
           largeFileOptimizations: true,
           maxTokenizationLineLength: 20000,
+          inlayHints: { enabled: 'on' },
           find: { seedSearchStringFromSelection: 'always', autoFindInSelection: 'multiline' },
           ...editorSettingsToMonaco(settings),
         }}

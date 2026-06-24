@@ -14,8 +14,13 @@ import { findLinks } from './links';
 import { findColors, toHex } from './colors';
 import { markdownSymbols } from './symbols';
 import { jsonDefaults } from 'monaco-editor/esm/vs/language/json/monaco.contribution';
+import {
+  javascriptDefaults,
+  typescriptDefaults,
+} from 'monaco-editor/esm/vs/language/typescript/monaco.contribution';
 import { SNIPPET_LANGUAGES, snippetsFor } from './snippets';
 import { JSON_SCHEMAS } from './json-schemas';
+import { TS_INLAY_HINTS } from './inlay-hints';
 
 declare global {
   interface Window {
@@ -54,6 +59,10 @@ jsonDefaults.setDiagnosticsOptions({
   enableSchemaRequest: false,
   schemas: JSON_SCHEMAS,
 });
+
+// Inline parameter-name and type hints from the TS and JS workers.
+typescriptDefaults.setInlayHintsOptions(TS_INLAY_HINTS);
+javascriptDefaults.setInlayHintsOptions(TS_INLAY_HINTS);
 
 // Make URLs clickable in any file: a link provider over the shared findLinks.
 const LINK_LANGUAGES = [

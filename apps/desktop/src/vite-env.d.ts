@@ -11,3 +11,13 @@ declare module 'monaco-editor/esm/vs/language/json/monaco.contribution' {
     }): void;
   };
 }
+
+// The typescript contribution exports typescriptDefaults and javascriptDefaults at
+// runtime but ships no type declarations for this deep path; declare the slice we use.
+declare module 'monaco-editor/esm/vs/language/typescript/monaco.contribution' {
+  interface LanguageServiceDefaults {
+    setInlayHintsOptions(options: Record<string, unknown>): void;
+  }
+  export const typescriptDefaults: LanguageServiceDefaults;
+  export const javascriptDefaults: LanguageServiceDefaults;
+}
