@@ -98,12 +98,16 @@ export interface EditorSettings {
   /** Line height in pixels, or 0 to derive it from the font size. */
   lineHeight: number;
   fontWeight: 'normal' | '500' | '600' | 'bold';
+  /** Zoom the editor font with Ctrl and the mouse wheel. */
+  mouseWheelZoom: boolean;
 }
 
 /** User-level application settings. */
 export interface AppSettings {
   themeId: string;
   presentationMode: PresentationMode;
+  /** Whole-UI zoom factor (1 is 100 percent). */
+  uiScale: number;
   reducedMotion: boolean;
   colorBlindSafe: boolean;
   sound: SoundSettings;
@@ -119,6 +123,7 @@ export interface AppSettings {
 export const DEFAULT_SETTINGS: AppSettings = {
   themeId: 'cozy-dark',
   presentationMode: 'companion',
+  uiScale: 1,
   reducedMotion: false,
   colorBlindSafe: false,
   sound: { enabled: false, masterVolume: 0.6, typing: true, ambient: false },
@@ -134,6 +139,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
     cursorStyle: 'line',
     lineHeight: 0,
     fontWeight: 'normal',
+    mouseWheelZoom: false,
   },
   defaultProvider: 'claude-code',
   models: {},

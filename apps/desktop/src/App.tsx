@@ -803,7 +803,7 @@ export function App() {
   );
 
   return (
-    <div className="app-shell" data-mode={mode} data-zen={zenMode}>
+    <div className="app-shell" data-mode={mode} data-zen={zenMode} style={{ zoom: settings.uiScale }}>
       <PixieActionSprite />
 
       <header className="app-header">

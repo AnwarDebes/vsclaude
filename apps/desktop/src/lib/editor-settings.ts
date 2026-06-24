@@ -18,6 +18,7 @@ export interface MonacoEditorOptions {
   cursorStyle: 'line' | 'block' | 'underline';
   lineHeight: number;
   fontWeight: string;
+  mouseWheelZoom: boolean;
 }
 
 /** Map the editor settings to Monaco's option names. */
@@ -34,6 +35,7 @@ export function editorSettingsToMonaco(settings: EditorSettings): MonacoEditorOp
     cursorStyle: settings.cursorStyle,
     lineHeight: settings.lineHeight,
     fontWeight: settings.fontWeight,
+    mouseWheelZoom: settings.mouseWheelZoom,
   };
 }
 

@@ -27,6 +27,7 @@ describe('editorSettingsToMonaco', () => {
       cursorStyle: 'line',
       lineHeight: 0,
       fontWeight: 'normal',
+      mouseWheelZoom: false,
     });
   });
 
