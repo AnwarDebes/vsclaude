@@ -187,6 +187,25 @@ test.describe('vsclaude shell', () => {
     await expect(page.locator('.monaco-editor.vs-dark')).toHaveCount(0);
   });
 
+  test('keyboard shortcuts reference lists commands and filters', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.getByText('vsclaude').first()).toBeVisible();
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('keyboard shortcuts');
+    await page.keyboard.press('Enter');
+    const shortcuts = page.getByRole('dialog', { name: 'Keyboard Shortcuts' });
+    await expect(shortcuts).toBeVisible();
+    // Go to File is listed with its real shortcut.
+    await expect(shortcuts.getByRole('cell', { name: 'Go to File' })).toBeVisible();
+    await shortcuts.getByRole('textbox', { name: /search shortcuts/i }).fill('uppercase');
+    await expect(shortcuts.getByRole('cell', { name: 'Transform to Uppercase' })).toBeVisible();
+    await expect(shortcuts.getByRole('cell', { name: 'Go to File' })).toHaveCount(0);
+    await shortcuts.getByRole('button', { name: /close keyboard shortcuts/i }).click();
+    await expect(page.getByRole('dialog', { name: 'Keyboard Shortcuts' })).toHaveCount(0);
+  });
+
   test('opens the diff review overlay from the command palette', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByText('vsclaude').first()).toBeVisible();

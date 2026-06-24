@@ -33,6 +33,7 @@ import { ProblemsPanel } from './components/ProblemsPanel';
 import { SearchPanel } from './components/SearchPanel';
 import { SourceControlPanel } from './components/SourceControlPanel';
 import { SettingsPanel } from './components/SettingsPanel';
+import { KeyboardShortcuts } from './components/KeyboardShortcuts';
 import { DiffModal, type DiffTarget } from './components/DiffModal';
 import { DiffReview } from './components/DiffReview';
 import { Narration } from './components/Narration';
@@ -96,6 +97,7 @@ export function App() {
   const [gitNonce, setGitNonce] = useState(0);
   const [diffTarget, setDiffTarget] = useState<DiffTarget | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const live = useLiveProvider();
   const { available: liveAvailable, start: liveStart } = live;
   const usingLive = live.events.length > 0;
@@ -399,6 +401,12 @@ export function App() {
       keybinding: 'Ctrl+,',
       run: () => setSettingsOpen(true),
     });
+    r.register({
+      id: 'open-keyboard-shortcuts',
+      title: 'Preferences: Keyboard Shortcuts',
+      keywords: ['keybindings', 'shortcuts', 'keys', 'reference'],
+      run: () => setShortcutsOpen(true),
+    });
     // The editor command surface: Monaco's built-in editing actions, run on the
     // active editor through the bridge, so they are discoverable in the palette.
     for (const cmd of EDITOR_COMMANDS) {
@@ -681,6 +689,9 @@ export function App() {
       />
       {settingsOpen ? (
         <SettingsPanel settings={settings} onChange={setSettings} onClose={() => setSettingsOpen(false)} />
+      ) : null}
+      {shortcutsOpen ? (
+        <KeyboardShortcuts registry={registry} onClose={() => setShortcutsOpen(false)} />
       ) : null}
       <DiffModal target={diffTarget} onClose={() => setDiffTarget(null)} />
       <DiffReview open={reviewOpen} cwd="." onClose={() => setReviewOpen(false)} />

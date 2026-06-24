@@ -1492,6 +1492,94 @@ body {
   color: var(--color-text-muted);
 }
 
+/* Keyboard Shortcuts reference */
+.shortcuts-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 8vh;
+  z-index: var(--z-popover, 200);
+}
+.shortcuts {
+  width: min(680px, 94vw);
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.shortcuts__header {
+  display: flex;
+  align-items: center;
+  padding: 10px var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+}
+.shortcuts__title {
+  font-size: 1rem;
+  margin: 0;
+}
+.shortcuts__close {
+  margin-left: auto;
+}
+.shortcuts__search {
+  margin: var(--space-md) var(--space-lg) 0;
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+  outline: none;
+}
+.shortcuts__search:focus {
+  border-color: var(--color-accent);
+}
+.shortcuts__table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--space-md) 0;
+  overflow: auto;
+}
+.shortcuts__table thead th {
+  text-align: left;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  padding: 4px var(--space-lg);
+  position: sticky;
+  top: 0;
+  background: var(--color-surface-elevated);
+}
+.shortcuts__row td {
+  padding: 5px var(--space-lg);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--color-border);
+}
+.shortcuts__key kbd {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.75rem;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm, 4px);
+  padding: 1px 6px;
+}
+.shortcuts__unbound {
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+}
+.shortcuts__empty {
+  padding: var(--space-md) var(--space-lg);
+  color: var(--color-text-muted);
+}
+
 /* Settings panel */
 .settings-overlay {
   position: fixed;

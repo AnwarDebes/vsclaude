@@ -5,9 +5,23 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus nine parity slices, the last eight self-paced by
+2026-06-24. Session 3 (Step 0 plus ten parity slices, the last nine self-paced by
 an autonomous /loop): quick open, status bar, problems, search, source control,
-editor commands, diff editor, settings, Monaco theme binding.
+editor commands, diff editor, settings, Monaco theme binding, keyboard shortcuts.
+
+## Slice 10: keyboard shortcuts reference (done)
+
+A searchable view of every command and its shortcut (catalog 5.15).
+
+- **Pure helpers** (`lib/shortcuts.ts`): `shortcutRows` turns the registered
+  commands into sorted rows, `filterShortcutRows` filters by title, id, or key. 4
+  unit tests.
+- **Reference** (`KeyboardShortcuts.tsx`): a searchable table of commands and their
+  keybindings, opened by the Preferences: Keyboard Shortcuts command. Read-only for
+  now (no rebinding).
+- **Quality**: 244 unit tests (240 plus 4), typecheck, lint clean (no Rust change),
+  the renderer build succeeds, and 17 Playwright e2e pass (the new one opens and
+  filters the reference). Matrix 5.15 moved to Done 3, Partial 2, Missing 6.
 
 ## Slice 9: Monaco theme binding (done)
 
