@@ -109,4 +109,10 @@ describe('filterSettings', () => {
   it('returns nothing when no setting matches', () => {
     expect(filterSettings('zzzznope', SETTINGS_SCHEMA)).toHaveLength(0);
   });
+
+  it('exposes the diff editor settings', () => {
+    const diffIds = filterSettings('diff', SETTINGS_SCHEMA).map((d) => d.id);
+    expect(diffIds).toContain('editor.diffAlgorithm');
+    expect(diffIds).toContain('editor.diffMaxComputationTime');
+  });
 });

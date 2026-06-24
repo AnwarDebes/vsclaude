@@ -39,6 +39,8 @@ export function DiffView({ original, modified, language, sideBySide = true }: Di
         scrollBeyondLastLine: false,
         hideUnchangedRegions: { enabled: true },
         ignoreTrimWhitespace: settings.diffIgnoreTrimWhitespace,
+        diffAlgorithm: settings.diffAlgorithm,
+        maxComputationTime: settings.diffMaxComputationTime,
       }}
     />
   );

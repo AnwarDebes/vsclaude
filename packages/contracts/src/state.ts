@@ -106,6 +106,10 @@ export interface EditorSettings {
   mouseWheelZoom: boolean;
   /** Ignore trailing-whitespace-only changes in the diff editor. */
   diffIgnoreTrimWhitespace: boolean;
+  /** The diff algorithm the diff editor uses. */
+  diffAlgorithm: 'legacy' | 'advanced';
+  /** Cap (in milliseconds) on diff computation, or 0 for no cap. */
+  diffMaxComputationTime: number;
   /** Draw vertical guides for matching bracket pairs. */
   bracketPairGuides: boolean;
   /** On save, strip trailing whitespace from every line. */
@@ -158,6 +162,8 @@ export const DEFAULT_SETTINGS: AppSettings = {
     fontWeight: 'normal',
     mouseWheelZoom: false,
     diffIgnoreTrimWhitespace: true,
+    diffAlgorithm: 'advanced',
+    diffMaxComputationTime: 5000,
     bracketPairGuides: true,
     trimTrailingWhitespace: false,
     insertFinalNewline: false,

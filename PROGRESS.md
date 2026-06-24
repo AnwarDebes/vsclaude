@@ -19,7 +19,24 @@ terminal menu, terminal tab rename, explorer problem decorations, search history
 tasks.json loading, git push/pull/fetch, commit amend, commit revert, on-save trim,
 settings JSON editor, reset layout, task variables, task groups, files.exclude,
 at-symbol navigation, hex view, notification toasts, inlay hints, menu bar,
-edit menu, minimap config.
+edit menu, minimap config, diff settings.
+
+## Slice 66: diff editor settings and a matrix roll-up reconciliation (done)
+
+Diff settings (catalog 5.4; the row moved to Done).
+
+- **Settings**: editor.diffAlgorithm (legacy or advanced) and editor.diffMaxComputationTime
+  join the existing diff ignore-trailing-whitespace setting; DiffView passes all three to
+  the Monaco diff editor. Settings unit tested.
+- **Matrix fix**: a sweep found the section roll-ups had drifted from their own capability
+  rows (6 sections off by one). Reconciled every roll-up to the actual rows; the true item
+  count is 333 (the prior 329 was an accumulated undercount of 4 Missing items). A new
+  verification sums each section's rows and compares them to its roll-up, so this cannot
+  recur silently.
+- **Quality**: 374 unit tests (a new settings-schema test for the diff settings),
+  typecheck, lint clean (no Rust change), the renderer build succeeds, and 49 Playwright
+  e2e pass. Matrix 5.4 diff-settings row moved to Done; totals now Done 94, Partial 118,
+  Missing 116, Not planned 5 (333).
 
 ## Slice 65: minimap side and size settings (done)
 

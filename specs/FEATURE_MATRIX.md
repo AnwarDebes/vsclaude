@@ -18,19 +18,19 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.1 | Text editing core | 11 | 16 | 0 | 0 |
 | 5.2 | Code intelligence (LSP language features) | 1 | 10 | 13 | 0 |
 | 5.3 | Editor advanced surface | 8 | 4 | 0 | 0 |
-| 5.4 | Diff and merge | 3 | 4 | 1 | 1 |
-| 5.5 | Workbench layout and navigation | 6 | 14 | 7 | 0 |
+| 5.4 | Diff and merge | 4 | 3 | 2 | 1 |
+| 5.5 | Workbench layout and navigation | 6 | 14 | 8 | 0 |
 | 5.6 | Quick open and command palette | 7 | 2 | 2 | 0 |
 | 5.7 | File explorer and workspace management | 6 | 4 | 4 | 3 |
 | 5.8 | Search and replace across files | 5 | 2 | 5 | 0 |
 | 5.9 | Source control and git | 7 | 9 | 8 | 0 |
-| 5.10 | Integrated terminal | 6 | 7 | 6 | 0 |
-| 5.11 | Tasks (VS Code task support) | 0 | 7 | 2 | 0 |
-| 5.12 | Debugging (Debug Adapter Protocol) | 0 | 0 | 9 | 0 |
+| 5.10 | Integrated terminal | 6 | 7 | 5 | 0 |
+| 5.11 | Tasks (VS Code task support) | 0 | 7 | 3 | 0 |
+| 5.12 | Debugging (Debug Adapter Protocol) | 0 | 0 | 10 | 0 |
 | 5.13 | Snippets and Emmet | 1 | 2 | 2 | 0 |
 | 5.14 | Settings and configuration | 2 | 3 | 4 | 1 |
 | 5.15 | Keybindings and keymaps | 3 | 2 | 6 | 0 |
-| 5.16 | Themes and appearance | 15 | 4 | 3 | 0 |
+| 5.16 | Themes and appearance | 15 | 4 | 4 | 0 |
 | 5.17 | Extensions and plugin ecosystem | 5 | 2 | 11 | 0 |
 | 5.18 | Notebooks | 0 | 0 | 6 | 0 |
 | 5.19 | Remote development and tunnels | 0 | 0 | 6 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 4 | 9 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 3 | 5 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 4 | 4 | 0 |
-| TOTAL | | 93 | 119 | 112 | 5 |
+| TOTAL | | 94 | 118 | 116 | 5 |
 
 ## Legend
 
@@ -146,7 +146,7 @@ A real Monaco diff editor now ships (DiffView.tsx and DiffModal.tsx): side-by-si
 | Compare feature (select, with saved, across workspace, folders) | Partial | Compare with Saved (App.tsx compareWithSaved) diffs the editor's unsaved changes against disk, in the workspace and the demo. | No select-for-compare between two arbitrary files, and no folder comparison. |
 | Three-way merge editor (current/incoming/result) | Not planned | GIT_SPEC section 17 states the merge editor is its own spec, a non-goal for git. | Out of scope for current phase. |
 | Inline merge-conflict decorations and accept actions | Missing | No conflict decorations or resolution buttons; model.ts has no conflicted state. | No conflict highlighting, accept buttons, or conflict detection. |
-| Diff settings (ignore trim whitespace, side-by-side threshold, max compute time) | Partial | The editor.diffIgnoreTrimWhitespace setting feeds DiffView's Monaco ignoreTrimWhitespace option (DiffView reads the editor-settings store). | No side-by-side threshold, diff algorithm, or compute-limit options. |
+| Diff settings (ignore trim whitespace, side-by-side threshold, max compute time) | Done | DiffView reads editor.diffIgnoreTrimWhitespace, editor.diffAlgorithm (legacy or advanced), and editor.diffMaxComputationTime from the editor-settings store and passes them to the Monaco diff editor; the modal chrome also toggles side-by-side versus inline. Settings unit tested. | (No per-pixel side-by-side breakpoint, but the diff settings surface is present.) |
 
 ## 5.5 Workbench layout and navigation
 

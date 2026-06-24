@@ -205,6 +205,30 @@ export const SETTINGS_SCHEMA: readonly SettingDef[] = [
     set: (s, v) => ({ ...s, editor: { ...s.editor, diffIgnoreTrimWhitespace: Boolean(v) } }),
   },
   {
+    id: 'editor.diffAlgorithm',
+    category: 'Editor',
+    label: 'Diff Algorithm',
+    description: 'The algorithm the diff editor uses to compare files.',
+    control: {
+      kind: 'select',
+      options: [
+        { value: 'advanced', label: 'Advanced' },
+        { value: 'legacy', label: 'Legacy' },
+      ],
+    },
+    get: (s) => s.editor.diffAlgorithm,
+    set: (s, v) => ({ ...s, editor: { ...s.editor, diffAlgorithm: v as 'legacy' | 'advanced' } }),
+  },
+  {
+    id: 'editor.diffMaxComputationTime',
+    category: 'Editor',
+    label: 'Diff Max Computation Time',
+    description: 'Cap in milliseconds on diff computation, or 0 for no cap.',
+    control: { kind: 'number', min: 0, max: 10000 },
+    get: (s) => s.editor.diffMaxComputationTime,
+    set: (s, v) => ({ ...s, editor: { ...s.editor, diffMaxComputationTime: Number(v) } }),
+  },
+  {
     id: 'editor.bracketPairGuides',
     category: 'Editor',
     label: 'Bracket Pair Guides',
