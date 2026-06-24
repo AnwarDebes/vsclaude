@@ -734,6 +734,26 @@ test.describe('vsclaude shell', () => {
     await expect(img).toHaveAttribute('src', /^data:image\/svg\+xml/);
   });
 
+  test('raster image preview shows dimensions and zooms', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'pixie.png', exact: true }).click();
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('image preview');
+    await page.keyboard.press('Enter');
+    const preview = page.getByRole('dialog', { name: /preview of pixie\.png/i });
+    await expect(preview).toBeVisible();
+    const img = preview.getByRole('img', { name: 'pixie.png' });
+    await expect(img).toHaveAttribute('src', /^data:image\/png/);
+    // The natural dimensions are read on load.
+    await expect(preview.getByText(/16 x 16 px/)).toBeVisible();
+    // Zoom in bumps the level off 100 percent.
+    await expect(preview.getByText('Zoom 100%')).toBeVisible();
+    await preview.getByRole('button', { name: 'Zoom in' }).click();
+    await expect(preview.getByText('Zoom 125%')).toBeVisible();
+  });
+
   test('markdown preview renders the active markdown file', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('button', { name: 'README.md', exact: true }).click();

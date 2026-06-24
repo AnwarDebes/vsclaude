@@ -9,6 +9,11 @@ export const demoFileContents: Record<string, string> = {
   <circle cx="32" cy="32" r="14" fill="#ffffff" />
 </svg>
 `,
+  // A 16 by 16 raster image (PNG data URL) so the Image preview can demo raster
+  // rendering, dimensions, and zoom in the browser. In the native app a real file
+  // is read from disk instead.
+  'assets/pixie.png':
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAIElEQVR42mPwr/n/nxLMMGoAdgNwgVED6GnAaEokzQAAPDf0SxcD/9EAAAAASUVORK5CYII=',
   'src/auth/login-form.tsx': `import { useState } from 'react';
 import { useAuth } from './use-auth';
 

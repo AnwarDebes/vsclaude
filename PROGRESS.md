@@ -24,6 +24,21 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 83: raster image preview with dimensions and zoom (done)
+
+Extend the image viewer beyond SVG (catalog 5.22).
+
+- **Detector** (`lib/preview.ts`): `isRasterImagePath` and `isImagePath` add raster
+  formats; `clampZoom` and `zoomPercent` back the zoom control. Pure and unit tested.
+- **Viewer** (`ImagePreview.tsx`): reports natural pixel dimensions on load, zooms
+  in and out within a clamped range, and shows a message if a source fails to decode.
+  A 16 by 16 demo PNG (`assets/pixie.png`) drives the browser e2e. Native raster
+  preview is gated with a notice for now: the file read is text-only (read_to_string
+  rejects binary), so raster is browser-demo-only until a binary read lands.
+- **Quality**: unit tests, typecheck, lint clean (no Rust change), the renderer build
+  succeeds, and the e2e asserts dimensions and a zoom step. Matrix 5.22 image-preview
+  row moved Missing to Partial.
+
 ## Slice 82: per-key keybinding conflict detection (done)
 
 Surface when two commands bind the same gesture (catalog 5.15).

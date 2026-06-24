@@ -62,7 +62,7 @@ import { welcomeQuickActions, type WelcomeActionId } from './lib/welcome';
 import { DiffModal, type DiffTarget } from './components/DiffModal';
 import { MarkdownPreview, type MarkdownTarget } from './components/MarkdownPreview';
 import { ImagePreview, type ImageTarget } from './components/ImagePreview';
-import { isSvgPath, svgDataUrl } from './lib/preview';
+import { isImagePath, isSvgPath, svgDataUrl } from './lib/preview';
 import { HexView, type HexTarget } from './components/HexView';
 import { ProcessInfoModal } from './components/ProcessInfoModal';
 import { AccessibilityHelp } from './components/AccessibilityHelp';
@@ -577,17 +577,29 @@ export function App() {
     r.register({
       id: 'image-preview',
       title: 'Image: Open Preview',
-      keywords: ['image', 'svg', 'preview', 'picture'],
+      keywords: ['image', 'svg', 'png', 'preview', 'picture'],
       run: () => {
         const path = hasWorkspace ? ws.activePath : openFile;
-        if (!path || !isSvgPath(path)) {
-          addNotification('info', 'Open an SVG file to preview it.');
+        if (!path || !isImagePath(path)) {
+          addNotification('info', 'Open an image file to preview it.');
           return;
         }
-        const svg = hasWorkspace
+        const content = hasWorkspace
           ? ws.activeDoc?.draft ?? ''
           : editedContents[openFile] ?? demoContentFor(openFile);
-        setImageTarget({ name: basePathName(path), src: svgDataUrl(svg) });
+        // SVG is text and is wrapped in a data URL. A raster source must already
+        // be a data URL: the browser demo stores one, but the native file read is
+        // text-only (read_to_string) so a real binary file is not yet previewable.
+        let src: string;
+        if (isSvgPath(path)) {
+          src = svgDataUrl(content);
+        } else if (content.startsWith('data:')) {
+          src = content;
+        } else {
+          addNotification('info', 'Native binary image preview is not wired yet.');
+          return;
+        }
+        setImageTarget({ name: basePathName(path), src });
       },
     });
     r.register({
