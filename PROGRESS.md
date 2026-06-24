@@ -5,7 +5,7 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus thirty-seven parity slices, the last thirty-six
+2026-06-24. Session 3 (Step 0 plus thirty-eight parity slices, the last thirty-seven
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
@@ -13,7 +13,18 @@ stash, zen mode, breadcrumbs, tasks, activity-bar badges, output panel, untitled
 more editor settings, markdown preview, document links, color decorators, outline,
 git history, release notes, notification center, branch delete and rename, git tags,
 gitignore action, svg preview, snippets, line height and font weight, ui scale and
-wheel zoom, follow system theme.
+wheel zoom, follow system theme, command categories.
+
+## Slice 38: command categories in the palette (done)
+
+A category badge per command (catalog 5.6).
+
+- **Helper** (`lib/command-title.ts`): `splitCommandTitle` splits "Git: View History"
+  into a category and a label. 3 unit tests.
+- **Palette**: command rows show the category as a muted badge before the label.
+- **Quality**: 332 unit tests (329 plus 3), typecheck, lint clean (no Rust change),
+  the renderer build succeeds, and 34 Playwright e2e pass (the new one checks the Git
+  badge). Matrix 5.6 command-categories row moved to Partial.
 
 ## Slice 37: follow OS system theme (done)
 

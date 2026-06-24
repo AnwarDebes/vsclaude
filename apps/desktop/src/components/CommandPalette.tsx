@@ -5,11 +5,14 @@ import {
   type CommandRegistry,
   type QuickPickItem,
 } from '@vsclaude/core-shell';
+import { splitCommandTitle } from '../lib/command-title';
 
 /** One rendered row, independent of which mode produced it. */
 interface Row {
   id: string;
   label: string;
+  /** A category badge shown before the label (command mode). */
+  category?: string;
   description?: string;
   hint?: string;
   run: () => void;
@@ -132,12 +135,16 @@ export function CommandPalette({
       return registry
         .fuzzyFind(parsed.query)
         .slice(0, LIMIT)
-        .map((match) => ({
-          id: match.command.id,
-          label: match.command.title,
-          hint: match.command.keybinding,
-          run: () => void registry.run(match.command.id),
-        }));
+        .map((match) => {
+          const parts = splitCommandTitle(match.command.title);
+          return {
+            id: match.command.id,
+            label: parts.label,
+            category: parts.category,
+            hint: match.command.keybinding,
+            run: () => void registry.run(match.command.id),
+          };
+        });
     }
     if (parsed.mode === 'files') {
       return filterQuickPick(parsed.query, files, LIMIT).map((item) => ({
@@ -231,6 +238,7 @@ export function CommandPalette({
                 onMouseEnter={() => setActive(i)}
                 onClick={() => choose(row)}
               >
+                {row.category ? <span className="palette__category">{row.category}</span> : null}
                 <span className="palette__label">{row.label}</span>
                 {row.description ? <span className="palette__desc">{row.description}</span> : null}
                 {row.hint ? <span className="palette__hint">{row.hint}</span> : null}

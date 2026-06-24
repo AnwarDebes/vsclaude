@@ -340,6 +340,17 @@ test.describe('vsclaude shell', () => {
     await expect(settings.getByText('Follow System Theme', { exact: true })).toBeVisible();
   });
 
+  test('the palette shows a command category badge', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('git history');
+    const option = palette.getByRole('option').filter({ hasText: 'View History' }).first();
+    await expect(option.getByText('Git', { exact: true })).toBeVisible();
+    await expect(option.getByText('View History', { exact: true })).toBeVisible();
+  });
+
   test('the notification center collects messages', async ({ page }) => {
     await page.goto('/');
     await page.getByText('Claude Code, in motion').click();

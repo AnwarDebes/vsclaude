@@ -20,7 +20,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.3 | Editor advanced surface | 7 | 5 | 0 | 0 |
 | 5.4 | Diff and merge | 3 | 3 | 2 | 1 |
 | 5.5 | Workbench layout and navigation | 6 | 12 | 9 | 0 |
-| 5.6 | Quick open and command palette | 7 | 0 | 4 | 0 |
+| 5.6 | Quick open and command palette | 7 | 1 | 3 | 0 |
 | 5.7 | File explorer and workspace management | 6 | 2 | 6 | 3 |
 | 5.8 | Search and replace across files | 5 | 1 | 6 | 0 |
 | 5.9 | Source control and git | 6 | 8 | 10 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 10 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 2 | 6 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 3 | 5 | 0 |
-| TOTAL | | 83 | 101 | 140 | 5 |
+| TOTAL | | 83 | 102 | 139 | 5 |
 
 ## Legend
 
@@ -197,7 +197,7 @@ The palette is now unified: Ctrl or Cmd plus K opens command mode and Ctrl or Cm
 | Go to line/column with : | Done | parsePaletteInput parses :line and :line:column; editor-bridge.ts gotoLine reveals and selects in the active Monaco editor; unit tested. | |
 | Commands via > prefix | Done | parsePaletteInput routes > to command mode inside the unified palette; e2e switches files to commands with >. | |
 | Keybinding display in palette | Done | Command.keybinding field (command-registry.ts); CommandPalette renders it right-aligned; Go to File and Show All Commands carry real shortcuts. | |
-| Command categories/grouping | Missing | Command interface has no category field; palette renders a flat list. | No category field or grouping headers. |
+| Command categories/grouping | Partial | The palette derives a category from each command title (splitCommandTitle, unit tested) and shows it as a badge before the label. | No grouping headers and no explicit category field on the command model. |
 | Go to definition and back/forward stack | Missing | No DefinitionProvider; no navigation stack or commands. | Deferred to 5.2: go-to-def, history stack, back/forward. |
 | General reusable quick-pick framework | Done | core-shell quick-pick.ts: QuickPickItem, filterQuickPick ranker, parsePaletteInput router; unit tested; reused by file mode and ready for branch, profile, theme, and search pickers. | |
 
