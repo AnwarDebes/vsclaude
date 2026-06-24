@@ -29,7 +29,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.12 | Debugging (Debug Adapter Protocol) | 0 | 0 | 10 | 0 |
 | 5.13 | Snippets and Emmet | 1 | 3 | 1 | 0 |
 | 5.14 | Settings and configuration | 2 | 3 | 4 | 1 |
-| 5.15 | Keybindings and keymaps | 3 | 2 | 6 | 0 |
+| 5.15 | Keybindings and keymaps | 3 | 3 | 5 | 0 |
 | 5.16 | Themes and appearance | 17 | 3 | 3 | 0 |
 | 5.17 | Extensions and plugin ecosystem | 5 | 2 | 11 | 0 |
 | 5.18 | Notebooks | 0 | 0 | 6 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 6 | 7 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 3 | 5 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 100 | 122 | 106 | 5 |
+| TOTAL | | 100 | 123 | 105 | 5 |
 
 ## Legend
 
@@ -365,17 +365,17 @@ A real Settings panel now ships: a searchable, categorized list with a modified 
 
 ## 5.15 Keybindings and keymaps
 
-vsclaude has a global keymap (Ctrl or Cmd plus K and P for the palette, plus S for save, plus G for go-to-line, plus Shift plus M, F, G for the bottom drawer, plus comma for settings, and Monaco's editor defaults) and now a searchable Keyboard Shortcuts reference (KeyboardShortcuts.tsx) that lists every command and its shortcut. The reference is read-only: a JSON config system, when-clause evaluation, conflict detection, rebinding, and importable keymaps remain.
+vsclaude has a global keymap (Ctrl or Cmd plus K and P for the palette, plus S for save, plus G for go-to-line, plus Shift plus M, F, G for the bottom drawer, plus comma for settings, and Monaco's editor defaults) and now a searchable Keyboard Shortcuts reference (KeyboardShortcuts.tsx) that lists every command and its shortcut, now with per-key conflict detection over the registered commands. The reference is otherwise read-only: a JSON config system, when-clause evaluation, rebinding, and importable keymaps remain.
 
 | Capability | Status | Evidence | What is missing |
 | --- | --- | --- | --- |
 | Global keyboard shortcuts (hardcoded) | Done | CommandPalette.tsx Ctrl/Cmd+K; EditorPanel.tsx Ctrl/Cmd+S; ACCESSIBILITY.md documents the full global keymap. | |
 | Command palette as keyboard interface | Done | command-registry.ts fuzzy matching; CommandPalette.tsx open/search/navigate/run. | |
-| Keybindings editor / settings UI | Partial | KeyboardShortcuts.tsx is a searchable, read-only reference of every command and its shortcut, opened by the Preferences: Keyboard Shortcuts command. | Read-only: no rebinding, conflict detection, or keybindings.json persistence. |
+| Keybindings editor / settings UI | Partial | KeyboardShortcuts.tsx is a searchable reference of every command and its shortcut, opened by the Preferences: Keyboard Shortcuts command, and flags per-key conflicts. | Read-only: no rebinding or keybindings.json persistence. |
 | Keybindings JSON format and persistence | Missing | AppSettings has no keybindings field; no keybindings.json. | No schema, file, or persistence; no export. |
 | When-clause context evaluation | Missing | CommandRegistry.register has no when field; no context filtering. | No when-clause evaluator or conditional bindings. |
 | Chord bindings (multi-key sequences) | Missing | Only a single Ctrl+K chord; no chord support in the registry. | No multi-key or prefix sequences. |
-| Per-key conflict detection | Missing | No conflict logic in CommandRegistry. | No detection or warning for duplicate bindings. |
+| Per-key conflict detection | Partial | keybinding-conflicts.ts findKeybindingConflicts normalizes gestures (case, modifier order, chords) and groups commands sharing one; the Keyboard Shortcuts view shows a conflict summary plus a per-row conflict badge. Unit tested. | Detection and warning only over registered commands; no live warning while rebinding (no rebinding yet) and no when-clause scoping. |
 | Importable keymaps (Vim/Sublime/IntelliJ) | Missing | No preset loader; plugin API has no registerKeybindings. | No presets or keybinding contributions. |
 | Printable shortcuts reference / help | Done | KeyboardShortcuts.tsx lists every command and its shortcut in a searchable table; shortcutRows and filterShortcutRows are unit tested. | |
 | Record-keys helper | Missing | No record/capture mode found. | No key-recording mode. |

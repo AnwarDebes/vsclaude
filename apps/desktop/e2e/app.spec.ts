@@ -201,6 +201,8 @@ test.describe('vsclaude shell', () => {
     await expect(shortcuts).toBeVisible();
     // Go to File is listed with its real shortcut.
     await expect(shortcuts.getByRole('cell', { name: 'Go to File' })).toBeVisible();
+    // The conflict summary reports on the real registry, whose bindings are unique.
+    await expect(shortcuts.getByLabel('Keybinding conflicts')).toHaveText(/no keybinding conflicts/i);
     await shortcuts.getByRole('textbox', { name: /search shortcuts/i }).fill('uppercase');
     await expect(shortcuts.getByRole('cell', { name: 'Transform to Uppercase' })).toBeVisible();
     await expect(shortcuts.getByRole('cell', { name: 'Go to File' })).toHaveCount(0);

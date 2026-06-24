@@ -24,6 +24,20 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 82: per-key keybinding conflict detection (done)
+
+Surface when two commands bind the same gesture (catalog 5.15).
+
+- **Detector** (`keybinding-conflicts.ts`): `normalizeKeybinding` collapses case,
+  modifier order, and chord spacing; `findKeybindingConflicts` groups commands
+  sharing a gesture; `conflictingKeys` flags rows. Pure and unit tested.
+- **UI** (`KeyboardShortcuts.tsx`): a conflict summary region (role status when
+  clean, role alert when not) plus a per-row conflict badge. The real registry is
+  conflict free, so the view reports "No keybinding conflicts."
+- **Quality**: unit tests, typecheck, lint clean (no Rust change), the renderer
+  build succeeds, and the e2e asserts the conflict summary. Matrix 5.15 per-key
+  conflict-detection row moved to Partial.
+
 ## Slice 81: narration log panel (done)
 
 An accessible narration history (catalog 5.20).
