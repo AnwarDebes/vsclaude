@@ -263,6 +263,21 @@ test.describe('vsclaude shell', () => {
     await expect(row.locator('.file-icon svg')).toBeVisible();
   });
 
+  test('zen mode hides the chrome and Escape restores it', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('.app-header')).toBeVisible();
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('zen');
+    await page.keyboard.press('Enter');
+    await expect(page.locator('.app-header')).toBeHidden();
+    await expect(page.locator('.activity-bar')).toBeHidden();
+    await expect(page.locator('.editor-panel')).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(page.locator('.app-header')).toBeVisible();
+  });
+
   test('opens the diff review overlay from the command palette', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByText('vsclaude').first()).toBeVisible();

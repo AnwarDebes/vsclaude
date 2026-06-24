@@ -2438,3 +2438,18 @@ body {
   animation-duration: 0.001ms !important;
   transition-duration: 0.001ms !important;
 }
+
+/* Zen mode: distraction-free, just the editor. Placed last so it wins source
+   order over the per-mode app-main grids. */
+.app-shell[data-zen='true'] .app-header,
+.app-shell[data-zen='true'] .activity-bar,
+.app-shell[data-zen='true'] .app-bottom,
+.app-shell[data-zen='true'] .status-bar {
+  display: none;
+}
+.app-shell[data-zen='true'] .app-main {
+  grid-template-columns: 1fr;
+}
+.app-shell[data-zen='true'] .app-main > *:not(.app-center) {
+  display: none;
+}

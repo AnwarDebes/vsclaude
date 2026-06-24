@@ -19,7 +19,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.2 | Code intelligence (LSP language features) | 0 | 7 | 17 | 0 |
 | 5.3 | Editor advanced surface | 6 | 4 | 2 | 0 |
 | 5.4 | Diff and merge | 3 | 3 | 2 | 1 |
-| 5.5 | Workbench layout and navigation | 5 | 9 | 13 | 0 |
+| 5.5 | Workbench layout and navigation | 6 | 10 | 11 | 0 |
 | 5.6 | Quick open and command palette | 7 | 0 | 4 | 0 |
 | 5.7 | File explorer and workspace management | 6 | 2 | 6 | 3 |
 | 5.8 | Search and replace across files | 5 | 1 | 6 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 6 | 8 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 1 | 7 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 3 | 5 | 0 |
-| TOTAL | | 76 | 83 | 165 | 5 |
+| TOTAL | | 77 | 84 | 163 | 5 |
 
 ## Legend
 
@@ -171,8 +171,8 @@ vsclaude uses a fixed, presentation-mode-driven layout rather than the dockable 
 | Drag-drop editors between groups | Missing | No multi-group support; no tab reorder via drag. | No drag between groups or tab reorder. |
 | Drag-drop views between containers | Missing | Panels hardcoded per mode; no relocation API. | No relocating views between sidebars or panel. |
 | Floating / auxiliary editor windows | Missing | No floating window support; single-window only. | No float of a view or editor group. |
-| Zen mode (hide UI chrome) | Missing | No zen toggle; minimal mode reduces but does not hide chrome. | No full chrome-hiding zen mode. |
-| Full screen / distraction-free | Missing | No fullscreen UI or API integration. | No fullscreen or distraction-free toggle. |
+| Zen mode (hide UI chrome) | Done | The View: Toggle Zen Mode command sets data-zen on the shell, hiding the header, activity bar, panels, and status bar to leave just the editor; Escape exits. | |
+| Full screen / distraction-free | Partial | Zen mode is the distraction-free path (just the editor). | No OS full-screen (F11) toggle through the Fullscreen API or the window. |
 | Custom title bar / menu bar | Missing | App.tsx renders a brand header; SettingsBar.tsx has control buttons, no menus. | No File/Edit/View menu bar or customizable title bar. |
 | Layout persistence across sessions | Partial | useWorkspace.ts persists root paths and recents; App.tsx restores presentationMode. | No split sizes, panel positions, tab order, or active tab persisted. |
 | Reset layout to defaults | Missing | No reset-layout command or button. | No reset to factory layout. |

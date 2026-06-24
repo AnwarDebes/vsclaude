@@ -5,10 +5,24 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus fifteen parity slices, the last fourteen
+2026-06-24. Session 3 (Step 0 plus sixteen parity slices, the last fifteen
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
-keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git stash.
+keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
+stash, zen mode.
+
+## Slice 16: zen mode (done)
+
+A distraction-free toggle (catalog 5.5).
+
+- **View: Toggle Zen Mode** sets `data-zen` on the app shell; the stylesheet hides
+  the header, activity bar, bottom panels, status bar, and the explorer and right
+  sidebar, leaving just the editor. Escape exits. The zen CSS is placed last so it
+  wins source order over the per-mode app-main grids.
+- **Quality**: 264 unit tests, typecheck, lint clean (no Rust change), the renderer
+  build succeeds, and 22 Playwright e2e pass (the new one toggles zen, asserts the
+  chrome is hidden, and restores it with Escape). Matrix 5.5 zen row moved to Done
+  and full-screen to Partial.
 
 ## Slice 15: git stash (done)
 

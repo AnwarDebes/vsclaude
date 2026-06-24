@@ -103,6 +103,7 @@ export function App() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const [welcomeOpen, setWelcomeOpen] = useState(false);
+  const [zenMode, setZenMode] = useState(false);
   const live = useLiveProvider();
   const { available: liveAvailable, start: liveStart } = live;
   const usingLive = live.events.length > 0;
@@ -356,6 +357,10 @@ export function App() {
   // for Problems and plus Shift plus F for Search. One slot, so each toggles.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        // Escape leaves Zen mode (a no-op when not in it).
+        setZenMode(false);
+      }
       if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key === ',') {
         e.preventDefault();
         setSettingsOpen((o) => !o);
@@ -459,6 +464,12 @@ export function App() {
       title: 'Help: Welcome',
       keywords: ['welcome', 'getting', 'started', 'help', 'intro'],
       run: () => setWelcomeOpen(true),
+    });
+    r.register({
+      id: 'toggle-zen',
+      title: 'View: Toggle Zen Mode',
+      keywords: ['zen', 'distraction', 'focus', 'fullscreen', 'hide'],
+      run: () => setZenMode((z) => !z),
     });
     // The editor command surface: Monaco's built-in editing actions, run on the
     // active editor through the bridge, so they are discoverable in the palette.
@@ -612,7 +623,7 @@ export function App() {
   );
 
   return (
-    <div className="app-shell" data-mode={mode}>
+    <div className="app-shell" data-mode={mode} data-zen={zenMode}>
       <PixieActionSprite />
 
       <header className="app-header">
