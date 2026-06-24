@@ -19,7 +19,19 @@ terminal menu, terminal tab rename, explorer problem decorations, search history
 tasks.json loading, git push/pull/fetch, commit amend, commit revert, on-save trim,
 settings JSON editor, reset layout, task variables, task groups, files.exclude,
 at-symbol navigation, hex view, notification toasts, inlay hints, menu bar,
-edit menu, minimap config, diff settings, process info, snippet browser.
+edit menu, minimap config, diff settings, process info, snippet browser,
+accessibility help.
+
+## Slice 69: accessibility help dialog (done)
+
+Keyboard and screen-reader help (catalog 5.20).
+
+- **Dialog** (`AccessibilityHelp.tsx`, aria-modal): Help: Accessibility Help lists how to
+  drive vsclaude from the keyboard and which accessibility affordances exist
+  (ACCESSIBILITY_HELP in lib/a11y-help.ts, unit tested). It is in the Help menu too.
+- **Quality**: 379 unit tests (377 plus 2), typecheck, lint clean (no Rust change), the
+  renderer build succeeds, and 52 Playwright e2e pass (the new one opens it from the Help
+  menu). Matrix 5.20 accessibility-help row moved to Partial.
 
 ## Slice 68: snippet browser and insert command (done)
 

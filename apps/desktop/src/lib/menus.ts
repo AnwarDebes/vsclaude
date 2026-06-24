@@ -62,6 +62,7 @@ export const MENU_BAR: readonly Menu[] = [
       { label: 'Welcome', command: 'help-welcome' },
       { label: 'Release Notes', command: 'help-release-notes' },
       { label: 'Keyboard Shortcuts', command: 'open-keyboard-shortcuts' },
+      { label: 'Accessibility Help', command: 'help-accessibility' },
     ],
   },
 ];

@@ -60,6 +60,7 @@ import { ImagePreview, type ImageTarget } from './components/ImagePreview';
 import { isSvgPath, svgDataUrl } from './lib/preview';
 import { HexView, type HexTarget } from './components/HexView';
 import { ProcessInfoModal } from './components/ProcessInfoModal';
+import { AccessibilityHelp } from './components/AccessibilityHelp';
 import { themeForSystem } from './lib/system-theme';
 import { DiffReview } from './components/DiffReview';
 import { Narration } from './components/Narration';
@@ -133,6 +134,7 @@ export function App() {
   const [hexTarget, setHexTarget] = useState<HexTarget | null>(null);
   const [processInfoOpen, setProcessInfoOpen] = useState(false);
   const [snippetsOpen, setSnippetsOpen] = useState(false);
+  const [a11yHelpOpen, setA11yHelpOpen] = useState(false);
   const [gitHistory, setGitHistory] = useState<GitCommit[] | null>(null);
   const [tagsOpen, setTagsOpen] = useState(false);
   const [npmTasks, setNpmTasks] = useState<NpmTask[]>([]);
@@ -631,6 +633,12 @@ export function App() {
       run: () => setSnippetsOpen(true),
     });
     r.register({
+      id: 'help-accessibility',
+      title: 'Help: Accessibility Help',
+      keywords: ['accessibility', 'a11y', 'help', 'keyboard', 'screen', 'reader'],
+      run: () => setA11yHelpOpen(true),
+    });
+    r.register({
       id: 'show-notifications',
       title: 'Notifications: Show',
       keywords: ['notifications', 'alerts', 'messages', 'center', 'bell'],
@@ -1115,6 +1123,7 @@ export function App() {
       <ImagePreview target={imageTarget} onClose={() => setImageTarget(null)} />
       <HexView target={hexTarget} onClose={() => setHexTarget(null)} />
       <ProcessInfoModal open={processInfoOpen} onClose={() => setProcessInfoOpen(false)} />
+      <AccessibilityHelp open={a11yHelpOpen} onClose={() => setA11yHelpOpen(false)} />
       <SnippetsModal
         open={snippetsOpen}
         onInsert={(body) => {

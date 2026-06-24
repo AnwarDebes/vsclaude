@@ -566,6 +566,15 @@ test.describe('vsclaude shell', () => {
     await expect(outline.getByRole('button', { name: 'Getting started' })).toBeVisible();
   });
 
+  test('accessibility help opens from the Help menu', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Help', exact: true }).click();
+    await page.getByRole('menu', { name: 'Help' }).getByRole('menuitem', { name: 'Accessibility Help' }).click();
+    const dialog = page.getByRole('dialog', { name: 'Accessibility help' });
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByText('Command palette')).toBeVisible();
+  });
+
   test('the snippet browser lists the built-in snippets', async ({ page }) => {
     await page.goto('/');
     await page.getByText('Claude Code, in motion').click();

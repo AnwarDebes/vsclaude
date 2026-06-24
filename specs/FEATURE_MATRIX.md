@@ -34,11 +34,11 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.17 | Extensions and plugin ecosystem | 5 | 2 | 11 | 0 |
 | 5.18 | Notebooks | 0 | 0 | 6 | 0 |
 | 5.19 | Remote development and tunnels | 0 | 0 | 6 | 0 |
-| 5.20 | Accessibility (full) | 1 | 11 | 4 | 0 |
+| 5.20 | Accessibility (full) | 1 | 12 | 3 | 0 |
 | 5.21 | Productivity and workspace lifecycle | 4 | 9 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 3 | 5 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 94 | 120 | 114 | 5 |
+| TOTAL | | 94 | 121 | 113 | 5 |
 
 ## Legend
 
@@ -483,7 +483,7 @@ The repository implements foundational accessibility but remains incomplete agai
 | Permission request dialog accessibility | Missing | No permission dialog component; DiffReview has role='dialog' but no permission safety pattern. | No alertdialog, aria-modal, focus trap/restore, safe default focus, or assertive narration with tool/inputs. |
 | ARIA patterns for chat, terminal, editor, swarm | Partial | Terminal section aria-label; editor tablist/tab/tabpanel/status; swarm cards with status labels. | No chat live region, terminal screen-reader mode, swarm tree hierarchy, diff line-count labels, or token meter values. |
 | Narration log panel accessible history (Ctrl+.) | Missing | Narration.tsx shows a caption plus log but not a separate drawer; no Ctrl/Cmd+. command; entries are strings. | No log panel with role='log' and timestamps, Ctrl/Cmd+. command, or jump-to-event rows. |
-| Accessible keyboard help and context-sensitive help | Missing | Palette lists commands but there is no dedicated help or a11y help dialog. | No help dialog listing committed commands or context-sensitive help per region. |
+| Accessible keyboard help and context-sensitive help | Partial | Help: Accessibility Help opens an aria-modal dialog (AccessibilityHelp) of keyboard and screen-reader guidance (ACCESSIBILITY_HELP, unit tested), reachable from the Help menu. An e2e opens it. | Not context-sensitive per region; static guidance rather than per-focus help. |
 
 ## 5.21 Productivity and workspace lifecycle
 

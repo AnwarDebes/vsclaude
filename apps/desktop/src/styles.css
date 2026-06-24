@@ -2558,6 +2558,60 @@ body {
   color: var(--color-text);
 }
 
+/* Accessibility help */
+.a11y-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 7vh;
+  z-index: var(--z-popover, 200);
+}
+.a11y-modal {
+  width: min(520px, 92vw);
+  max-height: 78vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.a11y-modal__header {
+  display: flex;
+  align-items: center;
+  padding: 10px var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+}
+.a11y-modal__title {
+  font-size: 0.95rem;
+  margin: 0;
+  margin-right: auto;
+}
+.a11y-modal__list {
+  margin: 0;
+  padding: var(--space-md) var(--space-lg);
+  overflow: auto;
+}
+.a11y-modal__entry {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+.a11y-modal__entry:last-child {
+  border-bottom: none;
+}
+.a11y-modal__entry dt {
+  font-weight: 600;
+  font-size: 0.86rem;
+}
+.a11y-modal__entry dd {
+  margin: 2px 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.84rem;
+}
+
 /* Snippet browser */
 .snip-overlay {
   position: fixed;
