@@ -416,7 +416,7 @@ export function App() {
   }, []);
   useEffect(() => {
     if (ws.error) {
-      appendLog(`Error: ${ws.error}`);
+      appendLog(`Error: ${ws.error}`, 'error');
       addNotification('error', ws.error);
     }
   }, [ws.error]);

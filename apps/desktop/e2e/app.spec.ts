@@ -304,6 +304,9 @@ test.describe('vsclaude shell', () => {
     const output = page.getByRole('region', { name: 'Output' });
     await expect(output).toBeVisible();
     await expect(output.getByText(/vsclaude ready/i).first()).toBeVisible();
+    // Filtering to errors hides the info startup line.
+    await output.getByRole('combobox', { name: /filter by level/i }).selectOption('error');
+    await expect(output.getByText(/vsclaude ready/i)).toHaveCount(0);
     await output.getByRole('button', { name: /close output panel/i }).click();
     await expect(page.getByRole('region', { name: 'Output' })).toHaveCount(0);
   });

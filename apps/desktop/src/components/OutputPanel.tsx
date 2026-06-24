@@ -1,22 +1,42 @@
-import { useSyncExternalStore } from 'react';
-import { clearLog, getLog, subscribeLog } from '../lib/output-log';
+import { useState, useSyncExternalStore } from 'react';
+import { clearLog, filterLog, getLog, subscribeLog, type LogLevel } from '../lib/output-log';
 
 export interface OutputPanelProps {
   onClose: () => void;
 }
 
+const LEVELS: Array<{ value: LogLevel | 'all'; label: string }> = [
+  { value: 'all', label: 'All' },
+  { value: 'info', label: 'Info' },
+  { value: 'warn', label: 'Warnings' },
+  { value: 'error', label: 'Errors' },
+];
+
 /**
  * The Output panel: a read-only view of the vsclaude log channel (startup,
- * opening a folder, running a task, errors). A single channel for now; per-channel
- * and log-level filtering are follow-ups.
+ * opening a folder, running a task, errors), filterable by level.
  */
 export function OutputPanel({ onClose }: OutputPanelProps) {
-  const lines = useSyncExternalStore(subscribeLog, getLog, getLog);
+  const entries = useSyncExternalStore(subscribeLog, getLog, getLog);
+  const [level, setLevel] = useState<LogLevel | 'all'>('all');
+  const visible = filterLog(entries, level);
 
   return (
     <section className="output" role="region" aria-label="Output">
       <header className="output__header">
         <h2 className="output__title">Output</h2>
+        <select
+          className="output__filter"
+          aria-label="Filter by level"
+          value={level}
+          onChange={(e) => setLevel(e.target.value as LogLevel | 'all')}
+        >
+          {LEVELS.map((l) => (
+            <option key={l.value} value={l.value}>
+              {l.label}
+            </option>
+          ))}
+        </select>
         <button type="button" className="output__action" onClick={() => clearLog()}>
           Clear
         </button>
@@ -25,12 +45,12 @@ export function OutputPanel({ onClose }: OutputPanelProps) {
         </button>
       </header>
       <div className="output__body">
-        {lines.length === 0 ? (
+        {visible.length === 0 ? (
           <p className="output__empty">No output yet.</p>
         ) : (
-          lines.map((line, i) => (
-            <div key={i} className="output__line">
-              {line}
+          visible.map((entry, i) => (
+            <div key={i} className={`output__line output__line--${entry.level}`}>
+              {entry.message}
             </div>
           ))
         )}

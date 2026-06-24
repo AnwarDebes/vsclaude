@@ -37,8 +37,8 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.20 | Accessibility (full) | 1 | 11 | 4 | 0 |
 | 5.21 | Productivity and workspace lifecycle | 3 | 10 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 2 | 6 | 0 |
-| 5.23 | Performance, logging, diagnostics, updates | 0 | 3 | 5 | 0 |
-| TOTAL | | 83 | 102 | 139 | 5 |
+| 5.23 | Performance, logging, diagnostics, updates | 0 | 4 | 4 | 0 |
+| TOTAL | | 83 | 103 | 138 | 5 |
 
 ## Legend
 
@@ -533,7 +533,7 @@ The repository has extensive performance specification (PERFORMANCE_BUDGETS.md w
 | Capability | Status | Evidence | What is missing |
 | --- | --- | --- | --- |
 | Cold start plus startup performance markers | Partial | PERFORMANCE_BUDGETS.md sections 4/12 specify budgets and method; BUILD.md describes the start path; no performance.mark in main.tsx or App.tsx. | No User Timing instrumentation, frame sampler harness, or cold-start CI gate. |
-| Structured logging with levels plus on-disk logs plus troubleshooting | Missing | No logging library, levels, sinks, or persistence; only tauri-plugin-dialog configured. | No structured logger, log-level setting, disk rotation, report flow, or diagnostics panel. |
+| Structured logging with levels plus on-disk logs plus troubleshooting | Partial | output-log.ts is a leveled in-memory log (info, warn, error) with filterLog (unit tested); the OutputPanel filters by level and colors entries; workspace errors log at error level. | No on-disk logs, rotation, troubleshooting report, or remote sinks. |
 | Privacy-respecting opt-in telemetry plus clear setting | Partial | state.ts telemetry false by default; AppSettings declares it; test confirms default. | No collection, transmission, UI toggle, or opt-in flow. |
 | Auto-update with channels plus restart-to-update | Missing | BUILD.md notes the updater needs tauri-plugin-updater, which is not in Cargo.toml; no update logic or UI. | No updater dependency, registration, version check, download/install, notification, restart, or channels. |
 | Crash reporting respecting telemetry setting | Missing | No crash reporting integration; no error boundary or Rust panic handler. | No crash service, capture, conditional sending, panic hook, or symbolication. |

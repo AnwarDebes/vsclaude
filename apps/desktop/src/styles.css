@@ -317,9 +317,24 @@ body {
   font-size: 0.78rem;
   color: var(--color-text);
 }
+.output__filter {
+  font: inherit;
+  font-size: 0.72rem;
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm, 4px);
+  padding: 1px 4px;
+}
 .output__line {
   white-space: pre-wrap;
   word-break: break-word;
+}
+.output__line--warn {
+  color: #d9a441;
+}
+.output__line--error {
+  color: #d9534f;
 }
 .output__empty {
   color: var(--color-text-muted);

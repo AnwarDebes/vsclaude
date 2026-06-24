@@ -5,7 +5,7 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus thirty-eight parity slices, the last thirty-seven
+2026-06-24. Session 3 (Step 0 plus thirty-nine parity slices, the last thirty-eight
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
@@ -13,7 +13,19 @@ stash, zen mode, breadcrumbs, tasks, activity-bar badges, output panel, untitled
 more editor settings, markdown preview, document links, color decorators, outline,
 git history, release notes, notification center, branch delete and rename, git tags,
 gitignore action, svg preview, snippets, line height and font weight, ui scale and
-wheel zoom, follow system theme, command categories.
+wheel zoom, follow system theme, command categories, output log levels.
+
+## Slice 39: output log levels and filter (done)
+
+Leveled logging (catalog 5.23).
+
+- **Store** (`lib/output-log.ts`): entries now carry a level (info, warn, error);
+  `appendLog(message, level)` and a pure `filterLog`. Workspace errors log at error
+  level. Tests updated and a filter test added.
+- **Panel**: the OutputPanel filters by level and colors warning and error lines.
+- **Quality**: 333 unit tests, typecheck, lint clean (no Rust change), the renderer
+  build succeeds, and 34 Playwright e2e pass (the output e2e now filters to errors and
+  confirms the info line hides). Matrix 5.23 structured-logging row moved to Partial.
 
 ## Slice 38: command categories in the palette (done)
 
