@@ -21,7 +21,21 @@ settings JSON editor, reset layout, task variables, task groups, files.exclude,
 at-symbol navigation, hex view, notification toasts, inlay hints, menu bar,
 edit menu, minimap config, diff settings, process info, snippet browser,
 accessibility help, git remotes, problems filter, output channels, editor font,
-diff change counter, terminal exit code, workspace symbols, open editors.
+diff change counter, terminal exit code, workspace symbols, open editors,
+git stash manager.
+
+## Slice 78: git stash apply, drop, and a stash list view (done)
+
+Round out stash support (catalog 5.9; the row moved to Done; Done crossed 100).
+
+- **Core** (`git.rs`): git_stash_apply and git_stash_drop by index (cargo tested, 17 cargo
+  tests now).
+- **UI** (`GitStashModal.tsx`): Git: Stashes lists the stashes (parseStashList in lib/stash.ts,
+  unit tested) with Apply and Drop and a Stash Current Changes button; opens without a repo
+  and shows a note, so it is browser-e2e-able.
+- **Quality**: 396 unit tests, 17 cargo tests, typecheck, lint clean, the renderer build
+  succeeds, and 58 Playwright e2e pass (the new one opens the modal with no folder). Matrix
+  5.9 stash row moved to Done.
 
 ## Slice 77: open editors view (done)
 

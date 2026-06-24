@@ -234,10 +234,22 @@ pub fn git_stash_pop(cwd: String) -> Result<(), String> {
     run_git(&cwd, &["stash", "pop"]).map(|_| ())
 }
 
-/// The raw `git stash list` output; the renderer counts the entries.
+/// The raw `git stash list` output; the renderer counts and parses the entries.
 #[tauri::command]
 pub fn git_stash_list(cwd: String) -> Result<String, String> {
     run_git(&cwd, &["stash", "list"])
+}
+
+/// Apply a stash by index without removing it from the stash list.
+#[tauri::command]
+pub fn git_stash_apply(cwd: String, index: u32) -> Result<(), String> {
+    run_git(&cwd, &["stash", "apply", &format!("stash@{{{index}}}")]).map(|_| ())
+}
+
+/// Drop a stash by index.
+#[tauri::command]
+pub fn git_stash_drop(cwd: String, index: u32) -> Result<(), String> {
+    run_git(&cwd, &["stash", "drop", &format!("stash@{{{index}}}")]).map(|_| ())
 }
 
 #[derive(Serialize)]
@@ -556,6 +568,30 @@ mod tests {
         assert_eq!(commits[0].author, "Test");
         assert!(!commits[0].short_hash.is_empty());
         assert!(commits[0].date > 0);
+
+        let _ = fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn stash_apply_keeps_the_entry_and_drop_removes_it() {
+        let dir = init_repo("stashapply");
+        let cwd = dir.to_str().unwrap().to_string();
+        fs::write(dir.join("a.txt"), "one").unwrap();
+        git_stage(cwd.clone(), vec!["a.txt".to_string()]).unwrap();
+        git_commit_staged(cwd.clone(), "first".to_string()).unwrap();
+
+        fs::write(dir.join("a.txt"), "two").unwrap();
+        git_stash(cwd.clone()).unwrap();
+        assert!(!git_status(cwd.clone()).unwrap().contains("a.txt"));
+
+        // Apply restores the change but leaves the stash entry in place.
+        git_stash_apply(cwd.clone(), 0).unwrap();
+        assert!(git_status(cwd.clone()).unwrap().contains("a.txt"));
+        assert!(git_stash_list(cwd.clone()).unwrap().contains("stash@{0}"));
+
+        // Drop removes the entry.
+        git_stash_drop(cwd.clone(), 0).unwrap();
+        assert_eq!(git_stash_list(cwd.clone()).unwrap().trim(), "");
 
         let _ = fs::remove_dir_all(&dir);
     }

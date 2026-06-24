@@ -525,6 +525,18 @@ test.describe('vsclaude shell', () => {
     await expect(center.getByText('No notifications.')).toBeVisible();
   });
 
+  test('the git stashes dialog opens from the command palette', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('git stashes');
+    await page.keyboard.press('Enter');
+    const modal = page.getByRole('dialog', { name: 'Git Stashes' });
+    await expect(modal).toBeVisible();
+    await expect(modal.getByText(/open a folder under git to manage stashes/i)).toBeVisible();
+  });
+
   test('the git remotes dialog opens from the command palette', async ({ page }) => {
     await page.goto('/');
     await page.getByText('Claude Code, in motion').click();

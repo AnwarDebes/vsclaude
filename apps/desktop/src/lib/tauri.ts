@@ -94,6 +94,10 @@ export const gitRenameBranch = (cwd: string, from: string, to: string): Promise<
 export const gitStash = (cwd: string): Promise<void> => invoke('git_stash', { cwd });
 export const gitStashPop = (cwd: string): Promise<void> => invoke('git_stash_pop', { cwd });
 export const gitStashList = (cwd: string): Promise<string> => invoke('git_stash_list', { cwd });
+export const gitStashApply = (cwd: string, index: number): Promise<void> =>
+  invoke('git_stash_apply', { cwd, index });
+export const gitStashDrop = (cwd: string, index: number): Promise<void> =>
+  invoke('git_stash_drop', { cwd, index });
 
 export interface GitCommit {
   hash: string;

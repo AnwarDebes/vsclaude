@@ -45,6 +45,7 @@ import { SourceControlPanel } from './components/SourceControlPanel';
 import { GitHistoryModal } from './components/GitHistoryModal';
 import { GitTagsModal } from './components/GitTagsModal';
 import { GitRemotesModal } from './components/GitRemotesModal';
+import { GitStashModal } from './components/GitStashModal';
 import { gitLog, type GitCommit } from './lib/tauri';
 import { SettingsPanel } from './components/SettingsPanel';
 import { SettingsJsonModal } from './components/SettingsJsonModal';
@@ -140,6 +141,7 @@ export function App() {
   const [gitHistory, setGitHistory] = useState<GitCommit[] | null>(null);
   const [tagsOpen, setTagsOpen] = useState(false);
   const [remotesOpen, setRemotesOpen] = useState(false);
+  const [stashesOpen, setStashesOpen] = useState(false);
   const [npmTasks, setNpmTasks] = useState<NpmTask[]>([]);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [settingsJsonOpen, setSettingsJsonOpen] = useState(false);
@@ -791,6 +793,12 @@ export function App() {
       run: () => setRemotesOpen(true),
     });
     r.register({
+      id: 'git-stashes',
+      title: 'Git: Stashes',
+      keywords: ['git', 'stash', 'stashes', 'shelve', 'wip'],
+      run: () => setStashesOpen(true),
+    });
+    r.register({
       id: 'git-history',
       title: 'Git: View History',
       keywords: ['git', 'history', 'log', 'commits'],
@@ -1169,6 +1177,12 @@ export function App() {
         open={remotesOpen}
         repo={hasWorkspace ? ws.roots[0]?.path ?? null : null}
         onClose={() => setRemotesOpen(false)}
+      />
+      <GitStashModal
+        open={stashesOpen}
+        repo={hasWorkspace ? ws.roots[0]?.path ?? null : null}
+        onClose={() => setStashesOpen(false)}
+        onChanged={() => setGitNonce((n) => n + 1)}
       />
       <ReleaseNotes open={releaseOpen} onClose={() => setReleaseOpen(false)} />
       <NotificationCenter open={notificationsOpen} onClose={() => setNotificationsOpen(false)} />
