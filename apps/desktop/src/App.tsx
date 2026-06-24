@@ -1,17 +1,19 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { AppSettings, PresentationMode } from '@vsclaude/contracts';
-import { CommandRegistry } from '@vsclaude/core-shell';
+import { CommandRegistry, type QuickPickItem } from '@vsclaude/core-shell';
 import { bundledThemeIds } from '@vsclaude/design-system';
 import { useSession } from './session/useSession';
 import { useLiveProvider } from './session/useLiveProvider';
 import { useWorkspace } from './workspace/useWorkspace';
+import { useFileIndex } from './workspace/useFileIndex';
+import { gotoLine } from './lib/editor-bridge';
 import { demoFiles } from './session/demo-session';
 import { demoContentFor } from './session/demo-files';
 import { applyTheme, loadAppSettings, saveAppSettings } from './lib/theme';
 import { PixieStage } from './components/PixieStage';
 import { PixieActionSprite } from './components/ActionIcon';
 import { SettingsBar } from './components/SettingsBar';
-import { CommandPalette } from './components/CommandPalette';
+import { CommandPalette, openPalette } from './components/CommandPalette';
 import { DiffReview } from './components/DiffReview';
 import { Narration } from './components/Narration';
 import { ExplorerPanel } from './panels/ExplorerPanel';
@@ -62,6 +64,44 @@ export function App() {
   const ws = useWorkspace();
   const hasWorkspace = ws.roots.length > 0;
 
+  const rootPaths = useMemo(() => ws.roots.map((r) => r.path), [ws.roots]);
+  const fileIndex = useFileIndex(rootPaths);
+
+  // The demo file list, shaped as quick-pick items, so Ctrl or Cmd plus P works
+  // in the browser demo before any real folder is open.
+  const demoFileItems = useMemo<QuickPickItem[]>(
+    () =>
+      demoFiles
+        .filter((f) => f.kind === 'file')
+        .map((f) => {
+          const slash = f.path.lastIndexOf('/');
+          return {
+            id: f.path,
+            label: f.name,
+            description: slash >= 0 ? f.path.slice(0, slash) : '',
+            keywords: [f.path],
+          };
+        }),
+    [],
+  );
+
+  const paletteFiles = hasWorkspace ? fileIndex.items : demoFileItems;
+
+  const openFileFromPalette = useCallback(
+    (path: string) => {
+      if (hasWorkspace) void ws.openFile(path);
+      else setOpenFile(path);
+      // Make sure the chosen file is actually visible: drop into an editor mode
+      // if the current mode does not show the editor.
+      setSettings((s) =>
+        s.presentationMode === 'companion' || s.presentationMode === 'cozy'
+          ? s
+          : { ...s, presentationMode: 'companion' },
+      );
+    },
+    [hasWorkspace, ws],
+  );
+
   useEffect(() => {
     applyTheme(settings);
     saveAppSettings(settings);
@@ -76,6 +116,20 @@ export function App() {
       run: () => setPlaying(!playing),
     });
     r.register({ id: 'restart', title: 'Replay the session', keywords: ['restart'], run: restart });
+    r.register({
+      id: 'quick-open-file',
+      title: 'Go to File',
+      keywords: ['open', 'file', 'quick', 'find', 'ctrl p'],
+      keybinding: 'Ctrl+P',
+      run: () => openPalette('files'),
+    });
+    r.register({
+      id: 'show-commands',
+      title: 'Show All Commands',
+      keywords: ['command', 'palette'],
+      keybinding: 'Ctrl+K',
+      run: () => openPalette('commands'),
+    });
     r.register({
       id: 'run-agent',
       title: liveAvailable
@@ -313,7 +367,13 @@ export function App() {
         </div>
       ) : null}
 
-      <CommandPalette registry={registry} />
+      <CommandPalette
+        registry={registry}
+        files={paletteFiles}
+        onOpenFile={openFileFromPalette}
+        onGotoLine={(line, column) => gotoLine(line, column)}
+        onRefreshFiles={hasWorkspace ? fileIndex.refresh : undefined}
+      />
       <DiffReview open={reviewOpen} cwd="." onClose={() => setReviewOpen(false)} />
     </div>
   );

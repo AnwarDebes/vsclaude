@@ -354,3 +354,84 @@ pub fn fs_unwatch(state: State<'_, WatcherState>, watch_id: String) -> Result<()
 pub struct WatchHandle {
     pub watch_id: String,
 }
+
+/// The shape returned by `fs.walk`.
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct WalkResult {
+    pub files: Vec<String>,
+    pub truncated: bool,
+}
+
+/// Default and hard ceilings for the quick-open file walk.
+const DEFAULT_WALK_LIMIT: usize = 20_000;
+const MAX_WALK_LIMIT: usize = 100_000;
+
+/// Directories the file index never descends into: dependency stores, version
+/// control metadata, and common build outputs. Keeping these out keeps the
+/// quick-open list small and fast.
+fn is_ignored_dir(name: &str) -> bool {
+    matches!(
+        name,
+        "node_modules"
+            | ".git"
+            | ".hg"
+            | ".svn"
+            | "target"
+            | "dist"
+            | "build"
+            | "out"
+            | ".next"
+            | "coverage"
+            | ".turbo"
+            | ".cache"
+            | "vendor"
+    )
+}
+
+/// Recursively collects file paths under `path` for the quick-open index.
+///
+/// The walk is iterative (an explicit stack) so a deep tree cannot overflow the
+/// call stack. Symlinks are never followed: `DirEntry::file_type` does not
+/// resolve links, so a symlink reports neither `is_dir` nor `is_file` here and is
+/// skipped, which also makes a symlink cycle impossible. An unreadable
+/// subdirectory is skipped rather than failing the whole walk. The result is
+/// capped; `truncated` records whether the cap stopped the walk early.
+#[tauri::command]
+pub fn fs_walk(path: String, limit: Option<usize>) -> Result<WalkResult, String> {
+    let cap = limit.unwrap_or(DEFAULT_WALK_LIMIT).min(MAX_WALK_LIMIT);
+    let mut files: Vec<String> = Vec::new();
+    let mut truncated = false;
+    let mut stack: Vec<std::path::PathBuf> = vec![std::path::PathBuf::from(&path)];
+
+    'walk: while let Some(dir) = stack.pop() {
+        let read = match fs::read_dir(&dir) {
+            Ok(read) => read,
+            Err(_) => continue,
+        };
+        for entry in read {
+            let entry = match entry {
+                Ok(entry) => entry,
+                Err(_) => continue,
+            };
+            let file_type = match entry.file_type() {
+                Ok(file_type) => file_type,
+                Err(_) => continue,
+            };
+            if file_type.is_dir() {
+                let name = entry.file_name().to_string_lossy().into_owned();
+                if !is_ignored_dir(&name) {
+                    stack.push(entry.path());
+                }
+            } else if file_type.is_file() {
+                if files.len() >= cap {
+                    truncated = true;
+                    break 'walk;
+                }
+                files.push(normalize(&entry.path().to_string_lossy()));
+            }
+        }
+    }
+
+    Ok(WalkResult { files, truncated })
+}

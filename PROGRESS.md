@@ -5,7 +5,35 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0: the VS Code parity feature matrix).
+2026-06-24. Session 3 (Step 0 plus the first parity slice: quick open).
+
+## Slice 1: quick open and the quick-pick framework (done)
+
+The spec is `specs/QUICK_OPEN.md`; this closes most of catalog 5.6 and builds the
+reusable picker that later features lean on.
+
+- **Contract v4** (`packages/contracts`): added `fs.walk`, a recursive file index
+  (skips node_modules, .git, and build outputs, never follows a symlink, caps the
+  result). `IPC_PROTOCOL_VERSION` is now 4 and the Rust const in `lib.rs` matches.
+- **Rust core** (`fs_ops.rs`): `fs_walk` does an iterative, symlink-safe walk that
+  skips unreadable subdirectories rather than failing. `cargo check` is clean.
+- **Quick-pick framework** (`@vsclaude/core-shell`): `quick-pick.ts` adds the
+  `QuickPickItem` shape, a `filterQuickPick` ranker that reuses the subsequence
+  scorer, and a `parsePaletteInput` prefix router (`>` commands, `:` go to line,
+  base mode otherwise; `@` and `#` reserved for the code-intelligence slice).
+  `Command` gained an optional `keybinding` label. 13 new unit tests.
+- **Editor bridge** (`apps/desktop/src/lib/editor-bridge.ts`): tracks the active
+  Monaco editor so `:` go-to-line can reveal and select a line, clamped to the
+  document bounds. EditorPanel publishes itself on mount and focus. 5 unit tests.
+- **Palette** (`CommandPalette.tsx`): one component, two entry points (Ctrl or Cmd
+  plus K for commands, plus P for files), live prefix routing, a real workspace
+  file index (`useFileIndex`, demo files as the browser fallback), keybinding
+  display, and accessible combobox and listbox semantics. New Go to File and Show
+  All Commands palette entries advertise their real shortcuts.
+- **Quality**: 193 unit tests (175 plus 18), typecheck, lint, and `cargo check`
+  clean, the renderer build succeeds, and 8 Playwright e2e tests pass (the two new
+  ones cover Ctrl or Cmd plus P file open and the `>` route back to commands). The
+  feature matrix 5.6 roll-up moved to Done 7, Partial 0, Missing 4.
 
 ## Step 0: VS Code parity feature matrix (done)
 

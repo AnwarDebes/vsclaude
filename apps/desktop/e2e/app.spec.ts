@@ -40,6 +40,34 @@ test.describe('vsclaude shell', () => {
     await expect(page.locator('.monaco-editor')).toBeVisible({ timeout: 15_000 });
   });
 
+  test('quick-open: Ctrl+P finds a file by name and opens it', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.getByText('vsclaude').first()).toBeVisible();
+    // Focus a neutral area so the Monaco editor does not capture the chord.
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyP');
+    const palette = page.getByRole('dialog', { name: /go to file/i });
+    await expect(palette).toBeVisible();
+    await palette.getByPlaceholder(/search files by name/i).fill('session');
+    const option = palette.getByRole('option', { name: /session\.ts/i });
+    await expect(option).toBeVisible();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('.monaco-editor')).toBeVisible({ timeout: 15_000 });
+  });
+
+  test('quick-open routes the > prefix back to commands', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.getByText('vsclaude').first()).toBeVisible();
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyP');
+    const palette = page.getByRole('dialog', { name: /go to file/i });
+    await expect(palette).toBeVisible();
+    // Typing '>' switches the same palette into command mode.
+    await palette.getByRole('combobox').fill('>swarm');
+    await page.keyboard.press('Enter');
+    await expect(page.getByRole('region', { name: /agent swarm/i })).toBeVisible();
+  });
+
   test('opens the diff review overlay from the command palette', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByText('vsclaude').first()).toBeVisible();

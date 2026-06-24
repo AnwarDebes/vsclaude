@@ -17,6 +17,12 @@ export interface Command {
   readonly run: () => void | Promise<void>;
   /** Extra terms that should also match this command. */
   readonly keywords?: readonly string[];
+  /**
+   * A display label for this command's keyboard shortcut, for example
+   * "Ctrl+Shift+P". This is shown right-aligned in the palette; it does not
+   * register a key handler on its own.
+   */
+  readonly keybinding?: string;
 }
 
 /** A command paired with its fuzzy match score against a query. */

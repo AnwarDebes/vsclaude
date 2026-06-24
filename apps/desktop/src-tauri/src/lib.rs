@@ -26,7 +26,8 @@ pub struct CoreVersion {
 /// `IPC_PROTOCOL_VERSION` in the contracts package. v2 added the filesystem
 /// mutation surface, mtime conflict detection, and the live watcher. v3 replaced
 /// the cleartext `secret.get` with `secret.status` (no key ever leaves the core).
-const IPC_PROTOCOL_VERSION: u32 = 3;
+/// v4 added `fs.walk`, the recursive file index behind quick-open.
+const IPC_PROTOCOL_VERSION: u32 = 4;
 
 #[tauri::command]
 fn core_version() -> CoreVersion {
@@ -54,6 +55,7 @@ pub fn run() {
             fs_ops::fs_copy,
             fs_ops::fs_watch,
             fs_ops::fs_unwatch,
+            fs_ops::fs_walk,
             secrets::secret_set,
             secrets::secret_status,
             secrets::secret_delete,

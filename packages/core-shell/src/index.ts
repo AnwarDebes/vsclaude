@@ -34,6 +34,15 @@ export {
 } from './command-registry.js';
 
 export {
+  type QuickPickItem,
+  type PaletteMode,
+  type ParsedPaletteInput,
+  scoreQuickPickItem,
+  filterQuickPick,
+  parsePaletteInput,
+} from './quick-pick.js';
+
+export {
   defaultLayout,
   layoutForMode,
   isLayoutValid,

@@ -913,6 +913,9 @@ body {
 }
 .palette__item {
   width: 100%;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
   text-align: left;
   font: inherit;
   font-size: 0.9rem;
@@ -926,6 +929,30 @@ body {
 .palette__item--active {
   background: var(--color-accent-muted);
   color: var(--color-accent);
+}
+.palette__label {
+  flex: 0 1 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.palette__desc {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.palette__hint {
+  flex: 0 0 auto;
+  margin-left: auto;
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm, 4px);
+  padding: 1px 6px;
 }
 .palette__empty {
   padding: 12px;

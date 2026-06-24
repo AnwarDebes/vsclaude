@@ -20,7 +20,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.3 | Editor advanced surface | 6 | 4 | 2 | 0 |
 | 5.4 | Diff and merge | 1 | 1 | 6 | 1 |
 | 5.5 | Workbench layout and navigation | 4 | 6 | 17 | 0 |
-| 5.6 | Quick open and command palette | 2 | 2 | 7 | 0 |
+| 5.6 | Quick open and command palette | 7 | 0 | 4 | 0 |
 | 5.7 | File explorer and workspace management | 6 | 1 | 7 | 3 |
 | 5.8 | Search and replace across files | 1 | 1 | 10 | 0 |
 | 5.9 | Source control and git | 4 | 4 | 16 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 4 | 10 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 1 | 2 | 7 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 3 | 5 | 0 |
-| TOTAL | | 49 | 77 | 198 | 5 |
+| TOTAL | | 54 | 75 | 195 | 5 |
 
 ## Legend
 
@@ -185,21 +185,21 @@ vsclaude uses a fixed, presentation-mode-driven layout rather than the dockable 
 
 ## 5.6 Quick open and command palette
 
-The command palette is implemented with fuzzy matching and keyword search, Ctrl/Cmd+K open and close, arrow/Enter navigation, and active-result highlighting. Recent projects are exposed as commands. Most quick-open variants in the spec (Ctrl+P file open, @ symbols, # workspace symbols, : go-to-line, keybinding display, command categories, and definition/back-forward navigation) are not implemented; the palette only runs commands.
+The palette is now unified: Ctrl or Cmd plus K opens command mode and Ctrl or Cmd plus P opens file quick-open over a real recursive index, and the input routes live on a prefix (`>` commands, `:` go to line and column). Commands can advertise a keybinding, and a reusable quick-pick framework (filterQuickPick plus the prefix router) backs it all. Document symbols (@), workspace symbols (#), command categories, and go-to-definition navigation remain, deferred to the code-intelligence slice. See specs/QUICK_OPEN.md.
 
 | Capability | Status | Evidence | What is missing |
 | --- | --- | --- | --- |
 | Command palette (fuzzy, keywords, Ctrl/Cmd+K) | Done | CommandPalette.tsx fuzzy search via registry.fuzzyFind(); command-registry.ts subsequence scoring and keywords; arrow/Enter nav. | |
 | Recently-used command/project ordering | Done | App.tsx registers Open Recent from ws.recents; recents.ts RecentProject with timestamps and de-dup; useWorkspace.ts exposes recents. | |
-| Quick open files by name with Ctrl+P | Missing | Spec 8.1 defines quickOpenSearch IPC; no implementation; no Ctrl+P binding in CommandPalette. | No Ctrl+P wiring, file picker UI, or indexed file list. |
-| Symbol navigation in current file with @ | Missing | Spec 8.1 specifies @; CommandPalette does not handle @; no DocumentSymbolProvider or breadcrumb row. | No @ search, symbol provider, or breadcrumb UI. |
-| Workspace symbols search with # | Missing | Spec 8.1 implies #; CommandPalette does not handle it; no WorkspaceSymbolProvider. | No # search or provider. |
-| Go to line/column with : | Missing | Spec 8.1 specifies :; CommandPalette does not parse it; gotoLine not wired. | No go-to-line command or : parsing. |
-| Commands via > prefix | Partial | Spec 8.1 specifies >; palette runs commands via Ctrl/Cmd+K, not > syntax. | No > prefix; different UX pattern from quick-open. |
-| Keybinding display in palette | Missing | CommandPalette.tsx renders title only; Command interface has no keybinding field. | No keybinding field or shortcut display. |
+| Quick open files by name with Ctrl+P | Done | CommandPalette.tsx file mode on Ctrl/Cmd+P; useFileIndex.ts walks roots via fs.walk (IPC v4, fs_ops.rs fs_walk); demo files used when no workspace; e2e covers it. | |
+| Symbol navigation in current file with @ | Missing | parsePaletteInput reserves @ but falls through; no DocumentSymbolProvider wired. | Deferred to 5.2: needs a document-symbol provider. |
+| Workspace symbols search with # | Missing | # reserved in the router but not handled; no WorkspaceSymbolProvider. | Deferred to 5.2: needs a workspace-symbol provider. |
+| Go to line/column with : | Done | parsePaletteInput parses :line and :line:column; editor-bridge.ts gotoLine reveals and selects in the active Monaco editor; unit tested. | |
+| Commands via > prefix | Done | parsePaletteInput routes > to command mode inside the unified palette; e2e switches files to commands with >. | |
+| Keybinding display in palette | Done | Command.keybinding field (command-registry.ts); CommandPalette renders it right-aligned; Go to File and Show All Commands carry real shortcuts. | |
 | Command categories/grouping | Missing | Command interface has no category field; palette renders a flat list. | No category field or grouping headers. |
-| Go to definition and back/forward stack | Missing | No DefinitionProvider; no navigation stack or commands. | No go-to-def, history stack, or back/forward. |
-| General reusable quick-pick framework | Partial | CommandRegistry provides reusable fuzzy matching for commands; plugin SDK lacks a quick-pick API. | Command-only; no generic items (files, symbols, folders); no plugin quick-pick. |
+| Go to definition and back/forward stack | Missing | No DefinitionProvider; no navigation stack or commands. | Deferred to 5.2: go-to-def, history stack, back/forward. |
+| General reusable quick-pick framework | Done | core-shell quick-pick.ts: QuickPickItem, filterQuickPick ranker, parsePaletteInput router; unit tested; reused by file mode and ready for branch, profile, theme, and search pickers. | |
 
 ## 5.7 File explorer and workspace management
 

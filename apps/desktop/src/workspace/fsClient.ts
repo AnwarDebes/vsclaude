@@ -29,6 +29,8 @@ export const deletePath = (path: string) => call('fs.delete', { path });
 export const copyPath = (from: string, to: string) => call('fs.copy', { from, to });
 export const watchPath = (path: string) => call('fs.watch', { path });
 export const unwatchPath = (watchId: string) => call('fs.unwatch', { watchId });
+/** Recursively lists files under a folder for the quick-open index. */
+export const walkDir = (path: string, limit?: number) => call('fs.walk', { path, limit });
 
 export const onFsChanged = (handler: (payload: IpcEventPayload<'fs:changed'>) => void) =>
   on('fs:changed', handler);

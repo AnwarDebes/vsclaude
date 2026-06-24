@@ -75,6 +75,16 @@ export interface IpcCommandMap {
   'fs.copy': { args: { from: string; to: string }; result: void };
   'fs.watch': { args: { path: string }; result: { watchId: string } };
   'fs.unwatch': { args: { watchId: string }; result: void };
+  /**
+   * Recursively lists file paths under a folder for the quick-open index. Skips
+   * heavy and noise directories (node_modules, .git, build outputs), never
+   * follows a symlink, and caps the result. `truncated` is true when the cap was
+   * reached before the tree was exhausted. See specs/QUICK_OPEN.md.
+   */
+  'fs.walk': {
+    args: { path: string; limit?: number };
+    result: { files: string[]; truncated: boolean };
+  };
 
   'secret.set': { args: { key: string; value: string }; result: void };
   /**
@@ -129,6 +139,7 @@ export const IPC_COMMANDS = [
   'fs.copy',
   'fs.watch',
   'fs.unwatch',
+  'fs.walk',
   'secret.set',
   'secret.status',
   'secret.delete',

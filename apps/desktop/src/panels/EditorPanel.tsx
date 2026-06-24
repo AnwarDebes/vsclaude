@@ -1,5 +1,7 @@
+import { useRef, useEffect } from 'react';
 import Editor, { type OnMount } from '@monaco-editor/react';
 import '../lib/monaco-setup';
+import { setActiveEditor, clearActiveEditor, type BridgeEditor } from '../lib/editor-bridge';
 
 interface EditorPanelProps {
   path?: string;
@@ -34,11 +36,27 @@ function languageFor(path?: string, explicit?: string): string {
  * edits in memory.
  */
 export function EditorPanel({ path, value, language, onChange, onSave }: EditorPanelProps) {
+  const editorRef = useRef<BridgeEditor | null>(null);
+
   const onMount: OnMount = (editor, monacoInstance) => {
     editor.addCommand(monacoInstance.KeyMod.CtrlCmd | monacoInstance.KeyCode.KeyS, () => {
       onSave?.(editor.getValue());
     });
+    // Publish this editor as the active one so palette actions (go to line, and
+    // the editor command surface) can reach the file the user is looking at.
+    const bridge = editor as unknown as BridgeEditor;
+    editorRef.current = bridge;
+    setActiveEditor(bridge);
+    editor.onDidFocusEditorText(() => setActiveEditor(bridge));
   };
+
+  // Stop claiming the active editor once this panel unmounts.
+  useEffect(
+    () => () => {
+      if (editorRef.current) clearActiveEditor(editorRef.current);
+    },
+    [],
+  );
 
   return (
     <div className="editor-panel">
