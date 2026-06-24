@@ -5,10 +5,26 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus eleven parity slices, the last ten self-paced by
-an autonomous /loop): quick open, status bar, problems, search, source control,
+2026-06-24. Session 3 (Step 0 plus twelve parity slices, the last eleven self-paced
+by an autonomous /loop): quick open, status bar, problems, search, source control,
 editor commands, diff editor, settings, Monaco theme binding, keyboard shortcuts,
-terminal tabs.
+terminal tabs, activity bar.
+
+## Slice 12: the activity bar (done)
+
+A left icon rail to reach the main views (catalog 5.5).
+
+- **ActivityBar** (`ActivityBar.tsx`): Explorer, Search, Source Control, Settings,
+  and Keyboard Shortcuts, with stroked inline icons and the active view
+  highlighted. It wires to the existing view state and commands.
+- **Layout**: the main row is wrapped in an `app-body` flex with the rail at the
+  left; the bottom drawers now start right of the 48px rail. `activeViewFor`
+  (`lib/activity-view.ts`) derives the highlight from the open bottom panel. 2 unit
+  tests.
+- **Quality**: 254 unit tests (252 plus 2), typecheck, lint clean (no Rust change),
+  the renderer build succeeds, and 19 Playwright e2e pass (the new one clicks the
+  rail to open the views; all prior flows still pass through the layout change).
+  Matrix 5.5 activity-bar row moved to Partial.
 
 ## Slice 11: multiple terminals with a tab bar (done)
 

@@ -19,7 +19,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.2 | Code intelligence (LSP language features) | 0 | 7 | 17 | 0 |
 | 5.3 | Editor advanced surface | 6 | 4 | 2 | 0 |
 | 5.4 | Diff and merge | 3 | 3 | 2 | 1 |
-| 5.5 | Workbench layout and navigation | 5 | 8 | 14 | 0 |
+| 5.5 | Workbench layout and navigation | 5 | 9 | 13 | 0 |
 | 5.6 | Quick open and command palette | 7 | 0 | 4 | 0 |
 | 5.7 | File explorer and workspace management | 6 | 1 | 7 | 3 |
 | 5.8 | Search and replace across files | 5 | 1 | 6 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 5 | 9 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 1 | 7 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 3 | 5 | 0 |
-| TOTAL | | 76 | 78 | 170 | 5 |
+| TOTAL | | 76 | 79 | 169 | 5 |
 
 ## Legend
 
@@ -150,7 +150,7 @@ A real Monaco diff editor now ships (DiffView.tsx and DiffModal.tsx): side-by-si
 
 ## 5.5 Workbench layout and navigation
 
-vsclaude uses a fixed, presentation-mode-driven layout rather than the dockable workbench VS Code provides. The core panel tree (panel-tree.ts) supports arbitrary splits but is not wired to the renderer. The app uses a hardcoded grid with fixed positions that change across five presentation modes (companion, stage, swarm, minimal, cozy). A real status bar now ships (branch and change count on the left; language, end-of-line, indentation, cursor position, and selection on the right), driven by a reusable status-bar-item model and a live editor-status store; see specs/STATUS_BAR.md. Editor tabs support keyboard navigation but only standard tabs, with no pinned, preview, or split groups. Floating windows, dockable panels, an activity bar, problems and outline views, and split-group navigation are specified but unimplemented.
+vsclaude uses a fixed, presentation-mode-driven layout rather than the dockable workbench VS Code provides. The core panel tree (panel-tree.ts) supports arbitrary splits but is not wired to the renderer. The app uses a hardcoded grid with fixed positions that change across five presentation modes (companion, stage, swarm, minimal, cozy). A real status bar now ships (branch and change count on the left; language, end-of-line, indentation, cursor position, and selection on the right), driven by a reusable status-bar-item model and a live editor-status store; see specs/STATUS_BAR.md. An activity bar (ActivityBar.tsx) gives a left icon rail to the Explorer, Search, Source Control, Settings, and Keyboard Shortcuts views, with the active one highlighted, and a Problems panel ships too. Editor tabs support keyboard navigation but only standard tabs, with no pinned, preview, or split groups. Floating windows, dockable panels, badges on the activity bar, an outline view, and split-group navigation are still unimplemented.
 
 | Capability | Status | Evidence | What is missing |
 | --- | --- | --- | --- |
@@ -160,7 +160,7 @@ vsclaude uses a fixed, presentation-mode-driven layout rather than the dockable 
 | Preview tabs (single-click provisional, double-click pins) | Missing | WorkspaceEditor.tsx has no preview mode; OpenDoc lacks preview/pinned fields. | No provisional preview tab or promotion on edit/pin. |
 | Editor split groups (horizontal and vertical) | Partial | panel-tree.ts implements a binary split tree with tests; renderer (WorkspaceEditor.tsx, App.tsx) exposes only one pane. | Split model never instantiated; no split UI, group focus/move, or drag between groups. |
 | Dockable panels (move, float, relocate) | Missing | Spec 5.3 specifies a dockable manager; App.tsx hardcodes grid columns; panel-tree.ts unused by renderer. | No dockable manager; fixed positions per mode; no float or persist. |
-| Activity bar with view containers and badges | Missing | No activity bar; App.tsx renders header/main/footer only. | No view containers or badges. |
+| Activity bar with view containers and badges | Partial | ActivityBar.tsx is a left icon rail (Explorer, Search, Source Control, Settings, Keyboard Shortcuts) that opens each view and highlights the active one (activeViewFor). | No count badges and no relocatable or hideable view containers. |
 | Primary and secondary sidebars (left/right) | Partial | App.tsx renders left explorer and right sidebar (companion, timeline); placement hardcoded per mode. | Views cannot move between sidebars or hide independently. |
 | Bottom panel (terminal, problems, output, debug console) | Partial | App.tsx footer renders TerminalPanel, TokenPanel, Narration; only terminal is wired. | No problems, output, or debug console; panel cannot maximize, move, or sash-resize. |
 | Sash resizing (visual splitter) | Missing | No sash elements; fixed grid columns; ResizeObserver only in TerminalPanel.tsx. | No draggable splitters; layout not user-resizable. |

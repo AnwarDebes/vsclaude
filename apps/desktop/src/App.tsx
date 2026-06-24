@@ -29,6 +29,8 @@ import { PixieActionSprite } from './components/ActionIcon';
 import { SettingsBar } from './components/SettingsBar';
 import { CommandPalette, openPalette } from './components/CommandPalette';
 import { StatusBar, useEditorStatus, useGitStatus } from './components/StatusBar';
+import { ActivityBar } from './components/ActivityBar';
+import { activeViewFor } from './lib/activity-view';
 import { ProblemsPanel } from './components/ProblemsPanel';
 import { SearchPanel } from './components/SearchPanel';
 import { SourceControlPanel } from './components/SourceControlPanel';
@@ -587,7 +589,16 @@ export function App() {
         />
       </header>
 
-      <main className="app-main">
+      <div className="app-body">
+        <ActivityBar
+          activeView={activeViewFor(bottomPanel)}
+          onExplorer={() => setSettings((s) => ({ ...s, presentationMode: 'companion' }))}
+          onSearch={() => setBottomPanel((p) => (p === 'search' ? 'none' : 'search'))}
+          onSourceControl={() => setBottomPanel((p) => (p === 'scm' ? 'none' : 'scm'))}
+          onSettings={() => setSettingsOpen(true)}
+          onShortcuts={() => setShortcutsOpen(true)}
+        />
+        <main className="app-main">
         {showExplorer ? (
           hasWorkspace ? (
             <WorkspaceExplorer ws={ws} />
@@ -640,7 +651,8 @@ export function App() {
         ) : showTimeline ? (
           <TimelinePanel timeline={session.timeline} />
         ) : null}
-      </main>
+        </main>
+      </div>
 
       {showBottom ? (
         <footer className="app-bottom">

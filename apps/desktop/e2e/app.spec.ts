@@ -222,6 +222,23 @@ test.describe('vsclaude shell', () => {
     await expect(tablist.getByRole('tab')).toHaveCount(1);
   });
 
+  test('activity bar opens the views', async ({ page }) => {
+    await page.goto('/');
+    const rail = page.getByRole('navigation', { name: 'Activity Bar' });
+    await expect(rail).toBeVisible();
+    // Source Control opens its drawer and marks the item active.
+    await rail.getByRole('button', { name: 'Source Control' }).click();
+    await expect(page.getByRole('region', { name: 'Source Control' })).toBeVisible();
+    await expect(rail.getByRole('button', { name: 'Source Control' })).toHaveAttribute('aria-pressed', 'true');
+    // Search swaps the drawer.
+    await rail.getByRole('button', { name: 'Search' }).click();
+    await expect(page.getByRole('region', { name: 'Search' })).toBeVisible();
+    await expect(page.getByRole('region', { name: 'Source Control' })).toHaveCount(0);
+    // Settings opens the dialog.
+    await rail.getByRole('button', { name: 'Settings' }).click();
+    await expect(page.getByRole('dialog', { name: 'Settings' })).toBeVisible();
+  });
+
   test('opens the diff review overlay from the command palette', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByText('vsclaude').first()).toBeVisible();
