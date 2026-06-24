@@ -45,6 +45,17 @@ export {
 export { type StatusBarItem, orderStatusItems } from './status-bar.js';
 
 export {
+  type DiagnosticSeverity,
+  type Diagnostic,
+  type DiagnosticCounts,
+  type DiagnosticGroup,
+  severityRank,
+  compareDiagnostics,
+  summarizeDiagnostics,
+  groupDiagnosticsByResource,
+} from './diagnostics.js';
+
+export {
   defaultLayout,
   layoutForMode,
   isLayoutValid,

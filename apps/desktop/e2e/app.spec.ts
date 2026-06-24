@@ -82,6 +82,20 @@ test.describe('vsclaude shell', () => {
     await expect(palette.getByPlaceholder(/go to line and column/i)).toBeVisible();
   });
 
+  test('problems: the status bar toggles the Problems panel', async ({ page }) => {
+    await page.goto('/');
+    const statusBar = page.getByRole('group', { name: /status bar/i });
+    await expect(statusBar).toBeVisible();
+    const problemsItem = statusBar.getByRole('button', { name: /toggle the problems panel/i });
+    await expect(problemsItem).toBeVisible();
+    await problemsItem.click();
+    const panel = page.getByRole('region', { name: /problems/i });
+    await expect(panel).toBeVisible();
+    await expect(panel.getByRole('heading', { name: 'Problems' })).toBeVisible();
+    await panel.getByRole('button', { name: /close problems panel/i }).click();
+    await expect(page.getByRole('region', { name: /problems/i })).toHaveCount(0);
+  });
+
   test('opens the diff review overlay from the command palette', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByText('vsclaude').first()).toBeVisible();

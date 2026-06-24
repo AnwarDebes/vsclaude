@@ -5,7 +5,33 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus two parity slices: quick open, status bar).
+2026-06-24. Session 3 (Step 0 plus three parity slices: quick open, status bar,
+problems and diagnostics).
+
+## Slice 3: problems panel and diagnostics (done)
+
+The spec is `specs/PROBLEMS_AND_DIAGNOSTICS.md`; it opens up the diagnostics
+surface that 5.2 and 5.5 share and completes the status bar from slice 2.
+
+- **Diagnostics model** (`@vsclaude/core-shell`): `diagnostics.ts` adds the
+  `Diagnostic` shape and `DiagnosticSeverity`, plus `summarizeDiagnostics`,
+  `groupDiagnosticsByResource`, and the severity ordering helpers. Reusable by any
+  producer (a worker today, a language server or task matcher later). 7 unit tests.
+- **Marker hook** (`apps/desktop/src/lib/useDiagnostics.ts`): subscribes to
+  Monaco's onDidChangeMarkers, reads every model's markers, and maps them to the
+  normalized model. When a real language server lands it publishes markers the
+  same way, so the hook does not change.
+- **Problems panel** (`ProblemsPanel.tsx`): a drawer above the status bar, grouped
+  by file, each problem a button that opens its file at the line. Accessible region
+  with labeled groups and per-problem aria-labels.
+- **Status bar and toggles**: the bar now shows the error and warning count
+  (completing slice 2), and the item toggles the panel. A View: Problems command
+  and Ctrl or Cmd plus Shift plus M also toggle it.
+- **Quality**: 207 unit tests (200 plus 7), typecheck, lint, and `cargo check`
+  clean (no Rust change), the renderer build succeeds, and 10 Playwright e2e pass
+  (the new one toggles the Problems panel from the status bar). Matrix moved 5.5
+  Problems view to Done, 5.2 diagnostics to Partial, and 5.21 problems filtering to
+  Partial.
 
 ## Slice 2: the workbench status bar (done)
 

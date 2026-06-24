@@ -1,12 +1,18 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { AppSettings, PresentationMode } from '@vsclaude/contracts';
-import { CommandRegistry, type QuickPickItem, type StatusBarItem } from '@vsclaude/core-shell';
+import {
+  CommandRegistry,
+  summarizeDiagnostics,
+  type QuickPickItem,
+  type StatusBarItem,
+} from '@vsclaude/core-shell';
 import { bundledThemeIds } from '@vsclaude/design-system';
 import { useSession } from './session/useSession';
 import { useLiveProvider } from './session/useLiveProvider';
 import { useWorkspace } from './workspace/useWorkspace';
 import { useFileIndex } from './workspace/useFileIndex';
 import { gotoLine } from './lib/editor-bridge';
+import { useDiagnostics } from './lib/useDiagnostics';
 import { demoFiles } from './session/demo-session';
 import { demoContentFor } from './session/demo-files';
 import { applyTheme, loadAppSettings, saveAppSettings } from './lib/theme';
@@ -15,6 +21,7 @@ import { PixieActionSprite } from './components/ActionIcon';
 import { SettingsBar } from './components/SettingsBar';
 import { CommandPalette, openPalette } from './components/CommandPalette';
 import { StatusBar, useEditorStatus, useGitStatus } from './components/StatusBar';
+import { ProblemsPanel } from './components/ProblemsPanel';
 import { DiffReview } from './components/DiffReview';
 import { Narration } from './components/Narration';
 import { ExplorerPanel } from './panels/ExplorerPanel';
@@ -73,6 +80,7 @@ export function App() {
   const [openFile, setOpenFile] = useState('src/auth/login-form.tsx');
   const [editedContents, setEditedContents] = useState<Record<string, string>>({});
   const [reviewOpen, setReviewOpen] = useState(false);
+  const [problemsOpen, setProblemsOpen] = useState(false);
   const live = useLiveProvider();
   const { available: liveAvailable, start: liveStart } = live;
   const usingLive = live.events.length > 0;
@@ -121,9 +129,29 @@ export function App() {
 
   const editorStatus = useEditorStatus();
   const gitSummary = useGitStatus(hasWorkspace ? ws.roots[0]?.path ?? null : null);
+  const diagnostics = useDiagnostics();
+
+  const openProblem = useCallback(
+    (resource: string, line: number, column: number) => {
+      openFileFromPalette(resource);
+      gotoLine(line, column);
+    },
+    [openFileFromPalette],
+  );
 
   const statusItems = useMemo<StatusBarItem[]>(() => {
     const items: StatusBarItem[] = [];
+    const counts = summarizeDiagnostics(diagnostics);
+    const hasProblems = counts.error > 0 || counts.warning > 0;
+    items.push({
+      id: 'problems',
+      side: 'left',
+      priority: 90,
+      text: hasProblems ? `${counts.error} errors, ${counts.warning} warnings` : 'No Problems',
+      tooltip: 'Problems (Ctrl or Cmd plus Shift plus M)',
+      ariaLabel: `${counts.error} errors, ${counts.warning} warnings. Toggle the Problems panel.`,
+      command: 'view-problems',
+    });
     if (gitSummary) {
       const sync =
         gitSummary.ahead || gitSummary.behind ? ` +${gitSummary.ahead}/-${gitSummary.behind}` : '';
@@ -196,12 +224,24 @@ export function App() {
       });
     }
     return items;
-  }, [editorStatus, gitSummary, hasWorkspace, ws.roots]);
+  }, [editorStatus, gitSummary, diagnostics, hasWorkspace, ws.roots]);
 
   useEffect(() => {
     applyTheme(settings);
     saveAppSettings(settings);
   }, [settings]);
+
+  // Ctrl or Cmd plus Shift plus M toggles the Problems panel, matching VS Code.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'm') {
+        e.preventDefault();
+        setProblemsOpen((o) => !o);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
 
   const registry = useMemo(() => {
     const r = new CommandRegistry();
@@ -232,6 +272,13 @@ export function App() {
       keywords: ['line', 'column', 'jump', 'goto'],
       keybinding: 'Ctrl+G',
       run: () => openPalette('files', ':'),
+    });
+    r.register({
+      id: 'view-problems',
+      title: 'View: Problems',
+      keywords: ['problems', 'errors', 'warnings', 'diagnostics'],
+      keybinding: 'Ctrl+Shift+M',
+      run: () => setProblemsOpen((o) => !o),
     });
     r.register({
       id: 'run-agent',
@@ -460,6 +507,14 @@ export function App() {
           <Narration narration={session.narration} />
         </footer>
       )}
+
+      {problemsOpen ? (
+        <ProblemsPanel
+          diagnostics={diagnostics}
+          onOpen={openProblem}
+          onClose={() => setProblemsOpen(false)}
+        />
+      ) : null}
 
       <StatusBar items={statusItems} onCommand={(id) => void registry.run(id)} />
 

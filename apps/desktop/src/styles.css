@@ -102,6 +102,112 @@ body {
   color: var(--color-surface-elevated);
 }
 
+/* Problems panel ----------------------------------------------------------- */
+.problems {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 24px;
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface-elevated);
+  border-top: 1px solid var(--color-border);
+  box-shadow: 0 -20px 40px -30px rgba(0, 0, 0, 0.6);
+  z-index: var(--z-popover, 200);
+}
+.problems__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 6px var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+}
+.problems__title {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0;
+  color: var(--color-text-muted);
+}
+.problems__count {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  background: var(--color-accent-muted);
+  border-radius: 999px;
+  padding: 0 8px;
+}
+.problems__close {
+  margin-left: auto;
+}
+.problems__body {
+  flex: 1 1 auto;
+  overflow: auto;
+  padding: 6px 0;
+}
+.problems__empty {
+  padding: var(--space-md) var(--space-lg);
+  color: var(--color-text-muted);
+}
+.problems__file {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 4px var(--space-md);
+  font-size: 0.8rem;
+}
+.problems__dir {
+  color: var(--color-text-muted);
+  font-size: 0.72rem;
+}
+.problems__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.problems__item {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  font-size: 0.8rem;
+  color: var(--color-text);
+  background: transparent;
+  border: none;
+  padding: 3px var(--space-md) 3px 28px;
+  cursor: pointer;
+}
+.problems__item:hover {
+  background: var(--color-accent-muted);
+}
+.problems__sev {
+  flex: 0 0 auto;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.problems__sev--error {
+  color: var(--color-danger, #e06c75);
+}
+.problems__sev--warning {
+  color: var(--color-warning, #d19a66);
+}
+.problems__sev--info,
+.problems__sev--hint {
+  color: var(--color-text-muted);
+}
+.problems__msg {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.problems__pos {
+  flex: 0 0 auto;
+  color: var(--color-text-muted);
+  font-size: 0.72rem;
+}
+
 /* Header ------------------------------------------------------------------ */
 .app-header {
   display: flex;

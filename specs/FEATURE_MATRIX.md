@@ -16,10 +16,10 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | Section | Title | Done | Partial | Missing | Not planned |
 | --- | --- | --- | --- | --- | --- |
 | 5.1 | Text editing core | 4 | 14 | 9 | 0 |
-| 5.2 | Code intelligence (LSP language features) | 0 | 5 | 19 | 0 |
+| 5.2 | Code intelligence (LSP language features) | 0 | 6 | 18 | 0 |
 | 5.3 | Editor advanced surface | 6 | 4 | 2 | 0 |
 | 5.4 | Diff and merge | 1 | 1 | 6 | 1 |
-| 5.5 | Workbench layout and navigation | 4 | 8 | 15 | 0 |
+| 5.5 | Workbench layout and navigation | 5 | 8 | 14 | 0 |
 | 5.6 | Quick open and command palette | 7 | 0 | 4 | 0 |
 | 5.7 | File explorer and workspace management | 6 | 1 | 7 | 3 |
 | 5.8 | Search and replace across files | 1 | 1 | 10 | 0 |
@@ -35,10 +35,10 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.18 | Notebooks | 0 | 0 | 6 | 0 |
 | 5.19 | Remote development and tunnels | 0 | 0 | 6 | 0 |
 | 5.20 | Accessibility (full) | 1 | 11 | 4 | 0 |
-| 5.21 | Productivity and workspace lifecycle | 3 | 4 | 10 | 0 |
+| 5.21 | Productivity and workspace lifecycle | 3 | 5 | 9 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 1 | 2 | 7 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 3 | 5 | 0 |
-| TOTAL | | 54 | 77 | 193 | 5 |
+| TOTAL | | 55 | 79 | 190 | 5 |
 
 ## Legend
 
@@ -83,7 +83,7 @@ The editor integrates Monaco 0.55.1 with minimal explicit configuration. Essenti
 
 ## 5.2 Code intelligence (LSP language features)
 
-vsclaude implements a limited set of code intelligence features, relying on Monaco's built-in capabilities. Multi-cursor, syntax highlighting, minimap, and folding come from Monaco defaults. Language support covers TS, JS, JSON, CSS, HTML, Markdown, and Rust through workers. There is no LSP bridge, no external language server integration, and no advanced IDE features (code actions, diagnostics, hover, symbol navigation, refactoring, formatting, semantic highlighting). The spec documents these as a follow-up surface; the implementation phase (A2) has not started. The app focuses on displaying agent edits rather than hand-editing.
+vsclaude implements a limited set of code intelligence features, relying on Monaco's built-in capabilities. Multi-cursor, syntax highlighting, minimap, and folding come from Monaco defaults. Language support covers TS, JS, JSON, CSS, HTML, Markdown, and Rust through workers. Diagnostics now surface: the Monaco worker markers are collected into a Problems panel and an error and warning count in the status bar (see specs/PROBLEMS_AND_DIAGNOSTICS.md). There is still no external language server bridge and no advanced IDE features (code actions, hover wiring, symbol navigation, refactoring, formatting, semantic highlighting). The LSP host (A2) has not started; the app focuses on displaying agent edits rather than hand-editing.
 
 | Capability | Status | Evidence | What is missing |
 | --- | --- | --- | --- |
@@ -95,7 +95,7 @@ vsclaude implements a limited set of code intelligence features, relying on Mona
 | Refactorings (extract, inline, move to file) | Missing | No refactoring UI, commands, or provider. | No refactoring features. |
 | Document and range formatting (on save/paste/type) | Missing | onSave does not format; no FormattingEditProvider; format options unset. ACTIONS.ts lists 'format' but it is unwired. | No formatting. |
 | Organize/sort imports and unused cleanup | Missing | No organize-imports command or provider. | No import sorting or cleanup. |
-| Diagnostics with severities, Problems panel, squiggles | Missing | No diagnostic UI, no Problems panel, no gutter glyphs. | No diagnostics display. |
+| Diagnostics with severities, Problems panel, squiggles | Partial | useDiagnostics.ts collects Monaco worker markers into the core-shell diagnostics model; ProblemsPanel.tsx lists them grouped by file; the status bar shows error and warning counts; squiggles render from the workers. See specs/PROBLEMS_AND_DIAGNOSTICS.md. | No external language-server diagnostics, no related information, no gutter glyph customization, no quick fixes. |
 | Semantic highlighting (over TextMate) | Missing | semanticHighlighting not enabled; no SemanticTokensProvider. | Only TextMate; needs bridge. |
 | Document and workspace symbols | Partial | Spec mentions breadcrumbs and @ quick-open, but no symbol providers registered. | No symbol picker; workspace symbol search absent. |
 | Call hierarchy and type hierarchy | Missing | No hierarchy providers or UI. | No hierarchy views. |
@@ -165,8 +165,8 @@ vsclaude uses a fixed, presentation-mode-driven layout rather than the dockable 
 | Bottom panel (terminal, problems, output, debug console) | Partial | App.tsx footer renders TerminalPanel, TokenPanel, Narration; only terminal is wired. | No problems, output, or debug console; panel cannot maximize, move, or sash-resize. |
 | Sash resizing (visual splitter) | Missing | No sash elements; fixed grid columns; ResizeObserver only in TerminalPanel.tsx. | No draggable splitters; layout not user-resizable. |
 | Outline / Document Symbol view | Missing | No Outline panel; breadcrumbs/symbols are Monaco features only. | No Outline panel. |
-| Problems / Diagnostics view | Missing | No Problems panel or diagnostics collection. | No problems view or count badge. |
-| Status bar (language, encoding, EOL, indent, cursor, branch, errors) | Partial | StatusBar.tsx renders branch and change count, language, EOL, indentation, cursor position, and selection, from core-shell orderStatusItems and the editor-bridge status store; cursor opens go-to-line and branch opens review. | Encoding indicator and error/warning counts (need the diagnostics surface, 5.2); items are not yet clickable pickers. |
+| Problems / Diagnostics view | Done | ProblemsPanel.tsx is a docked, grouped, jump-to-able panel; the status bar carries the error and warning count badge; View: Problems and Ctrl or Cmd plus Shift plus M toggle it. | |
+| Status bar (language, encoding, EOL, indent, cursor, branch, errors) | Partial | StatusBar.tsx renders the error and warning counts, branch and change count, language, EOL, indentation, cursor position, and selection, from core-shell orderStatusItems and the editor-bridge status store; cursor opens go-to-line, branch opens review, and the problems item toggles the panel. | Encoding indicator; the value items are not yet clickable pickers (language mode, EOL, indentation). |
 | Open Editors / Open Documents view | Missing | Tabs show open files inline; no separate list view. | No Open Editors view. |
 | Drag-drop editors between groups | Missing | No multi-group support; no tab reorder via drag. | No drag between groups or tab reorder. |
 | Drag-drop views between containers | Missing | Panels hardcoded per mode; no relocation API. | No relocating views between sidebars or panel. |
@@ -504,7 +504,7 @@ The repository implements a substantial subset of productivity features. Core ca
 | Notification center / history | Missing | Toast dismisses with no history; no center component. | No persistent notification log or drawer. |
 | Progress indicators and cancellation | Partial | SettingsBar progress indicator; Pixie state transitions; session pause/restart in App.tsx. | No general progress API or cancellation token; cannot cancel in-flight operations. |
 | Output channels with log level filtering | Missing | TerminalPanel shows agent command output; no per-channel logging or level UI. | No output channel abstraction or filtering. |
-| Problems panel with filtering | Missing | No Problems panel or diagnostics collection among the panels. | No problems aggregation or filter. |
+| Problems panel with filtering | Partial | ProblemsPanel.tsx aggregates and groups diagnostics by file (see 5.5 and 5.2). | No filtering by severity or by text yet. |
 | Welcome page and Get Started walkthroughs | Missing | ONBOARDING_AND_DELIGHT.md specifies a wizard; no renderer implementation; app shows a demo session. | No welcome screen, wizard, or step guide. |
 | What-is-new and release notes | Missing | No release-notes UI, version tracking, or changelog component. | No release notes or version-aware UI. |
 | General progress API with cancellation tokens | Missing | No CancellationToken type or general progress callback; cancellation is task-specific. | No standardized progress/cancellation abstraction. |
