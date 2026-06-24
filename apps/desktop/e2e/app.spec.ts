@@ -140,6 +140,24 @@ test.describe('vsclaude shell', () => {
     await expect(page.locator('.monaco-editor')).toBeVisible();
   });
 
+  test('compare with saved opens a Monaco diff editor', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('.editor-panel')).toBeVisible();
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await expect(palette).toBeVisible();
+    await palette.getByPlaceholder(/type a command/i).fill('compare with saved');
+    await page.keyboard.press('Enter');
+    const diff = page.getByRole('dialog', { name: /diff of/i });
+    await expect(diff).toBeVisible();
+    await expect(page.locator('.monaco-diff-editor')).toBeVisible({ timeout: 15_000 });
+    // Toggle to inline and back, then close.
+    await diff.getByRole('button', { name: 'Inline' }).click();
+    await diff.getByRole('button', { name: /close diff/i }).click();
+    await expect(page.getByRole('dialog', { name: /diff of/i })).toHaveCount(0);
+  });
+
   test('opens the diff review overlay from the command palette', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByText('vsclaude').first()).toBeVisible();

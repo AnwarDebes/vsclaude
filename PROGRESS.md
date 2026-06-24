@@ -5,8 +5,29 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus six parity slices: quick open, status bar,
-problems and diagnostics, project-wide search, source control, editor commands).
+2026-06-24. Session 3 (Step 0 plus seven parity slices, the last six self-paced by
+an autonomous /loop): quick open, status bar, problems, search, source control,
+editor commands, diff editor.
+
+## Slice 7: the Monaco diff editor (done)
+
+This ships catalog 5.4: a real diff editor, reachable everywhere.
+
+- **DiffView** (`DiffView.tsx`): wraps the Monaco DiffEditor, read-only, with the
+  built-in change navigation and collapsed unchanged regions. **DiffModal**
+  (`DiffModal.tsx`) hosts it with a side-by-side and inline toggle.
+- **Compare with Saved** (App.tsx): diffs the active editor's unsaved changes
+  against disk, in the native workspace (draft vs disk) and the browser demo (edits
+  vs bundled content), so it works everywhere and is e2e covered.
+- **Source Control diff**: clicking a file in the Source Control panel opens its
+  working-tree-vs-HEAD diff, with `diffSidesForCode` (in `@vsclaude/git`) deciding
+  which sides exist for added, untracked, and deleted files.
+- **Shared helper**: `languageForPath` is extracted to `lib/language.ts` and used
+  by the editor and the diff view.
+- **Quality**: 229 unit tests (222 plus 7), typecheck, lint clean (no Rust change),
+  the renderer build succeeds, a DiffView Storybook story, and 14 Playwright e2e
+  pass (the new one opens the diff editor via Compare with Saved). Matrix 5.4 moved
+  to Done 3, Partial 3, Missing 2, and the 5.22 diff-editor row to Done.
 
 ## Slice 6: the editor command surface (done)
 

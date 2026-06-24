@@ -18,7 +18,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.1 | Text editing core | 8 | 14 | 5 | 0 |
 | 5.2 | Code intelligence (LSP language features) | 0 | 7 | 17 | 0 |
 | 5.3 | Editor advanced surface | 6 | 4 | 2 | 0 |
-| 5.4 | Diff and merge | 1 | 1 | 6 | 1 |
+| 5.4 | Diff and merge | 3 | 3 | 2 | 1 |
 | 5.5 | Workbench layout and navigation | 5 | 8 | 14 | 0 |
 | 5.6 | Quick open and command palette | 7 | 0 | 4 | 0 |
 | 5.7 | File explorer and workspace management | 6 | 1 | 7 | 3 |
@@ -36,9 +36,9 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.19 | Remote development and tunnels | 0 | 0 | 6 | 0 |
 | 5.20 | Accessibility (full) | 1 | 11 | 4 | 0 |
 | 5.21 | Productivity and workspace lifecycle | 3 | 5 | 9 | 0 |
-| 5.22 | Custom editors, webviews, and previews | 1 | 2 | 7 | 0 |
+| 5.22 | Custom editors, webviews, and previews | 2 | 1 | 7 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 3 | 5 | 0 |
-| TOTAL | | 64 | 82 | 178 | 5 |
+| TOTAL | | 67 | 83 | 174 | 5 |
 
 ## Legend
 
@@ -133,17 +133,17 @@ The editor uses Monaco 0.55.1 with minimal configuration. Only the minimap is ex
 
 ## 5.4 Diff and merge
 
-The diff and merge subsystem is minimal. Only a text-based diff viewer for git review exists (DiffReview.tsx); the Monaco diff editor, the three-way merge editor, and the advanced features in the spec are not implemented. The spec reserves the merge editor as its own spec (out of scope for git), but even the diff editor (in scope, spec section 6) is absent. The git model in packages/git does not track conflicted file state, and no conflict-resolution UI exists.
+A real Monaco diff editor now ships (DiffView.tsx and DiffModal.tsx): side-by-side or inline, read-only, with the built-in change navigation and collapsed unchanged regions. It is reached by Compare with Saved (unsaved changes vs disk, in the workspace or the demo) and by clicking a file in the Source Control panel (working tree vs HEAD, using diffSidesForCode). See specs/SOURCE_CONTROL.md and the diff modal. The text-based review overlay (DiffReview.tsx) still drives the commit-all flow. The three-way merge editor and inline conflict resolution remain, and the git model does not track conflicted state.
 
 | Capability | Status | Evidence | What is missing |
 | --- | --- | --- | --- |
 | Basic text diff viewer | Done | DiffReview.tsx renders unified diff with colored lines; git.rs provides gitDiff(); file list and commit UI present. | |
-| Monaco diff editor (side-by-side and inline) | Missing | Spec 6.1 describes createDiffEditor; packages/editor/src/diff does not exist; no createDiffEditor calls. | No diff editor wrapper, model loading, or mode toggle. |
-| Diff change navigation and counter | Missing | Spec 6.3 specifies goToDiff and counter; DiffReview.tsx has no navigation. | No next/prev, counter, or overview ruler. |
-| Per-hunk accept/reject and gutter controls | Missing | Spec 6.3/11.3 describe per-hunk controls; DiffReview.tsx has none. | No hunk accept/reject, gutter decorations, or partial apply. |
-| Collapse unchanged regions in diff | Missing | DiffReview.tsx renders a flat line list. | No collapse of context regions. |
+| Monaco diff editor (side-by-side and inline) | Done | DiffView.tsx wraps the Monaco DiffEditor; DiffModal.tsx toggles side-by-side and inline; e2e opens it via Compare with Saved. | |
+| Diff change navigation and counter | Partial | The Monaco diff editor provides built-in change navigation (F7 and Shift+F7). | No explicit change counter or overview-ruler control in the modal chrome. |
+| Per-hunk accept/reject and gutter controls | Missing | The diff editor is read-only; no per-hunk apply. | No hunk accept/reject, gutter decorations, or partial apply. |
+| Collapse unchanged regions in diff | Done | DiffView.tsx enables hideUnchangedRegions on the Monaco diff editor. | |
 | Accessible diff viewer | Partial | DiffReview.tsx has role='dialog' and header aria-label; diff lines are plain spans. | Lines lack ARIA live regions and semantic labels; no screen-reader hunk descriptions. |
-| Compare feature (select, with saved, across workspace, folders) | Missing | Spec 6.2 lists manual compare; no compare UI exists. | No compare mode, dialog, folder, or multi-file comparison. |
+| Compare feature (select, with saved, across workspace, folders) | Partial | Compare with Saved (App.tsx compareWithSaved) diffs the editor's unsaved changes against disk, in the workspace and the demo. | No select-for-compare between two arbitrary files, and no folder comparison. |
 | Three-way merge editor (current/incoming/result) | Not planned | GIT_SPEC section 17 states the merge editor is its own spec, a non-goal for git. | Out of scope for current phase. |
 | Inline merge-conflict decorations and accept actions | Missing | No conflict decorations or resolution buttons; model.ts has no conflicted state. | No conflict highlighting, accept buttons, or conflict detection. |
 | Diff settings (ignore trim whitespace, side-by-side threshold, max compute time) | Missing | No diff settings in DiffReview.tsx or EditorPanel.tsx. | No whitespace, algorithm, threshold, or compute-limit options. |
@@ -524,7 +524,7 @@ The repository shows minimal custom-editor and webview capability. It supports o
 | Custom data contribution (HTML/CSS) | Missing | No customData files; plugin contributions list states/themes/panels/providers/visualizations only. | No HTML/CSS schema contribution or validation. |
 | Preview tabs (single-click ephemeral) | Partial | Spec 5.2 specifies them; tabs.ts has no preview field; WorkspaceEditor.tsx has basic tab management. | No preview state, italic styling, replacement, or promotion. |
 | Built-in language syntax highlighting (Monaco default) | Done | monaco-setup.ts loads workers; EditorPanel.tsx LANG_BY_EXT; Monaco bundles grammars. | |
-| Diff editor (side-by-side and inline) | Partial | DiffReview.tsx parses git diff text into add/remove/context/hunk; no Monaco diff editor or mode toggle. | No Monaco diff wrapper, mode toggle, navigation, counter, ruler, or per-hunk UI. |
+| Diff editor (side-by-side and inline) | Done | DiffView.tsx and DiffModal.tsx wrap the Monaco diff editor with a side-by-side and inline toggle; see 5.4. | |
 
 ## 5.23 Performance, logging, diagnostics, updates
 

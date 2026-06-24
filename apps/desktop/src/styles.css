@@ -1492,6 +1492,61 @@ body {
   color: var(--color-text-muted);
 }
 
+/* Diff modal (Monaco diff editor) */
+.diff-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4vh 4vw;
+  z-index: var(--z-popover, 200);
+}
+.diff-modal {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.diff-modal__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: 8px var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+}
+.diff-modal__title {
+  font-size: 0.9rem;
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.diff-modal__subtitle {
+  font-size: 0.74rem;
+  color: var(--color-text-muted);
+}
+.diff-modal__actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.chip--on {
+  background: var(--color-accent-muted);
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+.diff-modal__body {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
 /* Diff review and commit */
 .review-overlay {
   position: fixed;

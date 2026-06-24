@@ -6,7 +6,7 @@ import {
   type GitStatusModel,
 } from '@vsclaude/git';
 import { filterQuickPick } from '@vsclaude/core-shell';
-import { basePathName, joinPath } from '@vsclaude/editor';
+import { basePathName } from '@vsclaude/editor';
 import {
   gitBranches,
   gitCheckout,
@@ -22,7 +22,8 @@ import {
 export interface SourceControlPanelProps {
   /** The repo root, or null when no workspace is open. */
   repo: string | null;
-  onOpen: (path: string, line: number, column: number) => void;
+  /** Open a file's diff (working tree vs HEAD) when its row is clicked. */
+  onDiff: (change: GitFileChange) => void;
   onClose: () => void;
   /** Notifies the app after a git action so the status bar refreshes. */
   onChanged?: () => void;
@@ -39,7 +40,7 @@ function dirOf(path: string): string {
  * filter; the git engine stays a thin wrapper over the CLI. In the browser demo
  * (no workspace) it invites the user to open a folder.
  */
-export function SourceControlPanel({ repo, onOpen, onClose, onChanged }: SourceControlPanelProps) {
+export function SourceControlPanel({ repo, onDiff, onClose, onChanged }: SourceControlPanelProps) {
   const [status, setStatus] = useState<GitStatusModel | null>(null);
   const [branches, setBranches] = useState<BranchList | null>(null);
   const [message, setMessage] = useState('');
@@ -124,8 +125,8 @@ export function SourceControlPanel({ repo, onOpen, onClose, onChanged }: SourceC
         <button
           type="button"
           className="scm__file"
-          title={change.path}
-          onClick={() => repo && onOpen(joinPath(repo, change.path), 1, 1)}
+          title={`${change.path} (open diff)`}
+          onClick={() => onDiff(change)}
         >
           <span className={`scm__badge scm__badge--${code[0] ?? '?'}`}>{code}</span>
           <span className="scm__filename">{basePathName(change.path)}</span>

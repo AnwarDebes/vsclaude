@@ -28,3 +28,15 @@ export function scmGroups(model: GitStatusModel): ScmGroups {
 export function scmChangeCount(model: GitStatusModel): number {
   return model.staged.length + model.unstaged.length + model.untracked.length;
 }
+
+/**
+ * Which sides a diff has for a given porcelain status code. An added or untracked
+ * file has no committed (HEAD) side; a deleted file has no working-tree side.
+ * Everything else has both.
+ */
+export function diffSidesForCode(code: string): { head: boolean; working: boolean } {
+  const trimmed = code.trim();
+  const head = !(trimmed === '??' || trimmed.startsWith('A'));
+  const working = !trimmed.startsWith('D');
+  return { head, working };
+}

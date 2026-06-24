@@ -3,6 +3,7 @@ import { isAgentEvent, isAgentEventType } from '@vsclaude/contracts';
 import {
   branchLabel,
   captionForAction,
+  diffSidesForCode,
   gitActionEvent,
   isGitAction,
   parsePorcelainStatus,
@@ -126,6 +127,22 @@ describe('scmGroups', () => {
   it('counts all change entries', () => {
     expect(scmChangeCount(parsePorcelainStatus(SAMPLE))).toBe(8);
     expect(scmChangeCount(parsePorcelainStatus('## main\n'))).toBe(0);
+  });
+});
+
+describe('diffSidesForCode', () => {
+  it('gives a modified file both sides', () => {
+    expect(diffSidesForCode(' M')).toEqual({ head: true, working: true });
+    expect(diffSidesForCode('MM')).toEqual({ head: true, working: true });
+  });
+
+  it('drops the HEAD side for added and untracked files', () => {
+    expect(diffSidesForCode('A ')).toEqual({ head: false, working: true });
+    expect(diffSidesForCode('??')).toEqual({ head: false, working: true });
+  });
+
+  it('drops the working side for a deleted file', () => {
+    expect(diffSidesForCode('D ')).toEqual({ head: true, working: false });
   });
 });
 

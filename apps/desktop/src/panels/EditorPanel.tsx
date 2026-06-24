@@ -7,6 +7,7 @@ import {
   setEditorStatus,
   type BridgeEditor,
 } from '../lib/editor-bridge';
+import { languageForPath } from '../lib/language';
 
 interface EditorPanelProps {
   path?: string;
@@ -14,24 +15,6 @@ interface EditorPanelProps {
   language?: string;
   onChange?: (value: string) => void;
   onSave?: (value: string) => void;
-}
-
-const LANG_BY_EXT: Record<string, string> = {
-  ts: 'typescript',
-  tsx: 'typescript',
-  js: 'javascript',
-  jsx: 'javascript',
-  json: 'json',
-  css: 'css',
-  html: 'html',
-  md: 'markdown',
-  rs: 'rust',
-};
-
-function languageFor(path?: string, explicit?: string): string {
-  if (explicit) return explicit;
-  const ext = path?.split('.').pop() ?? '';
-  return LANG_BY_EXT[ext] ?? 'plaintext';
 }
 
 /**
@@ -98,7 +81,7 @@ export function EditorPanel({ path, value, language, onChange, onSave }: EditorP
         height="100%"
         theme="vs-dark"
         path={path}
-        language={languageFor(path, language)}
+        language={languageForPath(path, language)}
         value={value}
         onChange={(next) => onChange?.(next ?? '')}
         onMount={onMount}

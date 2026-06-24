@@ -6,7 +6,12 @@ import {
   type QuickPickItem,
   type StatusBarItem,
 } from '@vsclaude/core-shell';
+import { diffSidesForCode, type GitFileChange } from '@vsclaude/git';
+import { basePathName, joinPath } from '@vsclaude/editor';
 import { bundledThemeIds } from '@vsclaude/design-system';
+import { languageForPath } from './lib/language';
+import { readFile } from './workspace/fsClient';
+import { gitHeadFile } from './lib/tauri';
 import { useSession } from './session/useSession';
 import { useLiveProvider } from './session/useLiveProvider';
 import { useWorkspace } from './workspace/useWorkspace';
@@ -25,6 +30,7 @@ import { StatusBar, useEditorStatus, useGitStatus } from './components/StatusBar
 import { ProblemsPanel } from './components/ProblemsPanel';
 import { SearchPanel } from './components/SearchPanel';
 import { SourceControlPanel } from './components/SourceControlPanel';
+import { DiffModal, type DiffTarget } from './components/DiffModal';
 import { DiffReview } from './components/DiffReview';
 import { Narration } from './components/Narration';
 import { ExplorerPanel } from './panels/ExplorerPanel';
@@ -85,6 +91,7 @@ export function App() {
   const [reviewOpen, setReviewOpen] = useState(false);
   const [bottomPanel, setBottomPanel] = useState<'none' | 'problems' | 'search' | 'scm'>('none');
   const [gitNonce, setGitNonce] = useState(0);
+  const [diffTarget, setDiffTarget] = useState<DiffTarget | null>(null);
   const live = useLiveProvider();
   const { available: liveAvailable, start: liveStart } = live;
   const usingLive = live.events.length > 0;
@@ -142,6 +149,67 @@ export function App() {
     },
     [openFileFromPalette],
   );
+
+  // Open a Source Control file's diff: its committed version against the working
+  // tree. Added or untracked files have no HEAD side; deleted files have no
+  // working side (diffSidesForCode decides), and a missing side reads as empty.
+  const openScmDiff = useCallback(
+    async (change: GitFileChange) => {
+      const repo = hasWorkspace ? ws.roots[0]?.path ?? null : null;
+      if (!repo) return;
+      const sides = diffSidesForCode(change.code);
+      let original = '';
+      let modified = '';
+      if (sides.head) {
+        try {
+          original = await gitHeadFile(repo, change.path);
+        } catch {
+          original = '';
+        }
+      }
+      if (sides.working) {
+        try {
+          modified = (await readFile(joinPath(repo, change.path))).content;
+        } catch {
+          modified = '';
+        }
+      }
+      setDiffTarget({
+        name: basePathName(change.path),
+        original,
+        modified,
+        language: languageForPath(change.path),
+        subtitle: 'working tree vs HEAD',
+      });
+    },
+    [hasWorkspace, ws.roots],
+  );
+
+  // Compare the active editor's unsaved changes against what is on disk. Works in
+  // the native workspace (draft vs disk) and in the browser demo (edits vs the
+  // bundled content), so it is reachable everywhere.
+  const compareWithSaved = useCallback(() => {
+    if (hasWorkspace) {
+      const doc = ws.activeDoc;
+      if (!doc) return;
+      setDiffTarget({
+        name: basePathName(doc.path),
+        original: doc.disk,
+        modified: doc.draft,
+        language: languageForPath(doc.path),
+        subtitle: 'unsaved changes vs disk',
+      });
+    } else {
+      const saved = demoContentFor(openFile);
+      setDiffTarget({
+        name: basePathName(openFile),
+        original: saved,
+        modified: editedContents[openFile] ?? saved,
+        language: languageForPath(openFile),
+        subtitle: 'unsaved changes vs saved',
+      });
+    }
+  }, [hasWorkspace, ws.activeDoc, openFile, editedContents]);
 
   const statusItems = useMemo<StatusBarItem[]>(() => {
     const items: StatusBarItem[] = [];
@@ -307,6 +375,12 @@ export function App() {
       keybinding: 'Ctrl+Shift+G',
       run: () => setBottomPanel((p) => (p === 'scm' ? 'none' : 'scm')),
     });
+    r.register({
+      id: 'compare-saved',
+      title: 'Compare with Saved',
+      keywords: ['diff', 'compare', 'changes', 'saved', 'disk'],
+      run: compareWithSaved,
+    });
     // The editor command surface: Monaco's built-in editing actions, run on the
     // active editor through the bridge, so they are discoverable in the palette.
     for (const cmd of EDITOR_COMMANDS) {
@@ -413,7 +487,7 @@ export function App() {
       run: () => setSettings((s) => ({ ...s, sound: { ...s.sound, enabled: !s.sound.enabled } })),
     });
     return r;
-  }, [playing, setPlaying, restart, liveAvailable, liveStart, hasWorkspace, ws]);
+  }, [playing, setPlaying, restart, liveAvailable, liveStart, hasWorkspace, ws, compareWithSaved]);
 
   const mode = settings.presentationMode;
   const isEditorMode = mode === 'companion' || mode === 'cozy';
@@ -563,7 +637,7 @@ export function App() {
       ) : bottomPanel === 'scm' ? (
         <SourceControlPanel
           repo={hasWorkspace ? ws.roots[0]?.path ?? null : null}
-          onOpen={openProblem}
+          onDiff={(change) => void openScmDiff(change)}
           onClose={() => setBottomPanel('none')}
           onChanged={() => setGitNonce((n) => n + 1)}
         />
@@ -587,6 +661,7 @@ export function App() {
         onGotoLine={(line, column) => gotoLine(line, column)}
         onRefreshFiles={hasWorkspace ? fileIndex.refresh : undefined}
       />
+      <DiffModal target={diffTarget} onClose={() => setDiffTarget(null)} />
       <DiffReview open={reviewOpen} cwd="." onClose={() => setReviewOpen(false)} />
     </div>
   );
