@@ -5,10 +5,23 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus twelve parity slices, the last eleven self-paced
-by an autonomous /loop): quick open, status bar, problems, search, source control,
-editor commands, diff editor, settings, Monaco theme binding, keyboard shortcuts,
-terminal tabs, activity bar.
+2026-06-24. Session 3 (Step 0 plus thirteen parity slices, the last twelve
+self-paced by an autonomous /loop): quick open, status bar, problems, search,
+source control, editor commands, diff editor, settings, Monaco theme binding,
+keyboard shortcuts, terminal tabs, activity bar, welcome page.
+
+## Slice 13: the welcome page (done)
+
+A Get Started page (catalog 5.21).
+
+- **Welcome data** (`lib/welcome.ts`): the shortcut tips and a pure
+  `welcomeQuickActions` builder that filters the Start actions to what is available
+  (open folder, new file, settings, shortcuts, run a real agent). 3 unit tests.
+- **WelcomePanel** (`WelcomePanel.tsx`): Start actions, recent projects, and the
+  tips, opened by the Help: Welcome command.
+- **Quality**: 258 unit tests (254 plus 4), typecheck, lint clean (no Rust change),
+  the renderer build succeeds, and 20 Playwright e2e pass (the new one opens the
+  welcome page and runs a quick action). Matrix 5.21 welcome row moved to Partial.
 
 ## Slice 12: the activity bar (done)
 

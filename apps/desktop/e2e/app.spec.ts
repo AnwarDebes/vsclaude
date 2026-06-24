@@ -239,6 +239,23 @@ test.describe('vsclaude shell', () => {
     await expect(page.getByRole('dialog', { name: 'Settings' })).toBeVisible();
   });
 
+  test('the welcome page opens from the palette with quick actions', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.getByText('vsclaude').first()).toBeVisible();
+    await page.getByText('Claude Code, in motion').first().click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('welcome');
+    await page.keyboard.press('Enter');
+    const welcome = page.getByRole('dialog', { name: 'Welcome' });
+    await expect(welcome).toBeVisible();
+    await expect(welcome.getByRole('heading', { name: /welcome to vsclaude/i })).toBeVisible();
+    // A quick action opens Settings and closes the welcome page.
+    await welcome.getByRole('button', { name: 'Open Settings' }).click();
+    await expect(page.getByRole('dialog', { name: 'Welcome' })).toHaveCount(0);
+    await expect(page.getByRole('dialog', { name: 'Settings' })).toBeVisible();
+  });
+
   test('opens the diff review overlay from the command palette', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByText('vsclaude').first()).toBeVisible();

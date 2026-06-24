@@ -36,6 +36,8 @@ import { SearchPanel } from './components/SearchPanel';
 import { SourceControlPanel } from './components/SourceControlPanel';
 import { SettingsPanel } from './components/SettingsPanel';
 import { KeyboardShortcuts } from './components/KeyboardShortcuts';
+import { WelcomePanel } from './components/WelcomePanel';
+import { welcomeQuickActions, type WelcomeActionId } from './lib/welcome';
 import { DiffModal, type DiffTarget } from './components/DiffModal';
 import { DiffReview } from './components/DiffReview';
 import { Narration } from './components/Narration';
@@ -100,6 +102,7 @@ export function App() {
   const [diffTarget, setDiffTarget] = useState<DiffTarget | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
+  const [welcomeOpen, setWelcomeOpen] = useState(false);
   const live = useLiveProvider();
   const { available: liveAvailable, start: liveStart } = live;
   const usingLive = live.events.length > 0;
@@ -306,6 +309,42 @@ export function App() {
     return items;
   }, [editorStatus, gitSummary, diagnostics, hasWorkspace, ws.roots]);
 
+  const welcomeActions = useMemo(
+    () => welcomeQuickActions({ canOpenFolder: ws.available, hasWorkspace, liveAvailable }),
+    [ws.available, hasWorkspace, liveAvailable],
+  );
+
+  const onWelcomeAction = useCallback(
+    (id: WelcomeActionId) => {
+      setWelcomeOpen(false);
+      switch (id) {
+        case 'open-folder':
+          void ws.openFolder();
+          break;
+        case 'new-file': {
+          const root = ws.roots[0];
+          if (root) {
+            const name = window.prompt('New file name', 'untitled.ts');
+            if (name) void ws.newFile(root.path, name);
+          }
+          break;
+        }
+        case 'open-settings':
+          setSettingsOpen(true);
+          break;
+        case 'open-shortcuts':
+          setShortcutsOpen(true);
+          break;
+        case 'run-agent': {
+          const prompt = window.prompt('What should the agent do?', 'Add a validated login form with tests.');
+          if (prompt) void liveStart(prompt);
+          break;
+        }
+      }
+    },
+    [ws, liveStart],
+  );
+
   useEffect(() => {
     applyTheme(settings);
     saveAppSettings(settings);
@@ -414,6 +453,12 @@ export function App() {
       title: 'Terminal: New Terminal',
       keywords: ['terminal', 'shell', 'console', 'new'],
       run: requestNewTerminal,
+    });
+    r.register({
+      id: 'help-welcome',
+      title: 'Help: Welcome',
+      keywords: ['welcome', 'getting', 'started', 'help', 'intro'],
+      run: () => setWelcomeOpen(true),
     });
     // The editor command surface: Monaco's built-in editing actions, run on the
     // active editor through the bridge, so they are discoverable in the palette.
@@ -710,6 +755,18 @@ export function App() {
       ) : null}
       {shortcutsOpen ? (
         <KeyboardShortcuts registry={registry} onClose={() => setShortcutsOpen(false)} />
+      ) : null}
+      {welcomeOpen ? (
+        <WelcomePanel
+          actions={welcomeActions}
+          onAction={onWelcomeAction}
+          recents={ws.recents.map((r) => ({ name: r.name, path: r.path }))}
+          onOpenRecent={(path) => {
+            setWelcomeOpen(false);
+            void ws.openPath(path);
+          }}
+          onClose={() => setWelcomeOpen(false)}
+        />
       ) : null}
       <DiffModal target={diffTarget} onClose={() => setDiffTarget(null)} />
       <DiffReview open={reviewOpen} cwd="." onClose={() => setReviewOpen(false)} />
