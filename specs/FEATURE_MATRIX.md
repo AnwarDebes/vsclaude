@@ -27,7 +27,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.10 | Integrated terminal | 3 | 4 | 12 | 0 |
 | 5.11 | Tasks (VS Code task support) | 0 | 4 | 5 | 0 |
 | 5.12 | Debugging (Debug Adapter Protocol) | 0 | 0 | 9 | 0 |
-| 5.13 | Snippets and Emmet | 1 | 1 | 3 | 0 |
+| 5.13 | Snippets and Emmet | 1 | 2 | 2 | 0 |
 | 5.14 | Settings and configuration | 2 | 2 | 5 | 1 |
 | 5.15 | Keybindings and keymaps | 3 | 2 | 6 | 0 |
 | 5.16 | Themes and appearance | 11 | 3 | 8 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 10 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 2 | 6 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 3 | 5 | 0 |
-| TOTAL | | 79 | 99 | 146 | 5 |
+| TOTAL | | 79 | 100 | 145 | 5 |
 
 ## Legend
 
@@ -341,7 +341,7 @@ Monaco 0.55.1 is integrated with basic configuration, and Emmet and snippets are
 | Capability | Status | Evidence | What is missing |
 | --- | --- | --- | --- |
 | Emmet abbreviation expansion and commands | Partial | Monaco 0.55.1 ships Emmet; EditorPanel.tsx does not disable it; no Emmet commands in CommandRegistry. | No palette entries, keybindings, or customization for Emmet. |
-| Built-in and user snippet definitions | Missing | Spec section 10 describes SnippetDef (built-in/user/workspace); no loader, files, or completion provider; only a narration label exists. | No snippet loader, files, storage, or completion registration. |
+| Built-in and user snippet definitions | Partial | lib/snippets.ts defines built-in TypeScript and JavaScript snippets (clg, fn, afn, imp, todo), surfaced by a Monaco CompletionItemProvider in monaco-setup.ts. Unit tested. | No user or workspace snippet files, storage, or management. |
 | Snippet syntax support (TextMate grammar) | Missing | Spec specifies tabstops/placeholders/choices/variables; no parser or provider. | No TextMate snippet parser, tabstop nav, or variable substitution. |
 | Snippet management UI and commands | Missing | No snippet insert/edit/create or from-selection commands in App.tsx; no management UI. | No snippet commands, library browser, or preferences. |
 | IntelliSense with completion (Monaco default) | Done | EditorPanel.tsx does not disable suggest; TS/JS workers loaded in monaco-setup.ts provide completions. | |

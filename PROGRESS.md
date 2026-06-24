@@ -5,14 +5,27 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus thirty-three parity slices, the last thirty-two
+2026-06-24. Session 3 (Step 0 plus thirty-four parity slices, the last thirty-three
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
 stash, zen mode, breadcrumbs, tasks, activity-bar badges, output panel, untitled,
 more editor settings, markdown preview, document links, color decorators, outline,
 git history, release notes, notification center, branch delete and rename, git tags,
-gitignore action, svg preview.
+gitignore action, svg preview, snippets.
+
+## Slice 34: built-in snippets (done)
+
+Snippet completions (catalog 5.13).
+
+- **Data** (`lib/snippets.ts`): built-in TypeScript and JavaScript snippets (clg, fn,
+  afn, imp, todo) with snippet tabstops, plus `snippetsFor` and `SNIPPET_LANGUAGES`.
+  4 unit tests.
+- **Provider**: monaco-setup.ts registers a CompletionItemProvider that inserts them
+  as snippets, alongside the language workers.
+- **Quality**: 327 unit tests (323 plus 4), typecheck, lint clean (no Rust change),
+  the renderer build succeeds, and 33 Playwright e2e pass (no regression). Matrix 5.13
+  snippets row moved to Partial. Partial count reached 100.
 
 ## Slice 33: svg preview (done)
 

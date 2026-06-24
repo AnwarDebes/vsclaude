@@ -13,6 +13,7 @@ import { loader } from '@monaco-editor/react';
 import { findLinks } from './links';
 import { findColors, toHex } from './colors';
 import { markdownSymbols } from './symbols';
+import { SNIPPET_LANGUAGES, snippetsFor } from './snippets';
 
 declare global {
   interface Window {
@@ -98,6 +99,31 @@ for (const language of COLOR_LANGUAGES) {
     },
     provideColorPresentations(_model, colorInfo) {
       return [{ label: toHex(colorInfo.color) }];
+    },
+  });
+}
+
+// Built-in snippet completions for TypeScript and JavaScript.
+for (const language of SNIPPET_LANGUAGES) {
+  monaco.languages.registerCompletionItemProvider(language, {
+    provideCompletionItems(model, position) {
+      const word = model.getWordUntilPosition(position);
+      const range = new monaco.Range(
+        position.lineNumber,
+        word.startColumn,
+        position.lineNumber,
+        word.endColumn,
+      );
+      const suggestions = snippetsFor(language).map((snippet) => ({
+        label: snippet.prefix,
+        kind: monaco.languages.CompletionItemKind.Snippet,
+        insertText: snippet.body,
+        insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+        detail: snippet.description,
+        documentation: snippet.description,
+        range,
+      }));
+      return { suggestions };
     },
   });
 }
