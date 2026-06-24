@@ -5,7 +5,23 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-23. Session 2 (Phase A1: the real workspace and filesystem layer).
+2026-06-24. Session 3 (Step 0: the VS Code parity feature matrix).
+
+## Step 0: VS Code parity feature matrix (done)
+
+`specs/FEATURE_MATRIX.md` is the new single source of truth for the editor and IDE
+capability surface that vsclaude shares with VS Code. It audits the real repository
+(source, IPC contracts, Rust core, tests) against the full catalog, section by
+section, and is the gate for every parity slice that follows: only Partial and
+Missing items become specs and slices, and a row moves to Done only when the
+feature is implemented, tested, accessible, integrated, and documented.
+
+State at the audit (2026-06-24): 329 capabilities across 23 sections, scored Done
+49, Partial 77, Missing 198, Not planned 5. The largest gaps are code intelligence
+(no external LSP host, 5.2), the workbench layout (a fixed presentation-mode shell
+rather than a dockable workbench, 5.5), the git surface beyond status and commit
+(5.9), and the terminal productivity surface (5.10). The AI agent and motion layer
+is the product's own half and stays tracked in ROADMAP.md, not in this matrix.
 
 ## Phase A1: workspace and real filesystem (done)
 
