@@ -22,7 +22,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.5 | Workbench layout and navigation | 5 | 8 | 14 | 0 |
 | 5.6 | Quick open and command palette | 7 | 0 | 4 | 0 |
 | 5.7 | File explorer and workspace management | 6 | 1 | 7 | 3 |
-| 5.8 | Search and replace across files | 1 | 1 | 10 | 0 |
+| 5.8 | Search and replace across files | 5 | 1 | 6 | 0 |
 | 5.9 | Source control and git | 4 | 4 | 16 | 0 |
 | 5.10 | Integrated terminal | 2 | 3 | 14 | 0 |
 | 5.11 | Tasks (VS Code task support) | 0 | 2 | 7 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 5 | 9 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 1 | 2 | 7 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 3 | 5 | 0 |
-| TOTAL | | 55 | 79 | 190 | 5 |
+| TOTAL | | 59 | 79 | 186 | 5 |
 
 ## Legend
 
@@ -227,17 +227,17 @@ Phase A1 is substantially complete: a working file tree, lazy loading, full CRUD
 
 ## 5.8 Search and replace across files
 
-Project-wide search and replace is largely Missing. The spec details global search via ripgrep (regex/case/whole-word, include/exclude globs, gitignore toggle, scope) and replace with per-match and per-file preview and apply-all. But the IPC protocol has no editor_search_start or editor_quick_open, the Rust core has no search handlers, and the renderer has no search panel or result tree. Monaco's single-file find/replace (Ctrl+F/Ctrl+H) is available as a default but is not customized or exposed.
+Project-wide search now ships. The `search.find` IPC command (protocol v5) runs a gitignore-aware engine in the Rust core, built on the same ignore and grep crates ripgrep is, with regex, case, and whole-word options and include and exclude globs. The SearchPanel surfaces it with a debounced query, toggle buttons, glob inputs, and a results tree grouped by file where each match highlights the hit and opens its file at the line. Replace across files, a persistent Search Editor, scope toggles, and search history remain. Monaco's single-file find is still available as a default. See specs/SEARCH.md.
 
 | Capability | Status | Evidence | What is missing |
 | --- | --- | --- | --- |
 | Monaco built-in find/replace (single-file) | Done | EditorPanel.tsx does not disable the find widget; Monaco enables Ctrl+F/Ctrl+H by default. | |
-| Global project-wide search via ripgrep | Missing | No editor_search_start in ipc.ts; no handler in lib.rs; ripgrep not in Cargo.toml. | No search IPC, ripgrep dependency, or invocation. |
-| Quick-open/fuzzy file picker | Missing | No editor_quick_open command or handler; only command palette for commands. | No quick-open command, handler, or indexed list. |
-| Search result tree with context | Missing | No SearchPanel or tree component; no SearchHit in contracts. | No result tree, grouping, context lines, or counts. |
-| Replace with per-match and per-file preview | Missing | No replace preview component or editor_replace command. | No per-match diff, selection, or transactional apply. |
-| Search toggles (regex, case, whole-word) | Partial | Monaco find widget has these toggles for single-file only. | Global toggles absent because the backend does not exist. |
-| Include/exclude globs and gitignore | Missing | Spec 8.2 defines globs and ignore override; no UI or backend. | No glob UI or gitignore-aware filtering. |
+| Global project-wide search via ripgrep | Done | search.find (ipc.ts, protocol v5) runs search.rs run_search on the ignore and grep crates; SearchPanel.tsx surfaces it; covered by Rust tests. | |
+| Quick-open/fuzzy file picker | Done | CommandPalette.tsx Ctrl/Cmd+P over the fs.walk index (see 5.6). | |
+| Search result tree with context | Partial | SearchPanel.tsx renders a results tree grouped by file with match counts, highlighted hits, and jump-to-line. | No surrounding context lines (only the match line) and no expand and collapse of context. |
+| Replace with per-match and per-file preview | Missing | No replace UI or write path; the result model carries the ranges replace will need. | No per-match preview, selection, or transactional apply. |
+| Search toggles (regex, case, whole-word) | Done | SearchPanel.tsx toggle buttons feed SearchOptions; the Rust matcher honors regex, case_insensitive, and word. | |
+| Include/exclude globs and gitignore | Done | SearchOptions includeGlobs and excludeGlobs map to ignore OverrideBuilder; WalkBuilder respects .gitignore; Rust test covers it. | |
 | Open-editors and folder scope toggle | Missing | No scope selector or scope management. | No scope radio/dropdown or selection-aware search. |
 | Search history | Missing | No search-history state or persistence. | No recall of previous queries. |
 | Search in selection | Missing | No selection-boundary detection for search. | No search-in-selection toggle. |

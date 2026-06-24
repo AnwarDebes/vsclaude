@@ -29,6 +29,12 @@ notify = "8"
 notify-debouncer-full = "0.5"
 # Deletes go to the OS recycle bin so they stay recoverable.
 trash = "5"
+# Project-wide search, built on the same libraries ripgrep is: gitignore-aware
+# walking and a fast regex matcher. No runtime dependency on an external binary.
+ignore = "0.4"
+grep-regex = "0.1"
+grep-searcher = "0.1"
+grep-matcher = "0.1"
 
 [features]
 # Used by the production bundle.

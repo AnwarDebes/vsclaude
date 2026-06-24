@@ -22,6 +22,7 @@ import { SettingsBar } from './components/SettingsBar';
 import { CommandPalette, openPalette } from './components/CommandPalette';
 import { StatusBar, useEditorStatus, useGitStatus } from './components/StatusBar';
 import { ProblemsPanel } from './components/ProblemsPanel';
+import { SearchPanel } from './components/SearchPanel';
 import { DiffReview } from './components/DiffReview';
 import { Narration } from './components/Narration';
 import { ExplorerPanel } from './panels/ExplorerPanel';
@@ -80,7 +81,7 @@ export function App() {
   const [openFile, setOpenFile] = useState('src/auth/login-form.tsx');
   const [editedContents, setEditedContents] = useState<Record<string, string>>({});
   const [reviewOpen, setReviewOpen] = useState(false);
-  const [problemsOpen, setProblemsOpen] = useState(false);
+  const [bottomPanel, setBottomPanel] = useState<'none' | 'problems' | 'search'>('none');
   const live = useLiveProvider();
   const { available: liveAvailable, start: liveStart } = live;
   const usingLive = live.events.length > 0;
@@ -231,12 +232,18 @@ export function App() {
     saveAppSettings(settings);
   }, [settings]);
 
-  // Ctrl or Cmd plus Shift plus M toggles the Problems panel, matching VS Code.
+  // The bottom drawer shortcuts, matching VS Code: Ctrl or Cmd plus Shift plus M
+  // for Problems and plus Shift plus F for Search. One slot, so each toggles.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'm') {
+      if (!(e.ctrlKey || e.metaKey) || !e.shiftKey) return;
+      const key = e.key.toLowerCase();
+      if (key === 'm') {
         e.preventDefault();
-        setProblemsOpen((o) => !o);
+        setBottomPanel((p) => (p === 'problems' ? 'none' : 'problems'));
+      } else if (key === 'f') {
+        e.preventDefault();
+        setBottomPanel((p) => (p === 'search' ? 'none' : 'search'));
       }
     };
     window.addEventListener('keydown', onKey);
@@ -278,7 +285,14 @@ export function App() {
       title: 'View: Problems',
       keywords: ['problems', 'errors', 'warnings', 'diagnostics'],
       keybinding: 'Ctrl+Shift+M',
-      run: () => setProblemsOpen((o) => !o),
+      run: () => setBottomPanel((p) => (p === 'problems' ? 'none' : 'problems')),
+    });
+    r.register({
+      id: 'view-search',
+      title: 'Search: Find in Files',
+      keywords: ['search', 'find', 'files', 'grep', 'ripgrep'],
+      keybinding: 'Ctrl+Shift+F',
+      run: () => setBottomPanel((p) => (p === 'search' ? 'none' : 'search')),
     });
     r.register({
       id: 'run-agent',
@@ -508,11 +522,17 @@ export function App() {
         </footer>
       )}
 
-      {problemsOpen ? (
+      {bottomPanel === 'problems' ? (
         <ProblemsPanel
           diagnostics={diagnostics}
           onOpen={openProblem}
-          onClose={() => setProblemsOpen(false)}
+          onClose={() => setBottomPanel('none')}
+        />
+      ) : bottomPanel === 'search' ? (
+        <SearchPanel
+          root={hasWorkspace ? ws.roots[0]?.path ?? null : null}
+          onOpen={openProblem}
+          onClose={() => setBottomPanel('none')}
         />
       ) : null}
 

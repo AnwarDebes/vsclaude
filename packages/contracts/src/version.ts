@@ -25,8 +25,12 @@ export const AGENT_EVENT_SCHEMA_VERSION = 1 as const;
  * plus P) and, later, project search. It skips heavy directories, never follows a
  * symlink, and caps its result so a huge tree cannot hang the picker. See
  * specs/QUICK_OPEN.md.
+ *
+ * v5: added `search.find`, project-wide search backed by the `ignore` and `grep`
+ * crates (the libraries ripgrep is built from): gitignore-aware, with regex,
+ * case, and whole-word options and include and exclude globs. See specs/SEARCH.md.
  */
-export const IPC_PROTOCOL_VERSION = 4 as const;
+export const IPC_PROTOCOL_VERSION = 5 as const;
 
 /** Version of the public plugin API surface. Plugins declare the version they target. */
 export const PLUGIN_API_VERSION = 1 as const;

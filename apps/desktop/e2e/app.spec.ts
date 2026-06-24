@@ -96,6 +96,22 @@ test.describe('vsclaude shell', () => {
     await expect(page.getByRole('region', { name: /problems/i })).toHaveCount(0);
   });
 
+  test('search: Ctrl+Shift+F opens Search, and the bottom drawer holds one panel', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.getByText('vsclaude').first()).toBeVisible();
+    // Move focus out of Monaco so the global shortcut is not captured.
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+Shift+KeyF');
+    const search = page.getByRole('region', { name: 'Search' });
+    await expect(search).toBeVisible();
+    await expect(search.getByRole('textbox', { name: 'Search' })).toBeVisible();
+    await expect(search.getByText(/open a folder to search/i)).toBeVisible();
+    // Opening Problems closes Search: the drawer is a single slot.
+    await page.keyboard.press('Control+Shift+KeyM');
+    await expect(page.getByRole('region', { name: 'Search' })).toHaveCount(0);
+    await expect(page.getByRole('region', { name: /problems/i })).toBeVisible();
+  });
+
   test('opens the diff review overlay from the command palette', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByText('vsclaude').first()).toBeVisible();

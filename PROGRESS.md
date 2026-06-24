@@ -5,8 +5,35 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus three parity slices: quick open, status bar,
-problems and diagnostics).
+2026-06-24. Session 3 (Step 0 plus four parity slices: quick open, status bar,
+problems and diagnostics, project-wide search).
+
+## Slice 4: project-wide search (done)
+
+The spec is `specs/SEARCH.md`; it ships the find half of catalog 5.8.
+
+- **Contract v5** (`packages/contracts`): added `search.find` with the
+  `SearchOptions`, `SearchRange`, `SearchLineMatch`, `SearchFileResult`, and
+  `SearchResult` types. `IPC_PROTOCOL_VERSION` is now 5, mirrored in Rust.
+- **Rust engine** (`src-tauri/src/search.rs`): `run_search` is built on the same
+  crates ripgrep is, `ignore` (gitignore-aware walking with include and exclude
+  glob overrides) and `grep` (a fast regex matcher). It returns matches with line
+  numbers, the line text, and code-point match ranges, capped so a huge tree
+  cannot hang the UI; non-text files are skipped. 5 cargo tests cover literal,
+  gitignore plus exclude, regex plus case, the cap, and the empty query. `cargo
+  check` is clean.
+- **Search panel** (`SearchPanel.tsx`): a debounced query, regex, case, and
+  whole-word toggle buttons, include and exclude glob inputs, and a results tree
+  grouped by file where each match highlights the hit and opens the file at the
+  line. Pure view-model helpers (`searchModel.ts`: `splitLineByRanges`,
+  `summarizeSearch`) are unit tested.
+- **Bottom drawer**: the Problems and Search panels now share one bottom slot
+  (opening one closes the other), toggled by Ctrl or Cmd plus Shift plus M and
+  plus F and by the View: Problems and Search: Find in Files commands.
+- **Quality**: 214 unit tests (207 plus 7) and 5 Rust tests, typecheck, lint, and
+  `cargo check` clean, the renderer build succeeds, and 11 Playwright e2e pass (the
+  new one opens Search and verifies the single bottom slot). Matrix 5.8 moved to
+  Done 5, Partial 1, Missing 6.
 
 ## Slice 3: problems panel and diagnostics (done)
 

@@ -23,6 +23,53 @@ export interface FsEntry {
   mtimeMs?: number;
 }
 
+/** Options for a project-wide search. All fields are optional with sane defaults. */
+export interface SearchOptions {
+  /** Treat the query as a regular expression. Default false (literal). */
+  regex?: boolean;
+  /** Match case sensitively. Default false. */
+  caseSensitive?: boolean;
+  /** Match whole words only. Default false. */
+  wholeWord?: boolean;
+  /** Only search files matching these globs (a whitelist). */
+  includeGlobs?: string[];
+  /** Skip files matching these globs. */
+  excludeGlobs?: string[];
+  /** Cap on the number of matches returned. */
+  maxResults?: number;
+}
+
+/** A matched range within a line, as code-point offsets. */
+export interface SearchRange {
+  start: number;
+  end: number;
+}
+
+/** One matching line in a file. */
+export interface SearchLineMatch {
+  /** One-based line number. */
+  line: number;
+  /** The full line text (without the trailing newline). */
+  text: string;
+  /** The matched ranges within `text`, as code-point offsets. */
+  ranges: SearchRange[];
+}
+
+/** All matches within one file. */
+export interface SearchFileResult {
+  path: string;
+  lines: SearchLineMatch[];
+}
+
+/** The result of a project-wide search. */
+export interface SearchResult {
+  files: SearchFileResult[];
+  /** Total number of matches across all files. */
+  matchCount: number;
+  /** True when the match cap stopped the search before the tree was exhausted. */
+  truncated: boolean;
+}
+
 /** Metadata about a single path, returned by `fs.stat`. */
 export interface FileStat {
   path: string;
@@ -85,6 +132,14 @@ export interface IpcCommandMap {
     args: { path: string; limit?: number };
     result: { files: string[]; truncated: boolean };
   };
+  /**
+   * Project-wide search. Walks `root` (gitignore-aware) and matches `query`
+   * across text files. See specs/SEARCH.md.
+   */
+  'search.find': {
+    args: { root: string; query: string; options?: SearchOptions };
+    result: SearchResult;
+  };
 
   'secret.set': { args: { key: string; value: string }; result: void };
   /**
@@ -140,6 +195,7 @@ export const IPC_COMMANDS = [
   'fs.watch',
   'fs.unwatch',
   'fs.walk',
+  'search.find',
   'secret.set',
   'secret.status',
   'secret.delete',
