@@ -30,7 +30,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.13 | Snippets and Emmet | 1 | 2 | 2 | 0 |
 | 5.14 | Settings and configuration | 2 | 2 | 5 | 1 |
 | 5.15 | Keybindings and keymaps | 3 | 2 | 6 | 0 |
-| 5.16 | Themes and appearance | 15 | 3 | 4 | 0 |
+| 5.16 | Themes and appearance | 15 | 4 | 3 | 0 |
 | 5.17 | Extensions and plugin ecosystem | 5 | 2 | 11 | 0 |
 | 5.18 | Notebooks | 0 | 0 | 6 | 0 |
 | 5.19 | Remote development and tunnels | 0 | 0 | 6 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 10 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 2 | 6 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 3 | 5 | 0 |
-| TOTAL | | 83 | 100 | 141 | 5 |
+| TOTAL | | 83 | 101 | 140 | 5 |
 
 ## Legend
 
@@ -406,7 +406,7 @@ vsclaude has a strong design-token system and bundled themes. Theme selection (f
 | Editor tab size and indentation settings | Done | AppSettings.editor.tabSize and insertSpaces, edited in the Settings panel and applied to Monaco. | |
 | Editor word wrap setting | Done | AppSettings.editor.wordWrap, toggled in the Settings panel and applied to Monaco. | |
 | Editor minimap visibility | Done | AppSettings.editor.minimap, toggled in the Settings panel and applied to Monaco. | |
-| Follow OS system theme | Missing | Spec mentions followSystemTheme; not in AppSettings; no OS listener. | No OS theme detection or auto switch. |
+| Follow OS system theme | Partial | The workbench.followSystemTheme setting makes App listen to matchMedia(prefers-color-scheme) and switch between cozy-dark and cozy-light (themeForSystem, unit tested). | No separate preferred dark and light theme selection. |
 | UI scale customization | Done | The workbench.uiScale setting (80 to 150 percent) zooms the whole app shell (App.tsx style zoom). | |
 | Monaco editor theme binding to app theme | Done | monaco-theme.ts defines a Monaco theme from each bundled theme's tokens and switches on settings change; EditorPanel and DiffView read the bound theme; e2e verifies the editor follows light and dark. | |
 | Custom theme file import/export | Missing | Spec describes JSON themes with validation; no import/export; plugin themes runtime-only. | No custom theme file create/import/export. |

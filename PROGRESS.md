@@ -5,7 +5,7 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus thirty-six parity slices, the last thirty-five
+2026-06-24. Session 3 (Step 0 plus thirty-seven parity slices, the last thirty-six
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
@@ -13,7 +13,19 @@ stash, zen mode, breadcrumbs, tasks, activity-bar badges, output panel, untitled
 more editor settings, markdown preview, document links, color decorators, outline,
 git history, release notes, notification center, branch delete and rename, git tags,
 gitignore action, svg preview, snippets, line height and font weight, ui scale and
-wheel zoom.
+wheel zoom, follow system theme.
+
+## Slice 37: follow OS system theme (done)
+
+Auto light/dark (catalog 5.16).
+
+- **Helper** (`lib/system-theme.ts`): `themeForSystem` maps the OS preference to
+  cozy-dark or cozy-light. 2 unit tests.
+- **Setting and effect**: the workbench.followSystemTheme setting makes App listen to
+  matchMedia(prefers-color-scheme) and switch themes while it is on.
+- **Quality**: 329 unit tests (327 plus 2), typecheck, lint clean (no Rust change),
+  the renderer build succeeds, and 33 Playwright e2e pass (the settings e2e now also
+  finds Follow System Theme). Matrix 5.16 follow-system-theme row moved to Partial.
 
 ## Slice 36: UI scale and editor mouse-wheel zoom (done)
 

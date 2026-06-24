@@ -184,6 +184,15 @@ export const SETTINGS_SCHEMA: readonly SettingDef[] = [
     set: (s, v) => ({ ...s, uiScale: Number(v) }),
   },
   {
+    id: 'workbench.followSystemTheme',
+    category: 'Appearance',
+    label: 'Follow System Theme',
+    description: 'Match the operating system light or dark preference.',
+    control: { kind: 'boolean' },
+    get: (s) => s.followSystemTheme,
+    set: (s, v) => ({ ...s, followSystemTheme: Boolean(v) }),
+  },
+  {
     id: 'appearance.theme',
     category: 'Appearance',
     label: 'Color Theme',

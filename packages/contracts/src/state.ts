@@ -108,6 +108,8 @@ export interface AppSettings {
   presentationMode: PresentationMode;
   /** Whole-UI zoom factor (1 is 100 percent). */
   uiScale: number;
+  /** Follow the OS light/dark preference, overriding themeId while on. */
+  followSystemTheme: boolean;
   reducedMotion: boolean;
   colorBlindSafe: boolean;
   sound: SoundSettings;
@@ -124,6 +126,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   themeId: 'cozy-dark',
   presentationMode: 'companion',
   uiScale: 1,
+  followSystemTheme: false,
   reducedMotion: false,
   colorBlindSafe: false,
   sound: { enabled: false, masterVolume: 0.6, typing: true, ambient: false },

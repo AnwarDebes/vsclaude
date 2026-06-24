@@ -52,6 +52,7 @@ import { DiffModal, type DiffTarget } from './components/DiffModal';
 import { MarkdownPreview, type MarkdownTarget } from './components/MarkdownPreview';
 import { ImagePreview, type ImageTarget } from './components/ImagePreview';
 import { isSvgPath, svgDataUrl } from './lib/preview';
+import { themeForSystem } from './lib/system-theme';
 import { DiffReview } from './components/DiffReview';
 import { Narration } from './components/Narration';
 import { ExplorerPanel } from './panels/ExplorerPanel';
@@ -398,6 +399,16 @@ export function App() {
       cancelled = true;
     };
   }, [hasWorkspace, ws.available, ws.roots]);
+
+  // Follow the OS light/dark preference while Follow System Theme is on.
+  useEffect(() => {
+    if (!settings.followSystemTheme) return;
+    const media = window.matchMedia('(prefers-color-scheme: dark)');
+    const apply = () => setSettings((s) => ({ ...s, themeId: themeForSystem(media.matches) }));
+    apply();
+    media.addEventListener('change', apply);
+    return () => media.removeEventListener('change', apply);
+  }, [settings.followSystemTheme]);
 
   // Notable events flow to the Output channel.
   useEffect(() => {

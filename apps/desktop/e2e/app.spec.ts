@@ -336,6 +336,8 @@ test.describe('vsclaude shell', () => {
     await expect(settings.getByText('Line Height', { exact: true })).toBeVisible();
     await settings.getByRole('textbox', { name: /search settings/i }).fill('ui scale');
     await expect(settings.getByText('UI Scale', { exact: true })).toBeVisible();
+    await settings.getByRole('textbox', { name: /search settings/i }).fill('system theme');
+    await expect(settings.getByText('Follow System Theme', { exact: true })).toBeVisible();
   });
 
   test('the notification center collects messages', async ({ page }) => {
