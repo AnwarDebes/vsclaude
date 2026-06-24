@@ -1,9 +1,10 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { FsEntry } from '@vsclaude/contracts';
 import { buildFileTree, collectDirectoryPaths, flattenVisible, toggleExpanded } from '@vsclaude/editor';
 import { FileIcon } from '../components/FileIcon';
 import type { ProblemSeverity } from '../lib/problem-decorations';
 import { isExcludedPath } from '../lib/excludes';
+import { ancestorsOf } from '../lib/reveal';
 
 interface ExplorerPanelProps {
   files: FsEntry[];
@@ -35,6 +36,17 @@ export function ExplorerPanel({
   const tree = useMemo(() => buildFileTree(files.filter((f) => !isExcludedPath(f.path))), [files]);
   const [expanded, setExpanded] = useState<ReadonlySet<string>>(() => collectDirectoryPaths(tree));
   const rows = useMemo(() => flattenVisible(tree, expanded), [tree, expanded]);
+
+  // Auto-reveal: when the open file changes, expand the folders that contain it.
+  useEffect(() => {
+    if (!openPath) return;
+    const ancestors = ancestorsOf(openPath);
+    if (ancestors.length === 0) return;
+    setExpanded((current) => {
+      if (ancestors.every((dir) => current.has(dir))) return current;
+      return new Set([...current, ...ancestors]);
+    });
+  }, [openPath]);
 
   return (
     <nav className="explorer-panel" aria-label="Files">

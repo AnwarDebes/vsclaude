@@ -22,7 +22,19 @@ at-symbol navigation, hex view, notification toasts, inlay hints, menu bar,
 edit menu, minimap config, diff settings, process info, snippet browser,
 accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
-git stash manager, theme export.
+git stash manager, theme export, auto-reveal.
+
+## Slice 80: auto-reveal active file (done)
+
+Reveal the open file in the explorer (catalog 5.7).
+
+- **Helper** (`lib/reveal.ts` ancestorsOf): the ancestor folders of a path. Unit tested.
+- **Explorer**: when the open path changes, ExplorerPanel expands those ancestors so the
+  file is visible.
+- **Quality**: 400 unit tests (398 plus 2), typecheck, lint clean (no Rust change), the
+  renderer build succeeds, and 60 Playwright e2e pass (the new one collapses a folder, opens
+  a file inside via quick-open, and sees it re-revealed). Matrix 5.7 auto-reveal row moved
+  to Partial.
 
 ## Slice 79: theme export (done)
 

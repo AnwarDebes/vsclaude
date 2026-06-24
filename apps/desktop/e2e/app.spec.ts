@@ -267,6 +267,21 @@ test.describe('vsclaude shell', () => {
     await expect(panel.getByText('No problems match the filter.')).toBeVisible();
   });
 
+  test('the explorer auto-reveals the active file', async ({ page }) => {
+    await page.goto('/');
+    const list = page.getByRole('navigation', { name: 'Files' }).locator('.explorer-list');
+    // Collapse the auth folder so its files hide.
+    await list.getByRole('button', { name: 'auth', exact: true }).click();
+    await expect(list.getByRole('button', { name: 'use-auth.ts' })).toHaveCount(0);
+    // Open a file inside it via quick-open; the explorer re-reveals it.
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyP');
+    const palette = page.getByRole('dialog', { name: /go to file/i });
+    await palette.getByPlaceholder(/search files by name/i).fill('use-auth');
+    await page.keyboard.press('Enter');
+    await expect(list.getByRole('button', { name: 'use-auth.ts' })).toBeVisible();
+  });
+
   test('the explorer lists the open editor', async ({ page }) => {
     await page.goto('/');
     const openEditors = page.getByRole('region', { name: 'Open Editors' });
