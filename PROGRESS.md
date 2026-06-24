@@ -5,7 +5,7 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus fifty-five parity slices, the last fifty-four
+2026-06-24. Session 3 (Step 0 plus fifty-six parity slices, the last fifty-five
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
@@ -17,7 +17,20 @@ wheel zoom, follow system theme, command categories, output log levels, diff set
 json schemas, bracket guides and large-file mode, in-file find, terminal find,
 terminal menu, terminal tab rename, explorer problem decorations, search history,
 tasks.json loading, git push/pull/fetch, commit amend, commit revert, on-save trim,
-settings JSON editor, reset layout.
+settings JSON editor, reset layout, task variables.
+
+## Slice 56: task variable substitution (done)
+
+Variables in task commands (catalog 5.11).
+
+- **Substitution** (`lib/variables.ts` substituteVariables): resolves ${workspaceFolder},
+  ${file}, ${fileBasename}, and ${env:NAME}, leaving an unknown variable as-is. 4 unit tests.
+- **Wiring**: the Run Task command substitutes the variables before running, using the
+  open folder and active file.
+- **Quality**: 358 unit tests (354 plus 4), typecheck, lint clean (no Rust change), the
+  renderer build succeeds, and 42 Playwright e2e pass (tasks are native-gated, so the
+  pure substitution unit tests cover it). Matrix 5.11 variable-substitution row moved to
+  Partial.
 
 ## Slice 55: reset layout command (done)
 

@@ -67,6 +67,7 @@ import { TimelinePanel } from './panels/TimelinePanel';
 import { TokenPanel } from './panels/TokenPanel';
 import { TerminalTabs, requestNewTerminal, requestRunInTerminal } from './components/TerminalTabs';
 import { detectNpmTasks, parseTasksJson, type NpmTask } from './lib/tasks';
+import { substituteVariables } from './lib/variables';
 import { untitledName } from './lib/untitled';
 
 const STATE_LABELS: Record<string, string> = {
@@ -629,8 +630,15 @@ export function App() {
         title: `Run Task: ${task.label}`,
         keywords: ['task', 'run', 'npm', 'script', task.label],
         run: () => {
-          appendLog(`Running task: ${task.command}`);
-          requestRunInTerminal(task.command, task.label);
+          const repo = hasWorkspace ? ws.roots[0]?.path ?? '' : '';
+          const file = hasWorkspace ? ws.activePath ?? '' : openFile;
+          const command = substituteVariables(task.command, {
+            workspaceFolder: repo,
+            file,
+            fileBasename: file ? basePathName(file) : '',
+          });
+          appendLog(`Running task: ${command}`);
+          requestRunInTerminal(command, task.label);
         },
       });
     }

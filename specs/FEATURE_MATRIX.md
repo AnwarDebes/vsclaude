@@ -25,7 +25,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.8 | Search and replace across files | 5 | 2 | 5 | 0 |
 | 5.9 | Source control and git | 7 | 9 | 8 | 0 |
 | 5.10 | Integrated terminal | 6 | 7 | 6 | 0 |
-| 5.11 | Tasks (VS Code task support) | 0 | 5 | 4 | 0 |
+| 5.11 | Tasks (VS Code task support) | 0 | 6 | 3 | 0 |
 | 5.12 | Debugging (Debug Adapter Protocol) | 0 | 0 | 9 | 0 |
 | 5.13 | Snippets and Emmet | 1 | 2 | 2 | 0 |
 | 5.14 | Settings and configuration | 2 | 3 | 4 | 1 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 10 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 2 | 6 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 4 | 4 | 0 |
-| TOTAL | | 91 | 113 | 120 | 5 |
+| TOTAL | | 91 | 114 | 119 | 5 |
 
 ## Legend
 
@@ -314,7 +314,7 @@ Task support has started: npm scripts are auto-detected from the workspace packa
 | Problem matchers (output parsing into Problems panel) | Missing | Terminal spec states it does not parse output for meaning; no matcher logic in packages/editor/src. | No regex output parsing or error extraction. |
 | Background/watch tasks with begin/end patterns | Missing | Long-lived commands run via command_run but with no background designation. | No background flag or began/ended detection. |
 | Run, terminate, restart, show-running actions | Partial | ipc.ts pty_kill terminates; store.ts tracks live/exited; pty_create spawns. | No named-task run, show-running UI, or restart action. |
-| Input variables and variable substitution | Missing | cwd and env accepted at pty_create only. | No ${input}, ${config}, ${env}, or substitution engine. |
+| Input variables and variable substitution | Partial | lib/variables.ts substituteVariables (unit tested) resolves ${workspaceFolder}, ${file}, ${fileBasename}, and ${env:NAME} in a task command before running it. | No ${input} prompts or ${config} resolution. |
 | Task terminal output and result tracking | Partial | PtyExitEvent returns exitCode; store.ts tracks status; output streamed. | No structured task result or task-specific presentation. |
 
 ## 5.12 Debugging (Debug Adapter Protocol)
