@@ -20,7 +20,7 @@ describe('editorSettingsToMonaco', () => {
       tabSize: 2,
       insertSpaces: true,
       wordWrap: 'off',
-      minimap: { enabled: true },
+      minimap: { enabled: true, side: 'right', size: 'proportional' },
       lineNumbers: 'on',
       rulers: [],
       renderWhitespace: 'selection',
@@ -44,7 +44,16 @@ describe('editorSettingsToMonaco', () => {
       minimap: false,
     });
     expect(mapped.wordWrap).toBe('on');
-    expect(mapped.minimap).toEqual({ enabled: false });
+    expect(mapped.minimap).toEqual({ enabled: false, side: 'right', size: 'proportional' });
+  });
+
+  it('maps the minimap side and size', () => {
+    const mapped = editorSettingsToMonaco({
+      ...DEFAULT_SETTINGS.editor,
+      minimapSide: 'left',
+      minimapSize: 'fit',
+    });
+    expect(mapped.minimap).toEqual({ enabled: true, side: 'left', size: 'fit' });
   });
 });
 

@@ -73,6 +73,37 @@ export const SETTINGS_SCHEMA: readonly SettingDef[] = [
     set: (s, v) => ({ ...s, editor: { ...s.editor, minimap: Boolean(v) } }),
   },
   {
+    id: 'editor.minimapSide',
+    category: 'Editor',
+    label: 'Minimap Side',
+    description: 'Which side of the editor the minimap sits on.',
+    control: {
+      kind: 'select',
+      options: [
+        { value: 'right', label: 'Right' },
+        { value: 'left', label: 'Left' },
+      ],
+    },
+    get: (s) => s.editor.minimapSide,
+    set: (s, v) => ({ ...s, editor: { ...s.editor, minimapSide: v as 'left' | 'right' } }),
+  },
+  {
+    id: 'editor.minimapSize',
+    category: 'Editor',
+    label: 'Minimap Size',
+    description: 'How the minimap fills the vertical space.',
+    control: {
+      kind: 'select',
+      options: [
+        { value: 'proportional', label: 'Proportional' },
+        { value: 'fill', label: 'Fill' },
+        { value: 'fit', label: 'Fit' },
+      ],
+    },
+    get: (s) => s.editor.minimapSize,
+    set: (s, v) => ({ ...s, editor: { ...s.editor, minimapSize: v as 'proportional' | 'fill' | 'fit' } }),
+  },
+  {
     id: 'editor.lineNumbers',
     category: 'Editor',
     label: 'Line Numbers',

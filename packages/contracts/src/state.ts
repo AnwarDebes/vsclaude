@@ -90,6 +90,10 @@ export interface EditorSettings {
   insertSpaces: boolean;
   wordWrap: boolean;
   minimap: boolean;
+  /** Which side of the editor the minimap sits on. */
+  minimapSide: 'left' | 'right';
+  /** How the minimap fills the vertical space. */
+  minimapSize: 'proportional' | 'fill' | 'fit';
   lineNumbers: 'on' | 'off' | 'relative';
   /** A vertical ruler at this column, or 0 for none. */
   rulers: number;
@@ -144,6 +148,8 @@ export const DEFAULT_SETTINGS: AppSettings = {
     insertSpaces: true,
     wordWrap: false,
     minimap: true,
+    minimapSide: 'right',
+    minimapSize: 'proportional',
     lineNumbers: 'on',
     rulers: 0,
     renderWhitespace: 'selection',

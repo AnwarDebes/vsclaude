@@ -11,7 +11,7 @@ export interface MonacoEditorOptions {
   tabSize: number;
   insertSpaces: boolean;
   wordWrap: 'on' | 'off';
-  minimap: { enabled: boolean };
+  minimap: { enabled: boolean; side: 'left' | 'right'; size: 'proportional' | 'fill' | 'fit' };
   lineNumbers: 'on' | 'off' | 'relative';
   rulers: number[];
   renderWhitespace: 'none' | 'selection' | 'all';
@@ -29,7 +29,7 @@ export function editorSettingsToMonaco(settings: EditorSettings): MonacoEditorOp
     tabSize: settings.tabSize,
     insertSpaces: settings.insertSpaces,
     wordWrap: settings.wordWrap ? 'on' : 'off',
-    minimap: { enabled: settings.minimap },
+    minimap: { enabled: settings.minimap, side: settings.minimapSide, size: settings.minimapSize },
     lineNumbers: settings.lineNumbers,
     rulers: settings.rulers > 0 ? [settings.rulers] : [],
     renderWhitespace: settings.renderWhitespace,

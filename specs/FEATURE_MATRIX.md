@@ -17,7 +17,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | --- | --- | --- | --- | --- | --- |
 | 5.1 | Text editing core | 11 | 16 | 0 | 0 |
 | 5.2 | Code intelligence (LSP language features) | 1 | 10 | 13 | 0 |
-| 5.3 | Editor advanced surface | 7 | 5 | 0 | 0 |
+| 5.3 | Editor advanced surface | 8 | 4 | 0 | 0 |
 | 5.4 | Diff and merge | 3 | 4 | 1 | 1 |
 | 5.5 | Workbench layout and navigation | 6 | 14 | 7 | 0 |
 | 5.6 | Quick open and command palette | 7 | 2 | 2 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 4 | 9 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 3 | 5 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 4 | 4 | 0 |
-| TOTAL | | 92 | 120 | 112 | 5 |
+| TOTAL | | 93 | 119 | 112 | 5 |
 
 ## Legend
 
@@ -118,7 +118,7 @@ The editor uses Monaco 0.55.1 with minimal configuration. Only the minimap is ex
 
 | Capability | Status | Evidence | What is missing |
 | --- | --- | --- | --- |
-| Minimap (headers, find-match highlight, slider, side/size) | Partial | EditorPanel.tsx line 58 enables minimap with defaults. | No UI toggle; no side/size, slider, or maxColumn config. |
+| Minimap (headers, find-match highlight, slider, side/size) | Done | EditorPanel enables the minimap; the editor.minimap toggle plus editor.minimapSide and editor.minimapSize settings map to Monaco's minimap enabled, side, and size. Unit tested. | (No slider or maxColumn config, but the minimap with side and size is present.) |
 | Sticky scroll (enclosing scopes pinned) | Done | Spec line 308; Monaco default on; not disabled in EditorPanel.tsx. | |
 | Code folding (language-aware, manual, regions, fold/unfold all, by level) | Done | Spec line 306; Monaco default on; keyboard shortcuts work. | (No custom fold-all UI buttons, but core feature is present.) |
 | Line numbers (absolute/relative/interval/off) | Done | Monaco lineNumbers default on; not disabled. | (No UI toggle for mode switching.) |

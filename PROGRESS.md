@@ -19,7 +19,17 @@ terminal menu, terminal tab rename, explorer problem decorations, search history
 tasks.json loading, git push/pull/fetch, commit amend, commit revert, on-save trim,
 settings JSON editor, reset layout, task variables, task groups, files.exclude,
 at-symbol navigation, hex view, notification toasts, inlay hints, menu bar,
-edit menu.
+edit menu, minimap config.
+
+## Slice 65: minimap side and size settings (done)
+
+Configure the minimap (catalog 5.3; the row moved to Done).
+
+- **Settings**: editor.minimapSide (left/right) and editor.minimapSize (proportional/
+  fill/fit) join the existing minimap toggle, mapping to Monaco's minimap side and size.
+- **Quality**: 373 unit tests (the editorSettingsToMonaco mapper test covers the new
+  shape), typecheck, lint clean (no Rust change), the renderer build succeeds, and 49
+  Playwright e2e pass. Matrix 5.3 minimap row moved to Done.
 
 ## Slice 64: Edit menu and editing commands (done)
 
