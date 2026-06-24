@@ -104,6 +104,19 @@ export function runEditorAction(actionId: string): boolean {
 }
 
 /**
+ * Insert a snippet (Monaco/TextMate body with tabstops) at the cursor of the
+ * active editor and focus it, so the user lands on the first tabstop. Returns
+ * true when an editor was available, false otherwise.
+ */
+export function insertSnippet(body: string): boolean {
+  const editor = activeEditor;
+  if (!editor?.trigger) return false;
+  editor.focus();
+  editor.trigger('vsclaude', 'editor.action.insertSnippet', { snippet: body });
+  return true;
+}
+
+/**
  * Reveal and select a line (and optional column) in the active editor, then
  * focus it. The line is clamped to the document's bounds so a too-large number
  * from `:9999` lands on the last line rather than failing. Returns true when an

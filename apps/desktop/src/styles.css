@@ -2558,6 +2558,71 @@ body {
   color: var(--color-text);
 }
 
+/* Snippet browser */
+.snip-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 8vh;
+  z-index: var(--z-popover, 200);
+}
+.snip-modal {
+  width: min(440px, 92vw);
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.snip-modal__header {
+  display: flex;
+  align-items: center;
+  padding: 10px var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+}
+.snip-modal__title {
+  font-size: 0.95rem;
+  margin: 0;
+  margin-right: auto;
+}
+.snip-modal__list {
+  list-style: none;
+  margin: 0;
+  padding: var(--space-xs);
+  overflow: auto;
+}
+.snip-modal__insert {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-md);
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: var(--color-text);
+  background: transparent;
+  border: none;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+.snip-modal__insert:hover {
+  background: var(--color-accent-muted);
+}
+.snip-modal__prefix {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-weight: 600;
+  min-width: 56px;
+}
+.snip-modal__desc {
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+}
+
 /* Process info */
 .proc-overlay {
   position: fixed;

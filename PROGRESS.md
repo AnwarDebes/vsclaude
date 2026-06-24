@@ -19,7 +19,18 @@ terminal menu, terminal tab rename, explorer problem decorations, search history
 tasks.json loading, git push/pull/fetch, commit amend, commit revert, on-save trim,
 settings JSON editor, reset layout, task variables, task groups, files.exclude,
 at-symbol navigation, hex view, notification toasts, inlay hints, menu bar,
-edit menu, minimap config, diff settings, process info.
+edit menu, minimap config, diff settings, process info, snippet browser.
+
+## Slice 68: snippet browser and insert command (done)
+
+Insert built-in snippets (catalog 5.13).
+
+- **Browser** (`SnippetsModal.tsx`): Snippets: Insert Snippet lists the built-in snippets
+  (allSnippets in lib/snippets.ts, unit tested); choosing one inserts it at the cursor via
+  insertSnippet (editor-bridge runs the editor's insert-snippet action).
+- **Quality**: 377 unit tests (376 plus 1), typecheck, lint clean (no Rust change), the
+  renderer build succeeds, and 51 Playwright e2e pass (the new one opens the browser and
+  sees the snippets). Matrix 5.13 snippet-management row moved to Partial.
 
 ## Slice 67: process info panel (done)
 

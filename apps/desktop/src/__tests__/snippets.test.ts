@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { SNIPPET_LANGUAGES, snippetsFor } from '../lib/snippets';
+import { allSnippets, SNIPPET_LANGUAGES, snippetsFor } from '../lib/snippets';
 
 describe('snippetsFor', () => {
   it('returns TypeScript and JavaScript snippets including console.log', () => {
@@ -22,5 +22,12 @@ describe('snippetsFor', () => {
 
   it('lists the snippet languages', () => {
     expect(SNIPPET_LANGUAGES).toEqual(['typescript', 'javascript']);
+  });
+
+  it('lists every snippet once, deduplicated by prefix', () => {
+    const all = allSnippets();
+    const prefixes = all.map((s) => s.prefix);
+    expect(prefixes).toEqual(['clg', 'fn', 'afn', 'imp', 'todo']);
+    expect(new Set(prefixes).size).toBe(prefixes.length);
   });
 });

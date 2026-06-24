@@ -566,6 +566,19 @@ test.describe('vsclaude shell', () => {
     await expect(outline.getByRole('button', { name: 'Getting started' })).toBeVisible();
   });
 
+  test('the snippet browser lists the built-in snippets', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('snippets insert');
+    await page.keyboard.press('Enter');
+    const modal = page.getByRole('dialog', { name: 'Insert snippet' });
+    await expect(modal).toBeVisible();
+    await expect(modal.getByText('clg')).toBeVisible();
+    await expect(modal.getByText('console.log')).toBeVisible();
+  });
+
   test('the process info panel shows runtime metrics', async ({ page }) => {
     await page.goto('/');
     await page.getByText('Claude Code, in motion').click();

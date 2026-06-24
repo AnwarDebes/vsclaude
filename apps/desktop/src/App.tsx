@@ -17,7 +17,8 @@ import { useSession } from './session/useSession';
 import { useLiveProvider } from './session/useLiveProvider';
 import { useWorkspace } from './workspace/useWorkspace';
 import { useFileIndex } from './workspace/useFileIndex';
-import { gotoLine, runEditorAction } from './lib/editor-bridge';
+import { gotoLine, insertSnippet, runEditorAction } from './lib/editor-bridge';
+import { SnippetsModal } from './components/SnippetsModal';
 import { setEditorSettings } from './lib/editor-settings';
 import { applyMonacoTheme } from './lib/monaco-theme';
 import { EDITOR_COMMANDS } from './lib/editor-commands';
@@ -131,6 +132,7 @@ export function App() {
   const [imageTarget, setImageTarget] = useState<ImageTarget | null>(null);
   const [hexTarget, setHexTarget] = useState<HexTarget | null>(null);
   const [processInfoOpen, setProcessInfoOpen] = useState(false);
+  const [snippetsOpen, setSnippetsOpen] = useState(false);
   const [gitHistory, setGitHistory] = useState<GitCommit[] | null>(null);
   const [tagsOpen, setTagsOpen] = useState(false);
   const [npmTasks, setNpmTasks] = useState<NpmTask[]>([]);
@@ -623,6 +625,12 @@ export function App() {
       run: () => setProcessInfoOpen(true),
     });
     r.register({
+      id: 'snippets-insert',
+      title: 'Snippets: Insert Snippet',
+      keywords: ['snippet', 'insert', 'template', 'boilerplate'],
+      run: () => setSnippetsOpen(true),
+    });
+    r.register({
       id: 'show-notifications',
       title: 'Notifications: Show',
       keywords: ['notifications', 'alerts', 'messages', 'center', 'bell'],
@@ -1107,6 +1115,13 @@ export function App() {
       <ImagePreview target={imageTarget} onClose={() => setImageTarget(null)} />
       <HexView target={hexTarget} onClose={() => setHexTarget(null)} />
       <ProcessInfoModal open={processInfoOpen} onClose={() => setProcessInfoOpen(false)} />
+      <SnippetsModal
+        open={snippetsOpen}
+        onInsert={(body) => {
+          if (!insertSnippet(body)) addNotification('info', 'Open a file to insert a snippet.');
+        }}
+        onClose={() => setSnippetsOpen(false)}
+      />
       <GitHistoryModal
         commits={gitHistory}
         repo={hasWorkspace ? ws.roots[0]?.path ?? null : null}

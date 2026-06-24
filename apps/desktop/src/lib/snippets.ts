@@ -38,3 +38,18 @@ export function snippetsFor(languageId: string): Snippet[] {
 
 /** The language ids that have snippets. */
 export const SNIPPET_LANGUAGES = Object.keys(BY_LANGUAGE);
+
+/** Every built-in snippet, deduplicated by prefix, for the snippet browser. */
+export function allSnippets(): Snippet[] {
+  const seen = new Set<string>();
+  const out: Snippet[] = [];
+  for (const language of SNIPPET_LANGUAGES) {
+    for (const snippet of snippetsFor(language)) {
+      if (!seen.has(snippet.prefix)) {
+        seen.add(snippet.prefix);
+        out.push(snippet);
+      }
+    }
+  }
+  return out;
+}
