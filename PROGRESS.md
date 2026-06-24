@@ -5,8 +5,26 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus five parity slices: quick open, status bar,
-problems and diagnostics, project-wide search, source control).
+2026-06-24. Session 3 (Step 0 plus six parity slices: quick open, status bar,
+problems and diagnostics, project-wide search, source control, editor commands).
+
+## Slice 6: the editor command surface (done)
+
+This exposes Monaco's editing actions, closing most of catalog 5.1.
+
+- **Editor bridge** (`editor-bridge.ts`): `runEditorAction(actionId)` runs a
+  built-in Monaco action on the active editor (preferring the registered action,
+  falling back to trigger) and focuses it. 3 more unit tests.
+- **Command catalog** (`lib/editor-commands.ts`): a data list mapping palette
+  commands to Monaco action ids with their real default shortcuts: line operations
+  (delete, move, copy, insert, join, indent, transpose, sort, trim), case
+  transforms, multi-cursor and smart-select, comments, format document and
+  selection, word wrap, fold, and find and replace. App registers them all. A
+  sanity test guards unique ids and namespacing.
+- **Quality**: 222 unit tests (216 plus 6), typecheck, lint clean (no Rust change),
+  the renderer build succeeds, and 13 Playwright e2e pass (the new one runs an
+  editor command from the palette). Matrix 5.1 moved to Done 8, Partial 14, Missing
+  5, and 5.2 formatting moved to Partial.
 
 ## Slice 5: the source control panel (done)
 

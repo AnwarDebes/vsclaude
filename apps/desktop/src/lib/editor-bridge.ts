@@ -16,6 +16,10 @@ export interface BridgeEditor {
   setPosition(position: { lineNumber: number; column: number }): void;
   getModel(): { getLineCount(): number } | null;
   focus(): void;
+  /** Look up a built-in editor action by id, when available. */
+  getAction?(id: string): { run(): unknown } | null;
+  /** Trigger a command on the editor, the fallback when no action is registered. */
+  trigger?(source: string | null | undefined, handlerId: string, payload?: unknown): void;
 }
 
 /** A snapshot of the active editor's state, for the status bar. */
@@ -76,6 +80,27 @@ export function subscribeEditorStatus(listener: () => void): () => void {
 /** The current active editor, or null when no editor is mounted. */
 export function getActiveEditor(): BridgeEditor | null {
   return activeEditor;
+}
+
+/**
+ * Run a built-in Monaco action (for example `editor.action.deleteLines`) on the
+ * active editor, then focus it so the result is visible. Prefers the registered
+ * action and falls back to `trigger`. Returns true when an editor was available,
+ * false otherwise, so a palette command is a no-op when no editor is open.
+ */
+export function runEditorAction(actionId: string): boolean {
+  const editor = activeEditor;
+  if (!editor) return false;
+  const action = editor.getAction?.(actionId);
+  if (action) {
+    void action.run();
+  } else if (editor.trigger) {
+    editor.trigger('vsclaude', actionId, undefined);
+  } else {
+    return false;
+  }
+  editor.focus();
+  return true;
 }
 
 /**

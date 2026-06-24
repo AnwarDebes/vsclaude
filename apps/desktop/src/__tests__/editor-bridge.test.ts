@@ -4,6 +4,7 @@ import {
   getActiveEditor,
   getEditorStatus,
   gotoLine,
+  runEditorAction,
   setActiveEditor,
   setEditorStatus,
   subscribeEditorStatus,
@@ -76,6 +77,52 @@ describe('editor bridge', () => {
     expect(getActiveEditor()).toBe(second);
     clearActiveEditor(second);
     expect(getActiveEditor()).toBeNull();
+  });
+});
+
+describe('runEditorAction', () => {
+  beforeEach(() => {
+    const { editor } = fakeEditor();
+    setActiveEditor(editor);
+    clearActiveEditor(editor);
+  });
+
+  it('returns false and does nothing when no editor is active', () => {
+    expect(runEditorAction('editor.action.deleteLines')).toBe(false);
+  });
+
+  it('runs the registered action and focuses the editor', () => {
+    const run = vi.fn();
+    let focused = 0;
+    const editor: BridgeEditor = {
+      revealLineInCenter: () => {},
+      setPosition: () => {},
+      getModel: () => ({ getLineCount: () => 1 }),
+      focus: () => {
+        focused += 1;
+      },
+      getAction: (id) => (id === 'editor.action.deleteLines' ? { run } : null),
+      trigger: () => {},
+    };
+    setActiveEditor(editor);
+    expect(runEditorAction('editor.action.deleteLines')).toBe(true);
+    expect(run).toHaveBeenCalledTimes(1);
+    expect(focused).toBe(1);
+  });
+
+  it('falls back to trigger when the action is not registered', () => {
+    const trigger = vi.fn();
+    const editor: BridgeEditor = {
+      revealLineInCenter: () => {},
+      setPosition: () => {},
+      getModel: () => ({ getLineCount: () => 1 }),
+      focus: () => {},
+      getAction: () => null,
+      trigger,
+    };
+    setActiveEditor(editor);
+    expect(runEditorAction('some.command')).toBe(true);
+    expect(trigger).toHaveBeenCalledWith('vsclaude', 'some.command', undefined);
   });
 });
 

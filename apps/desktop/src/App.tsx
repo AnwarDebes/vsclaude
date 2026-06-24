@@ -11,7 +11,8 @@ import { useSession } from './session/useSession';
 import { useLiveProvider } from './session/useLiveProvider';
 import { useWorkspace } from './workspace/useWorkspace';
 import { useFileIndex } from './workspace/useFileIndex';
-import { gotoLine } from './lib/editor-bridge';
+import { gotoLine, runEditorAction } from './lib/editor-bridge';
+import { EDITOR_COMMANDS } from './lib/editor-commands';
 import { useDiagnostics } from './lib/useDiagnostics';
 import { demoFiles } from './session/demo-session';
 import { demoContentFor } from './session/demo-files';
@@ -306,6 +307,19 @@ export function App() {
       keybinding: 'Ctrl+Shift+G',
       run: () => setBottomPanel((p) => (p === 'scm' ? 'none' : 'scm')),
     });
+    // The editor command surface: Monaco's built-in editing actions, run on the
+    // active editor through the bridge, so they are discoverable in the palette.
+    for (const cmd of EDITOR_COMMANDS) {
+      r.register({
+        id: cmd.id,
+        title: cmd.title,
+        keywords: cmd.keywords,
+        keybinding: cmd.keybinding,
+        run: () => {
+          runEditorAction(cmd.actionId);
+        },
+      });
+    }
     r.register({
       id: 'run-agent',
       title: liveAvailable

@@ -15,8 +15,8 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 
 | Section | Title | Done | Partial | Missing | Not planned |
 | --- | --- | --- | --- | --- | --- |
-| 5.1 | Text editing core | 4 | 14 | 9 | 0 |
-| 5.2 | Code intelligence (LSP language features) | 0 | 6 | 18 | 0 |
+| 5.1 | Text editing core | 8 | 14 | 5 | 0 |
+| 5.2 | Code intelligence (LSP language features) | 0 | 7 | 17 | 0 |
 | 5.3 | Editor advanced surface | 6 | 4 | 2 | 0 |
 | 5.4 | Diff and merge | 1 | 1 | 6 | 1 |
 | 5.5 | Workbench layout and navigation | 5 | 8 | 14 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 5 | 9 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 1 | 2 | 7 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 3 | 5 | 0 |
-| TOTAL | | 60 | 81 | 183 | 5 |
+| TOTAL | | 64 | 82 | 178 | 5 |
 
 ## Legend
 
@@ -49,18 +49,18 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 
 ## 5.1 Text editing core
 
-The editor integrates Monaco 0.55.1 with minimal explicit configuration. Essential Monaco defaults (syntax highlighting, bracket pair colorization, folding, sticky scroll) are available but not surfaced in the UI or command palette. Critical text-editing features (find and replace in file, multi-cursor operations, case transforms, line operations, smart selection, and comprehensive editor settings for EOL, encoding, word wrap, indentation, auto-closing brackets, and read-only regions) are not implemented. The editor prioritizes agent diff review and basic file navigation; substantial text-editing capability remains absent or unexposed.
+The editor integrates Monaco 0.55.1, and its editing actions are now exposed: a command surface (apps/desktop/src/lib/editor-commands.ts) registers Monaco's line operations, case transforms, multi-cursor and smart-select, comment, format, fold, word-wrap, and find and replace actions in the command palette, run on the active editor through the bridge (runEditorAction). The remaining gaps are configuration and edge behaviors: EOL and encoding pickers, a wrap column control, soft undo across saves, large-file and tokenization limits, and respecting the read-only flag in the main editor.
 
 | Capability | Status | Evidence | What is missing |
 | --- | --- | --- | --- |
 | Basic cursor and selection | Done | EditorPanel.tsx passes through Monaco; single cursor and selection work via standard input. | |
-| Multi-cursor (add above/below, next/all occurrences) | Partial | EDITOR_SPEC.md line 301 claims Alt modifier, Ctrl+Shift+L, Ctrl+D; EditorPanel.tsx sets no multiCursorModifier (relies on defaults). | No explicit modifier config; no command palette registration or Alt wiring verified. |
+| Multi-cursor (add above/below, next/all occurrences) | Done | editor-commands.ts registers Add Cursor Above and Below, Add Cursors to Line Ends, Add Selection to Next Find Match, and Select All Occurrences in the palette, run via runEditorAction. | |
 | Column/box selection | Partial | EDITOR_SPEC.md line 310 notes column selection; Monaco supports it by default. | No explicit config or UI; depends on unverified defaults. |
 | Find and replace in file (regex, case, whole word, in-selection, count, seed, preserve case) | Missing | No find/replace UI in EditorPanel.tsx; spec sections 8.1-8.2 cover only global search and quick-open. | No in-file widget, no Ctrl+H, no toggles, counter, navigation, or selection seeding. |
-| Smart expand/shrink selection by syntax | Missing | No mention in EDITOR_SPEC.md 7.1-7.2; no expand/shrink code in apps/desktop/src or packages/editor/src. | Ctrl+Shift+Right/Left not exposed via config or palette. |
-| Line operations (move/copy, delete, insert, join, indent/outdent, transpose, sort, trim) | Missing | No line-operation commands in EditorPanel.tsx; not listed in spec 7.1-7.2. | No Ctrl+Shift+K, Alt+Up/Down, Ctrl+Shift+D, Ctrl+J, indent/outdent, transpose, sort, or trim. |
-| Case transforms (upper/lower/title) | Missing | No command registration in EditorPanel.tsx; not listed in spec. | No case-conversion commands. |
-| Word wrap and wrap column control | Missing | EditorPanel.tsx options omit wordWrap, wordWrapColumn, wrappingIndent. | No wrap toggle, custom column, or wrap-indent control. |
+| Smart expand/shrink selection by syntax | Done | editor-commands.ts registers Expand Selection and Shrink Selection (editor.action.smartSelect.expand and shrink). | |
+| Line operations (move/copy, delete, insert, join, indent/outdent, transpose, sort, trim) | Done | editor-commands.ts registers delete, move up and down, copy up and down, insert above and below, join, indent and outdent, transpose, sort ascending and descending, and trim trailing whitespace. | |
+| Case transforms (upper/lower/title) | Done | editor-commands.ts registers Transform to Uppercase, Lowercase, and Title Case. | |
+| Word wrap and wrap column control | Partial | editor-commands.ts registers Toggle Word Wrap (editor.action.toggleWordWrap). | No wrap-column setting or wrap-indent control. |
 | Auto-closing brackets and quotes | Partial | Monaco default-on; EditorPanel.tsx sets neither autoClosingBrackets nor autoClosingQuotes. | No explicit config or user toggle. |
 | Auto-surround and bracket pair selection | Partial | Monaco supports auto-surround by default; no explicit config. | No config, no verification, no UI toggle. |
 | Bracket matching and pair colorization | Partial | Spec 7.1 line 306 marks colorization default on; EditorPanel.tsx does not disable it. | Enabled by default but not configured or exposed; no toggle. |
@@ -93,7 +93,7 @@ vsclaude implements a limited set of code intelligence features, relying on Mona
 | Rename symbol with cross-file preview | Missing | No rename provider in EditorPanel.tsx. | No symbol rename; needs LSP bridge. |
 | Code actions and quick fixes (lightbulb) | Missing | No CodeActionProvider or lightbulb UI. | No quick fixes; needs provider or bridge. |
 | Refactorings (extract, inline, move to file) | Missing | No refactoring UI, commands, or provider. | No refactoring features. |
-| Document and range formatting (on save/paste/type) | Missing | onSave does not format; no FormattingEditProvider; format options unset. ACTIONS.ts lists 'format' but it is unwired. | No formatting. |
+| Document and range formatting (on save/paste/type) | Partial | editor-commands.ts registers Format Document and Format Selection (Monaco's built-in formatters for the bundled languages). | No format on save, paste, or type, and no external formatter providers. |
 | Organize/sort imports and unused cleanup | Missing | No organize-imports command or provider. | No import sorting or cleanup. |
 | Diagnostics with severities, Problems panel, squiggles | Partial | useDiagnostics.ts collects Monaco worker markers into the core-shell diagnostics model; ProblemsPanel.tsx lists them grouped by file; the status bar shows error and warning counts; squiggles render from the workers. See specs/PROBLEMS_AND_DIAGNOSTICS.md. | No external language-server diagnostics, no related information, no gutter glyph customization, no quick fixes. |
 | Semantic highlighting (over TextMate) | Missing | semanticHighlighting not enabled; no SemanticTokensProvider. | Only TextMate; needs bridge. |
