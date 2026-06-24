@@ -2451,6 +2451,18 @@ body {
   color: var(--color-text-muted);
   font-size: 0.78rem;
 }
+.history-row__revert {
+  flex: 0 0 auto;
+  font: inherit;
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.history-row__revert:hover {
+  color: var(--color-text);
+}
 
 /* Image preview */
 .image-overlay {

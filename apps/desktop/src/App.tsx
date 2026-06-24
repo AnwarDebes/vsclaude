@@ -1001,7 +1001,15 @@ export function App() {
       <DiffModal target={diffTarget} onClose={() => setDiffTarget(null)} />
       <MarkdownPreview target={markdownTarget} onClose={() => setMarkdownTarget(null)} />
       <ImagePreview target={imageTarget} onClose={() => setImageTarget(null)} />
-      <GitHistoryModal commits={gitHistory} onClose={() => setGitHistory(null)} />
+      <GitHistoryModal
+        commits={gitHistory}
+        repo={hasWorkspace ? ws.roots[0]?.path ?? null : null}
+        onReverted={() => {
+          const repo = hasWorkspace ? ws.roots[0]?.path ?? null : null;
+          if (repo) void gitLog(repo).then((commits) => setGitHistory(commits));
+        }}
+        onClose={() => setGitHistory(null)}
+      />
       <GitTagsModal
         open={tagsOpen}
         repo={hasWorkspace ? ws.roots[0]?.path ?? null : null}

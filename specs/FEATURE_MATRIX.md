@@ -23,7 +23,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.6 | Quick open and command palette | 7 | 1 | 3 | 0 |
 | 5.7 | File explorer and workspace management | 6 | 3 | 5 | 3 |
 | 5.8 | Search and replace across files | 5 | 2 | 5 | 0 |
-| 5.9 | Source control and git | 7 | 8 | 9 | 0 |
+| 5.9 | Source control and git | 7 | 9 | 8 | 0 |
 | 5.10 | Integrated terminal | 6 | 7 | 6 | 0 |
 | 5.11 | Tasks (VS Code task support) | 0 | 5 | 4 | 0 |
 | 5.12 | Debugging (Debug Adapter Protocol) | 0 | 0 | 9 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 10 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 2 | 6 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 4 | 4 | 0 |
-| TOTAL | | 91 | 109 | 124 | 5 |
+| TOTAL | | 91 | 110 | 123 | 5 |
 
 ## Legend
 
@@ -256,7 +256,7 @@ vsclaude now has a working Source Control panel for the daily git workflow: stag
 | Staging and unstaging (file and hunk level) | Partial | git.rs git_stage, git_unstage, and git_commit_staged; SourceControlPanel.tsx stages and unstages per file and in bulk and commits the staged set. Cargo tested. | Hunk-level and line-level staging are not wired. |
 | Commit amend | Partial | git.rs git_commit_amend (cargo tested); the SourceControlPanel has an Amend last commit toggle that amends with the staged changes and a new message. | No typed-confirmation gating for the history rewrite. |
 | Branch operations (create/checkout/delete/rename) | Done | git.rs git_branches, git_checkout, git_create_branch, git_delete_branch, and git_rename_branch (cargo tested); the SourceControlPanel branch picker switches, creates, deletes a branch, and renames the current one. | |
-| Merge, rebase, cherry-pick, revert | Missing | No merge/rebase/cherry-pick/revert commands; operation state read-only. | No commands to trigger or continue/abort. |
+| Merge, rebase, cherry-pick, revert | Partial | git.rs git_revert (cargo tested) creates a revert commit; the GitHistoryModal has a per-commit Revert. | No merge, rebase, or cherry-pick, and no continue or abort flow. |
 | Push, pull, fetch, sync with ahead/behind | Done | git.rs git_fetch, git_pull (fast-forward only), and git_push (cargo tested over a bare remote); the SourceControlPanel has Fetch, Pull, and Push buttons; ahead/behind are shown. Authentication uses git's own credential helper or ssh-agent. | |
 | Remotes (add/remove/rename/tracking) | Missing | No remote commands or UI. | No remote management. |
 | Stash (create/apply/pop/drop/list/include-untracked) | Partial | git.rs git_stash (push -u, include untracked), git_stash_pop, and git_stash_list; the Source Control panel has Stash Changes and Pop Stash buttons with a count (countStashes). Cargo and unit tested. | No apply, drop, named stash, or stash list view. |

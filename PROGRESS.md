@@ -5,7 +5,7 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus fifty-one parity slices, the last fifty
+2026-06-24. Session 3 (Step 0 plus fifty-two parity slices, the last fifty-one
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
@@ -16,7 +16,19 @@ gitignore action, svg preview, snippets, line height and font weight, ui scale a
 wheel zoom, follow system theme, command categories, output log levels, diff setting,
 json schemas, bracket guides and large-file mode, in-file find, terminal find,
 terminal menu, terminal tab rename, explorer problem decorations, search history,
-tasks.json loading, git push/pull/fetch, commit amend.
+tasks.json loading, git push/pull/fetch, commit amend, commit revert.
+
+## Slice 52: git revert (done)
+
+Revert a commit (catalog 5.9).
+
+- **Native** (`git.rs` git_revert): creates a revert commit (git revert --no-edit),
+  registered in lib.rs. A new cargo test reverts a commit and checks the file is gone
+  and a third commit exists (15 cargo tests now).
+- **UI**: the GitHistoryModal gains a per-commit Revert button that reloads the list.
+- **Quality**: 346 unit tests, typecheck, lint, cargo clean, the renderer build
+  succeeds, and 40 Playwright e2e pass (native-gated, so the cargo test covers it).
+  Matrix 5.9 merge/rebase/cherry-pick/revert row moved to Partial.
 
 ## Slice 51: git commit amend (done)
 

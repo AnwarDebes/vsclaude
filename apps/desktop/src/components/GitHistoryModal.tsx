@@ -1,14 +1,18 @@
 import { useEffect } from 'react';
-import type { GitCommit } from '../lib/tauri';
+import { gitRevert, type GitCommit } from '../lib/tauri';
 import { relativeTime } from '../lib/relative-time';
 
 export interface GitHistoryModalProps {
   commits: GitCommit[] | null;
+  /** The repo path, needed to revert a commit. */
+  repo?: string | null;
+  /** Called after a successful revert so the list can refresh. */
+  onReverted?: () => void;
   onClose: () => void;
 }
 
-/** A read-only list of recent commits (newest first). Escape closes it. */
-export function GitHistoryModal({ commits, onClose }: GitHistoryModalProps) {
+/** A list of recent commits (newest first) with a per-commit revert. Escape closes it. */
+export function GitHistoryModal({ commits, repo, onReverted, onClose }: GitHistoryModalProps) {
   useEffect(() => {
     if (!commits) return;
     const onKey = (e: KeyboardEvent) => {
@@ -42,6 +46,18 @@ export function GitHistoryModal({ commits, onClose }: GitHistoryModalProps) {
                 <span className="history-row__meta">
                   {commit.author}, {relativeTime(commit.date, now)}
                 </span>
+                {repo ? (
+                  <button
+                    type="button"
+                    className="history-row__revert"
+                    aria-label={`Revert ${commit.shortHash}`}
+                    onClick={() => {
+                      void gitRevert(repo, commit.hash).then(() => onReverted?.());
+                    }}
+                  >
+                    Revert
+                  </button>
+                ) : null}
               </div>
             ))
           )}

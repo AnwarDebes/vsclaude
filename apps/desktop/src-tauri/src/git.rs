@@ -154,6 +154,12 @@ pub fn git_ignore_add(cwd: String, pattern: String) -> Result<(), String> {
     Ok(())
 }
 
+/// Revert a commit by creating a new commit that undoes it.
+#[tauri::command]
+pub fn git_revert(cwd: String, hash: String) -> Result<String, String> {
+    run_git(&cwd, &["revert", "--no-edit", &hash])
+}
+
 /// Amend the last commit with the staged changes and a new message.
 #[tauri::command]
 pub fn git_commit_amend(cwd: String, message: String) -> Result<CommitResult, String> {
@@ -337,6 +343,27 @@ mod tests {
         git_stash_pop(cwd.clone()).unwrap();
         assert!(git_status(cwd.clone()).unwrap().contains("a.txt"));
         assert_eq!(git_stash_list(cwd.clone()).unwrap().trim(), "");
+
+        let _ = fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn revert_undoes_a_commit() {
+        let dir = init_repo("revert");
+        let cwd = dir.to_str().unwrap().to_string();
+        fs::write(dir.join("a.txt"), "one").unwrap();
+        git_stage(cwd.clone(), vec!["a.txt".to_string()]).unwrap();
+        git_commit_staged(cwd.clone(), "add a".to_string()).unwrap();
+        fs::write(dir.join("b.txt"), "two").unwrap();
+        git_stage(cwd.clone(), vec!["b.txt".to_string()]).unwrap();
+        git_commit_staged(cwd.clone(), "add b".to_string()).unwrap();
+
+        let head = git_log(cwd.clone(), Some(1)).unwrap()[0].hash.clone();
+        git_revert(cwd.clone(), head).unwrap();
+
+        // The revert removed b.txt and added a third commit.
+        assert!(!dir.join("b.txt").exists());
+        assert_eq!(git_log(cwd.clone(), Some(10)).unwrap().len(), 3);
 
         let _ = fs::remove_dir_all(&dir);
     }
