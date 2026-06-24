@@ -24,7 +24,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.7 | File explorer and workspace management | 6 | 2 | 6 | 3 |
 | 5.8 | Search and replace across files | 5 | 1 | 6 | 0 |
 | 5.9 | Source control and git | 6 | 8 | 10 | 0 |
-| 5.10 | Integrated terminal | 4 | 5 | 10 | 0 |
+| 5.10 | Integrated terminal | 6 | 6 | 7 | 0 |
 | 5.11 | Tasks (VS Code task support) | 0 | 4 | 5 | 0 |
 | 5.12 | Debugging (Debug Adapter Protocol) | 0 | 0 | 9 | 0 |
 | 5.13 | Snippets and Emmet | 1 | 2 | 2 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 10 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 2 | 6 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 4 | 4 | 0 |
-| TOTAL | | 88 | 104 | 132 | 5 |
+| TOTAL | | 90 | 105 | 129 | 5 |
 
 ## Legend
 
@@ -288,11 +288,11 @@ The terminal has a real PTY backend (portable-pty via Rust), a typed IPC protoco
 | Shell integration (command decorations, nav, exit-code, cwd) | Missing | No decorations or exit-code rendering; pty:exit carries code but is not shown. | No command separators, exit-code status, cwd inference, or recent-command pickers. |
 | Clickable links (paths, line:col, URLs) | Partial | TerminalPanel.tsx loads the web-links addon, so URLs in terminal output are clickable. | No file-path or line:col link detection. |
 | Find in terminal | Done | TerminalPanel.tsx loads the search addon and opens a find bar on Ctrl or Cmd plus F (intercepted via attachCustomKeyEventHandler) with next, previous, and match highlighting. An e2e opens it. | |
-| Copy, paste, copy-on-selection | Missing | Native xterm copy works but no explicit copy-on-selection or paste wiring; no context menu. | No copy-on-selection toggle or right-click menu. |
-| Right-click options (context menu) | Missing | No onContextMenu handler in TerminalPanel.tsx. | No context menu at all. |
+| Copy, paste, copy-on-selection | Partial | The terminal context menu offers Copy (term.getSelection to the clipboard), Paste (clipboard to the pty), and Select All. | No copy-on-selection toggle. |
+| Right-click options (context menu) | Done | TerminalPanel.tsx onContextMenu opens a menu with Copy, Paste, Select All, and Clear. An e2e opens it. | |
 | Rename, change icon/color, tab description | Missing | No rename, icon, color, or description UI; no tab metadata. | No tab customization. |
 | Sticky scroll and scrollback config | Partial | FitAddon plus xterm default scrollback (10,000). | No scrollback limit picker or sticky-scroll toggle. |
-| Clear terminal | Missing | xterm .clear() not exposed or bound. | No clear button or shortcut. |
+| Clear terminal | Done | The terminal context menu Clear calls term.clear(). | |
 | Persistence and reconnection across reloads | Missing | TerminalPanel creates a PTY on mount and kills on unmount; no pty_list to re-attach. | No session persistence or recovery. |
 | Process revival | Missing | pty_kill on unmount; no background process kept alive. | No detach-and-reattach flow. |
 | Env var collections from features/plugins | Missing | pty_create accepts env in some paths but not in the UI; no plugin injection. | No env UI or plugin env collection. |

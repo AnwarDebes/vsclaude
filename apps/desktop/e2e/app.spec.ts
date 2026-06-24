@@ -347,6 +347,17 @@ test.describe('vsclaude shell', () => {
     await expect(settings.getByText('Bracket Pair Guides', { exact: true })).toBeVisible();
   });
 
+  test('the terminal has a right-click menu with Clear', async ({ page }) => {
+    await page.goto('/');
+    const host = page.locator('.terminal-host').first();
+    await expect(host).toBeVisible();
+    await host.click({ button: 'right' });
+    const menu = page.getByRole('menu', { name: 'Terminal actions' });
+    await expect(menu).toBeVisible();
+    await menu.getByRole('menuitem', { name: 'Clear' }).click();
+    await expect(menu).toHaveCount(0);
+  });
+
   test('the terminal opens a find bar with Ctrl+F', async ({ page }) => {
     await page.goto('/');
     const host = page.locator('.terminal-host').first();

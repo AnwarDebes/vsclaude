@@ -24,8 +24,10 @@ export function TerminalPanel({ fallbackLines, cwd, initialCommand }: TerminalPa
   const hostRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<SearchAddon | null>(null);
   const termRef = useRef<Terminal | null>(null);
+  const ptyIdRef = useRef<string | null>(null);
   const [findOpen, setFindOpen] = useState(false);
   const [findQuery, setFindQuery] = useState('');
+  const [menu, setMenu] = useState<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
     const host = hostRef.current;
@@ -70,6 +72,7 @@ export function TerminalPanel({ fallbackLines, cwd, initialCommand }: TerminalPa
             void ptyKill(ptyId);
             return;
           }
+          ptyIdRef.current = ptyId;
           unlistenData = await onPtyData((p) => {
             if (p.ptyId === ptyId) term.write(p.data);
           });
@@ -107,6 +110,7 @@ export function TerminalPanel({ fallbackLines, cwd, initialCommand }: TerminalPa
       unlistenData?.();
       unlistenExit?.();
       if (ptyId) void ptyKill(ptyId);
+      ptyIdRef.current = null;
       searchRef.current = null;
       termRef.current = null;
       term.dispose();
@@ -124,8 +128,36 @@ export function TerminalPanel({ fallbackLines, cwd, initialCommand }: TerminalPa
     termRef.current?.focus();
   };
 
+  const copySelection = () => {
+    const selection = termRef.current?.getSelection();
+    if (selection) void navigator.clipboard?.writeText(selection);
+    setMenu(null);
+  };
+  const pasteClipboard = () => {
+    void navigator.clipboard?.readText().then((text) => {
+      if (text && ptyIdRef.current) void ptyWrite(ptyIdRef.current, text);
+    });
+    setMenu(null);
+  };
+  const selectAll = () => {
+    termRef.current?.selectAll();
+    setMenu(null);
+  };
+  const clearTerminal = () => {
+    termRef.current?.clear();
+    setMenu(null);
+    termRef.current?.focus();
+  };
+
   return (
-    <section className="terminal-panel" aria-label="Terminal">
+    <section
+      className="terminal-panel"
+      aria-label="Terminal"
+      onContextMenu={(e) => {
+        e.preventDefault();
+        setMenu({ x: e.clientX, y: e.clientY });
+      }}
+    >
       {findOpen ? (
         <div className="terminal-find">
           <input
@@ -157,6 +189,32 @@ export function TerminalPanel({ fallbackLines, cwd, initialCommand }: TerminalPa
         </div>
       ) : null}
       <div className="terminal-host" ref={hostRef} />
+      {menu ? (
+        <>
+          <div
+            className="terminal-ctx__backdrop"
+            onClick={() => setMenu(null)}
+            onContextMenu={(e) => {
+              e.preventDefault();
+              setMenu(null);
+            }}
+          />
+          <div className="terminal-ctx" role="menu" aria-label="Terminal actions" style={{ top: menu.y, left: menu.x }}>
+            <button type="button" role="menuitem" className="terminal-ctx__item" onClick={copySelection}>
+              Copy
+            </button>
+            <button type="button" role="menuitem" className="terminal-ctx__item" onClick={pasteClipboard}>
+              Paste
+            </button>
+            <button type="button" role="menuitem" className="terminal-ctx__item" onClick={selectAll}>
+              Select All
+            </button>
+            <button type="button" role="menuitem" className="terminal-ctx__item" onClick={clearTerminal}>
+              Clear
+            </button>
+          </div>
+        </>
+      ) : null}
     </section>
   );
 }

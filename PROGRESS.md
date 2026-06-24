@@ -5,7 +5,7 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus forty-four parity slices, the last forty-three
+2026-06-24. Session 3 (Step 0 plus forty-five parity slices, the last forty-four
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
@@ -14,7 +14,18 @@ more editor settings, markdown preview, document links, color decorators, outlin
 git history, release notes, notification center, branch delete and rename, git tags,
 gitignore action, svg preview, snippets, line height and font weight, ui scale and
 wheel zoom, follow system theme, command categories, output log levels, diff setting,
-json schemas, bracket guides and large-file mode, in-file find, terminal find.
+json schemas, bracket guides and large-file mode, in-file find, terminal find,
+terminal menu.
+
+## Slice 45: terminal context menu and clear (done)
+
+More terminal productivity (catalog 5.10).
+
+- **Context menu**: right-clicking the terminal opens a menu with Copy (selection to
+  clipboard), Paste (clipboard to the pty), Select All, and Clear (term.clear).
+- **Quality**: 336 unit tests, typecheck, lint clean (no Rust change), the renderer
+  build succeeds, and 37 Playwright e2e pass (the new one opens the menu and clicks
+  Clear). Matrix 5.10 context-menu and clear rows moved to Done, copy/paste to Partial.
 
 ## Slice 44: terminal find and clickable links (done)
 

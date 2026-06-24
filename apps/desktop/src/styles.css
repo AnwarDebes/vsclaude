@@ -1433,6 +1433,37 @@ body {
 .terminal-find__btn:hover {
   color: var(--color-text);
 }
+.terminal-ctx__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+}
+.terminal-ctx {
+  position: fixed;
+  z-index: 31;
+  min-width: 140px;
+  display: flex;
+  flex-direction: column;
+  padding: 4px;
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm, 4px);
+  box-shadow: 0 12px 30px -14px rgba(0, 0, 0, 0.7);
+}
+.terminal-ctx__item {
+  font: inherit;
+  font-size: 0.82rem;
+  text-align: left;
+  color: var(--color-text);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm, 4px);
+  padding: 5px 8px;
+  cursor: pointer;
+}
+.terminal-ctx__item:hover {
+  background: var(--color-surface);
+}
 .terminal-host {
   width: 100%;
   height: 100%;
