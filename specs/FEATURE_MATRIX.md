@@ -24,7 +24,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.7 | File explorer and workspace management | 6 | 2 | 6 | 3 |
 | 5.8 | Search and replace across files | 5 | 1 | 6 | 0 |
 | 5.9 | Source control and git | 6 | 8 | 10 | 0 |
-| 5.10 | Integrated terminal | 3 | 4 | 12 | 0 |
+| 5.10 | Integrated terminal | 4 | 5 | 10 | 0 |
 | 5.11 | Tasks (VS Code task support) | 0 | 4 | 5 | 0 |
 | 5.12 | Debugging (Debug Adapter Protocol) | 0 | 0 | 9 | 0 |
 | 5.13 | Snippets and Emmet | 1 | 2 | 2 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 10 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 2 | 6 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 4 | 4 | 0 |
-| TOTAL | | 87 | 103 | 134 | 5 |
+| TOTAL | | 88 | 104 | 132 | 5 |
 
 ## Legend
 
@@ -286,8 +286,8 @@ The terminal has a real PTY backend (portable-pty via Rust), a typed IPC protoco
 | Multiple terminals and tabs | Done | TerminalTabs.tsx renders a tab bar with new, switch, and close over a pure tabs reducer in @vsclaude/terminal (tabs.ts); each tab owns its own PTY-backed TerminalPanel, kept mounted so scrollback survives. The Terminal: New Terminal command also opens one. | |
 | Terminal profiles (bash/zsh/pwsh/cmd/git bash/custom) | Partial | pty_create accepts a shell override; detection for Windows and Unix; ipc.ts allows shell param. | No profile UI, stored list, or shell switcher. |
 | Shell integration (command decorations, nav, exit-code, cwd) | Missing | No decorations or exit-code rendering; pty:exit carries code but is not shown. | No command separators, exit-code status, cwd inference, or recent-command pickers. |
-| Clickable links (paths, line:col, URLs) | Missing | TerminalPanel.tsx does not load WebLinksAddon; spec mentions it in pseudocode only. | No link detection, URL opening, or path parsing. |
-| Find in terminal | Missing | No SearchAddon or search UI; Ctrl+F not intercepted. | No search input, highlighting, or navigation. |
+| Clickable links (paths, line:col, URLs) | Partial | TerminalPanel.tsx loads the web-links addon, so URLs in terminal output are clickable. | No file-path or line:col link detection. |
+| Find in terminal | Done | TerminalPanel.tsx loads the search addon and opens a find bar on Ctrl or Cmd plus F (intercepted via attachCustomKeyEventHandler) with next, previous, and match highlighting. An e2e opens it. | |
 | Copy, paste, copy-on-selection | Missing | Native xterm copy works but no explicit copy-on-selection or paste wiring; no context menu. | No copy-on-selection toggle or right-click menu. |
 | Right-click options (context menu) | Missing | No onContextMenu handler in TerminalPanel.tsx. | No context menu at all. |
 | Rename, change icon/color, tab description | Missing | No rename, icon, color, or description UI; no tab metadata. | No tab customization. |
@@ -298,7 +298,7 @@ The terminal has a real PTY backend (portable-pty via Rust), a typed IPC protoco
 | Env var collections from features/plugins | Missing | pty_create accepts env in some paths but not in the UI; no plugin injection. | No env UI or plugin env collection. |
 | Send-text and run-command interfaces | Partial | requestRunInTerminal opens a new terminal that runs a command (TerminalPanel initialCommand); used by Run Task. | No send-to-active-terminal or run-recent-command picker. |
 | Quick-fix surface | Missing | No output parsing or quick-fix UI. | No lightbulb or error-pattern detection. |
-| xterm addon ecosystem integration | Partial | FitAddon loaded; spec references Webgl, Unicode11, WebLinks, Serialize, but only FitAddon runs. | Webgl, Unicode11, WebLinks, and Serialize addons not loaded. |
+| xterm addon ecosystem integration | Partial | TerminalPanel.tsx loads the fit, search, and web-links addons. | Webgl, Unicode11, and Serialize addons not loaded. |
 
 ## 5.11 Tasks (VS Code task support)
 

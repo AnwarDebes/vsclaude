@@ -1,6 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Terminal } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
+import { SearchAddon } from '@xterm/addon-search';
+import { WebLinksAddon } from '@xterm/addon-web-links';
 import '@xterm/xterm/css/xterm.css';
 import { isTauri, onPtyData, onPtyExit, ptyCreate, ptyKill, ptyResize, ptyWrite } from '../lib/tauri';
 
@@ -15,10 +17,15 @@ interface TerminalPanelProps {
 /**
  * The integrated terminal. In the native app it spawns a real shell over the
  * Rust PTY and streams it through xterm with full input. In the browser it shows
- * the agent's command activity as a read-only log.
+ * the agent's command activity as a read-only log. URLs are clickable (web-links
+ * addon) and Ctrl or Cmd plus F opens a find bar (search addon).
  */
 export function TerminalPanel({ fallbackLines, cwd, initialCommand }: TerminalPanelProps) {
   const hostRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<SearchAddon | null>(null);
+  const termRef = useRef<Terminal | null>(null);
+  const [findOpen, setFindOpen] = useState(false);
+  const [findQuery, setFindQuery] = useState('');
 
   useEffect(() => {
     const host = hostRef.current;
@@ -30,10 +37,25 @@ export function TerminalPanel({ fallbackLines, cwd, initialCommand }: TerminalPa
       cursorBlink: true,
       theme: { background: '#161210', foreground: '#f3ece6', cursor: '#d97757' },
     });
+    termRef.current = term;
     const fit = new FitAddon();
+    const search = new SearchAddon();
+    searchRef.current = search;
     term.loadAddon(fit);
+    term.loadAddon(search);
+    term.loadAddon(new WebLinksAddon());
     term.open(host);
     fit.fit();
+
+    // Open the find bar on Ctrl or Cmd plus F instead of letting xterm see it.
+    term.attachCustomKeyEventHandler((e) => {
+      if (e.type === 'keydown' && (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'f') {
+        e.preventDefault();
+        setFindOpen(true);
+        return false;
+      }
+      return true;
+    });
 
     let ptyId: string | null = null;
     let unlistenData: UnlistenFnLike = null;
@@ -85,13 +107,55 @@ export function TerminalPanel({ fallbackLines, cwd, initialCommand }: TerminalPa
       unlistenData?.();
       unlistenExit?.();
       if (ptyId) void ptyKill(ptyId);
+      searchRef.current = null;
+      termRef.current = null;
       term.dispose();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const runFind = (back: boolean) => {
+    if (!findQuery) return;
+    if (back) searchRef.current?.findPrevious(findQuery);
+    else searchRef.current?.findNext(findQuery);
+  };
+  const closeFind = () => {
+    setFindOpen(false);
+    termRef.current?.focus();
+  };
+
   return (
     <section className="terminal-panel" aria-label="Terminal">
+      {findOpen ? (
+        <div className="terminal-find">
+          <input
+            className="terminal-find__input"
+            aria-label="Find in terminal"
+            placeholder="Find"
+            value={findQuery}
+            autoFocus
+            onChange={(e) => setFindQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                runFind(e.shiftKey);
+              } else if (e.key === 'Escape') {
+                e.preventDefault();
+                closeFind();
+              }
+            }}
+          />
+          <button type="button" className="terminal-find__btn" aria-label="Find previous" onClick={() => runFind(true)}>
+            Prev
+          </button>
+          <button type="button" className="terminal-find__btn" aria-label="Find next" onClick={() => runFind(false)}>
+            Next
+          </button>
+          <button type="button" className="terminal-find__btn" aria-label="Close find" onClick={closeFind}>
+            Close
+          </button>
+        </div>
+      ) : null}
       <div className="terminal-host" ref={hostRef} />
     </section>
   );

@@ -347,6 +347,15 @@ test.describe('vsclaude shell', () => {
     await expect(settings.getByText('Bracket Pair Guides', { exact: true })).toBeVisible();
   });
 
+  test('the terminal opens a find bar with Ctrl+F', async ({ page }) => {
+    await page.goto('/');
+    const host = page.locator('.terminal-host').first();
+    await expect(host).toBeVisible();
+    await host.click();
+    await page.keyboard.press('Control+KeyF');
+    await expect(page.getByRole('textbox', { name: 'Find in terminal' })).toBeVisible();
+  });
+
   test('the editor opens the find widget with Ctrl+F', async ({ page }) => {
     await page.goto('/');
     const editor = page.locator('.monaco-editor').first();

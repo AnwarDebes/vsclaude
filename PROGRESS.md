@@ -5,7 +5,7 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus forty-three parity slices, the last forty-two
+2026-06-24. Session 3 (Step 0 plus forty-four parity slices, the last forty-three
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
@@ -14,7 +14,19 @@ more editor settings, markdown preview, document links, color decorators, outlin
 git history, release notes, notification center, branch delete and rename, git tags,
 gitignore action, svg preview, snippets, line height and font weight, ui scale and
 wheel zoom, follow system theme, command categories, output log levels, diff setting,
-json schemas, bracket guides and large-file mode, in-file find.
+json schemas, bracket guides and large-file mode, in-file find, terminal find.
+
+## Slice 44: terminal find and clickable links (done)
+
+Terminal productivity (catalog 5.10).
+
+- **Addons**: TerminalPanel loads the xterm search and web-links addons (new deps
+  @xterm/addon-search and @xterm/addon-web-links). URLs in output are clickable.
+- **Find bar**: Ctrl or Cmd plus F (intercepted via attachCustomKeyEventHandler)
+  opens an in-terminal find bar with next, previous, and match highlighting.
+- **Quality**: 336 unit tests, typecheck, lint clean (no Rust change), the renderer
+  build succeeds, and 36 Playwright e2e pass (the new one opens the terminal find bar).
+  Matrix 5.10 find row moved to Done and the clickable-links row to Partial.
 
 ## Slice 43: in-file find and replace (done)
 
