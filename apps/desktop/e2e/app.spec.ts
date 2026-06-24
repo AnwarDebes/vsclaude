@@ -352,6 +352,8 @@ test.describe('vsclaude shell', () => {
     await expect(settings.getByText('Diff Ignore Trailing Whitespace', { exact: true })).toBeVisible();
     await settings.getByRole('textbox', { name: /search settings/i }).fill('bracket pair');
     await expect(settings.getByText('Bracket Pair Guides', { exact: true })).toBeVisible();
+    await settings.getByRole('textbox', { name: /search settings/i }).fill('trailing whitespace');
+    await expect(settings.getByText('Trim Trailing Whitespace', { exact: true })).toBeVisible();
   });
 
   test('a terminal tab can be renamed by double-click', async ({ page }) => {

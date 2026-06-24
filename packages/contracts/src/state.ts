@@ -104,6 +104,10 @@ export interface EditorSettings {
   diffIgnoreTrimWhitespace: boolean;
   /** Draw vertical guides for matching bracket pairs. */
   bracketPairGuides: boolean;
+  /** On save, strip trailing whitespace from every line. */
+  trimTrailingWhitespace: boolean;
+  /** On save, ensure the file ends with a newline. */
+  insertFinalNewline: boolean;
 }
 
 /** User-level application settings. */
@@ -149,6 +153,8 @@ export const DEFAULT_SETTINGS: AppSettings = {
     mouseWheelZoom: false,
     diffIgnoreTrimWhitespace: true,
     bracketPairGuides: true,
+    trimTrailingWhitespace: false,
+    insertFinalNewline: false,
   },
   defaultProvider: 'claude-code',
   models: {},

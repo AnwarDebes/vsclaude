@@ -5,7 +5,7 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus fifty-two parity slices, the last fifty-one
+2026-06-24. Session 3 (Step 0 plus fifty-three parity slices, the last fifty-two
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
@@ -16,7 +16,19 @@ gitignore action, svg preview, snippets, line height and font weight, ui scale a
 wheel zoom, follow system theme, command categories, output log levels, diff setting,
 json schemas, bracket guides and large-file mode, in-file find, terminal find,
 terminal menu, terminal tab rename, explorer problem decorations, search history,
-tasks.json loading, git push/pull/fetch, commit amend, commit revert.
+tasks.json loading, git push/pull/fetch, commit amend, commit revert, on-save trim.
+
+## Slice 53: trim trailing whitespace and insert final newline on save (done)
+
+On-save formatting (catalog 5.1).
+
+- **Transform** (`lib/on-save.ts` applyOnSave): trims trailing whitespace per line and
+  ensures a final newline, both off by default. 5 unit tests.
+- **Settings and wiring**: editor.trimTrailingWhitespace and editor.insertFinalNewline,
+  applied by EditorPanel's save command.
+- **Quality**: 351 unit tests (346 plus 5), typecheck, lint clean (no Rust change), the
+  renderer build succeeds, and 40 Playwright e2e pass (the settings e2e now also finds
+  Trim Trailing Whitespace). Matrix 5.1 trim-and-final-newline row moved to Partial.
 
 ## Slice 52: git revert (done)
 

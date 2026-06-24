@@ -15,7 +15,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 
 | Section | Title | Done | Partial | Missing | Not planned |
 | --- | --- | --- | --- | --- | --- |
-| 5.1 | Text editing core | 11 | 14 | 2 | 0 |
+| 5.1 | Text editing core | 11 | 15 | 1 | 0 |
 | 5.2 | Code intelligence (LSP language features) | 1 | 9 | 14 | 0 |
 | 5.3 | Editor advanced surface | 7 | 5 | 0 | 0 |
 | 5.4 | Diff and merge | 3 | 4 | 1 | 1 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 10 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 2 | 6 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 4 | 4 | 0 |
-| TOTAL | | 91 | 110 | 123 | 5 |
+| TOTAL | | 91 | 111 | 122 | 5 |
 
 ## Legend
 
@@ -73,7 +73,7 @@ The editor integrates Monaco 0.55.1, and its editing actions are now exposed: a 
 | Undo/redo and undo stops, soft undo across saves | Missing | No undo config in EditorPanel.tsx; no undo-history sync in IPC. | No soft undo, no undo stops API, no persistence. |
 | EOL handling (LF/CRLF detect, convert, platform default) | Partial | FilePayload reports eol (spec 3.2/11.1); EditorPanel.tsx exposes no EOL UI. | Core reads EOL but no selection, conversion, or platform-default UI. |
 | Encoding (detect, reopen with, save with, guess) | Partial | FilePayload includes encoding (spec 3.2); EditorPanel.tsx has no encoding option. | Detected but no picker, reopen-with, or save-as-encoding. |
-| Trim auto whitespace, insert final newline, trimFinalNewlines | Missing | None of these options in EditorPanel.tsx; not in spec. | No trim-trailing, final-newline insertion, or trimFinalNewlines. |
+| Trim auto whitespace, insert final newline, trimFinalNewlines | Partial | On save, EditorPanel applies applyOnSave (lib/on-save.ts, unit tested) driven by the editor.trimTrailingWhitespace and editor.insertFinalNewline settings. | No trimFinalNewlines (collapsing extra blank lines), and the workspace editor save path does not apply it yet. |
 | Large-file optimizations and tokenization limit | Done | EditorPanel.tsx sets largeFileOptimizations true and maxTokenizationLineLength 20000. | |
 | Read-only editors and read-only regions | Partial | FilePayload has readonly (spec 3.2); only diff tabs are read-only; main editor ignores the flag. | Main EditorPanel does not respect the readonly flag. |
 | Line numbers, folding, minimap, breadcrumbs, sticky scroll | Partial | EditorPanel.tsx enables minimap; folding/breadcrumbs/sticky scroll are Monaco defaults (spec 7.1). | Not explicitly configured; no UI toggle or verification. |

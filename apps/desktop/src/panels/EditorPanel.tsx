@@ -14,6 +14,7 @@ import {
 } from '../lib/editor-settings';
 import { useMonacoTheme } from '../lib/monaco-theme';
 import { languageForPath } from '../lib/language';
+import { applyOnSave } from '../lib/on-save';
 
 interface EditorPanelProps {
   path?: string;
@@ -36,7 +37,17 @@ export function EditorPanel({ path, value, language, onChange, onSave }: EditorP
 
   const onMount: OnMount = (editor, monacoInstance) => {
     editor.addCommand(monacoInstance.KeyMod.CtrlCmd | monacoInstance.KeyCode.KeyS, () => {
-      onSave?.(editor.getValue());
+      const current = getEditorSettings();
+      const next = applyOnSave(editor.getValue(), {
+        trimTrailingWhitespace: current.trimTrailingWhitespace,
+        insertFinalNewline: current.insertFinalNewline,
+      });
+      if (next !== editor.getValue()) {
+        const position = editor.getPosition();
+        editor.setValue(next);
+        if (position) editor.setPosition(position);
+      }
+      onSave?.(next);
     });
     // Publish this editor as the active one so palette actions (go to line, and
     // the editor command surface) can reach the file the user is looking at.
