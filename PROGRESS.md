@@ -5,7 +5,7 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus fifty-three parity slices, the last fifty-two
+2026-06-24. Session 3 (Step 0 plus fifty-four parity slices, the last fifty-three
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
@@ -16,7 +16,20 @@ gitignore action, svg preview, snippets, line height and font weight, ui scale a
 wheel zoom, follow system theme, command categories, output log levels, diff setting,
 json schemas, bracket guides and large-file mode, in-file find, terminal find,
 terminal menu, terminal tab rename, explorer problem decorations, search history,
-tasks.json loading, git push/pull/fetch, commit amend, commit revert, on-save trim.
+tasks.json loading, git push/pull/fetch, commit amend, commit revert, on-save trim,
+settings JSON editor.
+
+## Slice 54: settings JSON editor (done)
+
+Edit settings as JSON (catalog 5.14).
+
+- **Modal** (`SettingsJsonModal.tsx`): Settings: Open JSON seeds a textarea from the
+  current settings (serializeSettings); Apply validates the JSON (invalid is reported,
+  not applied) and merges through loadSettings; Copy exports it. The round-trip is unit
+  tested (reusing the persistence package's serialize and load).
+- **Quality**: 354 unit tests (351 plus 3), typecheck, lint clean (no Rust change), the
+  renderer build succeeds, and 41 Playwright e2e pass (the new one opens the editor and
+  confirms it holds the current settings). Matrix 5.14 settings-JSON row moved to Partial.
 
 ## Slice 53: trim trailing whitespace and insert final newline on save (done)
 

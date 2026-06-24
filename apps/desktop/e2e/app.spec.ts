@@ -454,6 +454,18 @@ test.describe('vsclaude shell', () => {
     await expect(tags.getByText(/open a folder under git to manage tags/i)).toBeVisible();
   });
 
+  test('the settings JSON editor opens with the current settings', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('settings open json');
+    await page.keyboard.press('Enter');
+    const modal = page.getByRole('dialog', { name: 'Settings JSON' });
+    await expect(modal).toBeVisible();
+    await expect(modal.getByRole('textbox', { name: 'Settings JSON' })).toHaveValue(/themeId/);
+  });
+
   test('release notes open from the command palette', async ({ page }) => {
     await page.goto('/');
     await page.getByText('Claude Code, in motion').click();

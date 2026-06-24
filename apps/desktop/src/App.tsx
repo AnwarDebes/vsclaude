@@ -42,6 +42,7 @@ import { GitHistoryModal } from './components/GitHistoryModal';
 import { GitTagsModal } from './components/GitTagsModal';
 import { gitLog, type GitCommit } from './lib/tauri';
 import { SettingsPanel } from './components/SettingsPanel';
+import { SettingsJsonModal } from './components/SettingsJsonModal';
 import { KeyboardShortcuts } from './components/KeyboardShortcuts';
 import { WelcomePanel } from './components/WelcomePanel';
 import { ReleaseNotes } from './components/ReleaseNotes';
@@ -125,6 +126,7 @@ export function App() {
   const [tagsOpen, setTagsOpen] = useState(false);
   const [npmTasks, setNpmTasks] = useState<NpmTask[]>([]);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [settingsJsonOpen, setSettingsJsonOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const [welcomeOpen, setWelcomeOpen] = useState(false);
   const [releaseOpen, setReleaseOpen] = useState(false);
@@ -573,6 +575,12 @@ export function App() {
       run: () => setReleaseOpen(true),
     });
     r.register({
+      id: 'settings-open-json',
+      title: 'Settings: Open JSON',
+      keywords: ['settings', 'json', 'edit', 'export', 'import', 'preferences'],
+      run: () => setSettingsJsonOpen(true),
+    });
+    r.register({
       id: 'show-notifications',
       title: 'Notifications: Show',
       keywords: ['notifications', 'alerts', 'messages', 'center', 'bell'],
@@ -1017,6 +1025,12 @@ export function App() {
       />
       <ReleaseNotes open={releaseOpen} onClose={() => setReleaseOpen(false)} />
       <NotificationCenter open={notificationsOpen} onClose={() => setNotificationsOpen(false)} />
+      <SettingsJsonModal
+        open={settingsJsonOpen}
+        settings={settings}
+        onApply={(next) => setSettings(next)}
+        onClose={() => setSettingsJsonOpen(false)}
+      />
       <DiffReview open={reviewOpen} cwd="." onClose={() => setReviewOpen(false)} />
     </div>
   );

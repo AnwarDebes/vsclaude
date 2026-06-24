@@ -28,7 +28,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.11 | Tasks (VS Code task support) | 0 | 5 | 4 | 0 |
 | 5.12 | Debugging (Debug Adapter Protocol) | 0 | 0 | 9 | 0 |
 | 5.13 | Snippets and Emmet | 1 | 2 | 2 | 0 |
-| 5.14 | Settings and configuration | 2 | 2 | 5 | 1 |
+| 5.14 | Settings and configuration | 2 | 3 | 4 | 1 |
 | 5.15 | Keybindings and keymaps | 3 | 2 | 6 | 0 |
 | 5.16 | Themes and appearance | 15 | 4 | 3 | 0 |
 | 5.17 | Extensions and plugin ecosystem | 5 | 2 | 11 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 10 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 2 | 6 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 4 | 4 | 0 |
-| TOTAL | | 91 | 111 | 122 | 5 |
+| TOTAL | | 91 | 112 | 121 | 5 |
 
 ## Legend
 
@@ -353,7 +353,7 @@ A real Settings panel now ships: a searchable, categorized list with a modified 
 | Capability | Status | Evidence | What is missing |
 | --- | --- | --- | --- |
 | Settings UI (search, categories, modified indicator, reset) | Done | SettingsPanel.tsx renders the settings-schema list with search (filterSettings), categories, a modified dot, a per-setting reset, and reset-all; opened by Ctrl or Cmd plus comma. | |
-| Settings JSON editing with completion and validation | Missing | persistence/settings.ts merges/loads but no editing UI or validation. | No JSON editor, generated schema, validation, or key completion. |
+| Settings JSON editing with completion and validation | Partial | SettingsJsonModal (Settings: Open JSON) edits the settings as JSON, validating on Apply (invalid JSON is reported, not applied) and merging through loadSettings; Copy exports it. Round-trip unit tested. | No schema-driven key completion or inline validation as you type. |
 | Multi-scope resolution (user/workspace/folder with source) | Missing | state.ts defines a flat AppSettings; spec describes four layers, unimplemented. | No workspace/folder files, scope indicator, precedence, or scope IPC. |
 | Language-specific setting overrides | Missing | EditorPanel.tsx hardcodes options; no override mechanism. | No [language] section or per-filetype options. |
 | Settings profiles (create/switch/export/import) | Missing | No profile code; PluginContributions has no profiles field. | No profile storage, switching, or bundle export/import. |
