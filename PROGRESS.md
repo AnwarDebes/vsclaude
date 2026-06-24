@@ -5,12 +5,29 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus twenty-two parity slices, the last twenty-one
+2026-06-24. Session 3 (Step 0 plus twenty-three parity slices, the last twenty-two
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
 stash, zen mode, breadcrumbs, tasks, activity-bar badges, output panel, untitled,
-more editor settings.
+more editor settings, markdown preview.
+
+## Slice 23: markdown preview (done)
+
+A safe Markdown preview (catalog 5.2).
+
+- **Renderer** (`lib/markdown.ts`): `renderMarkdown` turns Markdown into HTML for
+  headings, bold, italic, inline code, fenced code, links, lists, and paragraphs.
+  It escapes raw HTML and sanitizes link hrefs (dropping javascript: and the like),
+  so the output is not a script vector. The inline-code fence marker is built at
+  runtime (String.fromCharCode(0)) so the source stays ASCII. 10 unit tests,
+  including HTML-escape and unsafe-link cases.
+- **Preview** (`MarkdownPreview.tsx`): a modal of the rendered active Markdown file,
+  opened by the Markdown: Open Preview command. Escape closes it.
+- **Quality**: 291 unit tests (281 plus 10), typecheck, lint clean (no Rust change),
+  the renderer build succeeds, and 28 Playwright e2e pass (the new one previews the
+  demo README and checks a heading and a link). Matrix 5.2 markdown row moved to
+  Partial.
 
 ## Slice 22: more editor settings (rulers, whitespace, cursor) (done)
 

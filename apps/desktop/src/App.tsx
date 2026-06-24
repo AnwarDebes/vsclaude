@@ -42,6 +42,7 @@ import { KeyboardShortcuts } from './components/KeyboardShortcuts';
 import { WelcomePanel } from './components/WelcomePanel';
 import { welcomeQuickActions, type WelcomeActionId } from './lib/welcome';
 import { DiffModal, type DiffTarget } from './components/DiffModal';
+import { MarkdownPreview, type MarkdownTarget } from './components/MarkdownPreview';
 import { DiffReview } from './components/DiffReview';
 import { Narration } from './components/Narration';
 import { ExplorerPanel } from './panels/ExplorerPanel';
@@ -107,6 +108,7 @@ export function App() {
   );
   const [gitNonce, setGitNonce] = useState(0);
   const [diffTarget, setDiffTarget] = useState<DiffTarget | null>(null);
+  const [markdownTarget, setMarkdownTarget] = useState<MarkdownTarget | null>(null);
   const [npmTasks, setNpmTasks] = useState<NpmTask[]>([]);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
@@ -482,6 +484,22 @@ export function App() {
       run: compareWithSaved,
     });
     r.register({
+      id: 'markdown-preview',
+      title: 'Markdown: Open Preview',
+      keywords: ['markdown', 'md', 'preview', 'render'],
+      run: () => {
+        const path = hasWorkspace ? ws.activePath : openFile;
+        if (!path || !path.toLowerCase().endsWith('.md')) {
+          appendLog('Open a Markdown file to preview it.');
+          return;
+        }
+        const md = hasWorkspace
+          ? ws.activeDoc?.draft ?? ''
+          : editedContents[openFile] ?? demoContentFor(openFile);
+        setMarkdownTarget({ name: basePathName(path), markdown: md });
+      },
+    });
+    r.register({
       id: 'open-settings',
       title: 'Preferences: Open Settings',
       keywords: ['settings', 'preferences', 'config', 'options'],
@@ -655,7 +673,19 @@ export function App() {
       run: () => setSettings((s) => ({ ...s, sound: { ...s.sound, enabled: !s.sound.enabled } })),
     });
     return r;
-  }, [playing, setPlaying, restart, liveAvailable, liveStart, hasWorkspace, ws, compareWithSaved, npmTasks]);
+  }, [
+    playing,
+    setPlaying,
+    restart,
+    liveAvailable,
+    liveStart,
+    hasWorkspace,
+    ws,
+    compareWithSaved,
+    npmTasks,
+    openFile,
+    editedContents,
+  ]);
 
   const mode = settings.presentationMode;
   const isEditorMode = mode === 'companion' || mode === 'cozy';
@@ -872,6 +902,7 @@ export function App() {
         />
       ) : null}
       <DiffModal target={diffTarget} onClose={() => setDiffTarget(null)} />
+      <MarkdownPreview target={markdownTarget} onClose={() => setMarkdownTarget(null)} />
       <DiffReview open={reviewOpen} cwd="." onClose={() => setReviewOpen(false)} />
     </div>
   );

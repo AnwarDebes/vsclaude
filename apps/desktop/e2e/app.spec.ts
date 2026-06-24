@@ -334,6 +334,20 @@ test.describe('vsclaude shell', () => {
     await expect(settings.getByText('Render Whitespace', { exact: true })).toBeVisible();
   });
 
+  test('markdown preview renders the active markdown file', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'README.md', exact: true }).click();
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('markdown preview');
+    await page.keyboard.press('Enter');
+    const preview = page.getByRole('dialog', { name: /preview of readme/i });
+    await expect(preview).toBeVisible();
+    await expect(preview.getByRole('heading', { name: 'Aurora' })).toBeVisible();
+    await expect(preview.getByRole('link', { name: 'docs' })).toBeVisible();
+  });
+
   test('opens the diff review overlay from the command palette', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByText('vsclaude').first()).toBeVisible();

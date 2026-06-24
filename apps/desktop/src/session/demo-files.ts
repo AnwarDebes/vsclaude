@@ -74,7 +74,17 @@ import { App } from './App';
 
 createRoot(document.getElementById('root')!).render(<App />);
 `,
-  'README.md': `# aurora\n\nA demo project edited inside vsclaude.\n`,
+  'README.md': `# Aurora
+
+A small demo project shown in the **vsclaude** editor.
+
+## Getting started
+
+- Run \`npm install\`
+- Run \`npm run dev\`
+- Open the [docs](https://example.com)
+
+Press the Markdown preview command to render this file.`,
   'package.json': `{
   "name": "aurora",
   "version": "0.1.0",
