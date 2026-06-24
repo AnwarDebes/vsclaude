@@ -38,6 +38,8 @@ import { OutlinePanel } from './components/OutlinePanel';
 import { appendLog } from './lib/output-log';
 import { SearchPanel } from './components/SearchPanel';
 import { SourceControlPanel } from './components/SourceControlPanel';
+import { GitHistoryModal } from './components/GitHistoryModal';
+import { gitLog, type GitCommit } from './lib/tauri';
 import { SettingsPanel } from './components/SettingsPanel';
 import { KeyboardShortcuts } from './components/KeyboardShortcuts';
 import { WelcomePanel } from './components/WelcomePanel';
@@ -110,6 +112,7 @@ export function App() {
   const [gitNonce, setGitNonce] = useState(0);
   const [diffTarget, setDiffTarget] = useState<DiffTarget | null>(null);
   const [markdownTarget, setMarkdownTarget] = useState<MarkdownTarget | null>(null);
+  const [gitHistory, setGitHistory] = useState<GitCommit[] | null>(null);
   const [npmTasks, setNpmTasks] = useState<NpmTask[]>([]);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
@@ -589,6 +592,21 @@ export function App() {
       keywords: ['git', 'diff', 'commit', 'review', 'accept'],
       run: () => setReviewOpen(true),
     });
+    r.register({
+      id: 'git-history',
+      title: 'Git: View History',
+      keywords: ['git', 'history', 'log', 'commits'],
+      run: () => {
+        const repo = hasWorkspace ? ws.roots[0]?.path ?? null : null;
+        if (!repo) {
+          appendLog('Open a folder to view its git history.');
+          return;
+        }
+        void gitLog(repo)
+          .then((commits) => setGitHistory(commits))
+          .catch((err) => appendLog(`Git history failed: ${String(err)}`));
+      },
+    });
     if (!hasWorkspace) {
       r.register({
         id: 'new-untitled',
@@ -919,6 +937,7 @@ export function App() {
       ) : null}
       <DiffModal target={diffTarget} onClose={() => setDiffTarget(null)} />
       <MarkdownPreview target={markdownTarget} onClose={() => setMarkdownTarget(null)} />
+      <GitHistoryModal commits={gitHistory} onClose={() => setGitHistory(null)} />
       <DiffReview open={reviewOpen} cwd="." onClose={() => setReviewOpen(false)} />
     </div>
   );

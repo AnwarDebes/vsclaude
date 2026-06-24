@@ -149,6 +149,46 @@ pub fn git_stash_list(cwd: String) -> Result<String, String> {
     run_git(&cwd, &["stash", "list"])
 }
 
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GitCommit {
+    hash: String,
+    short_hash: String,
+    author: String,
+    email: String,
+    /// Author date in unix seconds.
+    date: i64,
+    subject: String,
+}
+
+/// Recent commit history, newest first, capped at `limit` (default 100). Fields
+/// are unit-separator delimited so a subject can hold any character but a newline.
+#[tauri::command]
+pub fn git_log(cwd: String, limit: Option<u32>) -> Result<Vec<GitCommit>, String> {
+    let max = limit.unwrap_or(100).to_string();
+    let format = "--pretty=format:%H%x1f%h%x1f%an%x1f%ae%x1f%at%x1f%s";
+    let out = run_git(&cwd, &["log", "-n", &max, format])?;
+    let mut commits = Vec::new();
+    for line in out.lines() {
+        if line.is_empty() {
+            continue;
+        }
+        let parts: Vec<&str> = line.split('\u{1f}').collect();
+        if parts.len() < 6 {
+            continue;
+        }
+        commits.push(GitCommit {
+            hash: parts[0].to_string(),
+            short_hash: parts[1].to_string(),
+            author: parts[2].to_string(),
+            email: parts[3].to_string(),
+            date: parts[4].parse().unwrap_or(0),
+            subject: parts[5].to_string(),
+        });
+    }
+    Ok(commits)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -212,6 +252,30 @@ mod tests {
         git_stash_pop(cwd.clone()).unwrap();
         assert!(git_status(cwd.clone()).unwrap().contains("a.txt"));
         assert_eq!(git_stash_list(cwd.clone()).unwrap().trim(), "");
+
+        let _ = fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn log_lists_commits_newest_first() {
+        let dir = init_repo("log");
+        let cwd = dir.to_str().unwrap().to_string();
+
+        fs::write(dir.join("a.txt"), "one").unwrap();
+        git_stage(cwd.clone(), vec!["a.txt".to_string()]).unwrap();
+        git_commit_staged(cwd.clone(), "first commit".to_string()).unwrap();
+
+        fs::write(dir.join("b.txt"), "two").unwrap();
+        git_stage(cwd.clone(), vec!["b.txt".to_string()]).unwrap();
+        git_commit_staged(cwd.clone(), "second commit".to_string()).unwrap();
+
+        let commits = git_log(cwd.clone(), Some(10)).unwrap();
+        assert_eq!(commits.len(), 2);
+        assert_eq!(commits[0].subject, "second commit");
+        assert_eq!(commits[1].subject, "first commit");
+        assert_eq!(commits[0].author, "Test");
+        assert!(!commits[0].short_hash.is_empty());
+        assert!(commits[0].date > 0);
 
         let _ = fs::remove_dir_all(&dir);
     }

@@ -262,7 +262,7 @@ vsclaude now has a working Source Control panel for the daily git workflow: stag
 | Stash (create/apply/pop/drop/list/include-untracked) | Partial | git.rs git_stash (push -u, include untracked), git_stash_pop, and git_stash_list; the Source Control panel has Stash Changes and Pop Stash buttons with a count (countStashes). Cargo and unit tested. | No apply, drop, named stash, or stash list view. |
 | Tags (create/delete/push/list) | Missing | No tag commands; tag exists only as a narration kind. | No tag operations or UI. |
 | Blame (inline, gutter, annotation) | Missing | No git_blame; spec section 17 lists blame as a non-goal for v1. | Out of scope for phase 0. |
-| History, commit graph, per-file history, Timeline | Partial | events.ts supports status narration; TimelinePanel shows agent events, not commits. | No git_log, pagination, per-file history, or graph. |
+| History, commit graph, per-file history, Timeline | Partial | git.rs git_log returns recent commits (cargo tested); Git: View History opens a commit list (GitHistoryModal) with relative dates (relativeTime, unit tested); TimelinePanel still shows agent events. | No commit graph, per-file history, or pagination. |
 | Merge conflict resolution (merge editor, inline markers) | Missing | Status model can hold conflicted files but no resolution UI or marker parser. | No conflict markers, merge editor, or resolve actions. |
 | Gutter decorations (added/modified/deleted, peek diff) | Missing | DiffReview shows file-level badges only; no line gutter marks. | No change-tracking gutter or peek diff in the editor. |
 | Gitignore awareness and add-to-gitignore action | Missing | Parser ignores ignored-file lines; no add-to-gitignore command. | No gitignore action. |

@@ -5,12 +5,28 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus twenty-six parity slices, the last twenty-five
+2026-06-24. Session 3 (Step 0 plus twenty-seven parity slices, the last twenty-six
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
 stash, zen mode, breadcrumbs, tasks, activity-bar badges, output panel, untitled,
-more editor settings, markdown preview, document links, color decorators, outline.
+more editor settings, markdown preview, document links, color decorators, outline,
+git history.
+
+## Slice 27: git commit history (done)
+
+A commit history view (catalog 5.9; the row stays Partial since there is no graph
+or per-file history, but git_log now exists).
+
+- **Native** (`git.rs` git_log): recent commits, newest first, capped, unit-separator
+  delimited so a subject is safe. Registered in lib.rs. Cargo tested (9 cargo tests).
+- **Helper** (`lib/relative-time.ts`): `relativeTime` formats a past timestamp as
+  "N units ago". 5 unit tests.
+- **View** (`GitHistoryModal.tsx`): Git: View History lists commits (short hash,
+  subject, author, relative date). Escape closes.
+- **Quality**: 313 unit tests (308 plus 5), typecheck, lint, cargo clean, the renderer
+  build succeeds, and 29 Playwright e2e pass (no regression; git is native-gated, so
+  cargo and the relativeTime unit tests cover it).
 
 ## Slice 26: outline view and markdown document symbols (done)
 

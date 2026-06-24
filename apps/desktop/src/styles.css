@@ -2006,6 +2006,74 @@ body {
   color: var(--color-text-muted);
 }
 
+/* Git history modal */
+.history-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 6vh;
+  z-index: var(--z-popover, 200);
+}
+.history-modal {
+  width: min(720px, 92vw);
+  max-height: 82vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.history-modal__header {
+  display: flex;
+  align-items: center;
+  padding: 10px var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+}
+.history-modal__title {
+  font-size: 0.95rem;
+  margin: 0;
+}
+.history-modal__header .btn {
+  margin-left: auto;
+}
+.history-modal__body {
+  flex: 1 1 auto;
+  overflow: auto;
+  padding: 4px 0;
+}
+.history-modal__empty {
+  color: var(--color-text-muted);
+  padding: var(--space-md) var(--space-lg);
+}
+.history-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-md);
+  padding: 6px var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+}
+.history-row__hash {
+  flex: 0 0 auto;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.78rem;
+  color: var(--color-accent);
+}
+.history-row__subject {
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.history-row__meta {
+  flex: 0 0 auto;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+}
+
 /* Markdown preview */
 .md-overlay {
   position: fixed;

@@ -81,6 +81,7 @@ pub fn run() {
             git::git_stash,
             git::git_stash_pop,
             git::git_stash_list,
+            git::git_log,
         ])
         .run(tauri::generate_context!())
         .expect("error while running the vsclaude application");

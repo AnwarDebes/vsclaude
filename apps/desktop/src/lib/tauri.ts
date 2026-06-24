@@ -88,3 +88,15 @@ export const gitCreateBranch = (cwd: string, name: string): Promise<void> =>
 export const gitStash = (cwd: string): Promise<void> => invoke('git_stash', { cwd });
 export const gitStashPop = (cwd: string): Promise<void> => invoke('git_stash_pop', { cwd });
 export const gitStashList = (cwd: string): Promise<string> => invoke('git_stash_list', { cwd });
+
+export interface GitCommit {
+  hash: string;
+  shortHash: string;
+  author: string;
+  email: string;
+  /** Author date in unix seconds. */
+  date: number;
+  subject: string;
+}
+export const gitLog = (cwd: string, limit?: number): Promise<GitCommit[]> =>
+  invoke('git_log', { cwd, limit });
