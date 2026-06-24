@@ -20,7 +20,18 @@ tasks.json loading, git push/pull/fetch, commit amend, commit revert, on-save tr
 settings JSON editor, reset layout, task variables, task groups, files.exclude,
 at-symbol navigation, hex view, notification toasts, inlay hints, menu bar,
 edit menu, minimap config, diff settings, process info, snippet browser,
-accessibility help, git remotes, problems filter, output channels.
+accessibility help, git remotes, problems filter, output channels, editor font.
+
+## Slice 73: editor font family and ligatures settings (done)
+
+Customize the editor font (catalog 5.16; two rows moved to Done).
+
+- **Settings**: editor.fontFamily (a select of monospace font stacks) and
+  editor.fontLigatures (a toggle) map to Monaco's fontFamily and fontLigatures, replacing
+  the values EditorPanel hardcoded.
+- **Quality**: 385 unit tests (the editorSettingsToMonaco mapper test covers the new
+  fields), typecheck, lint clean (no Rust change), the renderer build succeeds, and 55
+  Playwright e2e pass. Matrix 5.16 font-family and ligatures rows moved to Done.
 
 ## Slice 72: output channels (done)
 

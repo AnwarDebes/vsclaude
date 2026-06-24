@@ -30,7 +30,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.13 | Snippets and Emmet | 1 | 3 | 1 | 0 |
 | 5.14 | Settings and configuration | 2 | 3 | 4 | 1 |
 | 5.15 | Keybindings and keymaps | 3 | 2 | 6 | 0 |
-| 5.16 | Themes and appearance | 15 | 4 | 4 | 0 |
+| 5.16 | Themes and appearance | 17 | 2 | 4 | 0 |
 | 5.17 | Extensions and plugin ecosystem | 5 | 2 | 11 | 0 |
 | 5.18 | Notebooks | 0 | 0 | 6 | 0 |
 | 5.19 | Remote development and tunnels | 0 | 0 | 6 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 6 | 7 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 3 | 5 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 96 | 120 | 112 | 5 |
+| TOTAL | | 98 | 118 | 112 | 5 |
 
 ## Legend
 
@@ -398,8 +398,8 @@ vsclaude has a strong design-token system and bundled themes. Theme selection (f
 | Token color customization and semantic token theming | Missing | design-system handles bundled themes; registration accepts full themes only; no tokenColor field. | No per-token overrides. |
 | Workbench color customization | Missing | No workbench customization UI or API; AppSettings has themeId only. | No workbench color overrides. |
 | Editor font size customization | Done | AppSettings.editor.fontSize, edited in the Settings panel (8 to 32) and applied live to Monaco. | |
-| Editor font family customization | Partial | EditorPanel.tsx hardcodes fontFamily; no override field. | Not user-configurable. |
-| Editor font ligatures toggle | Partial | EditorPanel.tsx hardcodes fontLigatures true. | No user toggle. |
+| Editor font family customization | Done | The editor.fontFamily setting (a select of monospace font stacks) maps to Monaco's fontFamily (editorSettingsToMonaco). Unit tested. | |
+| Editor font ligatures toggle | Done | The editor.fontLigatures setting maps to Monaco's fontLigatures (editorSettingsToMonaco). Unit tested. | |
 | Editor line height customization | Done | The editor.lineHeight setting (settings-schema.ts) maps to Monaco's lineHeight (editorSettingsToMonaco); 0 derives it from the font size. Unit tested. | |
 | Editor font weight customization | Done | The editor.fontWeight setting (normal, medium, semibold, bold) maps to Monaco's fontWeight (editorSettingsToMonaco). Unit tested. | |
 | Editor wheel/scroll zoom | Done | The editor.mouseWheelZoom setting maps to Monaco's mouseWheelZoom (editorSettingsToMonaco), so Ctrl and the mouse wheel zoom the editor font. Unit tested. | |

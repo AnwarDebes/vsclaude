@@ -37,6 +37,33 @@ export const SETTINGS_SCHEMA: readonly SettingDef[] = [
     set: (s, v) => ({ ...s, editor: { ...s.editor, fontSize: Number(v) } }),
   },
   {
+    id: 'editor.fontFamily',
+    category: 'Editor',
+    label: 'Font Family',
+    description: 'The editor font family.',
+    control: {
+      kind: 'select',
+      options: [
+        { value: "'JetBrains Mono', 'Cascadia Code', ui-monospace, monospace", label: 'JetBrains Mono' },
+        { value: "'Cascadia Code', ui-monospace, monospace", label: 'Cascadia Code' },
+        { value: "'Fira Code', ui-monospace, monospace", label: 'Fira Code' },
+        { value: 'Consolas, ui-monospace, monospace', label: 'Consolas' },
+        { value: 'ui-monospace, monospace', label: 'System Monospace' },
+      ],
+    },
+    get: (s) => s.editor.fontFamily,
+    set: (s, v) => ({ ...s, editor: { ...s.editor, fontFamily: String(v) } }),
+  },
+  {
+    id: 'editor.fontLigatures',
+    category: 'Editor',
+    label: 'Font Ligatures',
+    description: 'Render programming ligatures in the editor font.',
+    control: { kind: 'boolean' },
+    get: (s) => s.editor.fontLigatures,
+    set: (s, v) => ({ ...s, editor: { ...s.editor, fontLigatures: Boolean(v) } }),
+  },
+  {
     id: 'editor.tabSize',
     category: 'Editor',
     label: 'Tab Size',

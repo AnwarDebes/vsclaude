@@ -8,6 +8,8 @@ import { DEFAULT_SETTINGS, type EditorSettings } from '@vsclaude/contracts';
 /** Monaco construction options derived from the editor settings. */
 export interface MonacoEditorOptions {
   fontSize: number;
+  fontFamily: string;
+  fontLigatures: boolean;
   tabSize: number;
   insertSpaces: boolean;
   wordWrap: 'on' | 'off';
@@ -26,6 +28,8 @@ export interface MonacoEditorOptions {
 export function editorSettingsToMonaco(settings: EditorSettings): MonacoEditorOptions {
   return {
     fontSize: settings.fontSize,
+    fontFamily: settings.fontFamily,
+    fontLigatures: settings.fontLigatures,
     tabSize: settings.tabSize,
     insertSpaces: settings.insertSpaces,
     wordWrap: settings.wordWrap ? 'on' : 'off',

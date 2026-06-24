@@ -106,8 +106,6 @@ export function EditorPanel({ path, value, language, onChange, onSave }: EditorP
         onMount={onMount}
         loading={<div className="editor-loading">Loading editor...</div>}
         options={{
-          fontFamily: "'JetBrains Mono', 'Cascadia Code', ui-monospace, monospace",
-          fontLigatures: true,
           scrollBeyondLastLine: false,
           automaticLayout: true,
           smoothScrolling: true,

@@ -86,6 +86,10 @@ export interface SoundSettings {
 /** Editor preferences applied to the Monaco editor and the diff view. */
 export interface EditorSettings {
   fontSize: number;
+  /** The editor font family, as a CSS font-family value. */
+  fontFamily: string;
+  /** Render programming ligatures in the editor font. */
+  fontLigatures: boolean;
   tabSize: number;
   insertSpaces: boolean;
   wordWrap: boolean;
@@ -148,6 +152,8 @@ export const DEFAULT_SETTINGS: AppSettings = {
   sound: { enabled: false, masterVolume: 0.6, typing: true, ambient: false },
   editor: {
     fontSize: 13,
+    fontFamily: "'JetBrains Mono', 'Cascadia Code', ui-monospace, monospace",
+    fontLigatures: true,
     tabSize: 2,
     insertSpaces: true,
     wordWrap: false,

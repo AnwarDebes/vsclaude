@@ -17,6 +17,8 @@ describe('editorSettingsToMonaco', () => {
   it('maps the defaults to Monaco option names', () => {
     expect(editorSettingsToMonaco(DEFAULT_SETTINGS.editor)).toEqual({
       fontSize: 13,
+      fontFamily: "'JetBrains Mono', 'Cascadia Code', ui-monospace, monospace",
+      fontLigatures: true,
       tabSize: 2,
       insertSpaces: true,
       wordWrap: 'off',
@@ -114,5 +116,11 @@ describe('filterSettings', () => {
     const diffIds = filterSettings('diff', SETTINGS_SCHEMA).map((d) => d.id);
     expect(diffIds).toContain('editor.diffAlgorithm');
     expect(diffIds).toContain('editor.diffMaxComputationTime');
+  });
+
+  it('exposes the editor font settings', () => {
+    const fontIds = filterSettings('font', SETTINGS_SCHEMA).map((d) => d.id);
+    expect(fontIds).toContain('editor.fontFamily');
+    expect(fontIds).toContain('editor.fontLigatures');
   });
 });
