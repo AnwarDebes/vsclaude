@@ -30,7 +30,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.13 | Snippets and Emmet | 1 | 3 | 1 | 0 |
 | 5.14 | Settings and configuration | 2 | 3 | 4 | 1 |
 | 5.15 | Keybindings and keymaps | 3 | 2 | 6 | 0 |
-| 5.16 | Themes and appearance | 17 | 2 | 4 | 0 |
+| 5.16 | Themes and appearance | 17 | 3 | 3 | 0 |
 | 5.17 | Extensions and plugin ecosystem | 5 | 2 | 11 | 0 |
 | 5.18 | Notebooks | 0 | 0 | 6 | 0 |
 | 5.19 | Remote development and tunnels | 0 | 0 | 6 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 6 | 7 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 3 | 5 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 100 | 119 | 109 | 5 |
+| TOTAL | | 100 | 120 | 108 | 5 |
 
 ## Legend
 
@@ -409,7 +409,7 @@ vsclaude has a strong design-token system and bundled themes. Theme selection (f
 | Follow OS system theme | Partial | The workbench.followSystemTheme setting makes App listen to matchMedia(prefers-color-scheme) and switch between cozy-dark and cozy-light (themeForSystem, unit tested). | No separate preferred dark and light theme selection. |
 | UI scale customization | Done | The workbench.uiScale setting (80 to 150 percent) zooms the whole app shell (App.tsx style zoom). | |
 | Monaco editor theme binding to app theme | Done | monaco-theme.ts defines a Monaco theme from each bundled theme's tokens and switches on settings change; EditorPanel and DiffView read the bound theme; e2e verifies the editor follows light and dark. | |
-| Custom theme file import/export | Missing | Spec describes JSON themes with validation; no import/export; plugin themes runtime-only. | No custom theme file create/import/export. |
+| Custom theme file import/export | Partial | Theme: Export shows the active theme as JSON (exportTheme over the resolved theme; currentTheme unit tested) with Copy. An e2e opens it. | No theme import or create flow yet; importing a custom theme needs runtime registry registration. |
 
 ## 5.17 Extensions and plugin ecosystem
 

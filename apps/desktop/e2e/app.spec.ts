@@ -561,6 +561,18 @@ test.describe('vsclaude shell', () => {
     await expect(tags.getByText(/open a folder under git to manage tags/i)).toBeVisible();
   });
 
+  test('the theme export shows the active theme as JSON', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('theme export');
+    await page.keyboard.press('Enter');
+    const modal = page.getByRole('dialog', { name: 'Export theme' });
+    await expect(modal).toBeVisible();
+    await expect(modal.getByRole('textbox', { name: 'Theme JSON' })).toHaveValue(/"id"/);
+  });
+
   test('the settings JSON editor opens with the current settings', async ({ page }) => {
     await page.goto('/');
     await page.getByText('Claude Code, in motion').click();

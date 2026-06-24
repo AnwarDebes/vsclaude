@@ -22,7 +22,18 @@ at-symbol navigation, hex view, notification toasts, inlay hints, menu bar,
 edit menu, minimap config, diff settings, process info, snippet browser,
 accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
-git stash manager.
+git stash manager, theme export.
+
+## Slice 79: theme export (done)
+
+Export the active theme as JSON (catalog 5.16).
+
+- **Helpers** (`lib/theme.ts`): currentTheme resolves the active theme; exportTheme
+  serializes it. applyTheme now reuses currentTheme. Unit tested.
+- **Modal** (`ThemeExportModal.tsx`): Theme: Export shows the JSON with Copy.
+- **Quality**: 398 unit tests (396 plus 2), typecheck, lint clean (no Rust change), the
+  renderer build succeeds, and 59 Playwright e2e pass (the new one opens the export and
+  sees the theme JSON). Matrix 5.16 theme-import/export row moved to Partial.
 
 ## Slice 78: git stash apply, drop, and a stash list view (done)
 

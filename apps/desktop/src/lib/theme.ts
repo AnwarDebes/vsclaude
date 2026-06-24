@@ -6,7 +6,7 @@
  * over the contract defaults by `@vsclaude/persistence` and stored in
  * localStorage. In the native app these settings live in the OS-backed store.
  */
-import { DEFAULT_SETTINGS, type AppSettings } from '@vsclaude/contracts';
+import { DEFAULT_SETTINGS, type AppSettings, type Theme } from '@vsclaude/contracts';
 import { resolveThemeForSettings, themeToCssVariables } from '@vsclaude/design-system';
 import { mergeSettings } from '@vsclaude/persistence';
 
@@ -34,12 +34,22 @@ export function saveAppSettings(settings: AppSettings): void {
   }
 }
 
-/** Resolve the active theme and apply its variables to the document root. */
-export function applyTheme(settings: AppSettings): void {
-  const theme = resolveThemeForSettings(settings.themeId, {
+/** The theme that the settings resolve to, after accessibility overrides. */
+export function currentTheme(settings: AppSettings): Theme {
+  return resolveThemeForSettings(settings.themeId, {
     reducedMotion: settings.reducedMotion,
     colorBlindSafe: settings.colorBlindSafe,
   });
+}
+
+/** The active theme serialized as JSON, for export. */
+export function exportTheme(settings: AppSettings): string {
+  return JSON.stringify(currentTheme(settings), null, 2);
+}
+
+/** Resolve the active theme and apply its variables to the document root. */
+export function applyTheme(settings: AppSettings): void {
+  const theme = currentTheme(settings);
   const root = document.documentElement;
   for (const [name, value] of Object.entries(themeToCssVariables(theme))) {
     root.style.setProperty(name, value);

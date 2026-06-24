@@ -49,6 +49,7 @@ import { GitStashModal } from './components/GitStashModal';
 import { gitLog, type GitCommit } from './lib/tauri';
 import { SettingsPanel } from './components/SettingsPanel';
 import { SettingsJsonModal } from './components/SettingsJsonModal';
+import { ThemeExportModal } from './components/ThemeExportModal';
 import { KeyboardShortcuts } from './components/KeyboardShortcuts';
 import { WelcomePanel } from './components/WelcomePanel';
 import { ReleaseNotes } from './components/ReleaseNotes';
@@ -145,6 +146,7 @@ export function App() {
   const [npmTasks, setNpmTasks] = useState<NpmTask[]>([]);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [settingsJsonOpen, setSettingsJsonOpen] = useState(false);
+  const [themeExportOpen, setThemeExportOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const [welcomeOpen, setWelcomeOpen] = useState(false);
   const [releaseOpen, setReleaseOpen] = useState(false);
@@ -633,6 +635,12 @@ export function App() {
       title: 'Settings: Open JSON',
       keywords: ['settings', 'json', 'edit', 'export', 'import', 'preferences'],
       run: () => setSettingsJsonOpen(true),
+    });
+    r.register({
+      id: 'theme-export',
+      title: 'Theme: Export',
+      keywords: ['theme', 'export', 'copy', 'json', 'color', 'appearance'],
+      run: () => setThemeExportOpen(true),
     });
     r.register({
       id: 'developer-process-info',
@@ -1193,6 +1201,7 @@ export function App() {
         onApply={(next) => setSettings(next)}
         onClose={() => setSettingsJsonOpen(false)}
       />
+      <ThemeExportModal open={themeExportOpen} settings={settings} onClose={() => setThemeExportOpen(false)} />
       <DiffReview open={reviewOpen} cwd="." onClose={() => setReviewOpen(false)} />
     </div>
   );
