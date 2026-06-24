@@ -5,12 +5,26 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus twenty-four parity slices, the last twenty-three
+2026-06-24. Session 3 (Step 0 plus twenty-five parity slices, the last twenty-four
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
 keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons, git
 stash, zen mode, breadcrumbs, tasks, activity-bar badges, output panel, untitled,
-more editor settings, markdown preview, document links.
+more editor settings, markdown preview, document links, color decorators.
+
+## Slice 25: color decorators (done)
+
+Color swatches and an inline picker (catalog 5.2).
+
+- **Detection** (`lib/colors.ts`): `findColors` parses #hex (3, 4, 6, 8 digits) and
+  rgb()/rgba() into normalized components with offsets, and `toHex` formats them
+  back. 8 unit tests.
+- **Provider**: monaco-setup.ts registers a DocumentColorProvider over findColors for
+  many languages, so colors show a swatch and an inline picker.
+- **Quality**: 304 unit tests (296 plus 8), typecheck, lint clean (no Rust change),
+  the renderer build succeeds, and 28 Playwright e2e pass (no regression). Matrix 5.2
+  color-decorators row moved to Partial. (Monaco swatches are not browser-e2e-able;
+  the pure parsing is unit tested.)
 
 ## Slice 24: document links (done)
 

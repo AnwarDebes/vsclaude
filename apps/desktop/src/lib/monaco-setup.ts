@@ -11,6 +11,7 @@ import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker';
 import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker';
 import { loader } from '@monaco-editor/react';
 import { findLinks } from './links';
+import { findColors, toHex } from './colors';
 
 declare global {
   interface Window {
@@ -73,6 +74,29 @@ for (const language of LINK_LANGUAGES) {
         }
       }
       return { links };
+    },
+  });
+}
+
+// Show a color swatch and an inline picker for #hex and rgb()/rgba() colors.
+const COLOR_LANGUAGES = ['css', 'scss', 'less', 'html', 'markdown', 'json', 'typescript', 'javascript'];
+for (const language of COLOR_LANGUAGES) {
+  monaco.languages.registerColorProvider(language, {
+    provideDocumentColors(model) {
+      const colors: monaco.languages.IColorInformation[] = [];
+      const lineCount = model.getLineCount();
+      for (let line = 1; line <= lineCount; line += 1) {
+        for (const match of findColors(model.getLineContent(line))) {
+          colors.push({
+            range: new monaco.Range(line, match.start + 1, line, match.end + 1),
+            color: match.color,
+          });
+        }
+      }
+      return colors;
+    },
+    provideColorPresentations(_model, colorInfo) {
+      return [{ label: toHex(colorInfo.color) }];
     },
   });
 }

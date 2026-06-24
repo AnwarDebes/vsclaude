@@ -16,7 +16,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | Section | Title | Done | Partial | Missing | Not planned |
 | --- | --- | --- | --- | --- | --- |
 | 5.1 | Text editing core | 8 | 14 | 5 | 0 |
-| 5.2 | Code intelligence (LSP language features) | 0 | 9 | 15 | 0 |
+| 5.2 | Code intelligence (LSP language features) | 0 | 10 | 14 | 0 |
 | 5.3 | Editor advanced surface | 7 | 4 | 1 | 0 |
 | 5.4 | Diff and merge | 3 | 3 | 2 | 1 |
 | 5.5 | Workbench layout and navigation | 6 | 11 | 10 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 8 | 6 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 1 | 7 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 3 | 5 | 0 |
-| TOTAL | | 78 | 92 | 154 | 5 |
+| TOTAL | | 78 | 93 | 153 | 5 |
 
 ## Legend
 
@@ -103,7 +103,7 @@ vsclaude implements a limited set of code intelligence features, relying on Mona
 | Folding and selection ranges from language | Partial | Monaco default folding enabled; no FoldingRangeProvider override. | No language-specific richer folding ranges. |
 | CodeLens | Missing | No CodeLensProvider or lens UI. | No CodeLens. |
 | Inlay hints | Missing | inlayHints unset; no provider. | No inlay hints. |
-| Color decorators and inline color picker | Missing | No ColorProvider; colorDecorators unset. | No color decorators or picker. |
+| Color decorators and inline color picker | Partial | monaco-setup.ts registers a DocumentColorProvider over findColors (lib/colors.ts) for many languages, showing a swatch and a picker for #hex and rgb()/rgba(). Unit tested. | Detection covers hex and rgb only (no hsl or named colors). |
 | Language servers (TS/JS, Python, Rust, JSON, HTML, CSS) and extensibility | Missing | No LSP bridge in src-tauri/src; spec 7.4 calls it a follow-up; WORKSPACE_AND_FILES.md defers LSP to A2. | No LSP integration; Python/Rust native support absent; A2 not started. |
 | Per-language config (comments, brackets, word patterns, on-enter) | Missing | No registerLanguageConfiguration calls. | No per-language behavior config. |
 | Language detection and manual mode switch | Partial | languageFor(path) maps extensions to Monaco ids; language prop override exists. | Extension-based only; no content detection; switch not in UI. |
