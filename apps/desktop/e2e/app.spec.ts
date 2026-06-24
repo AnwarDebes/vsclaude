@@ -256,6 +256,13 @@ test.describe('vsclaude shell', () => {
     await expect(page.getByRole('dialog', { name: 'Settings' })).toBeVisible();
   });
 
+  test('the explorer shows file-type icons', async ({ page }) => {
+    await page.goto('/');
+    const row = page.getByRole('button', { name: 'session.ts', exact: true });
+    await expect(row).toBeVisible();
+    await expect(row.locator('.file-icon svg')).toBeVisible();
+  });
+
   test('opens the diff review overlay from the command palette', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByText('vsclaude').first()).toBeVisible();

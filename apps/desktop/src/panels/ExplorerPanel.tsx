@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import type { FsEntry } from '@vsclaude/contracts';
 import { buildFileTree, collectDirectoryPaths, flattenVisible, toggleExpanded } from '@vsclaude/editor';
+import { FileIcon } from '../components/FileIcon';
 
 interface ExplorerPanelProps {
   files: FsEntry[];
@@ -41,8 +42,9 @@ export function ExplorerPanel({ files, activePath, openPath, onSelect }: Explore
                 }
               >
                 <span className="explorer-row__glyph" aria-hidden>
-                  {row.node.isDirectory ? (row.expanded ? '▾' : '▸') : '•'}
+                  {row.node.isDirectory ? (row.expanded ? '▾' : '▸') : ''}
                 </span>
+                <FileIcon name={row.node.name} isDirectory={row.node.isDirectory} />
                 <span className="explorer-row__name">{row.node.name}</span>
               </button>
             </li>

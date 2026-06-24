@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { flattenVisible, parentDir } from '@vsclaude/editor';
 import type { WorkspaceApi } from '../workspace/useWorkspace';
 import { ContextMenu, type MenuItem } from './ContextMenu';
+import { FileIcon } from './FileIcon';
 
 interface WorkspaceExplorerProps {
   ws: WorkspaceApi;
@@ -282,8 +283,9 @@ export function WorkspaceExplorer({ ws }: WorkspaceExplorerProps) {
                     onKeyDown={(e) => onRowKeyDown(e, index, isRoot)}
                   >
                     <span className="explorer-row__glyph" aria-hidden>
-                      {node.isDirectory ? (row.expanded ? '▾' : '▸') : '•'}
+                      {node.isDirectory ? (row.expanded ? '▾' : '▸') : ''}
                     </span>
+                    <FileIcon name={node.name} isDirectory={node.isDirectory} />
                     <span className="explorer-row__name">{node.name}</span>
                     {dirty ? (
                       <span className="explorer-row__dirty" aria-label="Unsaved changes" />

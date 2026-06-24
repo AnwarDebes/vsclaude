@@ -21,7 +21,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.4 | Diff and merge | 3 | 3 | 2 | 1 |
 | 5.5 | Workbench layout and navigation | 5 | 9 | 13 | 0 |
 | 5.6 | Quick open and command palette | 7 | 0 | 4 | 0 |
-| 5.7 | File explorer and workspace management | 6 | 1 | 7 | 3 |
+| 5.7 | File explorer and workspace management | 6 | 2 | 6 | 3 |
 | 5.8 | Search and replace across files | 5 | 1 | 6 | 0 |
 | 5.9 | Source control and git | 5 | 6 | 13 | 0 |
 | 5.10 | Integrated terminal | 3 | 3 | 13 | 0 |
@@ -30,7 +30,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.13 | Snippets and Emmet | 1 | 1 | 3 | 0 |
 | 5.14 | Settings and configuration | 2 | 2 | 5 | 1 |
 | 5.15 | Keybindings and keymaps | 3 | 2 | 6 | 0 |
-| 5.16 | Themes and appearance | 11 | 2 | 9 | 0 |
+| 5.16 | Themes and appearance | 11 | 3 | 8 | 0 |
 | 5.17 | Extensions and plugin ecosystem | 5 | 2 | 11 | 0 |
 | 5.18 | Notebooks | 0 | 0 | 6 | 0 |
 | 5.19 | Remote development and tunnels | 0 | 0 | 6 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 3 | 6 | 8 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 1 | 7 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 3 | 5 | 0 |
-| TOTAL | | 76 | 80 | 168 | 5 |
+| TOTAL | | 76 | 82 | 166 | 5 |
 
 ## Legend
 
@@ -220,7 +220,7 @@ Phase A1 is substantially complete: a working file tree, lazy loading, full CRUD
 | Open Editors section with dirty indicators and headers | Done | WorkspaceEditor.tsx tablist shows open docs, active class, dirty span, close button, roving keyboard nav. | |
 | New untitled file and language selection | Partial | App.tsx New File prompts a name (default untitled.ts); languageFor() infers language from extension. | No save-as language picker or immediate language selection. |
 | Recent projects/open roots persist and restore | Done | useWorkspace.ts localStorage RECENTS_KEY/ROOTS_KEY with load/persist; recents.ts with tests; App.tsx Open Recent. | |
-| File icon theme support | Missing | WorkspaceExplorer.tsx renders only Unicode glyphs for folder/file. | No Codicons or icon themes; file types not differentiated. |
+| File icon theme support | Partial | FileIcon.tsx draws per-type icons (fileIconSpec) in both explorers and the editor tabs, tinted by file type. | No selectable icon themes; a single built-in icon set. |
 | Tabs with active indicator and multi-document navigation | Done | WorkspaceEditor.tsx tablist with dirty indicator, close button, arrow/Home/End/Delete nav. | |
 | Cut/paste file operations | Missing | Context menu has Copy Path but no Cut or Paste. | No clipboard-based file cut/paste. |
 | Preview tabs (single-click to preview) | Not planned | EDITOR_SPEC.md 5.2 defers preview tabs; A1 uses persistent tabs. | Planned beyond A1; all files open as permanent tabs. |
@@ -393,7 +393,7 @@ vsclaude has a strong design-token system and bundled themes. Theme selection (f
 | Accessibility: reduced motion mode | Done | state.ts reducedMotion; SettingsBar.tsx toggle; resolve-theme.ts upgrades to high-contrast. | |
 | Accessibility: color-blind-safe theme | Done | design-tokens.ts colorBlindSafeTheme; state.ts flag; resolve-theme.ts prioritizes it. | |
 | CSS variable theme system | Done | css-variables.ts themeToCssVariables/themeToCssText; theme.ts applies to document root. | |
-| File icon themes | Missing | No fileIcon/iconTheme implementation in apps/desktop/src or contracts. | No icon theme support, picker, or registration. |
+| File icon themes | Partial | FileIcon.tsx and fileIconSpec render per-type file and folder icons in the tree and tabs (see 5.7). | No selectable or pluggable icon themes; one built-in set. |
 | Product icon themes | Missing | No productIcon references in source or design system. | No product icon theme or API. |
 | Token color customization and semantic token theming | Missing | design-system handles bundled themes; registration accepts full themes only; no tokenColor field. | No per-token overrides. |
 | Workbench color customization | Missing | No workbench customization UI or API; AppSettings has themeId only. | No workbench color overrides. |

@@ -5,10 +5,22 @@ continue seamlessly.
 
 ## Last updated
 
-2026-06-24. Session 3 (Step 0 plus thirteen parity slices, the last twelve
+2026-06-24. Session 3 (Step 0 plus fourteen parity slices, the last thirteen
 self-paced by an autonomous /loop): quick open, status bar, problems, search,
 source control, editor commands, diff editor, settings, Monaco theme binding,
-keyboard shortcuts, terminal tabs, activity bar, welcome page.
+keyboard shortcuts, terminal tabs, activity bar, welcome page, file icons.
+
+## Slice 14: file-type icons (done)
+
+Per-type icons in the tree and tabs (catalog 5.7 and 5.16).
+
+- **Icon mapping** (`lib/file-icons.ts`): `fileIconSpec` picks a folder, an image,
+  or a document icon and a color from a name. 4 unit tests.
+- **FileIcon** (`FileIcon.tsx`): draws the shape tinted by type. Wired into both
+  explorers (ExplorerPanel, WorkspaceExplorer) and the editor tabs (WorkspaceEditor).
+- **Quality**: 262 unit tests (258 plus 4), typecheck, lint clean (no Rust change),
+  the renderer build succeeds, and 21 Playwright e2e pass (the new one asserts a
+  file row shows an icon). Matrix 5.7 and 5.16 file-icon rows moved to Partial.
 
 ## Slice 13: the welcome page (done)
 

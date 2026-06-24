@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { basePathName } from '@vsclaude/editor';
 import type { WorkspaceApi } from '../workspace/useWorkspace';
 import { EditorPanel } from '../panels/EditorPanel';
+import { FileIcon } from './FileIcon';
 
 interface WorkspaceEditorProps {
   ws: WorkspaceApi;
@@ -69,6 +70,7 @@ export function WorkspaceEditor({ ws }: WorkspaceEditorProps) {
                 onClick={() => ws.setActivePath(doc.path)}
               >
                 {doc.dirty ? <span className="editor-tab__dirty" aria-hidden /> : null}
+                <FileIcon name={basePathName(doc.path)} isDirectory={false} />
                 {basePathName(doc.path)}
                 {doc.dirty ? <span className="sr-only">, unsaved changes</span> : null}
               </button>
