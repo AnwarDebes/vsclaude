@@ -35,10 +35,10 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.18 | Notebooks | 0 | 0 | 6 | 0 |
 | 5.19 | Remote development and tunnels | 0 | 0 | 6 | 0 |
 | 5.20 | Accessibility (full) | 1 | 12 | 3 | 0 |
-| 5.21 | Productivity and workspace lifecycle | 4 | 9 | 4 | 0 |
+| 5.21 | Productivity and workspace lifecycle | 5 | 8 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 3 | 5 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 94 | 122 | 112 | 5 |
+| TOTAL | | 95 | 121 | 112 | 5 |
 
 ## Legend
 
@@ -504,7 +504,7 @@ The repository implements a substantial subset of productivity features. Core ca
 | Notification center / history | Done | notifications.ts is a capped store (unit tested); NotificationCenter lists the history with dismiss and clear-all (Notifications: Show); NotificationToast shows a transient toast for the newest notification; a status-bar bell shows the count and opens the center. An e2e covers the toast and bell. | |
 | Progress indicators and cancellation | Partial | SettingsBar progress indicator; Pixie state transitions; session pause/restart in App.tsx. | No general progress API or cancellation token; cannot cancel in-flight operations. |
 | Output channels with log level filtering | Partial | OutputPanel.tsx renders an in-memory log channel (output-log.ts, capped, with Clear), opened by View: Output or Ctrl or Cmd plus Shift plus U; the app logs startup, errors, and task runs. | One channel only; no per-channel selection or log-level filtering. |
-| Problems panel with filtering | Partial | ProblemsPanel.tsx aggregates and groups diagnostics by file (see 5.5 and 5.2). | No filtering by severity or by text yet. |
+| Problems panel with filtering | Done | ProblemsPanel groups diagnostics by file and filters them by a text query and by severity toggles (filterDiagnostics in lib/problem-filter.ts, unit tested). An e2e filters to the empty state. | (No regex filter, but text and severity filtering are present.) |
 | Welcome page and Get Started walkthroughs | Partial | WelcomePanel.tsx is a Welcome page with Start actions (welcomeQuickActions), recent projects, and shortcut tips, opened by the Help: Welcome command. | No auto-show on first run and no interactive multi-step walkthroughs. |
 | What-is-new and release notes | Partial | ReleaseNotes.tsx is a What's New panel (RELEASE_NOTES data in release-notes.ts, unit tested for shape) opened by Help: Release Notes. | No version tracking or auto-show after an update. |
 | General progress API with cancellation tokens | Missing | No CancellationToken type or general progress callback; cancellation is task-specific. | No standardized progress/cancellation abstraction. |

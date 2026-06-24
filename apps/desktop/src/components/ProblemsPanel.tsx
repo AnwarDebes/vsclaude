@@ -1,5 +1,9 @@
+import { useMemo, useState } from 'react';
 import { groupDiagnosticsByResource, type Diagnostic, type DiagnosticSeverity } from '@vsclaude/core-shell';
 import { basePathName } from '@vsclaude/editor';
+import { FILTER_SEVERITIES, filterDiagnostics } from '../lib/problem-filter';
+
+const ALL_SEVERITIES: DiagnosticSeverity[] = ['error', 'warning', 'info', 'hint'];
 
 const SEVERITY_LABEL: Record<DiagnosticSeverity, string> = {
   error: 'Error',
@@ -21,14 +25,32 @@ export interface ProblemsPanelProps {
  * whether a problem came from a Monaco worker, a language server, or a task.
  */
 export function ProblemsPanel({ diagnostics, onOpen, onClose }: ProblemsPanelProps) {
-  const groups = groupDiagnosticsByResource(diagnostics);
+  const [text, setText] = useState('');
+  const [severities, setSeverities] = useState<ReadonlySet<DiagnosticSeverity>>(
+    () => new Set(ALL_SEVERITIES),
+  );
+
+  const filtered = useMemo(
+    () => filterDiagnostics(diagnostics, { text, severities }),
+    [diagnostics, text, severities],
+  );
+  const groups = groupDiagnosticsByResource(filtered);
+
+  const toggleSeverity = (severity: DiagnosticSeverity) => {
+    setSeverities((current) => {
+      const next = new Set(current);
+      if (next.has(severity)) next.delete(severity);
+      else next.add(severity);
+      return next;
+    });
+  };
 
   return (
     <section className="problems" role="region" aria-label="Problems">
       <header className="problems__header">
         <h2 className="problems__title">Problems</h2>
         <span className="problems__count" aria-hidden>
-          {diagnostics.length}
+          {filtered.length}
         </span>
         <button
           type="button"
@@ -39,9 +61,35 @@ export function ProblemsPanel({ diagnostics, onOpen, onClose }: ProblemsPanelPro
           Close
         </button>
       </header>
+      <div className="problems__filter">
+        <input
+          className="problems__search"
+          type="search"
+          aria-label="Filter problems"
+          placeholder="Filter by text"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+        />
+        {FILTER_SEVERITIES.map((severity) => (
+          <button
+            key={severity}
+            type="button"
+            className={`problems__sevtoggle problems__sevtoggle--${severity}`}
+            aria-pressed={severities.has(severity)}
+            aria-label={`Show ${SEVERITY_LABEL[severity]} problems`}
+            onClick={() => toggleSeverity(severity)}
+          >
+            {SEVERITY_LABEL[severity]}
+          </button>
+        ))}
+      </div>
       <div className="problems__body">
         {groups.length === 0 ? (
-          <p className="problems__empty">No problems have been detected.</p>
+          <p className="problems__empty">
+            {diagnostics.length === 0
+              ? 'No problems have been detected.'
+              : 'No problems match the filter.'}
+          </p>
         ) : (
           groups.map((group) => {
             const name = basePathName(group.resource) || group.resource;

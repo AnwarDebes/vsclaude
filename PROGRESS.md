@@ -20,7 +20,19 @@ tasks.json loading, git push/pull/fetch, commit amend, commit revert, on-save tr
 settings JSON editor, reset layout, task variables, task groups, files.exclude,
 at-symbol navigation, hex view, notification toasts, inlay hints, menu bar,
 edit menu, minimap config, diff settings, process info, snippet browser,
-accessibility help, git remotes.
+accessibility help, git remotes, problems filter.
+
+## Slice 71: problems panel filtering (done)
+
+Filter the Problems panel (catalog 5.21; the row moved to Done).
+
+- **Filter** (`lib/problem-filter.ts` filterDiagnostics): by a text query (message or file)
+  and by severity toggles. 4 unit tests.
+- **Panel**: ProblemsPanel gained a filter input and Error, Warning, and Info toggles; the
+  count reflects the filtered set, with a distinct empty state when a filter hides all.
+- **Quality**: 383 unit tests (379 plus 4), typecheck, lint clean (no Rust change), the
+  renderer build succeeds, and 54 Playwright e2e pass (the new one waits for a real
+  diagnostic then filters to the empty state). Matrix 5.21 problems-filter row moved to Done.
 
 ## Slice 70: git remotes (done)
 

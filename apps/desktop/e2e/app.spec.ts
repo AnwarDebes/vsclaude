@@ -256,6 +256,15 @@ test.describe('vsclaude shell', () => {
     await expect(page.getByRole('dialog', { name: 'Settings' })).toBeVisible();
   });
 
+  test('the problems panel filters by text', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('navigation', { name: 'Activity Bar' }).getByRole('button', { name: /problems/i }).click();
+    const panel = page.getByRole('region', { name: 'Problems' });
+    await expect(panel.locator('.problems__item').first()).toBeVisible({ timeout: 20_000 });
+    await panel.getByRole('searchbox', { name: 'Filter problems' }).fill('zzzznope');
+    await expect(panel.getByText('No problems match the filter.')).toBeVisible();
+  });
+
   test('the explorer hides excluded noise directories', async ({ page }) => {
     await page.goto('/');
     const explorer = page.getByRole('navigation', { name: 'Files' });

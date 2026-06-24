@@ -202,6 +202,43 @@ body {
 .problems__close {
   margin-left: auto;
 }
+.problems__filter {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 6px var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+}
+.problems__search {
+  flex: 1 1 auto;
+  min-width: 0;
+  font: inherit;
+  font-size: 0.82rem;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 3px 8px;
+}
+.problems__sevtoggle {
+  font: inherit;
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 2px 8px;
+  cursor: pointer;
+}
+.problems__sevtoggle[aria-pressed='true'] {
+  color: var(--color-text);
+  background: var(--color-surface-elevated);
+  border-color: var(--color-accent);
+}
+.problems__sevtoggle[aria-pressed='false'] {
+  opacity: 0.55;
+  text-decoration: line-through;
+}
 .problems__body {
   flex: 1 1 auto;
   overflow: auto;
