@@ -5,6 +5,7 @@ import {
   isMediaPath,
   isVideoPath,
   mediaKind,
+  mediaMime,
   VIDEO_EXTENSIONS,
 } from '../lib/media';
 
@@ -57,5 +58,18 @@ describe('mediaKind', () => {
     expect(mediaKind('movie.ogv')).toBe('video');
     expect(isVideoPath('song.ogg')).toBe(false);
     expect(isAudioPath('movie.ogv')).toBe(false);
+  });
+});
+
+describe('mediaMime', () => {
+  it('maps audio and video extensions to MIME types', () => {
+    expect(mediaMime('chime.wav')).toBe('audio/wav');
+    expect(mediaMime('track.MP3')).toBe('audio/mpeg');
+    expect(mediaMime('clip.mp4')).toBe('video/mp4');
+    expect(mediaMime('movie.ogv')).toBe('video/ogg');
+  });
+
+  it('falls back to a generic binary type for unknown extensions', () => {
+    expect(mediaMime('mystery.xyz')).toBe('application/octet-stream');
   });
 });

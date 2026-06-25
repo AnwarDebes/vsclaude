@@ -71,7 +71,7 @@ import { MarkdownPreview, type MarkdownTarget } from './components/MarkdownPrevi
 import { ImagePreview, type ImageTarget } from './components/ImagePreview';
 import { isImagePath, isSvgPath, svgDataUrl, rasterImageMime } from './lib/preview';
 import { MediaPlayer, type MediaTarget } from './components/MediaPlayer';
-import { isMediaPath, mediaKind } from './lib/media';
+import { isMediaPath, mediaKind, mediaMime } from './lib/media';
 import { HexView, type HexTarget } from './components/HexView';
 import { ProcessInfoModal } from './components/ProcessInfoModal';
 import { AccessibilityHelp } from './components/AccessibilityHelp';
@@ -665,7 +665,7 @@ export function App() {
       id: 'media-open',
       title: 'Media: Open Player',
       keywords: ['media', 'audio', 'video', 'play', 'sound'],
-      run: () => {
+      run: async () => {
         const path = hasWorkspace ? ws.activePath : openFile;
         const kind = path ? mediaKind(path) : null;
         if (!path || !kind || !isMediaPath(path)) {
@@ -675,14 +675,25 @@ export function App() {
         const content = hasWorkspace
           ? ws.activeDoc?.draft ?? ''
           : editedContents[openFile] ?? demoContentFor(openFile);
-        // Media is binary; the source must already be a data URL. The native file
-        // read is text-only (read_to_string), so a real media file is not yet
-        // playable: the browser demo stores a data URL.
-        if (!content.startsWith('data:')) {
-          addNotification('info', 'Native media playback is not wired yet.');
+        // Media is binary. The browser demo stores a data URL; natively we read the
+        // file's bytes as base64 (fs_read_file_base64) and wrap them in a data URL the
+        // CSP's media-src allows.
+        let src: string;
+        if (content.startsWith('data:')) {
+          src = content;
+        } else if (isTauri()) {
+          try {
+            const base64 = await readFileBase64(path);
+            src = `data:${mediaMime(path)};base64,${base64}`;
+          } catch {
+            addNotification('error', 'Could not read the media file.');
+            return;
+          }
+        } else {
+          addNotification('info', 'Open an audio or video file to play it.');
           return;
         }
-        setMediaTarget({ name: basePathName(path), src: content, kind });
+        setMediaTarget({ name: basePathName(path), src, kind });
       },
     });
     r.register({

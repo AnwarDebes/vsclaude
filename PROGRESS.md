@@ -24,6 +24,22 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 103: native media playback (done)
+
+Make audio/video playback work in the native app, completing the binary-preview trio with slice
+101's image read (catalog 5.22).
+
+- lib/media.ts: mediaMime maps audio/video extensions to MIME types (unit tested).
+- App: the Media: Open Player command, natively, reads the file's bytes (fs_read_file_base64 from
+  slice 101) and builds a data:<mime>;base64,... URL; the browser demo still uses its stored data URL.
+- CSP (tauri.conf.json): added media-src 'self' data: asset: https://asset.localhost, parity with the
+  existing img-src, so a data: media URL is permitted in the packaged app (a minimal, parity-driven
+  loosening; data: media is the same risk class as the already-allowed data: images).
+- Quality: a mediaMime unit test; the existing WAV media e2e covers the MediaPlayer via the data-URL
+  path; typecheck, lint clean; build and full e2e pass. Matrix 5.22 "Audio/video media player" stays
+  Partial (no playlist, captions, or playback-speed control) with the native-playback gap closed.
+  No count change (114/112/102).
+
 ## Slice 102: breadcrumb folder dropdowns (done)
 
 Add VS Code's breadcrumb folder pickers: click a folder segment to jump to a sibling (catalog 5.5).

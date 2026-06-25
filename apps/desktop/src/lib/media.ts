@@ -31,3 +31,23 @@ export function mediaKind(path: string): MediaKind | null {
   if (isVideoPath(path)) return 'video';
   return null;
 }
+
+const MEDIA_MIME: Record<string, string> = {
+  mp3: 'audio/mpeg',
+  wav: 'audio/wav',
+  ogg: 'audio/ogg',
+  flac: 'audio/flac',
+  aac: 'audio/aac',
+  m4a: 'audio/mp4',
+  mp4: 'video/mp4',
+  webm: 'video/webm',
+  ogv: 'video/ogg',
+  mov: 'video/quicktime',
+  mkv: 'video/x-matroska',
+};
+
+/** The MIME type for a media path, for building a data URL from its bytes. */
+export function mediaMime(path: string): string {
+  const ext = path.split('.').pop()?.toLowerCase() ?? '';
+  return MEDIA_MIME[ext] ?? 'application/octet-stream';
+}
