@@ -24,6 +24,20 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 94: clickable status bar (EOL picker and indentation) (done)
+
+Make the status bar fully interactive like VS Code, building on the slice 93 language picker.
+
+- **EOL picker**: the editor bridge gains registerEolSetter / setEditorEol; EditorPanel
+  registers a live model.pushEOL setter. The status-bar EOL item is clickable and opens a
+  Change End of Line picker (LF / CRLF) that converts the line endings live.
+- **Indentation**: the status-bar indentation item is clickable and opens the Convert
+  Indentation actions.
+- **Quality**: bridge unit tests for setEditorEol (happy path, no-op, clear); an e2e clicks the
+  EOL item and converts the file to CRLF; typecheck, lint clean; build and full e2e pass.
+- Matrix: 5.1 EOL and 5.5 status-bar rows stay Partial (no platform-default EOL; no encoding
+  picker) with narrowed gaps. Honest: no count change, real interactivity gain (110/116/102).
+
 ## Slice 93: language mode switcher and content detection (done)
 
 Make the editor's language explicit and switchable, the way VS Code's status bar is (catalog 5.2).

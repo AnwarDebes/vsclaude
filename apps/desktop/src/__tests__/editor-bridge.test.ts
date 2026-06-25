@@ -4,9 +4,11 @@ import {
   getActiveEditor,
   getEditorStatus,
   gotoLine,
+  registerEolSetter,
   registerLanguageSetter,
   runEditorAction,
   setActiveEditor,
+  setEditorEol,
   setEditorLanguage,
   setEditorStatus,
   subscribeEditorStatus,
@@ -186,5 +188,34 @@ describe('setEditorLanguage', () => {
     registerLanguageSetter(vi.fn());
     registerLanguageSetter(null);
     expect(setEditorLanguage('css')).toBe(false);
+  });
+});
+
+describe('setEditorEol', () => {
+  beforeEach(() => {
+    registerEolSetter(null);
+    const { editor } = fakeEditor();
+    setActiveEditor(editor);
+    clearActiveEditor(editor);
+  });
+
+  it('returns false when no eol setter is registered', () => {
+    expect(setEditorEol('CRLF')).toBe(false);
+  });
+
+  it('invokes the registered setter, focuses the editor, and returns true', () => {
+    const setter = vi.fn();
+    registerEolSetter(setter);
+    const { editor, calls } = fakeEditor();
+    setActiveEditor(editor);
+    expect(setEditorEol('CRLF')).toBe(true);
+    expect(setter).toHaveBeenCalledWith('CRLF');
+    expect(calls.focused).toBe(1);
+  });
+
+  it('clears the setter when passed null, restoring the no-op path', () => {
+    registerEolSetter(vi.fn());
+    registerEolSetter(null);
+    expect(setEditorEol('LF')).toBe(false);
   });
 });

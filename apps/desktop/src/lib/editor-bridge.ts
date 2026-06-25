@@ -41,6 +41,7 @@ export interface EditorStatus {
 let activeEditor: BridgeEditor | null = null;
 let editorStatus: EditorStatus | null = null;
 let languageSetter: ((languageId: string) => void) | null = null;
+let eolSetter: ((eol: 'LF' | 'CRLF') => void) | null = null;
 const statusListeners = new Set<() => void>();
 
 function emitStatus(): void {
@@ -98,6 +99,25 @@ export function registerLanguageSetter(setter: ((languageId: string) => void) | 
 export function setEditorLanguage(languageId: string): boolean {
   if (!languageSetter) return false;
   languageSetter(languageId);
+  activeEditor?.focus();
+  return true;
+}
+
+/**
+ * Register the function that changes the active editor's end-of-line sequence (it
+ * needs the Monaco namespace, which lives in the EditorPanel). Pass null on unmount.
+ */
+export function registerEolSetter(setter: ((eol: 'LF' | 'CRLF') => void) | null): void {
+  eolSetter = setter;
+}
+
+/**
+ * Change the active editor's end-of-line sequence live. Returns true when an
+ * editor was available to change, false otherwise (so a command is a no-op).
+ */
+export function setEditorEol(eol: 'LF' | 'CRLF'): boolean {
+  if (!eolSetter) return false;
+  eolSetter(eol);
   activeEditor?.focus();
   return true;
 }

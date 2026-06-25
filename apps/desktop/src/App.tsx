@@ -18,7 +18,13 @@ import { useSession } from './session/useSession';
 import { useLiveProvider } from './session/useLiveProvider';
 import { useWorkspace, loadRootPaths } from './workspace/useWorkspace';
 import { useFileIndex } from './workspace/useFileIndex';
-import { gotoLine, insertSnippet, runEditorAction, setEditorLanguage } from './lib/editor-bridge';
+import {
+  gotoLine,
+  insertSnippet,
+  runEditorAction,
+  setEditorLanguage,
+  setEditorEol,
+} from './lib/editor-bridge';
 import { SnippetsModal } from './components/SnippetsModal';
 import { setEditorSettings } from './lib/editor-settings';
 import { applyMonacoTheme } from './lib/monaco-theme';
@@ -337,16 +343,20 @@ export function App() {
         text: editorStatus.indent.insertSpaces
           ? `Spaces: ${editorStatus.indent.tabSize}`
           : `Tab Size: ${editorStatus.indent.tabSize}`,
+        tooltip: 'Change Indentation',
+        command: 'change-indentation',
         ariaLabel: editorStatus.indent.insertSpaces
-          ? `Indentation, ${editorStatus.indent.tabSize} spaces`
-          : `Indentation, tab size ${editorStatus.indent.tabSize}`,
+          ? `Indentation, ${editorStatus.indent.tabSize} spaces. Change indentation.`
+          : `Indentation, tab size ${editorStatus.indent.tabSize}. Change indentation.`,
       });
       items.push({
         id: 'editor.eol',
         side: 'right',
         priority: 30,
         text: editorStatus.eol,
-        ariaLabel: `End of line ${editorStatus.eol}`,
+        tooltip: 'Select End of Line Sequence',
+        command: 'change-eol',
+        ariaLabel: `End of line ${editorStatus.eol}. Change end of line sequence.`,
       });
       items.push({
         id: 'editor.language',
@@ -766,6 +776,31 @@ export function App() {
         },
       });
     }
+    // Change End of Line: a picker plus a command per sequence, reached by clicking
+    // the EOL item in the status bar.
+    r.register({
+      id: 'change-eol',
+      title: 'Change End of Line Sequence',
+      keywords: ['eol', 'end of line', 'line ending', 'lf', 'crlf', 'newline'],
+      run: () => openPalette('commands', 'End of Line:'),
+    });
+    for (const eol of ['LF', 'CRLF'] as const) {
+      r.register({
+        id: `eol-${eol.toLowerCase()}`,
+        title: `End of Line: ${eol}`,
+        keywords: ['eol', 'end of line', 'line ending', eol],
+        run: () => {
+          if (!setEditorEol(eol)) addNotification('info', 'Open a file to change its line endings.');
+        },
+      });
+    }
+    // Indentation: clicking the status-bar indent item opens the conversion actions.
+    r.register({
+      id: 'change-indentation',
+      title: 'Change Indentation',
+      keywords: ['indent', 'indentation', 'spaces', 'tabs'],
+      run: () => openPalette('commands', 'Convert Indentation'),
+    });
     r.register({
       id: 'view-narration-log',
       title: 'View: Narration Log',

@@ -6,6 +6,7 @@ import {
   clearActiveEditor,
   setEditorStatus,
   registerLanguageSetter,
+  registerEolSetter,
   type BridgeEditor,
 } from '../lib/editor-bridge';
 import {
@@ -61,6 +62,17 @@ export function EditorPanel({ path, value, language, onChange, onSave }: EditorP
       const model = editor.getModel();
       if (model) monacoInstance.editor.setModelLanguage(model, languageId);
     });
+    // Let the status-bar End of Line picker convert this editor's line endings live.
+    registerEolSetter((eol) => {
+      const model = editor.getModel();
+      if (model) {
+        model.pushEOL(
+          eol === 'CRLF'
+            ? monacoInstance.editor.EndOfLineSequence.CRLF
+            : monacoInstance.editor.EndOfLineSequence.LF,
+        );
+      }
+    });
 
     // Publish a status snapshot for the status bar and keep it live.
     const publishStatus = () => {
@@ -99,6 +111,7 @@ export function EditorPanel({ path, value, language, onChange, onSave }: EditorP
       if (editorRef.current) clearActiveEditor(editorRef.current);
       setEditorStatus(null);
       registerLanguageSetter(null);
+      registerEolSetter(null);
     },
     [],
   );

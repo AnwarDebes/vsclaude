@@ -834,4 +834,19 @@ test.describe('vsclaude shell', () => {
     // The editor language switched live, so the status bar now reads JSON.
     await expect(page.getByRole('button', { name: /^Language JSON/i })).toBeVisible();
   });
+
+  test('the status bar changes the end of line sequence', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    // Demo files use LF, so the status bar shows LF and is clickable.
+    const eolItem = page.getByRole('button', { name: /^End of line LF/i });
+    await expect(eolItem).toBeVisible();
+    await eolItem.click();
+    // The palette opens filtered to End of Line commands; pick CRLF.
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('End of Line: CRLF');
+    await page.keyboard.press('Enter');
+    // The conversion ran live, so the status bar now reads CRLF.
+    await expect(page.getByRole('button', { name: /^End of line CRLF/i })).toBeVisible();
+  });
 });
