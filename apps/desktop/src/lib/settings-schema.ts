@@ -82,6 +82,15 @@ export const SETTINGS_SCHEMA: readonly SettingDef[] = [
     set: (s, v) => ({ ...s, editor: { ...s.editor, insertSpaces: Boolean(v) } }),
   },
   {
+    id: 'editor.detectIndentation',
+    category: 'Editor',
+    label: 'Detect Indentation',
+    description: 'Auto-detect tab size and spaces-vs-tabs from the file content on open.',
+    control: { kind: 'boolean' },
+    get: (s) => s.editor.detectIndentation,
+    set: (s, v) => ({ ...s, editor: { ...s.editor, detectIndentation: Boolean(v) } }),
+  },
+  {
     id: 'editor.wordWrap',
     category: 'Editor',
     label: 'Word Wrap',
@@ -330,6 +339,15 @@ export const SETTINGS_SCHEMA: readonly SettingDef[] = [
     control: { kind: 'number', min: 0, max: 10000 },
     get: (s) => s.editor.diffMaxComputationTime,
     set: (s, v) => ({ ...s, editor: { ...s.editor, diffMaxComputationTime: Number(v) } }),
+  },
+  {
+    id: 'editor.indentGuides',
+    category: 'Editor',
+    label: 'Indentation Guides',
+    description: 'Draw vertical indentation guides.',
+    control: { kind: 'boolean' },
+    get: (s) => s.editor.indentGuides,
+    set: (s, v) => ({ ...s, editor: { ...s.editor, indentGuides: Boolean(v) } }),
   },
   {
     id: 'editor.bracketPairGuides',

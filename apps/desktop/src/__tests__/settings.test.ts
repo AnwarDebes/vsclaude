@@ -21,6 +21,7 @@ describe('editorSettingsToMonaco', () => {
       fontLigatures: true,
       tabSize: 2,
       insertSpaces: true,
+      detectIndentation: true,
       wordWrap: 'off',
       minimap: { enabled: true, side: 'right', size: 'proportional' },
       lineNumbers: 'on',
@@ -36,13 +37,23 @@ describe('editorSettingsToMonaco', () => {
       smoothScrolling: true,
       fastScrollSensitivity: 5,
       scrollBeyondLastLine: false,
-      guides: { bracketPairs: true },
+      guides: { bracketPairs: true, indentation: true },
       bracketPairColorization: { enabled: true },
       autoClosingBrackets: 'languageDefined',
       autoClosingQuotes: 'languageDefined',
       autoSurround: 'languageDefined',
       matchBrackets: 'always',
     });
+  });
+
+  it('maps the indentation settings', () => {
+    const mapped = editorSettingsToMonaco({
+      ...DEFAULT_SETTINGS.editor,
+      detectIndentation: false,
+      indentGuides: false,
+    });
+    expect(mapped.detectIndentation).toBe(false);
+    expect(mapped.guides).toEqual({ bracketPairs: true, indentation: false });
   });
 
   it('maps the cursor and scrolling settings', () => {
@@ -176,6 +187,12 @@ describe('filterSettings', () => {
     expect(ids).toContain('editor.autoClosingQuotes');
     expect(ids).toContain('editor.autoSurround');
     expect(ids).toContain('editor.matchBrackets');
+  });
+
+  it('exposes the indentation settings', () => {
+    const ids = SETTINGS_SCHEMA.map((d) => d.id);
+    expect(ids).toContain('editor.detectIndentation');
+    expect(ids).toContain('editor.indentGuides');
   });
 
   it('exposes the cursor and scrolling settings', () => {

@@ -92,6 +92,8 @@ export interface EditorSettings {
   fontLigatures: boolean;
   tabSize: number;
   insertSpaces: boolean;
+  /** Auto-detect tab size and spaces-vs-tabs from the file content on open. */
+  detectIndentation: boolean;
   wordWrap: boolean;
   minimap: boolean;
   /** Which side of the editor the minimap sits on. */
@@ -126,6 +128,8 @@ export interface EditorSettings {
   diffAlgorithm: 'legacy' | 'advanced';
   /** Cap (in milliseconds) on diff computation, or 0 for no cap. */
   diffMaxComputationTime: number;
+  /** Draw indentation guides. */
+  indentGuides: boolean;
   /** Draw vertical guides for matching bracket pairs. */
   bracketPairGuides: boolean;
   /** Colorize matching bracket pairs by nesting depth. */
@@ -178,6 +182,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
     fontLigatures: true,
     tabSize: 2,
     insertSpaces: true,
+    detectIndentation: true,
     wordWrap: false,
     minimap: true,
     minimapSide: 'right',
@@ -198,6 +203,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
     diffIgnoreTrimWhitespace: true,
     diffAlgorithm: 'advanced',
     diffMaxComputationTime: 5000,
+    indentGuides: true,
     bracketPairGuides: true,
     bracketPairColorization: true,
     autoClosingBrackets: 'languageDefined',

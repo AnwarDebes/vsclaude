@@ -27,6 +27,8 @@ export const EDITOR_COMMANDS: readonly EditorCommandDef[] = [
   { id: 'editor.copyLineDown', title: 'Copy Line Down', actionId: 'editor.action.copyLinesDownAction', keybinding: 'Shift+Alt+Down', keywords: ['line', 'duplicate'] },
   { id: 'editor.indentLines', title: 'Indent Line', actionId: 'editor.action.indentLines', keywords: ['indent'] },
   { id: 'editor.outdentLines', title: 'Outdent Line', actionId: 'editor.action.outdentLines', keywords: ['outdent', 'dedent'] },
+  { id: 'editor.indentationToSpaces', title: 'Convert Indentation to Spaces', actionId: 'editor.action.indentationToSpaces', keywords: ['indent', 'spaces', 'convert'] },
+  { id: 'editor.indentationToTabs', title: 'Convert Indentation to Tabs', actionId: 'editor.action.indentationToTabs', keywords: ['indent', 'tabs', 'convert'] },
   { id: 'editor.joinLines', title: 'Join Lines', actionId: 'editor.action.joinLines', keywords: ['line', 'merge'] },
   { id: 'editor.insertLineAbove', title: 'Insert Line Above', actionId: 'editor.action.insertLineBefore', keybinding: 'Ctrl+Shift+Enter', keywords: ['line'] },
   { id: 'editor.insertLineBelow', title: 'Insert Line Below', actionId: 'editor.action.insertLineAfter', keybinding: 'Ctrl+Enter', keywords: ['line'] },

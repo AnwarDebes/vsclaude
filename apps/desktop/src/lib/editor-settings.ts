@@ -12,6 +12,7 @@ export interface MonacoEditorOptions {
   fontLigatures: boolean;
   tabSize: number;
   insertSpaces: boolean;
+  detectIndentation: boolean;
   wordWrap: 'on' | 'off';
   minimap: { enabled: boolean; side: 'left' | 'right'; size: 'proportional' | 'fill' | 'fit' };
   lineNumbers: 'on' | 'off' | 'relative';
@@ -27,7 +28,7 @@ export interface MonacoEditorOptions {
   smoothScrolling: boolean;
   fastScrollSensitivity: number;
   scrollBeyondLastLine: boolean;
-  guides: { bracketPairs: boolean };
+  guides: { bracketPairs: boolean; indentation: boolean };
   bracketPairColorization: { enabled: boolean };
   autoClosingBrackets: 'always' | 'languageDefined' | 'beforeWhitespace' | 'never';
   autoClosingQuotes: 'always' | 'languageDefined' | 'beforeWhitespace' | 'never';
@@ -43,6 +44,7 @@ export function editorSettingsToMonaco(settings: EditorSettings): MonacoEditorOp
     fontLigatures: settings.fontLigatures,
     tabSize: settings.tabSize,
     insertSpaces: settings.insertSpaces,
+    detectIndentation: settings.detectIndentation,
     wordWrap: settings.wordWrap ? 'on' : 'off',
     minimap: { enabled: settings.minimap, side: settings.minimapSide, size: settings.minimapSize },
     lineNumbers: settings.lineNumbers,
@@ -58,7 +60,7 @@ export function editorSettingsToMonaco(settings: EditorSettings): MonacoEditorOp
     smoothScrolling: settings.smoothScrolling,
     fastScrollSensitivity: settings.fastScrollSensitivity,
     scrollBeyondLastLine: settings.scrollBeyondLastLine,
-    guides: { bracketPairs: settings.bracketPairGuides },
+    guides: { bracketPairs: settings.bracketPairGuides, indentation: settings.indentGuides },
     bracketPairColorization: { enabled: settings.bracketPairColorization },
     autoClosingBrackets: settings.autoClosingBrackets,
     autoClosingQuotes: settings.autoClosingQuotes,

@@ -24,6 +24,19 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 87: complete indentation support (done)
+
+Close out the editor's indentation capability (catalog 5.1).
+
+- **Settings**: `detectIndentation` and `indentGuides` join EditorSettings and
+  DEFAULT_SETTINGS, map through editorSettingsToMonaco (the latter as guides.indentation),
+  and appear in the Settings panel. tabSize and insertSpaces already existed.
+- **Commands**: Convert Indentation to Spaces and Convert Indentation to Tabs join
+  EDITOR_COMMANDS, running Monaco's indentationToSpaces/indentationToTabs on the active editor.
+- **Quality**: editorSettingsToMonaco unit tests updated (defaults plus a focused mapping
+  test); schema exposure tested; typecheck, lint, build, build:packages clean; e2e unaffected.
+  Matrix 5.1 indentation row moved Partial to Done (Done crossed to 106; 5.1 now 17/10/0).
+
 ## Slice 86: explicit cursor and scrolling editor settings (done)
 
 Make the editor's cursor and scrolling behaviors explicit and configurable (catalog 5.1).
