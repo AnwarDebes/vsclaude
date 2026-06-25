@@ -215,6 +215,24 @@ export function App() {
     [openFileFromPalette],
   );
 
+  // Open a workspace symbol (# in the palette) and jump to its line. Same-file jumps
+  // are immediate; cross-file jumps stash the target line and let EditorPanel reveal
+  // it once the new model is shown (revealLine below), avoiding the model-swap race.
+  const [revealTarget, setRevealTarget] = useState<{ path: string; line: number } | null>(null);
+  const openSymbol = useCallback(
+    (path: string, line: number) => {
+      if (path === openFile) {
+        gotoLine(line, 1);
+      } else {
+        setRevealTarget({ path, line });
+        openFileFromPalette(path);
+      }
+    },
+    [openFile, openFileFromPalette],
+  );
+  // Stable so EditorPanel's reveal effect does not re-run every render.
+  const clearRevealTarget = useCallback(() => setRevealTarget(null), []);
+
   // Open a Source Control file's diff: its committed version against the working
   // tree. Added or untracked files have no HEAD side; deleted files have no
   // working side (diffSidesForCode decides), and a missing side reads as empty.
@@ -1175,6 +1193,8 @@ export function App() {
                       ? detectLanguageFromContent(content) ?? undefined
                       : undefined
                   }
+                  revealLine={revealTarget?.path === openFile ? revealTarget.line : undefined}
+                  onRevealed={clearRevealTarget}
                   onChange={(v) => setEditedContents((m) => ({ ...m, [openFile]: v }))}
                   onSave={(v) => setEditedContents((m) => ({ ...m, [openFile]: v }))}
                 />
@@ -1268,6 +1288,7 @@ export function App() {
         onGotoSymbol={() => runEditorAction('editor.action.quickOutline')}
         editorSymbols={editorSymbols}
         workspaceSymbols={workspaceSymbolIndex}
+        onOpenSymbol={openSymbol}
         onRefreshFiles={hasWorkspace ? fileIndex.refresh : undefined}
       />
       {settingsOpen ? (

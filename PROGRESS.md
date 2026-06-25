@@ -24,6 +24,22 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 96: workspace symbol (#) jumps to the line (done)
+
+Make # workspace symbol search jump to the exact symbol, not just open the file (catalog 5.6),
+completing the symbol-navigation story started by slice 95's @.
+
+- CommandPalette # mode calls a new onOpenSymbol(file, line) instead of just onOpenFile.
+- App's openSymbol jumps immediately for same-file targets, and for cross-file targets stashes
+  a revealTarget and lets EditorPanel reveal the line once the new model is shown. The new
+  EditorPanel revealLine prop reveals in an effect that runs after the child Editor swaps the
+  model on a path change, so the jump is race-free (no model-swap race). The reveal is one-shot:
+  EditorPanel calls onRevealed and App clears revealTarget, so a later normal re-open of that file
+  does not re-jump or steal focus (caught by the adversarial review).
+- Quality: an e2e types #isExpired and asserts session.ts opens at line 7; typecheck, lint clean;
+  build and full e2e pass. Matrix 5.6 "Workspace symbols search with #" stays Partial (the index
+  is still built from demo file contents only) with the jump gap closed. No count change (111/115/102).
+
 ## Slice 95: inline Go to Symbol with @ (done)
 
 Make the palette's @ Go to Symbol list the active file's symbols inline and jump to them,

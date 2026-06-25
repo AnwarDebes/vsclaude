@@ -22,6 +22,10 @@ interface EditorPanelProps {
   path?: string;
   value: string;
   language?: string;
+  /** One-based line to reveal once this file is shown (for cross-file symbol jumps). */
+  revealLine?: number;
+  /** Called after a revealLine has been applied, so the caller can clear it (one-shot). */
+  onRevealed?: () => void;
   onChange?: (value: string) => void;
   onSave?: (value: string) => void;
 }
@@ -32,7 +36,15 @@ interface EditorPanelProps {
  * value is read from and written to disk through the Rust core; in the browser it
  * edits in memory.
  */
-export function EditorPanel({ path, value, language, onChange, onSave }: EditorPanelProps) {
+export function EditorPanel({
+  path,
+  value,
+  language,
+  revealLine,
+  onRevealed,
+  onChange,
+  onSave,
+}: EditorPanelProps) {
   const editorRef = useRef<BridgeEditor | null>(null);
   const settings = useSyncExternalStore(subscribeEditorSettings, getEditorSettings, getEditorSettings);
   const monacoTheme = useMonacoTheme();
@@ -115,6 +127,21 @@ export function EditorPanel({ path, value, language, onChange, onSave }: EditorP
     },
     [],
   );
+
+  // Reveal a requested line once this file is shown. The child Editor swaps the
+  // model on a path change before this (parent) effect runs, so a cross-file symbol
+  // jump lands in the right document rather than racing the model swap.
+  useEffect(() => {
+    if (revealLine == null) return;
+    const editor = editorRef.current;
+    if (!editor) return;
+    editor.revealLineInCenter(revealLine);
+    editor.setPosition({ lineNumber: revealLine, column: 1 });
+    editor.focus();
+    // One-shot: clear the target so a later normal re-open of this file does not
+    // re-jump to the stale symbol line or steal focus.
+    onRevealed?.();
+  }, [revealLine, path, onRevealed]);
 
   return (
     <div className="editor-panel">

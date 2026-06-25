@@ -34,6 +34,8 @@ export interface CommandPaletteProps {
   editorSymbols?: readonly OutlineItem[];
   /** The workspace-symbol index for `#` mode. */
   workspaceSymbols?: readonly WorkspaceSymbol[];
+  /** Open a workspace symbol's file and jump to its line (`#` mode). */
+  onOpenSymbol?: (path: string, line: number) => void;
   /** Called when file mode opens, so the index can be refreshed. */
   onRefreshFiles?: () => void;
 }
@@ -66,6 +68,7 @@ export function CommandPalette({
   onGotoSymbol,
   editorSymbols = [],
   workspaceSymbols = [],
+  onOpenSymbol,
   onRefreshFiles,
 }: CommandPaletteProps) {
   const [open, setOpen] = useState(false);
@@ -170,8 +173,9 @@ export function CommandPalette({
       return filterWorkspaceSymbols(workspaceSymbols, parsed.query, LIMIT).map((symbol) => ({
         id: `${symbol.file}:${symbol.line}:${symbol.name}`,
         label: symbol.name,
-        description: symbol.file,
-        run: () => onOpenFile?.(symbol.file),
+        description: `${symbol.file}:${symbol.line}`,
+        run: () =>
+          onOpenSymbol ? onOpenSymbol(symbol.file, symbol.line) : onOpenFile?.(symbol.file),
       }));
     }
     // Symbol mode: list the active file's outline symbols inline and jump to the
@@ -210,7 +214,17 @@ export function CommandPalette({
       ];
     }
     return [];
-  }, [parsed, registry, files, onOpenFile, onGotoLine, onGotoSymbol, editorSymbols, workspaceSymbols]);
+  }, [
+    parsed,
+    registry,
+    files,
+    onOpenFile,
+    onGotoLine,
+    onGotoSymbol,
+    editorSymbols,
+    workspaceSymbols,
+    onOpenSymbol,
+  ]);
 
   if (!open) return null;
 

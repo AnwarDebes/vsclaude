@@ -861,4 +861,18 @@ test.describe('vsclaude shell', () => {
     // The editor jumped to the symbol, so the cursor status reads line 4.
     await expect(page.getByRole('button', { name: /^Line 4,/i })).toBeVisible();
   });
+
+  test('the command palette jumps to a workspace symbol with #', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    // isExpired is defined in session.ts at line 7; the default open file is login-form.tsx.
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('#isExpired');
+    await expect(palette.getByRole('option', { name: /isExpired/ })).toBeVisible();
+    await page.keyboard.press('Enter');
+    // The cross-file jump opened session.ts and revealed the symbol's line.
+    await expect(page.getByText('session.ts').first()).toBeVisible();
+    await expect(page.getByRole('button', { name: /^Line 7,/i })).toBeVisible();
+  });
 });
