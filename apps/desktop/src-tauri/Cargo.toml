@@ -35,6 +35,8 @@ ignore = "0.4"
 grep-regex = "0.1"
 grep-searcher = "0.1"
 grep-matcher = "0.1"
+# Encode binary files (images, media) for preview, since fs_read_file is UTF-8 only.
+base64 = "0.22"
 
 [features]
 # Used by the production bundle.

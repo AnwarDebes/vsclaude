@@ -48,6 +48,7 @@ pub fn run() {
             core_version,
             fs_ops::fs_read_dir,
             fs_ops::fs_read_file,
+            fs_ops::fs_read_file_base64,
             fs_ops::fs_write_file,
             fs_ops::fs_stat,
             fs_ops::fs_create_file,

@@ -59,6 +59,12 @@ export const onProviderExit = (
 ): Promise<UnlistenFn> =>
   listen<{ sessionId: string; code: number | null }>('provider:exit', (e) => handler(e.payload));
 
+/* ---- Filesystem (binary read for previews) ---- */
+
+/** Read a file's raw bytes as standard base64, for previewing binary files. */
+export const readFileBase64 = (path: string): Promise<string> =>
+  invoke('fs_read_file_base64', { path });
+
 /* ---- Git (diff review and commit) ---- */
 
 export const gitStatus = (cwd: string): Promise<string> => invoke('git_status', { cwd });

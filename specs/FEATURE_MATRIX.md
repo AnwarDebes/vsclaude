@@ -36,9 +36,9 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.19 | Remote development and tunnels | 0 | 0 | 6 | 0 |
 | 5.20 | Accessibility (full) | 1 | 13 | 2 | 0 |
 | 5.21 | Productivity and workspace lifecycle | 6 | 7 | 4 | 0 |
-| 5.22 | Custom editors, webviews, and previews | 3 | 4 | 3 | 0 |
+| 5.22 | Custom editors, webviews, and previews | 4 | 3 | 3 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 112 | 114 | 102 | 5 |
+| TOTAL | | 113 | 113 | 102 | 5 |
 
 ## Legend
 
@@ -517,7 +517,7 @@ The repository has a growing preview surface (an image viewer for raster and SVG
 | --- | --- | --- | --- |
 | Custom editor API (document model plus backup) | Missing | No DocumentModel, CustomEditor, or backup interfaces; EditorPanel.tsx wraps Monaco with language detection only. | No document model, backup/autosave, registration, or binary editor. |
 | Webview API (messaging, state, CSP) | Missing | No webview or messaging infrastructure; ipc.ts has only file/fs/session/pty channels. | No webview creation, message passing, state, CSP, or events. |
-| Image preview (inline plus viewer) | Partial | Image: Open Preview renders raster images (lib/preview.ts isRasterImagePath and isImagePath, unit tested) in the ImagePreview viewer, which reports natural pixel dimensions on load and supports zoom, rotate, and drag-to-pan (clampZoom, nextRotation, imageTransform, unit tested); an e2e covers a PNG. | Native raster preview is not yet wired (the file read is text-only via read_to_string, which rejects binary), so raster works only from a data URL in the browser demo; the native command shows a notice instead of a broken image. |
+| Image preview (inline plus viewer) | Done | Image: Open Preview renders raster and SVG images (lib/preview.ts isRasterImagePath/isImagePath/rasterImageMime, unit tested) in the ImagePreview viewer, which reports natural pixel dimensions on load and supports zoom, rotate, and drag-to-pan (clampZoom, nextRotation, imageTransform, unit tested). Natively the raster file's bytes are read as base64 (fs_read_file_base64, cargo tested) and wrapped in a data URL the CSP allows; the browser demo uses a stored data URL. An e2e covers an SVG and a PNG. | |
 | SVG viewer (zoom/pan) | Done | Image: Open Preview renders an active .svg through a safe data URL in the shared ImagePreview viewer (imageTransform and nextRotation unit tested), with zoom in and out, rotate, drag-to-pan, a dimensions readout, and reset. One e2e renders an .svg; the shared viewer's zoom, rotate, and reset are exercised by the image e2e (a PNG) and the unit tests. | |
 | Audio/video media player | Partial | Media: Open Player opens audio and video files (lib/media.ts isMediaPath and mediaKind, unit tested) in a MediaPlayer with native browser controls; an e2e covers a WAV. | No playlist, captions, or playback-speed control. Native playback is not yet wired (the file read is text-only via read_to_string), so media works only from a data URL in the browser demo; the native command shows a notice. |
 | Hex viewer and binary editor | Partial | View: Hex shows a hex dump of the active file (hexDump in lib/hex.ts, unit tested) in HexView. An e2e covers it. | Read-only, no byte editing or endianness toggle, and bytes are derived from code units rather than a true binary read. |

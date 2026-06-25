@@ -24,6 +24,21 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 101: native image preview (binary file read) (done)
+
+Make raster image preview work in the native app, not just the browser demo (catalog 5.22).
+
+- Rust: fs_read_file_base64 reads a file's raw bytes as standard base64 (the text read,
+  read_to_string, rejects binary). Added the base64 crate; cargo tests cover a non-UTF-8 blob and a
+  missing file. Registered in lib.rs; tauri.ts exposes readFileBase64.
+- App: the Image: Open Preview command, natively, reads the file's bytes and builds a
+  data:<mime>;base64,... URL (rasterImageMime maps the extension; the CSP already allows data: and
+  asset: for img-src). The browser demo still uses its stored data URL.
+- Quality: cargo test (19), a rasterImageMime unit test, typecheck and lint clean; build and full
+  e2e pass (the existing SVG and PNG preview e2e cover the data-URL path). Matrix 5.22 "Image
+  preview (inline plus viewer)" Partial to Done (Done crossed to 113; 5.22 now 4/3/3). The base64
+  read is reusable for native media and hex later (media also needs a CSP media-src entry).
+
 ## Slice 100: toggle the bottom panel (Ctrl+J) (done)
 
 Add VS Code's Toggle Panel shortcut, the natural pair to slice 99's Ctrl+B (catalog 5.5).

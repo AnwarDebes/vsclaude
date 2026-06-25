@@ -6,6 +6,7 @@ import {
   isRasterImagePath,
   isSvgPath,
   nextRotation,
+  rasterImageMime,
   RASTER_IMAGE_EXTENSIONS,
   RESET_VIEW,
   svgDataUrl,
@@ -43,6 +44,20 @@ describe('isRasterImagePath', () => {
   it('rejects svg and non-image files', () => {
     expect(isRasterImagePath('logo.svg')).toBe(false);
     expect(isRasterImagePath('app.tsx')).toBe(false);
+  });
+});
+
+describe('rasterImageMime', () => {
+  it('maps extensions to MIME types case-insensitively', () => {
+    expect(rasterImageMime('a/pixie.png')).toBe('image/png');
+    expect(rasterImageMime('Photo.JPG')).toBe('image/jpeg');
+    expect(rasterImageMime('art.jpeg')).toBe('image/jpeg');
+    expect(rasterImageMime('anim.gif')).toBe('image/gif');
+    expect(rasterImageMime('icon.ico')).toBe('image/x-icon');
+  });
+
+  it('falls back to a generic binary type for unknown extensions', () => {
+    expect(rasterImageMime('mystery.dat')).toBe('application/octet-stream');
   });
 });
 

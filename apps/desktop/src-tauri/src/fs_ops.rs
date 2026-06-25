@@ -12,6 +12,7 @@
 //! Windows `std::fs` accepts forward slashes, so the same string round-trips back
 //! into the core unchanged.
 
+use base64::Engine;
 use notify::{EventKind, RecursiveMode};
 use notify_debouncer_full::{new_debouncer, Debouncer, RecommendedCache};
 use serde::Serialize;
@@ -151,6 +152,14 @@ pub fn fs_read_file(path: String) -> Result<FileContent, String> {
         encoding: "utf-8".to_string(),
         mtime_ms: mtime,
     })
+}
+
+/// Read a file's raw bytes as standard base64, for previewing binary files
+/// (images, media) that `fs_read_file` rejects because they are not valid UTF-8.
+#[tauri::command]
+pub fn fs_read_file_base64(path: String) -> Result<String, String> {
+    let bytes = fs::read(&path).map_err(|e| e.to_string())?;
+    Ok(base64::engine::general_purpose::STANDARD.encode(bytes))
 }
 
 #[tauri::command]
@@ -434,4 +443,27 @@ pub fn fs_walk(path: String, limit: Option<usize>) -> Result<WalkResult, String>
     }
 
     Ok(WalkResult { files, truncated })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn reads_raw_bytes_as_base64() {
+        let dir = std::env::temp_dir().join("vsclaude_fs_b64_test");
+        fs::create_dir_all(&dir).unwrap();
+        let file = dir.join("blob.bin");
+        // Bytes that are not valid UTF-8, so fs_read_file would reject them.
+        fs::write(&file, [0u8, 1, 2, 255]).unwrap();
+        let encoded = fs_read_file_base64(file.to_string_lossy().into_owned()).unwrap();
+        assert_eq!(encoded, "AAEC/w==");
+        fs::remove_file(&file).ok();
+    }
+
+    #[test]
+    fn base64_read_errors_on_missing_file() {
+        let missing = std::env::temp_dir().join("vsclaude_does_not_exist.bin");
+        assert!(fs_read_file_base64(missing.to_string_lossy().into_owned()).is_err());
+    }
 }

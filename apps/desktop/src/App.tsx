@@ -13,7 +13,7 @@ import { bundledThemeIds } from '@vsclaude/design-system';
 import { languageForPath } from './lib/language';
 import { languageLabel, detectLanguageFromContent, SELECTABLE_LANGUAGES } from './lib/languages';
 import { readFile } from './workspace/fsClient';
-import { gitHeadFile, isTauri } from './lib/tauri';
+import { gitHeadFile, isTauri, readFileBase64 } from './lib/tauri';
 import { useSession } from './session/useSession';
 import { useLiveProvider } from './session/useLiveProvider';
 import { useWorkspace, loadRootPaths } from './workspace/useWorkspace';
@@ -69,7 +69,7 @@ import { welcomeQuickActions, type WelcomeActionId } from './lib/welcome';
 import { DiffModal, type DiffTarget } from './components/DiffModal';
 import { MarkdownPreview, type MarkdownTarget } from './components/MarkdownPreview';
 import { ImagePreview, type ImageTarget } from './components/ImagePreview';
-import { isImagePath, isSvgPath, svgDataUrl } from './lib/preview';
+import { isImagePath, isSvgPath, svgDataUrl, rasterImageMime } from './lib/preview';
 import { MediaPlayer, type MediaTarget } from './components/MediaPlayer';
 import { isMediaPath, mediaKind } from './lib/media';
 import { HexView, type HexTarget } from './components/HexView';
@@ -629,7 +629,7 @@ export function App() {
       id: 'image-preview',
       title: 'Image: Open Preview',
       keywords: ['image', 'svg', 'png', 'preview', 'picture'],
-      run: () => {
+      run: async () => {
         const path = hasWorkspace ? ws.activePath : openFile;
         if (!path || !isImagePath(path)) {
           addNotification('info', 'Open an image file to preview it.');
@@ -638,16 +638,24 @@ export function App() {
         const content = hasWorkspace
           ? ws.activeDoc?.draft ?? ''
           : editedContents[openFile] ?? demoContentFor(openFile);
-        // SVG is text and is wrapped in a data URL. A raster source must already
-        // be a data URL: the browser demo stores one, but the native file read is
-        // text-only (read_to_string) so a real binary file is not yet previewable.
+        // SVG is text and is wrapped in a data URL. A raster source is a data URL:
+        // the browser demo stores one; natively we read the file's bytes as base64
+        // (fs_read_file_base64), since the text file read rejects binary.
         let src: string;
         if (isSvgPath(path)) {
           src = svgDataUrl(content);
         } else if (content.startsWith('data:')) {
           src = content;
+        } else if (isTauri()) {
+          try {
+            const base64 = await readFileBase64(path);
+            src = `data:${rasterImageMime(path)};base64,${base64}`;
+          } catch {
+            addNotification('error', 'Could not read the image file.');
+            return;
+          }
         } else {
-          addNotification('info', 'Native binary image preview is not wired yet.');
+          addNotification('info', 'Open an image file to preview it.');
           return;
         }
         setImageTarget({ name: basePathName(path), src });

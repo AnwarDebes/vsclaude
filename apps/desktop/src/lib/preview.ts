@@ -26,6 +26,23 @@ export function isRasterImagePath(path: string): boolean {
   return RASTER_IMAGE_EXTENSIONS.some((ext) => lower.endsWith(ext));
 }
 
+const RASTER_MIME: Record<string, string> = {
+  png: 'image/png',
+  jpg: 'image/jpeg',
+  jpeg: 'image/jpeg',
+  gif: 'image/gif',
+  webp: 'image/webp',
+  bmp: 'image/bmp',
+  ico: 'image/x-icon',
+  avif: 'image/avif',
+};
+
+/** The MIME type for a raster image path, for building a data URL from its bytes. */
+export function rasterImageMime(path: string): string {
+  const ext = path.split('.').pop()?.toLowerCase() ?? '';
+  return RASTER_MIME[ext] ?? 'application/octet-stream';
+}
+
 /** Any previewable image, raster or SVG. */
 export function isImagePath(path: string): boolean {
   return isSvgPath(path) || isRasterImagePath(path);
