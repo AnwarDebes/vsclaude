@@ -24,6 +24,21 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 97: outline follows the cursor (done)
+
+Make the Outline view highlight and track the symbol containing the caret, like VS Code (catalog 5.5).
+
+- OutlinePanel gains an activeLine prop; it marks the last symbol that starts at or before the
+  caret line with outline__item--active and aria-current, and App feeds it editorStatus.line so it
+  updates live as the cursor moves. A CSS rule gives the active entry an accent bar.
+- Corrected stale matrix claims: the Outline view already rendered code symbols (not "Markdown
+  only"), and the 5.5 section intro listed the outline view and activity-bar badges as
+  unimplemented though both ship.
+- Quality: an e2e opens the Outline, moves the caret into LoginForm via :5, and asserts the entry
+  becomes aria-current; typecheck, lint clean; build and full e2e pass. Matrix 5.5 "Outline /
+  Document Symbol view" Partial to Done (the view's features are complete; language coverage of the
+  symbol source stays tracked in 5.3). Done crossed to 112; 5.5 now 7/14/7.
+
 ## Slice 96: workspace symbol (#) jumps to the line (done)
 
 Make # workspace symbol search jump to the exact symbol, not just open the file (catalog 5.6),

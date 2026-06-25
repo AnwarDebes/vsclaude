@@ -875,4 +875,22 @@ test.describe('vsclaude shell', () => {
     await expect(page.getByText('session.ts').first()).toBeVisible();
     await expect(page.getByRole('button', { name: /^Line 7,/i })).toBeVisible();
   });
+
+  test('the outline highlights the symbol containing the cursor', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    // Open the Outline view (the default file defines LoginForm at line 4).
+    await page.keyboard.press('Control+KeyK');
+    let palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('View: Outline');
+    await page.keyboard.press('Enter');
+    const item = page.getByRole('button', { name: 'LoginForm' });
+    await expect(item).toBeVisible();
+    // Move the caret into LoginForm; the outline should follow and highlight it.
+    await page.keyboard.press('Control+KeyK');
+    palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill(':5');
+    await page.keyboard.press('Enter');
+    await expect(item).toHaveAttribute('aria-current', 'true');
+  });
 });

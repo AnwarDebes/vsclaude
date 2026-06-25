@@ -19,7 +19,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.2 | Code intelligence (LSP language features) | 3 | 8 | 13 | 0 |
 | 5.3 | Editor advanced surface | 8 | 4 | 0 | 0 |
 | 5.4 | Diff and merge | 5 | 2 | 2 | 1 |
-| 5.5 | Workbench layout and navigation | 6 | 15 | 7 | 0 |
+| 5.5 | Workbench layout and navigation | 7 | 14 | 7 | 0 |
 | 5.6 | Quick open and command palette | 8 | 2 | 1 | 0 |
 | 5.7 | File explorer and workspace management | 6 | 5 | 3 | 3 |
 | 5.8 | Search and replace across files | 5 | 2 | 5 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 6 | 7 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 3 | 4 | 3 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 111 | 115 | 102 | 5 |
+| TOTAL | | 112 | 114 | 102 | 5 |
 
 ## Legend
 
@@ -150,7 +150,7 @@ A real Monaco diff editor now ships (DiffView.tsx and DiffModal.tsx): side-by-si
 
 ## 5.5 Workbench layout and navigation
 
-vsclaude uses a fixed, presentation-mode-driven layout rather than the dockable workbench VS Code provides. The core panel tree (panel-tree.ts) supports arbitrary splits but is not wired to the renderer. The app uses a hardcoded grid with fixed positions that change across five presentation modes (companion, stage, swarm, minimal, cozy). A real status bar now ships (branch and change count on the left; language, end-of-line, indentation, cursor position, and selection on the right), driven by a reusable status-bar-item model and a live editor-status store; see specs/STATUS_BAR.md. An activity bar (ActivityBar.tsx) gives a left icon rail to the Explorer, Search, Source Control, Settings, and Keyboard Shortcuts views, with the active one highlighted, and a Problems panel ships too. Editor tabs support keyboard navigation but only standard tabs, with no pinned, preview, or split groups. Floating windows, dockable panels, badges on the activity bar, an outline view, and split-group navigation are still unimplemented.
+vsclaude uses a fixed, presentation-mode-driven layout rather than the dockable workbench VS Code provides. The core panel tree (panel-tree.ts) supports arbitrary splits but is not wired to the renderer. The app uses a hardcoded grid with fixed positions that change across five presentation modes (companion, stage, swarm, minimal, cozy). A real status bar now ships (branch and change count on the left; language, end-of-line, indentation, cursor position, and selection on the right), driven by a reusable status-bar-item model and a live editor-status store; see specs/STATUS_BAR.md. An activity bar (ActivityBar.tsx) gives a left icon rail to the Explorer, Search, Source Control, Settings, and Keyboard Shortcuts views, with the active one highlighted, and a Problems panel ships too. Editor tabs support keyboard navigation but only standard tabs, with no pinned, preview, or split groups. An Outline view ships (View: Outline) that lists the file's symbols and follows the cursor. Floating windows, dockable panels, and split-group navigation are still unimplemented.
 
 | Capability | Status | Evidence | What is missing |
 | --- | --- | --- | --- |
@@ -164,7 +164,7 @@ vsclaude uses a fixed, presentation-mode-driven layout rather than the dockable 
 | Primary and secondary sidebars (left/right) | Partial | App.tsx renders left explorer and right sidebar (companion, timeline); placement hardcoded per mode. | Views cannot move between sidebars or hide independently. |
 | Bottom panel (terminal, problems, output, debug console) | Partial | App.tsx footer renders TerminalPanel, TokenPanel, Narration; only terminal is wired. | No problems, output, or debug console; panel cannot maximize, move, or sash-resize. |
 | Sash resizing (visual splitter) | Missing | No sash elements; fixed grid columns; ResizeObserver only in TerminalPanel.tsx. | No draggable splitters; layout not user-resizable. |
-| Outline / Document Symbol view | Partial | OutlinePanel.tsx is a drawer (View: Outline) listing the active file's symbols, indented by level, that reveals a line on click. | Markdown headings only; no other languages and no live follow-cursor highlight. |
+| Outline / Document Symbol view | Done | OutlinePanel.tsx (View: Outline) lists the active file's symbols indented by level, reveals a line on click, and highlights and follows the symbol containing the caret (activeLine from the editor status). An e2e covers the follow-cursor highlight. The symbol source (which languages produce symbols) is tracked separately in 5.3. | |
 | Problems / Diagnostics view | Done | ProblemsPanel.tsx is a docked, grouped, jump-to-able panel; the status bar carries the error and warning count badge; View: Problems and Ctrl or Cmd plus Shift plus M toggle it. | |
 | Status bar (language, encoding, EOL, indent, cursor, branch, errors) | Partial | StatusBar.tsx renders the error and warning counts, branch and change count, language, EOL, indentation, cursor position, and selection, from core-shell orderStatusItems and the editor-bridge status store; cursor opens go-to-line, branch opens review, problems toggles the panel, and the language, EOL, and indentation items are now clickable pickers (Change Language Mode, Change End of Line, Convert Indentation). | No encoding indicator or encoding picker. |
 | Open Editors / Open Documents view | Partial | The Explorer shows an Open Editors section listing the open editor(s) and highlighting the active one; clicking switches. An e2e covers it. | In the demo it tracks a single editor; no per-tab close or dirty indicators yet. |

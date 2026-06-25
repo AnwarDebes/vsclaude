@@ -468,6 +468,11 @@ body {
 .outline__item:hover {
   background: var(--color-surface);
 }
+.outline__item--active {
+  background: var(--color-surface);
+  box-shadow: inset 2px 0 0 var(--color-accent);
+  color: var(--color-text);
+}
 .outline__empty {
   color: var(--color-text-muted);
   padding: 6px var(--space-md);

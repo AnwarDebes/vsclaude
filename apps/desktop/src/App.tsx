@@ -1262,6 +1262,7 @@ export function App() {
           content={
             hasWorkspace ? ws.activeDoc?.draft ?? '' : editedContents[openFile] ?? demoContentFor(openFile)
           }
+          activeLine={editorStatus?.line ?? null}
           onReveal={(line) => gotoLine(line, 1)}
           onClose={() => setBottomPanel('none')}
         />
