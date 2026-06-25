@@ -24,6 +24,21 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 95: inline Go to Symbol with @ (done)
+
+Make the palette's @ Go to Symbol list the active file's symbols inline and jump to them,
+instead of handing off to Monaco's separate picker (catalog 5.6).
+
+- CommandPalette gains an editorSymbols prop; in @ mode it lists the active file's outline
+  symbols (outlineSymbols over markdown headings and top-level JS/TS/Rust declarations) filtered
+  by the query, each row jumping to the symbol's line via onGotoLine; a trailing "Go to Symbol in
+  Editor" row still hands off to Monaco's full quickOutline for nested symbols and other languages.
+- App computes editorSymbols for the open file and passes it through. The breadcrumb symbol click
+  keeps the rich Monaco path, so nothing is lost.
+- Quality: an e2e types @LoginForm and asserts the editor jumps to line 4; typecheck, lint clean;
+  build and full e2e pass. Matrix 5.6 "Symbol navigation in current file with @" Partial to Done
+  (Done crossed to 111; 5.6 now 8/2/1).
+
 ## Slice 94: clickable status bar (EOL picker and indentation) (done)
 
 Make the status bar fully interactive like VS Code, building on the slice 93 language picker.

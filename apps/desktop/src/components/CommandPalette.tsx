@@ -7,6 +7,7 @@ import {
 } from '@vsclaude/core-shell';
 import { splitCommandTitle } from '../lib/command-title';
 import { filterWorkspaceSymbols, type WorkspaceSymbol } from '../lib/workspace-symbols';
+import type { OutlineItem } from '../lib/symbols';
 
 /** One rendered row, independent of which mode produced it. */
 interface Row {
@@ -27,8 +28,10 @@ export interface CommandPaletteProps {
   onOpenFile?: (path: string) => void;
   /** Jump the active editor to a line and column in go-to mode. */
   onGotoLine?: (line: number, column?: number) => void;
-  /** Open Go to Symbol in the active editor (symbol mode). */
+  /** Open Go to Symbol in the active editor (symbol mode), for nested/full symbols. */
   onGotoSymbol?: () => void;
+  /** The active file's outline symbols, listed inline in `@` mode. */
+  editorSymbols?: readonly OutlineItem[];
   /** The workspace-symbol index for `#` mode. */
   workspaceSymbols?: readonly WorkspaceSymbol[];
   /** Called when file mode opens, so the index can be refreshed. */
@@ -61,6 +64,7 @@ export function CommandPalette({
   onOpenFile,
   onGotoLine,
   onGotoSymbol,
+  editorSymbols = [],
   workspaceSymbols = [],
   onRefreshFiles,
 }: CommandPaletteProps) {
@@ -170,12 +174,26 @@ export function CommandPalette({
         run: () => onOpenFile?.(symbol.file),
       }));
     }
-    // Symbol mode: a single row that opens Go to Symbol in the active editor.
+    // Symbol mode: list the active file's outline symbols inline and jump to the
+    // chosen one. A trailing row hands off to the editor's own Go to Symbol for the
+    // full, nested symbol set (and is the only row when no outline is available).
     if (parsed.mode === 'symbols') {
+      const query = parsed.query.toLowerCase();
+      const matches = editorSymbols
+        .filter((symbol) => !query || symbol.name.toLowerCase().includes(query))
+        .slice(0, LIMIT)
+        .map((symbol) => ({
+          id: `symbol:${symbol.line}:${symbol.name}`,
+          label: symbol.name,
+          description: `Ln ${symbol.line}`,
+          run: () => onGotoLine?.(symbol.line, 1),
+        }));
       return [
+        ...matches,
         {
           id: 'goto-symbol',
           label: 'Go to Symbol in Editor',
+          hint: 'all symbols',
           run: () => onGotoSymbol?.(),
         },
       ];
@@ -192,7 +210,7 @@ export function CommandPalette({
       ];
     }
     return [];
-  }, [parsed, registry, files, onOpenFile, onGotoLine, onGotoSymbol, workspaceSymbols]);
+  }, [parsed, registry, files, onOpenFile, onGotoLine, onGotoSymbol, editorSymbols, workspaceSymbols]);
 
   if (!open) return null;
 

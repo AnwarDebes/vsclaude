@@ -32,7 +32,7 @@ import { EDITOR_COMMANDS } from './lib/editor-commands';
 import { useDiagnostics } from './lib/useDiagnostics';
 import { demoFiles } from './session/demo-session';
 import { demoContentFor, demoFileContents } from './session/demo-files';
-import { buildWorkspaceSymbols } from './lib/workspace-symbols';
+import { buildWorkspaceSymbols, outlineSymbols } from './lib/workspace-symbols';
 import { applyTheme, loadAppSettings, saveAppSettings } from './lib/theme';
 import { PixieStage } from './components/PixieStage';
 import { PixieActionSprite } from './components/ActionIcon';
@@ -1074,6 +1074,8 @@ export function App() {
   const showTimeline = mode !== 'minimal';
   const showBottom = mode !== 'minimal';
   const content = editedContents[openFile] ?? demoContentFor(openFile);
+  // The active file's outline symbols, for inline `@` Go to Symbol in the palette.
+  const editorSymbols = useMemo(() => outlineSymbols(openFile, content), [openFile, content]);
 
   const terminalLines = useMemo(() => {
     const lines: string[] = [];
@@ -1264,6 +1266,7 @@ export function App() {
         onOpenFile={openFileFromPalette}
         onGotoLine={(line, column) => gotoLine(line, column)}
         onGotoSymbol={() => runEditorAction('editor.action.quickOutline')}
+        editorSymbols={editorSymbols}
         workspaceSymbols={workspaceSymbolIndex}
         onRefreshFiles={hasWorkspace ? fileIndex.refresh : undefined}
       />

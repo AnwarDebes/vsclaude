@@ -20,7 +20,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.3 | Editor advanced surface | 8 | 4 | 0 | 0 |
 | 5.4 | Diff and merge | 5 | 2 | 2 | 1 |
 | 5.5 | Workbench layout and navigation | 6 | 15 | 7 | 0 |
-| 5.6 | Quick open and command palette | 7 | 3 | 1 | 0 |
+| 5.6 | Quick open and command palette | 8 | 2 | 1 | 0 |
 | 5.7 | File explorer and workspace management | 6 | 5 | 3 | 3 |
 | 5.8 | Search and replace across files | 5 | 2 | 5 | 0 |
 | 5.9 | Source control and git | 8 | 9 | 7 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 6 | 7 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 3 | 4 | 3 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 110 | 116 | 102 | 5 |
+| TOTAL | | 111 | 115 | 102 | 5 |
 
 ## Legend
 
@@ -185,14 +185,14 @@ vsclaude uses a fixed, presentation-mode-driven layout rather than the dockable 
 
 ## 5.6 Quick open and command palette
 
-The palette is now unified: Ctrl or Cmd plus K opens command mode and Ctrl or Cmd plus P opens file quick-open over a real recursive index, and the input routes live on a prefix (`>` commands, `:` go to line and column). Commands can advertise a keybinding, and a reusable quick-pick framework (filterQuickPick plus the prefix router) backs it all. Document symbols (@), workspace symbols (#), command categories, and go-to-definition navigation remain, deferred to the code-intelligence slice. See specs/QUICK_OPEN.md.
+The palette is now unified: Ctrl or Cmd plus K opens command mode and Ctrl or Cmd plus P opens file quick-open over a real recursive index, and the input routes live on a prefix (`>` commands, `:` go to line and column). Commands can advertise a keybinding, and a reusable quick-pick framework (filterQuickPick plus the prefix router) backs it all. Go to Symbol (@) now lists the active file's outline inline and jumps to the chosen symbol, with the editor's full Go to Symbol one row away. Workspace symbols (#), command categories, and go-to-definition navigation are still partial, with the deeper code-intelligence work deferred. See specs/QUICK_OPEN.md.
 
 | Capability | Status | Evidence | What is missing |
 | --- | --- | --- | --- |
 | Command palette (fuzzy, keywords, Ctrl/Cmd+K) | Done | CommandPalette.tsx fuzzy search via registry.fuzzyFind(); command-registry.ts subsequence scoring and keywords; arrow/Enter nav. | |
 | Recently-used command/project ordering | Done | App.tsx registers Open Recent from ws.recents; recents.ts RecentProject with timestamps and de-dup; useWorkspace.ts exposes recents. | |
 | Quick open files by name with Ctrl+P | Done | CommandPalette.tsx file mode on Ctrl/Cmd+P; useFileIndex.ts walks roots via fs.walk (IPC v4, fs_ops.rs fs_walk); demo files used when no workspace; e2e covers it. | |
-| Symbol navigation in current file with @ | Partial | Typing @ in the palette opens Go to Symbol in the active editor (parsePaletteInput symbols mode, unit tested; CommandPalette runs Monaco's quickOutline, which uses the markdown DocumentSymbolProvider and the TS or JS worker). An e2e covers the palette entry. | The palette hands off to Monaco's picker rather than listing symbols inline. |
+| Symbol navigation in current file with @ | Done | Typing @ in the palette lists the active file's outline symbols inline (outlineSymbols over markdown headings and top-level JS/TS/Rust declarations) and jumps to the chosen symbol's line; a trailing row hands off to the editor's full Go to Symbol (Monaco quickOutline) for nested symbols and other languages. parsePaletteInput symbols mode and outlineSymbols are unit tested; an e2e jumps to a symbol. | |
 | Workspace symbols search with # | Partial | Typing # in the palette searches a workspace-symbol index (buildWorkspaceSymbols over the file contents: markdown headings and top-level code declarations via codeSymbols; filterWorkspaceSymbols; all unit tested); selecting opens the file. An e2e covers it. | Built from the demo file contents only (a real workspace needs the core to supply file bodies); selecting opens the file but does not yet jump to the symbol line. |
 | Go to line/column with : | Done | parsePaletteInput parses :line and :line:column; editor-bridge.ts gotoLine reveals and selects in the active Monaco editor; unit tested. | |
 | Commands via > prefix | Done | parsePaletteInput routes > to command mode inside the unified palette; e2e switches files to commands with >. | |

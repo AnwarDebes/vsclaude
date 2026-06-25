@@ -849,4 +849,16 @@ test.describe('vsclaude shell', () => {
     // The conversion ran live, so the status bar now reads CRLF.
     await expect(page.getByRole('button', { name: /^End of line CRLF/i })).toBeVisible();
   });
+
+  test('the command palette jumps to a symbol with @', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    // The default file defines the LoginForm component at line 4.
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('@LoginForm');
+    await page.keyboard.press('Enter');
+    // The editor jumped to the symbol, so the cursor status reads line 4.
+    await expect(page.getByRole('button', { name: /^Line 4,/i })).toBeVisible();
+  });
 });
