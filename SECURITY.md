@@ -1,8 +1,10 @@
 # Security Policy
 
-This is the community security policy for **vsclaude**, an open-source desktop IDE that runs your AI coding agent (Claude Code, Codex, Gemini, and local Ollama models) behind one unified, animated experience. This document tells you how to report a vulnerability privately, which versions we support, what response timeline to expect, and where to find the deep engineering security model. If you are an engineer implementing or reviewing security-sensitive code, read this first for the process, then read the full engineering spec at [specs/SECURITY.md](./specs/SECURITY.md) for the technical contract.
+This is the community security policy for **vsclaude**, an open-source desktop IDE that runs your AI coding agent (Claude Code today, with Codex, Gemini, and local Ollama models planned) behind one unified, animated experience. This document tells you how to report a vulnerability privately, which versions we support, what response timeline to expect, and where to find the deep engineering security model. If you are an engineer implementing or reviewing security-sensitive code, read this first for the process, then read the full engineering spec at [specs/SECURITY.md](./specs/SECURITY.md) for the technical contract.
 
 > One thing to know up front: **vsclaude stores provider API keys only in your operating system keychain.** Keys are never written to plaintext on disk, never shipped to the renderer, and never uploaded anywhere. See [Where your secrets live](#where-your-secrets-live).
+
+> **Implementation status (beta).** The OS-keychain secret storage described here is implemented and enforced today. The broader agent permission engine, the per-OS sandbox, signature-verified auto-update, and some automated CI security gates described in the engineering spec are part of the security roadmap and are not all shipped in this `0.x` beta. The scope sections below describe the intended trust boundaries, and reports against them are welcome even where enforcement is still landing.
 
 ## Table of contents
 
@@ -25,23 +27,12 @@ This is the community security policy for **vsclaude**, an open-source desktop I
 
 | Channel | How | Use when |
 | --- | --- | --- |
-| GitHub private advisory | Repo **Security** tab, **Report a vulnerability** ([GitHub Security Advisories](https://docs.github.com/code-security/security-advisories)) | Preferred for everything. Gives us a private thread, a CVE workflow, and a private fix branch. |
-| Email | `security@vsclaude.dev` | If you cannot use GitHub, or you want to send an encrypted message. |
-| Encrypted email | Same address, encrypted to the PGP key published at [`/.well-known/security.txt`](https://vsclaude.dev/.well-known/security.txt) | For reports that include sensitive proof-of-concept material. |
+| GitHub private advisory | Repo **Security** tab, **Report a vulnerability** ([GitHub Security Advisories](https://github.com/AnwarDebes/vsclaude/security/advisories/new)) | **Preferred, and the only verified channel today.** Gives us a private thread, a CVE workflow, and a private fix branch. |
+| Private email / PGP | Not yet provisioned | A dedicated security mailbox and PGP key are planned. Until then, please open a GitHub private advisory, which is already private end to end. |
 
 If you are unsure whether something is a real vulnerability, report it anyway. We would rather triage a false alarm than miss a real one. When in doubt, choose the private channel.
 
-A machine-readable [`security.txt`](https://www.rfc-editor.org/rfc/rfc9116) is published so scanners and researchers can find the right contact:
-
-```text
-# https://vsclaude.dev/.well-known/security.txt
-Contact: mailto:security@vsclaude.dev
-Contact: https://github.com/<org>/vsclaude/security/advisories/new
-Encryption: https://vsclaude.dev/.well-known/pgp-key.asc
-Preferred-Languages: en
-Policy: https://github.com/<org>/vsclaude/blob/main/SECURITY.md
-Expires: 2027-01-01T00:00:00.000Z
-```
+A machine-readable [`security.txt`](https://www.rfc-editor.org/rfc/rfc9116) will be published once a project domain is set up; until then the GitHub private-advisory link above is the canonical contact.
 
 ## What to include in a report
 
@@ -116,14 +107,13 @@ Please do not disclose publicly, post a write-up, or demo the issue at a talk be
 
 ## Supported versions
 
-Security fixes land on the latest minor release line. We follow [semantic versioning](https://semver.org/). Because vsclaude ships a signed auto-updater (see [Auto-update integrity](./specs/SECURITY.md#auto-update-integrity)), the most reliable way to stay protected is to keep auto-update enabled and install prompted updates.
+Security fixes land on the latest release line. We follow [semantic versioning](https://semver.org/). Signature-verified auto-update (see [Auto-update integrity](./specs/SECURITY.md#auto-update-integrity)) is planned; until it ships, the most reliable way to stay protected is to watch the [Releases](https://github.com/AnwarDebes/vsclaude/releases) page and install the latest signed build manually.
 
 | Version | Supported | Notes |
 | --- | --- | --- |
-| `1.x` (latest minor) | Yes, full support | All security fixes land here first. |
-| `1.x` (previous minor) | Critical and High only | Backported when feasible until the next minor is out plus 30 days. |
-| `0.x` (pre-1.0 betas) | Best effort | Pre-1.0 lines move fast; please update to the latest. We will help you upgrade. |
-| End-of-life lines | No | Listed as EOL in release notes; upgrade required. |
+| `0.x` (latest beta) | Yes, best effort | All security fixes land here first. Pre-1.0 lines move fast; please update to the latest. |
+| Older `0.x` | No | Pre-1.0 lines are superseded quickly; upgrade to the latest beta. |
+| Local builds from `main` | Reports welcome | Not a release and carry no support guarantee, but we still want reports. |
 
 To check your version: open **Help, About** in the app, or read the `version` field in `apps/desktop/src-tauri/tauri.conf.json` for a local build. Local builds from `main` are not "releases" and carry no support guarantee, but we still want reports against them.
 
@@ -133,8 +123,8 @@ This is the single most important fact for a security-conscious user, and it is 
 
 - **OS keychain only.** Provider API keys are stored exclusively in the platform secret store through one audited Rust module. There is **no plaintext fallback**: if the keychain is unavailable, key storage fails loudly rather than writing a file.
 - **Never in the renderer.** The UI never receives a key. It receives only a `configured: boolean` flag and a masked hint (last four characters) for display.
-- **Never on disk, in logs, or in stores.** A key is never written to a config file, a log line, a temp file, `localStorage`, `sessionStorage`, IndexedDB, or a Zustand store. A CI gate greps the tree to keep it that way.
-- **Injected, not cached.** When the agent starts, the key is injected into the child process environment at spawn time and the in-memory copy is zeroized immediately. Keys are never passed as command-line arguments, because argv is visible to other processes.
+- **Never on disk, in logs, or in stores.** A key is never written to a config file, a log line, a temp file, `localStorage`, `sessionStorage`, IndexedDB, or a Zustand store. Keeping keys out of the tree is a release-review check today; an automated CI grep gate is planned.
+- **Injected, not cached.** When the agent starts, the key is injected into the child process environment at spawn time and the in-memory copy is dropped promptly after spawn (a dedicated zeroizing wipe is planned). Keys are never passed as command-line arguments, because argv is visible to other processes.
 - **Local-first by default.** Session transcripts and event logs stay on your disk. Telemetry is off by default and, if enabled, never carries content or keys.
 
 | Platform | Keychain backend |
@@ -185,7 +175,7 @@ We support good-faith security research and will not pursue or support legal act
 - Give us a reasonable time to fix the issue before any public disclosure, per [Coordinated disclosure](#coordinated-disclosure).
 - Do not perform denial-of-service testing against shared infrastructure or other users.
 
-If you are unsure whether an action is permitted, ask us first at `security@vsclaude.dev`. Acting in good faith under this policy, we consider your research authorized, and we will say so publicly if a third party questions it.
+If you are unsure whether an action is permitted, ask us first in a GitHub private advisory. Acting in good faith under this policy, we consider your research authorized, and we will say so publicly if a third party questions it.
 
 ## Recognition
 
@@ -224,4 +214,4 @@ See also: [Architecture](./specs/ARCHITECTURE.md), [Providers and adapters](./sp
 
 ---
 
-*Last reviewed: 2026-06-21. This policy is versioned with the repository; the canonical copy lives at the repo root on `main`.*
+*Last reviewed: 2026-06-25. This policy is versioned with the repository; the canonical copy lives at the repo root on `main`.*

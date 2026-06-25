@@ -20,6 +20,8 @@ export default defineConfig({
     target: 'es2022',
     outDir: 'dist',
     emptyOutDir: true,
-    sourcemap: true,
+    // No sourcemaps in the shipped bundle: they would otherwise be packaged into the
+    // installer and ship the full source. Use a dev build or DEVTOOLS for debugging.
+    sourcemap: false,
   },
 });

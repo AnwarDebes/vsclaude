@@ -73,7 +73,8 @@ function persistRecents(list: RecentProject[]): void {
   }
 }
 
-function loadRootPaths(): string[] {
+/** The workspace root paths persisted from the last session (read synchronously). */
+export function loadRootPaths(): string[] {
   if (typeof localStorage === 'undefined') return [];
   try {
     const data: unknown = JSON.parse(localStorage.getItem(ROOTS_KEY) ?? '[]');

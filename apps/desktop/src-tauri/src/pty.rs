@@ -132,7 +132,10 @@ pub fn pty_create(
 pub fn pty_write(pty_id: String, data: String) -> Result<(), String> {
     let mut map = registry().lock().unwrap();
     let handle = map.get_mut(&pty_id).ok_or("unknown pty")?;
-    handle.writer.write_all(data.as_bytes()).map_err(|e| e.to_string())?;
+    handle
+        .writer
+        .write_all(data.as_bytes())
+        .map_err(|e| e.to_string())?;
     handle.writer.flush().map_err(|e| e.to_string())
 }
 

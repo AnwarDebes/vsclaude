@@ -1,5 +1,7 @@
 # SECURITY (engineering spec)
 
+> **Status (0.x beta):** this is the design contract the codebase is built toward, not a claim that every control is shipped. Implemented today: OS-keychain secret storage, the strict CSP and Tauri capability posture, and the minimal IPC surface. Still landing: the agent permission engine and decision-resolution order, the per-OS sandbox defaults, signature-verified auto-update, and the automated CI security gates. Sections describing those read as the target design. See the root [SECURITY.md](../SECURITY.md) for the public policy and reporting process.
+
 This document defines the security model for vsclaude. The core posture is simple to state and hard to weaken: provider keys live only in the OS keychain and never touch plaintext disk, the agent runs under explicit user-controlled permissions with conservative sandbox defaults, the desktop shell exposes a minimal and signed IPC surface protected by a strict Content Security Policy and a narrow Tauri capability set, and every command or MCP server the agent reaches for is treated as untrusted code that must pass through a policy gate before it executes. Security here is not a feature bolted on after the demo; it is a property the architecture is built to guarantee by construction, in the same spirit as the platform's "truthful by construction" pillar.
 
 ## Table of contents

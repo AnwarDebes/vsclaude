@@ -1,6 +1,6 @@
 {
   "name": "@vsclaude/desktop",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "The vsclaude desktop application: a Tauri shell wrapping the React renderer.",
   "license": "MIT",

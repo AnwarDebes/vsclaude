@@ -1,6 +1,6 @@
 {
   "name": "vsclaude",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Claude Code, in motion. For any model. A cozy IDE where you watch your AI agent work through living pixel-art animation.",
   "keywords": [
@@ -32,6 +32,8 @@
   "scripts": {
     "dev": "pnpm --filter @vsclaude/desktop dev",
     "tauri": "pnpm --filter @vsclaude/desktop tauri",
+    "tauri:dev": "pnpm --filter @vsclaude/desktop tauri:dev",
+    "tauri:build": "pnpm --filter @vsclaude/desktop tauri:build",
     "build": "pnpm run build:packages && pnpm --filter @vsclaude/desktop build",
     "build:packages": "pnpm -r --filter \"./packages/*\" run build",
     "typecheck": "pnpm -r run typecheck",

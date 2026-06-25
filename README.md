@@ -9,7 +9,7 @@
 <p>A cozy, beautiful IDE where you <em>watch</em> your AI coding agent work through living pixel-art animation, instead of scrolling walls of text.</p>
 
 <p>
-  <img alt="status" src="https://img.shields.io/badge/status-alpha-d97757?style=for-the-badge" />
+  <img alt="status" src="https://img.shields.io/badge/status-beta-e0a458?style=for-the-badge" />
   <img alt="license" src="https://img.shields.io/badge/license-MIT-7fb069?style=for-the-badge" />
   <img alt="tauri" src="https://img.shields.io/badge/Tauri-2.x-e0a458?style=for-the-badge&logo=tauri&logoColor=white" />
   <img alt="react" src="https://img.shields.io/badge/React-19-6c9bd9?style=for-the-badge&logo=react&logoColor=white" />
@@ -48,8 +48,9 @@ searching, debugging, building, celebrating, getting puzzled. Around Pixie,
 lightweight visualizations show the meaningful detail (which file, which query,
 which command) without forcing anyone to read raw logs.
 
-It runs **Claude Code** as a first-class citizen, and **Codex**, **Gemini**, and
-**local models** behind one unified experience. Bring your own key.
+It runs **Claude Code** as a first-class citizen today, with **Codex**, **Gemini**,
+and **local models** designed to plug into the same unified experience through one
+normalized event pipeline. Bring your own key.
 
 ## The soul: "Claude Code in motion"
 
@@ -116,14 +117,18 @@ whole collaboration. This is the screenshot that sells the product. See
 
 ## Feature set
 
-- **IDE core**: file explorer, Monaco editing, tabs and splits, a dockable panel
-  layout, a keyboard-first command palette, global search, an integrated terminal.
+_This describes what vsclaude is designed to be. For exactly what ships in this
+beta versus what is still on the roadmap, see [Project status](#project-status)._
+
+- **IDE core**: file explorer, Monaco editing, tabs, a multi-panel layout, a
+  keyboard-first command palette, global search, an integrated terminal.
 - **Agent experience**: conversation panel, plan mode as Pixie's animated
-  checklist, gorgeous diff review, a tool-call inspector, permission controls,
-  context manager, checkpoints and time-travel, a token and cost dashboard, an MCP
-  server manager.
-- **Providers**: Claude Code, Codex, Gemini, Ollama. Bring your own key, stored in
-  the OS keychain. Per-project provider and model selection.
+  checklist, gorgeous diff review, a tool-call inspector, a token and cost
+  dashboard, and (planned) permission controls, a context manager, checkpoints and
+  time-travel, and an MCP server manager.
+- **Providers**: Claude Code ships today; Codex, Gemini, and Ollama are planned
+  through the same adapter contract. Bring your own key, stored in the OS keychain,
+  with per-project provider and model selection.
 - **Cozy and accessible**: a warm default theme, reduced-motion mode, color-blind
   safe palettes, full keyboard control, and a narrated event stream so people who
   cannot see the animation still get the whole story.
@@ -195,7 +200,7 @@ To build the native installers:
 ```bash
 # produces the native executable plus a .msi and a setup .exe (Windows),
 # a .dmg (macOS), and an .AppImage and .deb (Linux)
-pnpm --filter @vsclaude/desktop tauri:build
+pnpm tauri:build
 ```
 
 See [BUILD.md](./BUILD.md) for packaging, signing, and the release pipeline.
@@ -213,13 +218,15 @@ more) are built, typed, and tested. On top of them the app ships:
 - a **live Claude Code provider** (the Rust core spawns the CLI and streams it),
   with a recorded demo as the fallback,
 - a **git diff review and commit** flow,
+- **open-folder workspaces** with a file tree, project-wide search, and source control,
 - a command palette, five presentation modes, runtime theming,
 - **Storybook** with a story for every component and Pixie state,
 - **Playwright** end-to-end tests, and a three-OS **installer pipeline**.
 
 Native `vsclaude.exe`, a WiX `.msi`, and an NSIS setup `.exe` build and run today.
-Remaining: signed release builds (your certificates), auto-update hosting, the
-Rive Pixie artboard, and an open-folder workspace. See [ROADMAP.md](./ROADMAP.md)
+Remaining: signed release builds (your certificates), signature-verified
+auto-update, the Rive Pixie artboard, and the Phase B agent features (permission
+engine, MCP manager, checkpoints). See [ROADMAP.md](./ROADMAP.md)
 and [PROGRESS.md](./PROGRESS.md).
 
 ## Documentation

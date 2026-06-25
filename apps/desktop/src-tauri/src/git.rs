@@ -189,7 +189,11 @@ pub fn git_push(cwd: String) -> Result<String, String> {
 #[tauri::command]
 pub fn git_tags(cwd: String) -> Result<Vec<String>, String> {
     let out = run_git(&cwd, &["tag", "--list", "--sort=-creatordate"])?;
-    Ok(out.lines().filter(|l| !l.is_empty()).map(|l| l.to_string()).collect())
+    Ok(out
+        .lines()
+        .filter(|l| !l.is_empty())
+        .map(|l| l.to_string())
+        .collect())
 }
 
 /// Create a tag. Annotated when a message is given, lightweight otherwise.
@@ -470,7 +474,16 @@ mod tests {
         run_git(&a, &["push", "-u", "origin", "HEAD"]).unwrap();
 
         // Repo B: clone the remote.
-        run_git(tmp_cwd, &["clone", "-q", remote.to_str().unwrap(), dir_b.to_str().unwrap()]).unwrap();
+        run_git(
+            tmp_cwd,
+            &[
+                "clone",
+                "-q",
+                remote.to_str().unwrap(),
+                dir_b.to_str().unwrap(),
+            ],
+        )
+        .unwrap();
         let b = dir_b.to_str().unwrap().to_string();
 
         // A commits again and pushes through git_push.

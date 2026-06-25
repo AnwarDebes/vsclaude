@@ -86,5 +86,5 @@ jobs:
           releaseName: 'vsclaude __VERSION__'
           releaseBody: 'Download the installer for your platform from the assets below.'
           releaseDraft: true
-          prerelease: false
+          prerelease: true
           args: ${{ matrix.args }}

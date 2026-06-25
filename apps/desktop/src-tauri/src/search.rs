@@ -85,7 +85,9 @@ fn regex_escape(input: &str) -> String {
 /// Converts a byte offset within `text` to a code-point offset, so the renderer
 /// can highlight the range with `[...text]` correctly past ASCII.
 fn char_offset(text: &str, byte: usize) -> usize {
-    text.get(..byte).map(|s| s.chars().count()).unwrap_or_else(|| text.chars().count())
+    text.get(..byte)
+        .map(|s| s.chars().count())
+        .unwrap_or_else(|| text.chars().count())
 }
 
 #[tauri::command]
@@ -100,15 +102,26 @@ pub fn search_find(
 /// The search engine, factored out of the Tauri command so it can be unit tested.
 pub fn run_search(root: &str, query: &str, opts: &SearchOptions) -> Result<SearchResult, String> {
     if query.is_empty() {
-        return Ok(SearchResult { files: Vec::new(), match_count: 0, truncated: false });
+        return Ok(SearchResult {
+            files: Vec::new(),
+            match_count: 0,
+            truncated: false,
+        });
     }
 
-    let cap = opts.max_results.unwrap_or(DEFAULT_SEARCH_LIMIT).min(MAX_SEARCH_LIMIT);
+    let cap = opts
+        .max_results
+        .unwrap_or(DEFAULT_SEARCH_LIMIT)
+        .min(MAX_SEARCH_LIMIT);
     let case_sensitive = opts.case_sensitive.unwrap_or(false);
     let is_regex = opts.regex.unwrap_or(false);
     let whole_word = opts.whole_word.unwrap_or(false);
 
-    let pattern = if is_regex { query.to_string() } else { regex_escape(query) };
+    let pattern = if is_regex {
+        query.to_string()
+    } else {
+        regex_escape(query)
+    };
     let matcher = RegexMatcherBuilder::new()
         .case_insensitive(!case_sensitive)
         .word(whole_word)
@@ -196,7 +209,11 @@ pub fn run_search(root: &str, query: &str, opts: &SearchOptions) -> Result<Searc
         }
     }
 
-    Ok(SearchResult { files, match_count, truncated })
+    Ok(SearchResult {
+        files,
+        match_count,
+        truncated,
+    })
 }
 
 #[cfg(test)]
@@ -257,11 +274,17 @@ mod tests {
     fn supports_regex_and_case_sensitivity() {
         let dir = temp_root("regex");
         write(&dir, "code.rs", "let Foo = 1;\nlet foo = 2;\n");
-        let case = SearchOptions { case_sensitive: Some(true), ..Default::default() };
+        let case = SearchOptions {
+            case_sensitive: Some(true),
+            ..Default::default()
+        };
         let lower = run_search(dir.to_str().unwrap(), "foo", &case).unwrap();
         assert_eq!(lower.match_count, 1);
 
-        let rgx = SearchOptions { regex: Some(true), ..Default::default() };
+        let rgx = SearchOptions {
+            regex: Some(true),
+            ..Default::default()
+        };
         let result = run_search(dir.to_str().unwrap(), "f.o", &rgx).unwrap();
         assert_eq!(result.match_count, 2);
         let _ = fs::remove_dir_all(&dir);
@@ -271,7 +294,10 @@ mod tests {
     fn caps_the_result() {
         let dir = temp_root("cap");
         write(&dir, "many.txt", "x\nx\nx\nx\nx\n");
-        let opts = SearchOptions { max_results: Some(3), ..Default::default() };
+        let opts = SearchOptions {
+            max_results: Some(3),
+            ..Default::default()
+        };
         let result = run_search(dir.to_str().unwrap(), "x", &opts).unwrap();
         assert!(result.truncated);
         assert_eq!(result.match_count, 3);

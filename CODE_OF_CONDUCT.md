@@ -85,7 +85,7 @@ Community leaders have the right and responsibility to remove, edit, or reject c
 
 If you experience or witness unacceptable behavior, or have any other concerns, please report it to the community leaders responsible for enforcement.
 
-> **Enforcement contact:** `conduct@vsclaude.dev` *(placeholder: replace with the project's real moderation address or a private reporting form before launch)*
+> **Enforcement contact:** open a [GitHub private security advisory](https://github.com/AnwarDebes/vsclaude/security/advisories/new) (it is private end to end and reaches the maintainer), or use GitHub's **Report content** on the offending item. A dedicated moderation address will be added once a project domain is provisioned.
 
 When you file a report, including the following details helps us act quickly and fairly. None of these are required, and you should share only what you are comfortable sharing.
 

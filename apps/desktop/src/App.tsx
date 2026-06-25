@@ -12,10 +12,10 @@ import { basePathName, joinPath } from '@vsclaude/editor';
 import { bundledThemeIds } from '@vsclaude/design-system';
 import { languageForPath } from './lib/language';
 import { readFile } from './workspace/fsClient';
-import { gitHeadFile } from './lib/tauri';
+import { gitHeadFile, isTauri } from './lib/tauri';
 import { useSession } from './session/useSession';
 import { useLiveProvider } from './session/useLiveProvider';
-import { useWorkspace } from './workspace/useWorkspace';
+import { useWorkspace, loadRootPaths } from './workspace/useWorkspace';
 import { useFileIndex } from './workspace/useFileIndex';
 import { gotoLine, insertSnippet, runEditorAction } from './lib/editor-bridge';
 import { SnippetsModal } from './components/SnippetsModal';
@@ -387,6 +387,18 @@ export function App() {
     () => welcomeQuickActions({ canOpenFolder: ws.available, hasWorkspace, liveAvailable }),
     [ws.available, hasWorkspace, liveAvailable],
   );
+
+  // On the native app's first run with no folder, greet the user with the Welcome
+  // page so they have an obvious Open Folder path instead of the in-memory demo
+  // content. Gated to the native shell (the browser demo and e2e are unaffected) and
+  // to a genuinely empty persisted workspace, read synchronously so it does not race
+  // the asynchronous root restore (a returning user is never greeted on every launch).
+  // Mount-only: the persisted-roots check is the source of truth for a fresh run.
+  useEffect(() => {
+    if (isTauri() && loadRootPaths().length === 0) {
+      setWelcomeOpen(true);
+    }
+  }, []);
 
   const onWelcomeAction = useCallback(
     (id: WelcomeActionId) => {
@@ -839,7 +851,15 @@ export function App() {
       id: 'review-changes',
       title: 'Review changes and commit',
       keywords: ['git', 'diff', 'commit', 'review', 'accept'],
-      run: () => setReviewOpen(true),
+      run: () => {
+        // In the native app, reviewing changes needs a real repo; the browser demo
+        // shows a showcase diff without one.
+        if (isTauri() && !hasWorkspace) {
+          addNotification('info', 'Open a folder to review changes.');
+          return;
+        }
+        setReviewOpen(true);
+      },
     });
     r.register({
       id: 'git-tags',
@@ -900,24 +920,35 @@ export function App() {
         run: () => void ws.openFolder(),
       });
     }
+    // Save All and New File are always registered (the menu always lists them), but
+    // guard the no-workspace case with a hint instead of silently doing nothing.
+    r.register({
+      id: 'save-all',
+      title: 'Save All',
+      keywords: ['write', 'disk', 'save'],
+      run: () => {
+        if (!hasWorkspace) {
+          addNotification('info', 'Open a folder to save files to disk.');
+          return;
+        }
+        void ws.saveAll();
+      },
+    });
+    r.register({
+      id: 'new-file',
+      title: 'New File',
+      keywords: ['create', 'file'],
+      run: () => {
+        const root = ws.roots[0];
+        if (!root) {
+          addNotification('info', 'Open a folder first, or use New Untitled File.');
+          return;
+        }
+        const name = window.prompt('New file name', 'untitled.ts');
+        if (name) void ws.newFile(root.path, name);
+      },
+    });
     if (hasWorkspace) {
-      r.register({
-        id: 'save-all',
-        title: 'Save All',
-        keywords: ['write', 'disk', 'save'],
-        run: () => void ws.saveAll(),
-      });
-      r.register({
-        id: 'new-file',
-        title: 'New File',
-        keywords: ['create', 'file'],
-        run: () => {
-          const root = ws.roots[0];
-          if (!root) return;
-          const name = window.prompt('New file name', 'untitled.ts');
-          if (name) void ws.newFile(root.path, name);
-        },
-      });
       for (const root of ws.roots) {
         r.register({
           id: `close-folder-${root.id}`,
@@ -1127,7 +1158,7 @@ export function App() {
 
       {showBottom ? (
         <footer className="app-bottom">
-          <TerminalTabs fallbackLines={terminalLines} />
+          <TerminalTabs fallbackLines={terminalLines} cwd={hasWorkspace ? ws.roots[0]?.path : undefined} />
           <TokenPanel tokens={session.tokens} tree={session.tree} />
           <Narration narration={session.narration} />
         </footer>
@@ -1258,7 +1289,11 @@ export function App() {
         onClose={() => setSettingsJsonOpen(false)}
       />
       <ThemeExportModal open={themeExportOpen} settings={settings} onClose={() => setThemeExportOpen(false)} />
-      <DiffReview open={reviewOpen} cwd="." onClose={() => setReviewOpen(false)} />
+      <DiffReview
+        open={reviewOpen}
+        cwd={hasWorkspace ? ws.roots[0]?.path ?? '.' : '.'}
+        onClose={() => setReviewOpen(false)}
+      />
     </div>
   );
 }
