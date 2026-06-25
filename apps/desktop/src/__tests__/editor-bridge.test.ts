@@ -4,8 +4,10 @@ import {
   getActiveEditor,
   getEditorStatus,
   gotoLine,
+  registerLanguageSetter,
   runEditorAction,
   setActiveEditor,
+  setEditorLanguage,
   setEditorStatus,
   subscribeEditorStatus,
   type BridgeEditor,
@@ -155,5 +157,34 @@ describe('editor status store', () => {
     unsubscribe();
     setEditorStatus(sample);
     expect(listener).toHaveBeenCalledTimes(2);
+  });
+});
+
+describe('setEditorLanguage', () => {
+  beforeEach(() => {
+    registerLanguageSetter(null);
+    const { editor } = fakeEditor();
+    setActiveEditor(editor);
+    clearActiveEditor(editor);
+  });
+
+  it('returns false when no language setter is registered', () => {
+    expect(setEditorLanguage('json')).toBe(false);
+  });
+
+  it('invokes the registered setter, focuses the editor, and returns true', () => {
+    const setter = vi.fn();
+    registerLanguageSetter(setter);
+    const { editor, calls } = fakeEditor();
+    setActiveEditor(editor);
+    expect(setEditorLanguage('json')).toBe(true);
+    expect(setter).toHaveBeenCalledWith('json');
+    expect(calls.focused).toBe(1);
+  });
+
+  it('clears the setter when passed null, restoring the no-op path', () => {
+    registerLanguageSetter(vi.fn());
+    registerLanguageSetter(null);
+    expect(setEditorLanguage('css')).toBe(false);
   });
 });

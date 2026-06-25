@@ -5,6 +5,7 @@ import {
   setActiveEditor,
   clearActiveEditor,
   setEditorStatus,
+  registerLanguageSetter,
   type BridgeEditor,
 } from '../lib/editor-bridge';
 import {
@@ -54,6 +55,12 @@ export function EditorPanel({ path, value, language, onChange, onSave }: EditorP
     const bridge = editor as unknown as BridgeEditor;
     editorRef.current = bridge;
     setActiveEditor(bridge);
+    // Let the status-bar Change Language Mode picker switch this editor's language
+    // live (the setter needs the Monaco namespace, which only the panel has).
+    registerLanguageSetter((languageId) => {
+      const model = editor.getModel();
+      if (model) monacoInstance.editor.setModelLanguage(model, languageId);
+    });
 
     // Publish a status snapshot for the status bar and keep it live.
     const publishStatus = () => {
@@ -82,6 +89,7 @@ export function EditorPanel({ path, value, language, onChange, onSave }: EditorP
     editor.onDidChangeCursorSelection(publishStatus);
     editor.onDidChangeModelContent(publishStatus);
     editor.onDidChangeModel(publishStatus);
+    editor.onDidChangeModelLanguage(publishStatus);
     publishStatus();
   };
 
@@ -90,6 +98,7 @@ export function EditorPanel({ path, value, language, onChange, onSave }: EditorP
     () => () => {
       if (editorRef.current) clearActiveEditor(editorRef.current);
       setEditorStatus(null);
+      registerLanguageSetter(null);
     },
     [],
   );

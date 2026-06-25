@@ -11,13 +11,14 @@ import { diffSidesForCode, type GitFileChange } from '@vsclaude/git';
 import { basePathName, joinPath } from '@vsclaude/editor';
 import { bundledThemeIds } from '@vsclaude/design-system';
 import { languageForPath } from './lib/language';
+import { languageLabel, detectLanguageFromContent, SELECTABLE_LANGUAGES } from './lib/languages';
 import { readFile } from './workspace/fsClient';
 import { gitHeadFile, isTauri } from './lib/tauri';
 import { useSession } from './session/useSession';
 import { useLiveProvider } from './session/useLiveProvider';
 import { useWorkspace, loadRootPaths } from './workspace/useWorkspace';
 import { useFileIndex } from './workspace/useFileIndex';
-import { gotoLine, insertSnippet, runEditorAction } from './lib/editor-bridge';
+import { gotoLine, insertSnippet, runEditorAction, setEditorLanguage } from './lib/editor-bridge';
 import { SnippetsModal } from './components/SnippetsModal';
 import { setEditorSettings } from './lib/editor-settings';
 import { applyMonacoTheme } from './lib/monaco-theme';
@@ -103,22 +104,6 @@ const STATE_LABELS: Record<string, string> = {
   confused: 'puzzled',
   sleeping: 'resting',
 };
-
-const LANGUAGE_LABELS: Record<string, string> = {
-  typescript: 'TypeScript',
-  javascript: 'JavaScript',
-  json: 'JSON',
-  css: 'CSS',
-  html: 'HTML',
-  markdown: 'Markdown',
-  rust: 'Rust',
-  plaintext: 'Plain Text',
-};
-
-/** A friendly display name for a Monaco language id. */
-function languageLabel(id: string): string {
-  return LANGUAGE_LABELS[id] ?? id.charAt(0).toUpperCase() + id.slice(1);
-}
 
 /**
  * The vsclaude shell: a cozy, multi-panel IDE driven end to end by the real
@@ -368,7 +353,9 @@ export function App() {
         side: 'right',
         priority: 20,
         text: languageLabel(editorStatus.language),
-        ariaLabel: `Language ${languageLabel(editorStatus.language)}`,
+        tooltip: 'Select Language Mode',
+        command: 'change-language',
+        ariaLabel: `Language ${languageLabel(editorStatus.language)}. Change language mode.`,
       });
     }
     items.push({
@@ -761,6 +748,24 @@ export function App() {
       keywords: ['outline', 'symbols', 'headings', 'structure'],
       run: () => setBottomPanel((p) => (p === 'outline' ? 'none' : 'outline')),
     });
+    // Change Language Mode: one command per language plus an entry that opens the
+    // palette filtered to them, reached by clicking the language item in the status bar.
+    r.register({
+      id: 'change-language',
+      title: 'Change Language Mode',
+      keywords: ['language', 'mode', 'syntax', 'grammar'],
+      run: () => openPalette('commands', 'Language Mode:'),
+    });
+    for (const lang of SELECTABLE_LANGUAGES) {
+      r.register({
+        id: `language-mode-${lang.id}`,
+        title: `Language Mode: ${lang.label}`,
+        keywords: ['language', 'mode', 'syntax', lang.label],
+        run: () => {
+          if (!setEditorLanguage(lang.id)) addNotification('info', 'Open a file to set its language.');
+        },
+      });
+    }
     r.register({
       id: 'view-narration-log',
       title: 'View: Narration Log',
@@ -1128,6 +1133,11 @@ export function App() {
                 <EditorPanel
                   path={openFile}
                   value={content}
+                  language={
+                    languageForPath(openFile) === 'plaintext'
+                      ? detectLanguageFromContent(content) ?? undefined
+                      : undefined
+                  }
                   onChange={(v) => setEditedContents((m) => ({ ...m, [openFile]: v }))}
                   onSave={(v) => setEditedContents((m) => ({ ...m, [openFile]: v }))}
                 />

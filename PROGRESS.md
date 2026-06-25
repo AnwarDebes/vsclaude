@@ -24,6 +24,21 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 93: language mode switcher and content detection (done)
+
+Make the editor's language explicit and switchable, the way VS Code's status bar is (catalog 5.2).
+
+- **Detection** (`lib/languages.ts`): `detectLanguageFromContent` reads a shebang or an
+  opening marker (php/xml/html) for files whose extension does not resolve a language;
+  `SELECTABLE_LANGUAGES` and `languageLabel` (consolidated from App) back the picker. Unit tested.
+- **Live switch**: the editor bridge gains `registerLanguageSetter`/`setEditorLanguage`;
+  EditorPanel registers a Monaco `setModelLanguage` setter and now publishes language changes.
+  Clicking the status-bar language item opens a Change Language Mode picker (one command per
+  language) that switches the model language live.
+- **Quality**: unit tests; an e2e clicks the status-bar language item and switches the file to
+  JSON; typecheck, lint clean; renderer build succeeds. Matrix 5.2 "Language detection and manual
+  mode switch" moved Partial to Done (Done crossed to 110; 5.2 now 3/8/13).
+
 ## Slice 92: hsl and named color decorators (done)
 
 Complete the editor color decorators (catalog 5.2).

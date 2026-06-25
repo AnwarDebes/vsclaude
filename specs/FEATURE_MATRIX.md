@@ -16,7 +16,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | Section | Title | Done | Partial | Missing | Not planned |
 | --- | --- | --- | --- | --- | --- |
 | 5.1 | Text editing core | 18 | 9 | 0 | 0 |
-| 5.2 | Code intelligence (LSP language features) | 2 | 9 | 13 | 0 |
+| 5.2 | Code intelligence (LSP language features) | 3 | 8 | 13 | 0 |
 | 5.3 | Editor advanced surface | 8 | 4 | 0 | 0 |
 | 5.4 | Diff and merge | 5 | 2 | 2 | 1 |
 | 5.5 | Workbench layout and navigation | 6 | 15 | 7 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 6 | 7 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 3 | 4 | 3 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 109 | 117 | 102 | 5 |
+| TOTAL | | 110 | 116 | 102 | 5 |
 
 ## Legend
 
@@ -106,7 +106,7 @@ vsclaude implements a limited set of code intelligence features, relying on Mona
 | Color decorators and inline color picker | Done | monaco-setup.ts registers a DocumentColorProvider over findColors (lib/colors.ts) for many languages, showing a swatch and a picker for #hex, rgb()/rgba(), hsl()/hsla(), and CSS named colors (named only in CSS-family languages so plain identifiers are not decorated). Unit tested. | |
 | Language servers (TS/JS, Python, Rust, JSON, HTML, CSS) and extensibility | Missing | No LSP bridge in src-tauri/src; spec 7.4 calls it a follow-up; WORKSPACE_AND_FILES.md defers LSP to A2. | No LSP integration; Python/Rust native support absent; A2 not started. |
 | Per-language config (comments, brackets, word patterns, on-enter) | Missing | No registerLanguageConfiguration calls. | No per-language behavior config. |
-| Language detection and manual mode switch | Partial | languageFor(path) maps extensions to Monaco ids; language prop override exists. | Extension-based only; no content detection; switch not in UI. |
+| Language detection and manual mode switch | Done | languageForPath maps extensions to Monaco ids; detectLanguageFromContent (lib/languages.ts, unit tested) falls back to shebang and opening-marker detection for unknown extensions; the status-bar language item opens a Change Language Mode picker that switches the model language live (setEditorLanguage via the editor bridge). An e2e switches a file to JSON. | |
 | TS/JS smart editing (auto imports, update on move, JSDoc, inlay hints, CodeLens) | Missing | No auto-import, rename-update, JSDoc, inlay, or CodeLens registration. | No TS/JS smarts beyond the worker. |
 | Emmet expansion for HTML/CSS | Missing | No Emmet config; Monaco needs explicit registration. | No abbreviation expansion. |
 | JSON schema validation and completion | Done | monaco-setup.ts registers schemas (json-schemas.ts, unit tested) for package.json and tsconfig.json through jsonDefaults.setDiagnosticsOptions, on top of Monaco's built-in JSON validation, giving schema-driven validation and completion. | |

@@ -819,4 +819,19 @@ test.describe('vsclaude shell', () => {
     await expect(review).toBeVisible();
     await expect(review.getByText(/native app/i)).toBeVisible();
   });
+
+  test('the status bar changes the editor language mode', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    // The default file is a .tsx, so the status bar shows TypeScript and is clickable.
+    const langItem = page.getByRole('button', { name: /^Language TypeScript/i });
+    await expect(langItem).toBeVisible();
+    await langItem.click();
+    // The palette opens filtered to Language Mode commands; pick JSON.
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('Language Mode: JSON');
+    await page.keyboard.press('Enter');
+    // The editor language switched live, so the status bar now reads JSON.
+    await expect(page.getByRole('button', { name: /^Language JSON/i })).toBeVisible();
+  });
 });

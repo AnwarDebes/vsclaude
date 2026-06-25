@@ -40,6 +40,7 @@ export interface EditorStatus {
 
 let activeEditor: BridgeEditor | null = null;
 let editorStatus: EditorStatus | null = null;
+let languageSetter: ((languageId: string) => void) | null = null;
 const statusListeners = new Set<() => void>();
 
 function emitStatus(): void {
@@ -80,6 +81,25 @@ export function subscribeEditorStatus(listener: () => void): () => void {
 /** The current active editor, or null when no editor is mounted. */
 export function getActiveEditor(): BridgeEditor | null {
   return activeEditor;
+}
+
+/**
+ * Register the function that changes the active editor's language (it needs the
+ * Monaco namespace, which lives in the EditorPanel). Pass null on unmount.
+ */
+export function registerLanguageSetter(setter: ((languageId: string) => void) | null): void {
+  languageSetter = setter;
+}
+
+/**
+ * Change the active editor's language mode live. Returns true when an editor was
+ * available to change, false otherwise (so a command is a no-op with no editor).
+ */
+export function setEditorLanguage(languageId: string): boolean {
+  if (!languageSetter) return false;
+  languageSetter(languageId);
+  activeEditor?.focus();
+  return true;
 }
 
 /**
