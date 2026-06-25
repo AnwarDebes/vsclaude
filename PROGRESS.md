@@ -24,6 +24,20 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 100: toggle the bottom panel (Ctrl+J) (done)
+
+Add VS Code's Toggle Panel shortcut, the natural pair to slice 99's Ctrl+B (catalog 5.5).
+
+- App remembers the last non-hidden bottom panel in a ref; the global keydown handler and a
+  View: Toggle Panel command (Ctrl/Cmd+J) toggle the bottom panel between hidden and the last panel
+  (defaulting to Problems). The bottom-panel drawer already collapses cleanly on 'none', so no grid
+  surgery is needed (unlike the sidebar). The terminal lives in the separate companion footer, so
+  this toggles the problems/output/search/scm/outline drawer, not the terminal.
+- Quality: an e2e presses Ctrl+J and asserts the Problems region shows then hides; typecheck, lint
+  clean; build and full e2e pass. Matrix 5.5 "Show/hide individual views independently" stays
+  Partial (right-side companion/timeline and the terminal footer remain mode-coupled) with the
+  sidebar/panel toggles noted. No count change (112/114/102).
+
 ## Slice 99: toggle the primary sidebar (Ctrl+B) (done)
 
 Add VS Code's most-used layout shortcut: hide and show the primary (explorer) sidebar (catalog 5.5).

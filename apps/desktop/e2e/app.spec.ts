@@ -909,4 +909,15 @@ test.describe('vsclaude shell', () => {
     await page.keyboard.press('Control+KeyB');
     await expect(explorer).toBeVisible();
   });
+
+  test('Ctrl+J toggles the bottom panel', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    const problems = page.getByRole('region', { name: 'Problems' });
+    await expect(problems).toBeHidden();
+    await page.keyboard.press('Control+KeyJ');
+    await expect(problems).toBeVisible();
+    await page.keyboard.press('Control+KeyJ');
+    await expect(problems).toBeHidden();
+  });
 });

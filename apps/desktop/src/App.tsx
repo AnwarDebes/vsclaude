@@ -125,6 +125,10 @@ export function App() {
   const [bottomPanel, setBottomPanel] = useState<
     'none' | 'problems' | 'search' | 'scm' | 'output' | 'outline' | 'narration'
   >('none');
+  // The last non-hidden bottom panel, so Toggle Panel (Ctrl+J) can restore it.
+  const lastBottomPanelRef = useRef<
+    'problems' | 'search' | 'scm' | 'output' | 'outline' | 'narration'
+  >('problems');
   const [gitNonce, setGitNonce] = useState(0);
   const [diffTarget, setDiffTarget] = useState<DiffTarget | null>(null);
   const [markdownTarget, setMarkdownTarget] = useState<MarkdownTarget | null>(null);
@@ -517,6 +521,17 @@ export function App() {
         setSidebarHidden((h) => !h);
         return;
       }
+      if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === 'j') {
+        e.preventDefault();
+        setBottomPanel((p) => {
+          if (p !== 'none') {
+            lastBottomPanelRef.current = p;
+            return 'none';
+          }
+          return lastBottomPanelRef.current;
+        });
+        return;
+      }
       if (!(e.ctrlKey || e.metaKey) || !e.shiftKey) return;
       const key = e.key.toLowerCase();
       if (key === 'm') {
@@ -853,6 +868,20 @@ export function App() {
       keywords: ['sidebar', 'explorer', 'hide', 'show', 'panel', 'left'],
       keybinding: 'Ctrl+B',
       run: () => setSidebarHidden((h) => !h),
+    });
+    r.register({
+      id: 'toggle-panel',
+      title: 'View: Toggle Panel',
+      keywords: ['panel', 'bottom', 'problems', 'output', 'hide', 'show'],
+      keybinding: 'Ctrl+J',
+      run: () =>
+        setBottomPanel((p) => {
+          if (p !== 'none') {
+            lastBottomPanelRef.current = p;
+            return 'none';
+          }
+          return lastBottomPanelRef.current;
+        }),
     });
     // Detected npm scripts, each runnable in a new terminal.
     const runTask = (task: NpmTask) => {
