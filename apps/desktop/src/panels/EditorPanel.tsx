@@ -17,6 +17,7 @@ import {
 import { useMonacoTheme } from '../lib/monaco-theme';
 import { languageForPath } from '../lib/language';
 import { applyOnSave } from '../lib/on-save';
+import { findConflicts } from '../lib/conflicts';
 
 interface EditorPanelProps {
   path?: string;
@@ -46,10 +47,16 @@ export function EditorPanel({
   onSave,
 }: EditorPanelProps) {
   const editorRef = useRef<BridgeEditor | null>(null);
+  const monacoEditorRef = useRef<Parameters<OnMount>[0] | null>(null);
+  // Decoration ids tracked PER MODEL: @monaco-editor/react keeps one editor and swaps
+  // cached models on a path change, and deltaDecorations only clears ids on the current
+  // model, so a single shared id list would leak/duplicate across file switches.
+  const conflictDecorationsByModelRef = useRef<WeakMap<object, string[]>>(new WeakMap());
   const settings = useSyncExternalStore(subscribeEditorSettings, getEditorSettings, getEditorSettings);
   const monacoTheme = useMonacoTheme();
 
   const onMount: OnMount = (editor, monacoInstance) => {
+    monacoEditorRef.current = editor;
     editor.addCommand(monacoInstance.KeyMod.CtrlCmd | monacoInstance.KeyCode.KeyS, () => {
       void (async () => {
         const current = getEditorSettings();
@@ -152,6 +159,36 @@ export function EditorPanel({
     // re-jump to the stale symbol line or steal focus.
     onRevealed?.();
   }, [revealLine, path, onRevealed]);
+
+  // Highlight git merge-conflict regions inline: the markers, the current side, and
+  // the incoming side. Recomputed as the content changes; cleared when none remain.
+  useEffect(() => {
+    const editor = monacoEditorRef.current;
+    const model = editor?.getModel();
+    if (!editor || !model) return;
+    const decorations = findConflicts(value).flatMap((conflict) => {
+      const lineDecoration = (lineNumber: number, className: string) => ({
+        range: { startLineNumber: lineNumber, startColumn: 1, endLineNumber: lineNumber, endColumn: 1 },
+        options: { isWholeLine: true, className },
+      });
+      const out = [
+        lineDecoration(conflict.start, 'conflict-marker'),
+        lineDecoration(conflict.separator, 'conflict-marker'),
+        lineDecoration(conflict.end, 'conflict-marker'),
+      ];
+      for (let line = conflict.start + 1; line < conflict.separator; line += 1) {
+        out.push(lineDecoration(line, 'conflict-current'));
+      }
+      for (let line = conflict.separator + 1; line < conflict.end; line += 1) {
+        out.push(lineDecoration(line, 'conflict-incoming'));
+      }
+      return out;
+    });
+    // Clear and reapply this model's own previous decorations, so revisiting a file
+    // (its cached model) replaces rather than accumulates the highlighting.
+    const previous = conflictDecorationsByModelRef.current.get(model) ?? [];
+    conflictDecorationsByModelRef.current.set(model, editor.deltaDecorations(previous, decorations));
+  }, [value, path]);
 
   return (
     <div className="editor-panel">

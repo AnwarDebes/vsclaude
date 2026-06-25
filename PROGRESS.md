@@ -24,6 +24,25 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 108: inline conflict decorations + native conflict bar (done)
+
+Complete the merge-conflict feature: highlight conflicts inline and make accept work in both editors
+(catalog 5.4), building on slice 107's detection/resolution.
+
+- EditorPanel decorates each conflict block inline (current/incoming/marker whole-line decorations
+  via deltaDecorations, recomputed on content change). Since both the demo and the workspace editor
+  use EditorPanel, the highlighting applies in both.
+- WorkspaceEditor (native) now renders the MergeConflictBar above the editor and resolves via
+  ws.setDraft, so accept actions work natively too (the demo already had the bar in App).
+- Decoration ids are tracked per model (a WeakMap keyed on the Monaco model) so switching files (the
+  editor swaps cached models) replaces rather than accumulates the highlighting (a leak the
+  adversarial review caught; an e2e now guards that the marker count is stable across a round-trip).
+- Quality: an e2e opens the conflicted file, asserts the inline .conflict-marker decoration, and
+  accepts a side; typecheck, lint clean; build and full e2e pass. Matrix 5.4 "Inline merge-conflict
+  decorations and accept actions" Partial to Done (inline decorations + accept in both editors; the
+  caveat: accept via a per-file bar not per-conflict CodeLens, and no separate 3-way merge editor).
+  5.4 now 6/2/1; TOTAL 115/116/97.
+
 ## Slice 107: merge-conflict bar and resolution (done)
 
 Detect git merge conflicts and resolve them from the editor, like VS Code (catalog 5.4).

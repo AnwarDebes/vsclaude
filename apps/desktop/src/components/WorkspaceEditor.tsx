@@ -3,6 +3,8 @@ import { basePathName } from '@vsclaude/editor';
 import type { WorkspaceApi } from '../workspace/useWorkspace';
 import { EditorPanel } from '../panels/EditorPanel';
 import { FileIcon } from './FileIcon';
+import { MergeConflictBar } from './MergeConflictBar';
+import { findConflicts, resolveConflict } from '../lib/conflicts';
 
 interface WorkspaceEditorProps {
   ws: WorkspaceApi;
@@ -122,6 +124,12 @@ export function WorkspaceEditor({ ws }: WorkspaceEditorProps) {
                 </div>
               </div>
             ) : null}
+            <MergeConflictBar
+              conflicts={findConflicts(active.draft)}
+              onResolve={(conflict, choice) =>
+                ws.setDraft(active.path, resolveConflict(active.draft, conflict, choice))
+              }
+            />
             <EditorPanel
               path={active.path}
               value={active.draft}

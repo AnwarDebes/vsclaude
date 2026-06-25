@@ -969,8 +969,25 @@ test.describe('vsclaude shell', () => {
     const bar = page.getByRole('region', { name: 'Merge conflicts' });
     await expect(bar).toBeVisible();
     await expect(bar.getByText(/1 merge conflict/i)).toBeVisible();
+    // The conflict regions are decorated inline in the editor.
+    await expect(page.locator('.conflict-marker').first()).toBeVisible();
     await bar.getByRole('button', { name: 'Accept Current' }).click();
     // Resolving rewrites the file, so the conflict (and the bar) disappear.
     await expect(bar).toBeHidden();
+  });
+
+  test('conflict decorations do not duplicate when switching files', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    const tree = page.locator('.explorer-list');
+    await tree.getByRole('button', { name: 'session.config.ts', exact: true }).click();
+    const markers = page.locator('.conflict-marker');
+    await expect(markers.first()).toBeVisible();
+    const initial = await markers.count();
+    // Switch to another file and back; the decorations must replace, not accumulate.
+    await tree.getByRole('button', { name: 'login-form.tsx', exact: true }).click();
+    await tree.getByRole('button', { name: 'session.config.ts', exact: true }).click();
+    await expect(markers.first()).toBeVisible();
+    await expect(markers).toHaveCount(initial);
   });
 });
