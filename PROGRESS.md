@@ -24,6 +24,18 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 91: image viewer pan and rotate (done)
+
+Complete the SVG/image viewer with pan and rotate (catalog 5.22).
+
+- **Transform** (`lib/preview.ts`): `ImageView` plus pure `imageTransform` (pan, then zoom,
+  then rotate), `nextRotation` (quarter-turn, wraps), and `RESET_VIEW`. Unit tested.
+- **Viewer** (`ImagePreview.tsx`): a Rotate button, drag-to-pan on the body, and a Reset that
+  returns to the neutral view; the img uses imageTransform.
+- **Quality**: unit tests (imageTransform/nextRotation); the raster e2e now clicks Rotate and
+  Reset and asserts the transform; typecheck, lint clean (no contracts change); build succeeds.
+  Matrix 5.22 "SVG viewer (zoom/pan)" moved Partial to Done (Done crossed to 108; 5.22 now 3/4/3).
+
 ## Slice 90: compound tasks and dependencies (done)
 
 Run a task's dependency chain before it (catalog 5.11).

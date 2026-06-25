@@ -768,6 +768,13 @@ test.describe('vsclaude shell', () => {
     await expect(preview.getByText('Zoom 100%')).toBeVisible();
     await preview.getByRole('button', { name: 'Zoom in' }).click();
     await expect(preview.getByText('Zoom 125%')).toBeVisible();
+    // Rotate turns the image a quarter turn.
+    await preview.getByRole('button', { name: 'Rotate' }).click();
+    await expect(img).toHaveAttribute('style', /rotate\(90deg\)/);
+    // Reset returns to the neutral view.
+    await preview.getByRole('button', { name: 'Reset view' }).click();
+    await expect(img).toHaveAttribute('style', /rotate\(0deg\)/);
+    await expect(preview.getByText('Zoom 100%')).toBeVisible();
   });
 
   test('media player opens an audio file with controls', async ({ page }) => {

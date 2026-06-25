@@ -49,3 +49,26 @@ export function clampZoom(zoom: number): number {
 export function zoomPercent(zoom: number): string {
   return `${Math.round(zoom * 100)}%`;
 }
+
+/** The pan, zoom, and rotation state of the image viewport. */
+export interface ImageView {
+  zoom: number;
+  /** Rotation in degrees. */
+  rotation: number;
+  /** Pan offset in pixels. */
+  panX: number;
+  panY: number;
+}
+
+/** The neutral view: no pan, no rotation, 100 percent zoom. */
+export const RESET_VIEW: ImageView = { zoom: 1, rotation: 0, panX: 0, panY: 0 };
+
+/** The next clockwise quarter turn, wrapped to the range 0 to 359 degrees. */
+export function nextRotation(rotation: number): number {
+  return (((rotation + 90) % 360) + 360) % 360;
+}
+
+/** A CSS transform for the viewport: pan, then zoom, then rotate. */
+export function imageTransform(view: ImageView): string {
+  return `translate(${view.panX}px, ${view.panY}px) scale(${view.zoom}) rotate(${view.rotation}deg)`;
+}

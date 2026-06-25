@@ -1,10 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import {
   clampZoom,
+  imageTransform,
   isImagePath,
   isRasterImagePath,
   isSvgPath,
+  nextRotation,
   RASTER_IMAGE_EXTENSIONS,
+  RESET_VIEW,
   svgDataUrl,
   zoomPercent,
   ZOOM_MAX,
@@ -72,6 +75,26 @@ describe('zoomPercent', () => {
   it('labels the zoom bounds', () => {
     expect(zoomPercent(ZOOM_MIN)).toBe('25%');
     expect(zoomPercent(ZOOM_MAX)).toBe('400%');
+  });
+});
+
+describe('nextRotation', () => {
+  it('advances by a quarter turn and wraps at 360', () => {
+    expect(nextRotation(0)).toBe(90);
+    expect(nextRotation(270)).toBe(0);
+    expect(nextRotation(360)).toBe(90);
+  });
+});
+
+describe('imageTransform', () => {
+  it('renders the neutral view', () => {
+    expect(imageTransform(RESET_VIEW)).toBe('translate(0px, 0px) scale(1) rotate(0deg)');
+  });
+
+  it('composes pan, zoom, and rotation', () => {
+    expect(imageTransform({ zoom: 1.5, rotation: 90, panX: 10, panY: -20 })).toBe(
+      'translate(10px, -20px) scale(1.5) rotate(90deg)',
+    );
   });
 });
 
