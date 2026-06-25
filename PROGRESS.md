@@ -24,6 +24,22 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 98: format on save, paste, and type (done)
+
+Add the VS Code formatting toggles on top of the existing Format Document/Selection commands
+(catalog 5.2).
+
+- EditorSettings (contract) gains formatOnSave, formatOnPaste, formatOnType (default off);
+  editorSettingsToMonaco maps formatOnPaste/formatOnType to Monaco's native options (so they apply
+  via the editor's options spread); the EditorPanel save handler runs Format Document before
+  trim/final-newline when formatOnSave is on. All three are exposed in the Settings panel.
+- Quality: the mapper unit test covers formatOnPaste/formatOnType; typecheck, lint clean; build and
+  full e2e pass. Matrix 5.2 "Document and range formatting (on save/paste/type)" stays Partial with
+  the on-save/paste/type gap closed; the remaining gap is external formatter providers (Prettier or
+  LSP via extensions, tracked in 5.17). No count change (112/114/102). Built-in formatters cover the
+  bundled languages only, so an injected-content format-on-save e2e is brittle (Monaco auto-close)
+  and intentionally omitted; the toggle wiring is covered by the mapper test and manual reasoning.
+
 ## Slice 97: outline follows the cursor (done)
 
 Make the Outline view highlight and track the symbol containing the caret, like VS Code (catalog 5.5).

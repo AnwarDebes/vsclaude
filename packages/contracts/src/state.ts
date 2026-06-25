@@ -150,6 +150,12 @@ export interface EditorSettings {
   trimTrailingWhitespace: boolean;
   /** On save, ensure the file ends with a newline. */
   insertFinalNewline: boolean;
+  /** Format the whole document on save. */
+  formatOnSave: boolean;
+  /** Format pasted content. */
+  formatOnPaste: boolean;
+  /** Format a line as you finish typing it. */
+  formatOnType: boolean;
 }
 
 /** User-level application settings. */
@@ -218,6 +224,9 @@ export const DEFAULT_SETTINGS: AppSettings = {
     matchBrackets: 'always',
     trimTrailingWhitespace: false,
     insertFinalNewline: false,
+    formatOnSave: false,
+    formatOnPaste: false,
+    formatOnType: false,
   },
   defaultProvider: 'claude-code',
   models: {},

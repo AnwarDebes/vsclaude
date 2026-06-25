@@ -36,6 +36,8 @@ export interface MonacoEditorOptions {
   autoClosingQuotes: 'always' | 'languageDefined' | 'beforeWhitespace' | 'never';
   autoSurround: 'languageDefined' | 'quotes' | 'brackets' | 'never';
   matchBrackets: 'always' | 'near' | 'never';
+  formatOnPaste: boolean;
+  formatOnType: boolean;
 }
 
 /** Map the editor settings to Monaco's option names. */
@@ -70,6 +72,8 @@ export function editorSettingsToMonaco(settings: EditorSettings): MonacoEditorOp
     autoClosingQuotes: settings.autoClosingQuotes,
     autoSurround: settings.autoSurround,
     matchBrackets: settings.matchBrackets,
+    formatOnPaste: settings.formatOnPaste,
+    formatOnType: settings.formatOnType,
   };
 }
 

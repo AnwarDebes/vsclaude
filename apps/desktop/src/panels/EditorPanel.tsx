@@ -51,17 +51,27 @@ export function EditorPanel({
 
   const onMount: OnMount = (editor, monacoInstance) => {
     editor.addCommand(monacoInstance.KeyMod.CtrlCmd | monacoInstance.KeyCode.KeyS, () => {
-      const current = getEditorSettings();
-      const next = applyOnSave(editor.getValue(), {
-        trimTrailingWhitespace: current.trimTrailingWhitespace,
-        insertFinalNewline: current.insertFinalNewline,
-      });
-      if (next !== editor.getValue()) {
-        const position = editor.getPosition();
-        editor.setValue(next);
-        if (position) editor.setPosition(position);
-      }
-      onSave?.(next);
+      void (async () => {
+        const current = getEditorSettings();
+        // Format on save first, so trim/final-newline run on the formatted text.
+        if (current.formatOnSave) {
+          try {
+            await editor.getAction('editor.action.formatDocument')?.run();
+          } catch {
+            // A language without a formatter is fine; just save as-is.
+          }
+        }
+        const next = applyOnSave(editor.getValue(), {
+          trimTrailingWhitespace: current.trimTrailingWhitespace,
+          insertFinalNewline: current.insertFinalNewline,
+        });
+        if (next !== editor.getValue()) {
+          const position = editor.getPosition();
+          editor.setValue(next);
+          if (position) editor.setPosition(position);
+        }
+        onSave?.(next);
+      })();
     });
     // Publish this editor as the active one so palette actions (go to line, and
     // the editor command surface) can reach the file the user is looking at.

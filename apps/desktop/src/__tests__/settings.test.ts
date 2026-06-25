@@ -45,7 +45,19 @@ describe('editorSettingsToMonaco', () => {
       autoClosingQuotes: 'languageDefined',
       autoSurround: 'languageDefined',
       matchBrackets: 'always',
+      formatOnPaste: false,
+      formatOnType: false,
     });
+  });
+
+  it('maps the format-on-paste and format-on-type toggles', () => {
+    const mapped = editorSettingsToMonaco({
+      ...DEFAULT_SETTINGS.editor,
+      formatOnPaste: true,
+      formatOnType: true,
+    });
+    expect(mapped.formatOnPaste).toBe(true);
+    expect(mapped.formatOnType).toBe(true);
   });
 
   it('maps folding and sticky scroll', () => {
