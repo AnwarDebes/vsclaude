@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { classifyTaskGroup, detectNpmTasks, parseTasksJson } from '../lib/tasks';
+import {
+  classifyTaskGroup,
+  detectNpmTasks,
+  parseTasksJson,
+  resolveTaskChain,
+  type NpmTask,
+} from '../lib/tasks';
 
 describe('classifyTaskGroup', () => {
   it('classifies build and test names', () => {
@@ -69,5 +75,64 @@ describe('parseTasksJson', () => {
       ],
     });
     expect(parseTasksJson(json).map((t) => t.group)).toEqual(['build', 'test', undefined]);
+  });
+
+  it('reads dependsOn as a string or an array of labels', () => {
+    const json = JSON.stringify({
+      tasks: [
+        { label: 'one', command: 'a', dependsOn: 'build' },
+        { label: 'two', command: 'b', dependsOn: ['build', 'lint'] },
+        { label: 'three', command: 'c' },
+      ],
+    });
+    const tasks = parseTasksJson(json);
+    expect(tasks[0]!.dependsOn).toEqual(['build']);
+    expect(tasks[1]!.dependsOn).toEqual(['build', 'lint']);
+    expect(tasks[2]!.dependsOn).toBeUndefined();
+  });
+
+  it('ignores an empty or non-string dependsOn', () => {
+    const json = JSON.stringify({
+      tasks: [
+        { label: 'a', command: 'x', dependsOn: '' },
+        { label: 'b', command: 'y', dependsOn: [''] },
+        { label: 'c', command: 'z', dependsOn: 42 },
+      ],
+    });
+    expect(parseTasksJson(json).every((t) => t.dependsOn === undefined)).toBe(true);
+  });
+});
+
+describe('resolveTaskChain', () => {
+  const task = (label: string, dependsOn?: string[]): NpmTask => ({
+    id: label,
+    label,
+    command: label,
+    ...(dependsOn ? { dependsOn } : {}),
+  });
+
+  it('returns just the task when it has no dependencies', () => {
+    const tasks = [task('a')];
+    expect(resolveTaskChain(tasks, 'a').map((t) => t.label)).toEqual(['a']);
+  });
+
+  it('places transitive dependencies before the task, in order', () => {
+    const tasks = [task('a'), task('b', ['a']), task('c', ['b'])];
+    expect(resolveTaskChain(tasks, 'c').map((t) => t.label)).toEqual(['a', 'b', 'c']);
+  });
+
+  it('preserves declared order and de-duplicates a diamond', () => {
+    const tasks = [task('a'), task('b', ['a']), task('c', ['a']), task('d', ['b', 'c'])];
+    expect(resolveTaskChain(tasks, 'd').map((t) => t.label)).toEqual(['a', 'b', 'c', 'd']);
+  });
+
+  it('breaks dependency cycles without looping forever', () => {
+    const tasks = [task('a', ['b']), task('b', ['a'])];
+    expect(resolveTaskChain(tasks, 'a').map((t) => t.label)).toEqual(['b', 'a']);
+  });
+
+  it('skips unknown dependency and root labels', () => {
+    expect(resolveTaskChain([task('a', ['nope'])], 'a').map((t) => t.label)).toEqual(['a']);
+    expect(resolveTaskChain([task('a')], 'missing')).toEqual([]);
   });
 });

@@ -24,6 +24,20 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 90: compound tasks and dependencies (done)
+
+Run a task's dependency chain before it (catalog 5.11).
+
+- **Parsing** (`lib/tasks.ts`): `parseTasksJson` reads `dependsOn` (a label string or an array
+  of labels) into `NpmTask.dependsOn`.
+- **Resolution** (`lib/tasks.ts`): new pure `resolveTaskChain(tasks, label)` flattens transitive
+  dependencies deps-first, de-duplicated, with cycle safety; unit tested.
+- **Run** (`App.tsx`): `runTask` resolves the chain and runs it as one sequential command (joined
+  with the shell and-operator), substituting variables per command.
+- **Quality**: unit tests (dependsOn parsing + resolveTaskChain order/dedup/cycle/unknown);
+  typecheck, lint clean (no contracts change); the renderer build succeeds; e2e unaffected.
+  Matrix 5.11 compound-tasks row moved Missing to Partial (5.11 now 0/8/2).
+
 ## Slice 89: folding and sticky scroll editor settings (done)
 
 Make the last advanced editor surfaces explicit and configurable (catalog 5.1).

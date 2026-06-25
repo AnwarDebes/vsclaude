@@ -25,7 +25,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.8 | Search and replace across files | 5 | 2 | 5 | 0 |
 | 5.9 | Source control and git | 8 | 9 | 7 | 0 |
 | 5.10 | Integrated terminal | 6 | 8 | 4 | 0 |
-| 5.11 | Tasks (VS Code task support) | 0 | 7 | 3 | 0 |
+| 5.11 | Tasks (VS Code task support) | 0 | 8 | 2 | 0 |
 | 5.12 | Debugging (Debug Adapter Protocol) | 0 | 0 | 10 | 0 |
 | 5.13 | Snippets and Emmet | 1 | 3 | 1 | 0 |
 | 5.14 | Settings and configuration | 2 | 3 | 4 | 1 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 6 | 7 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 5 | 3 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 107 | 118 | 103 | 5 |
+| TOTAL | | 107 | 119 | 102 | 5 |
 
 ## Legend
 
@@ -302,7 +302,7 @@ The terminal has a real PTY backend (portable-pty via Rust), a typed IPC protoco
 
 ## 5.11 Tasks (VS Code task support)
 
-Task support has started: npm scripts are auto-detected from the workspace package.json (detectNpmTasks) and surface as Run Task commands in the palette, each running in a new terminal. There is still no tasks.json parsing, problem matchers, task groups, default build and test tasks, compound tasks, or background and watch tasks.
+Task support has grown: npm scripts and .vscode/tasks.json are parsed into Run Task commands in the palette (with build and test groups and a Run Build Task), each running in a terminal; variables are substituted, and a task's dependsOn chain runs in sequence. Still missing: problem matchers, a persisted default task with its keybinding, and background or watch tasks.
 
 | Capability | Status | Evidence | What is missing |
 | --- | --- | --- | --- |
@@ -310,7 +310,7 @@ Task support has started: npm scripts are auto-detected from the workspace packa
 | Task auto-detection (npm scripts, gradle, etc.) | Partial | detectNpmTasks (lib/tasks.ts) reads the workspace package.json scripts; App registers each as a Run Task command. Unit tested. | Only npm scripts; no gradle, make, or other build systems. |
 | Task quick-pick UI and palette integration | Partial | Detected tasks appear as Run Task: <name> commands in the palette, each running in a new terminal (requestRunInTerminal). | No dedicated task picker view, task groups, or default build and test tasks. |
 | Task groups (build, test) and default task | Partial | Tasks carry a build or test group (parseTasksJson reads the tasks.json group; detectNpmTasks classifies script names via classifyTaskGroup, unit tested); Tasks: Run Build Task runs the first build-group task. | No persisted default task and no Ctrl or Cmd plus Shift plus B keybinding wired. |
-| Compound tasks and dependencies | Missing | Terminal runs one command per command_run event. | No sequencing or dependency declarations. |
+| Compound tasks and dependencies | Partial | parseTasksJson reads dependsOn (a label or array of labels); resolveTaskChain (lib/tasks.ts, unit tested) flattens transitive dependencies deps-first with de-duplication and cycle safety; App runs a task's chain as one sequential command joined with the shell and-operator. | No dependsOrder parallel semantics (the chain is always sequential), no background or watch-task coordination, and the chain runs as one joined command rather than discrete task invocations. |
 | Problem matchers (output parsing into Problems panel) | Missing | Terminal spec states it does not parse output for meaning; no matcher logic in packages/editor/src. | No regex output parsing or error extraction. |
 | Background/watch tasks with begin/end patterns | Missing | Long-lived commands run via command_run but with no background designation. | No background flag or began/ended detection. |
 | Run, terminate, restart, show-running actions | Partial | ipc.ts pty_kill terminates; store.ts tracks live/exited; pty_create spawns. | No named-task run, show-running UI, or restart action. |

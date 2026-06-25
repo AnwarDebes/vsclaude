@@ -79,7 +79,7 @@ import { SwarmPanel } from './panels/SwarmPanel';
 import { TimelinePanel } from './panels/TimelinePanel';
 import { TokenPanel } from './panels/TokenPanel';
 import { TerminalTabs, requestNewTerminal, requestRunInTerminal } from './components/TerminalTabs';
-import { detectNpmTasks, parseTasksJson, type NpmTask } from './lib/tasks';
+import { detectNpmTasks, parseTasksJson, resolveTaskChain, type NpmTask } from './lib/tasks';
 import { substituteVariables } from './lib/variables';
 import { isExcludedPath } from './lib/excludes';
 import { untitledName } from './lib/untitled';
@@ -775,11 +775,18 @@ export function App() {
     const runTask = (task: NpmTask) => {
       const repo = hasWorkspace ? ws.roots[0]?.path ?? '' : '';
       const file = hasWorkspace ? ws.activePath ?? '' : openFile;
-      const command = substituteVariables(task.command, {
-        workspaceFolder: repo,
-        file,
-        fileBasename: file ? basePathName(file) : '',
-      });
+      // Run the task's dependency chain before it, in order, as one sequential command.
+      const chain = resolveTaskChain(npmTasks, task.label);
+      const toRun = chain.length > 0 ? chain : [task];
+      const command = toRun
+        .map((t) =>
+          substituteVariables(t.command, {
+            workspaceFolder: repo,
+            file,
+            fileBasename: file ? basePathName(file) : '',
+          }),
+        )
+        .join(' && ');
       appendLog(`Running task: ${command}`, 'info', 'Tasks');
       requestRunInTerminal(command, task.label);
     };

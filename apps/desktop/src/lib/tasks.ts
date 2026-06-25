@@ -12,6 +12,39 @@ export interface NpmTask {
   command: string;
   /** The VS Code task group, when known. */
   group?: TaskGroup;
+  /** Labels of tasks this one depends on, run before it. */
+  dependsOn?: string[];
+}
+
+/** Normalize a tasks.json dependsOn (a label string or an array of labels). */
+function readDependsOn(raw: unknown): string[] {
+  if (typeof raw === 'string') return raw.length > 0 ? [raw] : [];
+  if (Array.isArray(raw)) return raw.filter((x): x is string => typeof x === 'string' && x.length > 0);
+  return [];
+}
+
+/**
+ * Flatten a task and its transitive dependencies into run order: every dependency
+ * appears before the task that needs it, each task appears once, and dependency
+ * cycles are broken safely (a task already on the current path is not re-entered).
+ * An unknown label (the root or a dependency) is skipped. Pure, so it is unit tested.
+ */
+export function resolveTaskChain(tasks: readonly NpmTask[], label: string): NpmTask[] {
+  const byLabel = new Map(tasks.map((t) => [t.label, t]));
+  const out: NpmTask[] = [];
+  const done = new Set<string>();
+  const visit = (lbl: string, path: Set<string>): void => {
+    if (done.has(lbl) || path.has(lbl)) return;
+    const task = byLabel.get(lbl);
+    if (!task) return;
+    path.add(lbl);
+    for (const dep of task.dependsOn ?? []) visit(dep, path);
+    path.delete(lbl);
+    done.add(lbl);
+    out.push(task);
+  };
+  visit(label, new Set());
+  return out;
 }
 
 /** Classify a script or task name into a build or test group, if it looks like one. */
@@ -54,11 +87,13 @@ export function parseTasksJson(tasksJsonText: string): NpmTask[] {
           ? (rawGroup as { kind?: unknown }).kind
           : undefined;
     const group = groupKind === 'build' || groupKind === 'test' ? groupKind : undefined;
+    const dependsOn = readDependsOn((task as { dependsOn?: unknown }).dependsOn);
     out.push({
       id: `tasksjson-${label}`,
       label,
       command: argString ? `${command} ${argString}` : command,
       group,
+      ...(dependsOn.length > 0 ? { dependsOn } : {}),
     });
   }
   return out;
