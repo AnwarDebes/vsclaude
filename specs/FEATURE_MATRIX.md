@@ -15,7 +15,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 
 | Section | Title | Done | Partial | Missing | Not planned |
 | --- | --- | --- | --- | --- | --- |
-| 5.1 | Text editing core | 11 | 16 | 0 | 0 |
+| 5.1 | Text editing core | 14 | 13 | 0 | 0 |
 | 5.2 | Code intelligence (LSP language features) | 1 | 10 | 13 | 0 |
 | 5.3 | Editor advanced surface | 8 | 4 | 0 | 0 |
 | 5.4 | Diff and merge | 5 | 2 | 2 | 1 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 6 | 7 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 5 | 3 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 100 | 125 | 103 | 5 |
+| TOTAL | | 103 | 122 | 103 | 5 |
 
 ## Legend
 
@@ -61,9 +61,9 @@ The editor integrates Monaco 0.55.1, and its editing actions are now exposed: a 
 | Line operations (move/copy, delete, insert, join, indent/outdent, transpose, sort, trim) | Done | editor-commands.ts registers delete, move up and down, copy up and down, insert above and below, join, indent and outdent, transpose, sort ascending and descending, and trim trailing whitespace. | |
 | Case transforms (upper/lower/title) | Done | editor-commands.ts registers Transform to Uppercase, Lowercase, and Title Case. | |
 | Word wrap and wrap column control | Partial | editor-commands.ts registers Toggle Word Wrap (editor.action.toggleWordWrap). | No wrap-column setting or wrap-indent control. |
-| Auto-closing brackets and quotes | Partial | Monaco default-on; EditorPanel.tsx sets neither autoClosingBrackets nor autoClosingQuotes. | No explicit config or user toggle. |
-| Auto-surround and bracket pair selection | Partial | Monaco supports auto-surround by default; no explicit config. | No config, no verification, no UI toggle. |
-| Bracket matching and pair colorization | Partial | Spec 7.1 line 306 marks colorization default on; EditorPanel.tsx does not disable it. | Enabled by default but not configured or exposed; no toggle. |
+| Auto-closing brackets and quotes | Done | editor.autoClosingBrackets and editor.autoClosingQuotes settings map to Monaco (editorSettingsToMonaco, unit tested) and are exposed in the Settings panel. | |
+| Auto-surround and bracket pair selection | Done | The editor.autoSurround setting maps to Monaco's autoSurround (editorSettingsToMonaco, unit tested) and is exposed in the Settings panel. | |
+| Bracket matching and pair colorization | Done | editor.matchBrackets and editor.bracketPairColorization settings map to Monaco (editorSettingsToMonaco, unit tested) and are exposed in the Settings panel. | |
 | Bracket pair guides | Done | The editor.bracketPairGuides setting maps to Monaco's guides.bracketPairs (editorSettingsToMonaco), on by default. Unit tested. | |
 | Indentation (detect, spaces/tabs, convert, tab size, guides) | Partial | EditorPanel.tsx sets tabSize: 2; no detectIndentation or insertSpaces. | No auto-detect, no insertSpaces toggle, no convert command, no explicit guide config. |
 | Whitespace and control char rendering, render final newline | Partial | renderWhitespace is now a setting (none, selection, all) applied to Monaco. | Control-character rendering and render-final-newline are not configurable. |

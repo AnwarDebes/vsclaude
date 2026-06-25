@@ -24,6 +24,18 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 85: explicit bracket and auto-close editor settings (done)
+
+Make three Monaco-default behaviors explicit and configurable (catalog 5.1).
+
+- **Settings**: `bracketPairColorization`, `autoClosingBrackets`, `autoClosingQuotes`,
+  `autoSurround`, and `matchBrackets` join EditorSettings and DEFAULT_SETTINGS, map to
+  Monaco through editorSettingsToMonaco, and appear in the Settings panel via the schema.
+- **Quality**: editorSettingsToMonaco unit tests updated (defaults plus a focused
+  mapping test); schema exposure tested; typecheck, lint, build clean; e2e unaffected.
+  Matrix 5.1 rows auto-closing brackets/quotes, auto-surround, and bracket
+  matching/colorization moved Partial to Done (Done crossed to 103).
+
 ## Slice 84: audio and video media player (done)
 
 A media player for audio and video files (catalog 5.22).

@@ -22,6 +22,11 @@ export interface MonacoEditorOptions {
   fontWeight: string;
   mouseWheelZoom: boolean;
   guides: { bracketPairs: boolean };
+  bracketPairColorization: { enabled: boolean };
+  autoClosingBrackets: 'always' | 'languageDefined' | 'beforeWhitespace' | 'never';
+  autoClosingQuotes: 'always' | 'languageDefined' | 'beforeWhitespace' | 'never';
+  autoSurround: 'languageDefined' | 'quotes' | 'brackets' | 'never';
+  matchBrackets: 'always' | 'near' | 'never';
 }
 
 /** Map the editor settings to Monaco's option names. */
@@ -42,6 +47,11 @@ export function editorSettingsToMonaco(settings: EditorSettings): MonacoEditorOp
     fontWeight: settings.fontWeight,
     mouseWheelZoom: settings.mouseWheelZoom,
     guides: { bracketPairs: settings.bracketPairGuides },
+    bracketPairColorization: { enabled: settings.bracketPairColorization },
+    autoClosingBrackets: settings.autoClosingBrackets,
+    autoClosingQuotes: settings.autoClosingQuotes,
+    autoSurround: settings.autoSurround,
+    matchBrackets: settings.matchBrackets,
   };
 }
 

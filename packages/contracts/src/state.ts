@@ -116,6 +116,16 @@ export interface EditorSettings {
   diffMaxComputationTime: number;
   /** Draw vertical guides for matching bracket pairs. */
   bracketPairGuides: boolean;
+  /** Colorize matching bracket pairs by nesting depth. */
+  bracketPairColorization: boolean;
+  /** When the editor auto-closes brackets as you type. */
+  autoClosingBrackets: 'always' | 'languageDefined' | 'beforeWhitespace' | 'never';
+  /** When the editor auto-closes quotes as you type. */
+  autoClosingQuotes: 'always' | 'languageDefined' | 'beforeWhitespace' | 'never';
+  /** Whether typing a bracket or quote over a selection wraps it. */
+  autoSurround: 'languageDefined' | 'quotes' | 'brackets' | 'never';
+  /** When to highlight the bracket matching the one at the cursor. */
+  matchBrackets: 'always' | 'near' | 'never';
   /** On save, strip trailing whitespace from every line. */
   trimTrailingWhitespace: boolean;
   /** On save, ensure the file ends with a newline. */
@@ -171,6 +181,11 @@ export const DEFAULT_SETTINGS: AppSettings = {
     diffAlgorithm: 'advanced',
     diffMaxComputationTime: 5000,
     bracketPairGuides: true,
+    bracketPairColorization: true,
+    autoClosingBrackets: 'languageDefined',
+    autoClosingQuotes: 'languageDefined',
+    autoSurround: 'languageDefined',
+    matchBrackets: 'always',
     trimTrailingWhitespace: false,
     insertFinalNewline: false,
   },

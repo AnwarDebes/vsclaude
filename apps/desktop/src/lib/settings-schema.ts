@@ -265,6 +265,100 @@ export const SETTINGS_SCHEMA: readonly SettingDef[] = [
     set: (s, v) => ({ ...s, editor: { ...s.editor, bracketPairGuides: Boolean(v) } }),
   },
   {
+    id: 'editor.bracketPairColorization',
+    category: 'Editor',
+    label: 'Bracket Pair Colorization',
+    description: 'Colorize matching bracket pairs by nesting depth.',
+    control: { kind: 'boolean' },
+    get: (s) => s.editor.bracketPairColorization,
+    set: (s, v) => ({ ...s, editor: { ...s.editor, bracketPairColorization: Boolean(v) } }),
+  },
+  {
+    id: 'editor.autoClosingBrackets',
+    category: 'Editor',
+    label: 'Auto Closing Brackets',
+    description: 'When the editor auto-closes brackets as you type.',
+    control: {
+      kind: 'select',
+      options: [
+        { value: 'languageDefined', label: 'Language Defined' },
+        { value: 'always', label: 'Always' },
+        { value: 'beforeWhitespace', label: 'Before Whitespace' },
+        { value: 'never', label: 'Never' },
+      ],
+    },
+    get: (s) => s.editor.autoClosingBrackets,
+    set: (s, v) => ({
+      ...s,
+      editor: {
+        ...s.editor,
+        autoClosingBrackets: v as 'always' | 'languageDefined' | 'beforeWhitespace' | 'never',
+      },
+    }),
+  },
+  {
+    id: 'editor.autoClosingQuotes',
+    category: 'Editor',
+    label: 'Auto Closing Quotes',
+    description: 'When the editor auto-closes quotes as you type.',
+    control: {
+      kind: 'select',
+      options: [
+        { value: 'languageDefined', label: 'Language Defined' },
+        { value: 'always', label: 'Always' },
+        { value: 'beforeWhitespace', label: 'Before Whitespace' },
+        { value: 'never', label: 'Never' },
+      ],
+    },
+    get: (s) => s.editor.autoClosingQuotes,
+    set: (s, v) => ({
+      ...s,
+      editor: {
+        ...s.editor,
+        autoClosingQuotes: v as 'always' | 'languageDefined' | 'beforeWhitespace' | 'never',
+      },
+    }),
+  },
+  {
+    id: 'editor.autoSurround',
+    category: 'Editor',
+    label: 'Auto Surround',
+    description: 'Whether typing a bracket or quote over a selection wraps it.',
+    control: {
+      kind: 'select',
+      options: [
+        { value: 'languageDefined', label: 'Language Defined' },
+        { value: 'quotes', label: 'Quotes' },
+        { value: 'brackets', label: 'Brackets' },
+        { value: 'never', label: 'Never' },
+      ],
+    },
+    get: (s) => s.editor.autoSurround,
+    set: (s, v) => ({
+      ...s,
+      editor: { ...s.editor, autoSurround: v as 'languageDefined' | 'quotes' | 'brackets' | 'never' },
+    }),
+  },
+  {
+    id: 'editor.matchBrackets',
+    category: 'Editor',
+    label: 'Match Brackets',
+    description: 'When to highlight the bracket matching the one at the cursor.',
+    control: {
+      kind: 'select',
+      options: [
+        { value: 'always', label: 'Always' },
+        { value: 'near', label: 'Near' },
+        { value: 'never', label: 'Never' },
+      ],
+    },
+    get: (s) => s.editor.matchBrackets,
+    set: (s, v) => ({
+      ...s,
+      editor: { ...s.editor, matchBrackets: v as 'always' | 'near' | 'never' },
+    }),
+  },
+  {
     id: 'editor.trimTrailingWhitespace',
     category: 'Editor',
     label: 'Trim Trailing Whitespace',

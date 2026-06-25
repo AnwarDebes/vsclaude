@@ -31,7 +31,28 @@ describe('editorSettingsToMonaco', () => {
       fontWeight: 'normal',
       mouseWheelZoom: false,
       guides: { bracketPairs: true },
+      bracketPairColorization: { enabled: true },
+      autoClosingBrackets: 'languageDefined',
+      autoClosingQuotes: 'languageDefined',
+      autoSurround: 'languageDefined',
+      matchBrackets: 'always',
     });
+  });
+
+  it('maps the bracket and auto-close settings', () => {
+    const mapped = editorSettingsToMonaco({
+      ...DEFAULT_SETTINGS.editor,
+      bracketPairColorization: false,
+      autoClosingBrackets: 'never',
+      autoClosingQuotes: 'beforeWhitespace',
+      autoSurround: 'quotes',
+      matchBrackets: 'near',
+    });
+    expect(mapped.bracketPairColorization).toEqual({ enabled: false });
+    expect(mapped.autoClosingBrackets).toBe('never');
+    expect(mapped.autoClosingQuotes).toBe('beforeWhitespace');
+    expect(mapped.autoSurround).toBe('quotes');
+    expect(mapped.matchBrackets).toBe('near');
   });
 
   it('maps a ruler column to a Monaco rulers array', () => {
@@ -122,5 +143,14 @@ describe('filterSettings', () => {
     const fontIds = filterSettings('font', SETTINGS_SCHEMA).map((d) => d.id);
     expect(fontIds).toContain('editor.fontFamily');
     expect(fontIds).toContain('editor.fontLigatures');
+  });
+
+  it('exposes the bracket and auto-close settings', () => {
+    const ids = SETTINGS_SCHEMA.map((d) => d.id);
+    expect(ids).toContain('editor.bracketPairColorization');
+    expect(ids).toContain('editor.autoClosingBrackets');
+    expect(ids).toContain('editor.autoClosingQuotes');
+    expect(ids).toContain('editor.autoSurround');
+    expect(ids).toContain('editor.matchBrackets');
   });
 });
