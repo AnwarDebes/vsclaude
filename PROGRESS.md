@@ -24,6 +24,19 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 104: hex view true bytes (done)
+
+Make the hex dump exact, completing the binary-read story (image 101, media 103, hex now) (catalog 5.22).
+
+- lib/hex.ts: hexDumpBytes(Uint8Array) is the core (exact for any byte); hexDump(text) now encodes
+  UTF-8 first (so non-ASCII shows real bytes, not code units); base64ToBytes decodes the native read.
+- HexView/HexTarget carry bytes; the View: Hex command natively reads the file's true bytes
+  (fs_read_file_base64 plus base64ToBytes) and in the demo encodes the content as UTF-8.
+- Quality: hexDumpBytes (binary + byte 255) and base64ToBytes unit tests, plus the existing hex e2e
+  (now correct UTF-8 bytes); typecheck, lint clean; build and full e2e pass. Matrix 5.22 "Hex viewer
+  and binary editor" stays Partial (read-only, no byte editing or data inspector) with the
+  code-units gap closed. No count change (114/112/102).
+
 ## Slice 103: native media playback (done)
 
 Make audio/video playback work in the native app, completing the binary-preview trio with slice

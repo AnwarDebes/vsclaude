@@ -73,6 +73,7 @@ import { isImagePath, isSvgPath, svgDataUrl, rasterImageMime } from './lib/previ
 import { MediaPlayer, type MediaTarget } from './components/MediaPlayer';
 import { isMediaPath, mediaKind, mediaMime } from './lib/media';
 import { HexView, type HexTarget } from './components/HexView';
+import { base64ToBytes } from './lib/hex';
 import { ProcessInfoModal } from './components/ProcessInfoModal';
 import { AccessibilityHelp } from './components/AccessibilityHelp';
 import { themeForSystem } from './lib/system-theme';
@@ -700,16 +701,27 @@ export function App() {
       id: 'view-hex',
       title: 'View: Hex',
       keywords: ['hex', 'binary', 'bytes', 'dump'],
-      run: () => {
+      run: async () => {
         const path = hasWorkspace ? ws.activePath : openFile;
         if (!path) {
           addNotification('info', 'Open a file to view it as hex.');
           return;
         }
-        const content = hasWorkspace
-          ? ws.activeDoc?.draft ?? ''
-          : editedContents[openFile] ?? demoContentFor(openFile);
-        setHexTarget({ name: basePathName(path), content });
+        // Natively, dump the file's true on-disk bytes (so binary and non-ASCII files
+        // are exact; unsaved edits are not reflected); in the demo, encode the
+        // in-memory content as UTF-8.
+        let bytes: Uint8Array;
+        if (hasWorkspace) {
+          try {
+            bytes = base64ToBytes(await readFileBase64(path));
+          } catch {
+            addNotification('error', 'Could not read the file.');
+            return;
+          }
+        } else {
+          bytes = new TextEncoder().encode(editedContents[openFile] ?? demoContentFor(openFile));
+        }
+        setHexTarget({ name: basePathName(path), bytes });
       },
     });
     r.register({

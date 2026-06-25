@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import { hexDump } from '../lib/hex';
+import { hexDumpBytes } from '../lib/hex';
 
 export interface HexTarget {
   name: string;
-  content: string;
+  bytes: Uint8Array;
 }
 
 export interface HexViewProps {
@@ -33,7 +33,7 @@ export function HexView({ target, onClose }: HexViewProps) {
             Close
           </button>
         </header>
-        <pre className="hex-modal__body">{hexDump(target.content)}</pre>
+        <pre className="hex-modal__body">{hexDumpBytes(target.bytes)}</pre>
       </div>
     </div>
   );
