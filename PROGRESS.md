@@ -24,6 +24,23 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 88: outline view for code symbols (done)
+
+Broaden the Outline view beyond Markdown (catalog 5.3); the row stays Partial.
+
+- **Source** (`lib/workspace-symbols.ts`): a new pure `outlineSymbols(path, content)` returns
+  Markdown headings (with level) for .md and flat top-level code declarations otherwise;
+  `codeSymbols(text, rust)` gained an opt-in Rust matcher (fn/struct/trait/impl/mod/union/
+  enum/type/const/static) applied only to .rs files, so JS/TS keywords like `static` are not
+  mis-captured. Unit tested.
+- **Panel** (`OutlinePanel.tsx`): renders `outlineSymbols` for any active file; clicking a
+  symbol reveals its line. Empty state distinguishes no-symbols from no-file-open.
+- **Honesty**: the row stays Partial (the adversarial review flagged a Done flip as an
+  overclaim: JSON/CSS/HTML/SCSS/LESS/YAML/TOML still get no outline). This slice broadens
+  coverage to JS/TS/Rust; the matrix counts are unchanged.
+- **Quality**: unit tests, typecheck, lint clean (no contracts change), the renderer build
+  succeeds, and an e2e opens a TS file and asserts its component appears in the outline.
+
 ## Slice 87: complete indentation support (done)
 
 Close out the editor's indentation capability (catalog 5.1).

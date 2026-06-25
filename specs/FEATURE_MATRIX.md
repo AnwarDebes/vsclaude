@@ -114,7 +114,7 @@ vsclaude implements a limited set of code intelligence features, relying on Mona
 
 ## 5.3 Editor advanced surface
 
-The editor uses Monaco 0.55.1 with minimal configuration. Only the minimap is explicitly enabled; other advanced features (sticky scroll, folding, breadcrumbs, inline diagnostics, rulers, indent guides, bracket colorization) rely on Monaco defaults that are on, but are not exposed through UI controls or explicitly wired. The app emphasizes simplicity in early alpha over full parity on the advanced surface.
+The editor uses Monaco 0.55.1. Editor appearance and behavior are now exposed through the Settings panel (font, minimap, cursor, scrolling, rulers, indent guides, and bracket colorization), and the Outline view sources symbols for Markdown and JS/TS/Rust code files. A few advanced surfaces (sticky scroll, inline diagnostics from language workers) still rely on Monaco defaults that are on but lack dedicated UI controls. The app emphasizes simplicity in early alpha over full parity on the advanced surface.
 
 | Capability | Status | Evidence | What is missing |
 | --- | --- | --- | --- |
@@ -128,7 +128,7 @@ The editor uses Monaco 0.55.1 with minimal configuration. Only the minimap is ex
 | Hover controls, def-on-hover preview, click-to-peek | Partial | Monaco hovers default on; TS worker provides hovers; spec 7.3 registration surface unwired. | No definition/references provider; no peek or Ctrl+Click-to-def. |
 | Word-based suggestions across open docs | Partial | Monaco completions default on; word-based built in. | No explicit or cross-document config. |
 | Suggest widget status bar plus details toggle | Done | Monaco suggest widget default on with details pane; not disabled. | |
-| Outline rendering source for Outline view | Partial | A markdown DocumentSymbolProvider (monaco-setup.ts over markdownSymbols in lib/symbols.ts) supplies the heading outline; OutlinePanel renders it. Unit tested. | Symbol source covers Markdown only; other languages have no provider yet. |
+| Outline rendering source for Outline view | Partial | OutlinePanel renders outlineSymbols (lib/workspace-symbols.ts, unit tested): Markdown headings, plus flat top-level declarations for JS/TS and Rust files via codeSymbols. Clicking an entry reveals its line; an e2e covers Markdown and code. | No structural outline for JSON, CSS/SCSS/LESS, HTML, or YAML/TOML; code coverage is flat top-level JS/TS and Rust declarations only (no nesting) and does not detect Python defs. |
 | Indent guides plus bracket guides plus active highlight | Done | Monaco indent and bracket guides default on; not disabled. | (No custom color/width/active styling.) |
 
 ## 5.4 Diff and merge

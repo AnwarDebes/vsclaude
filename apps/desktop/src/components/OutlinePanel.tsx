@@ -1,4 +1,4 @@
-import { markdownSymbols } from '../lib/symbols';
+import { outlineSymbols } from '../lib/workspace-symbols';
 
 export interface OutlinePanelProps {
   /** The active file path, or null. */
@@ -10,13 +10,12 @@ export interface OutlinePanelProps {
 }
 
 /**
- * The Outline view: the symbols of the active file. Markdown headings are
- * supported today; other languages show an empty state until their symbol
- * sources are added. Clicking an entry reveals its line in the editor.
+ * The Outline view: the symbols of the active file. Markdown contributes its
+ * headings; code files contribute their top-level declarations. Clicking an entry
+ * reveals its line in the editor.
  */
 export function OutlinePanel({ path, content, onReveal, onClose }: OutlinePanelProps) {
-  const isMarkdown = path?.toLowerCase().endsWith('.md') ?? false;
-  const symbols = isMarkdown ? markdownSymbols(content) : [];
+  const symbols = path ? outlineSymbols(path, content) : [];
 
   return (
     <section className="outline" role="region" aria-label="Outline">
@@ -28,9 +27,7 @@ export function OutlinePanel({ path, content, onReveal, onClose }: OutlinePanelP
       </header>
       <div className="outline__body">
         {symbols.length === 0 ? (
-          <p className="outline__empty">
-            {isMarkdown ? 'No headings in this file.' : 'Outline is available for Markdown files.'}
-          </p>
+          <p className="outline__empty">{path ? 'No symbols in this file.' : 'No file is open.'}</p>
         ) : (
           symbols.map((symbol, i) => (
             <button
