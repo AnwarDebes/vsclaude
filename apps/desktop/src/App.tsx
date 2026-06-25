@@ -24,7 +24,9 @@ import {
   runEditorAction,
   setEditorLanguage,
   setEditorEol,
+  currentPosition,
 } from './lib/editor-bridge';
+import { navBack, navForward } from './lib/nav-history';
 import { SnippetsModal } from './components/SnippetsModal';
 import { setEditorSettings } from './lib/editor-settings';
 import { applyMonacoTheme } from './lib/monaco-theme';
@@ -533,6 +535,21 @@ export function App() {
         });
         return;
       }
+      // Editor navigation history: Alt+Left goes back, Alt+Right goes forward.
+      if (e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey && e.key === 'ArrowLeft') {
+        e.preventDefault();
+        const cur = currentPosition();
+        const previous = cur ? navBack(cur) : null;
+        if (previous) gotoLine(previous.line, previous.column, false);
+        return;
+      }
+      if (e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey && e.key === 'ArrowRight') {
+        e.preventDefault();
+        const cur = currentPosition();
+        const next = cur ? navForward(cur) : null;
+        if (next) gotoLine(next.line, next.column, false);
+        return;
+      }
       if (!(e.ctrlKey || e.metaKey) || !e.shiftKey) return;
       const key = e.key.toLowerCase();
       if (key === 'm') {
@@ -899,6 +916,30 @@ export function App() {
       keywords: ['sidebar', 'explorer', 'hide', 'show', 'panel', 'left'],
       keybinding: 'Ctrl+B',
       run: () => setSidebarHidden((h) => !h),
+    });
+    r.register({
+      id: 'nav-back',
+      title: 'Go Back',
+      keywords: ['back', 'navigate', 'history', 'previous', 'return'],
+      keybinding: 'Alt+Left',
+      run: () => {
+        const cur = currentPosition();
+        if (!cur) return;
+        const previous = navBack(cur);
+        if (previous) gotoLine(previous.line, previous.column, false);
+      },
+    });
+    r.register({
+      id: 'nav-forward',
+      title: 'Go Forward',
+      keywords: ['forward', 'navigate', 'history', 'next'],
+      keybinding: 'Alt+Right',
+      run: () => {
+        const cur = currentPosition();
+        if (!cur) return;
+        const next = navForward(cur);
+        if (next) gotoLine(next.line, next.column, false);
+      },
     });
     r.register({
       id: 'toggle-panel',

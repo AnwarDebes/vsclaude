@@ -942,4 +942,22 @@ test.describe('vsclaude shell', () => {
     await palette.getByPlaceholder(/type a command/i).fill('Go to Definition');
     await expect(palette.getByRole('option', { name: /Go to Definition/i })).toBeVisible();
   });
+
+  test('Go Back and Go Forward step through the navigation history', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    // The editor opens at line 1. Jump to the LoginForm symbol (line 4) via @, which
+    // records the line-1 origin in the history. (Ctrl+K works here: the editor is not
+    // yet focused, so Monaco does not capture it as a chord.)
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('@LoginForm');
+    await page.keyboard.press('Enter');
+    await expect(page.getByRole('button', { name: /^Line 4,/i })).toBeVisible();
+    // Alt+Left goes back to the origin, Alt+Right returns (Monaco does not bind these).
+    await page.keyboard.press('Alt+ArrowLeft');
+    await expect(page.getByRole('button', { name: /^Line 1,/i })).toBeVisible();
+    await page.keyboard.press('Alt+ArrowRight');
+    await expect(page.getByRole('button', { name: /^Line 4,/i })).toBeVisible();
+  });
 });

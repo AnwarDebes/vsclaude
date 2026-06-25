@@ -9,6 +9,7 @@
  * this module does not pull the editor types into every caller; the only methods
  * used are revealing, positioning, and focusing.
  */
+import { recordNav, type NavPos } from './nav-history';
 
 /** The slice of the Monaco editor API the bridge uses. */
 export interface BridgeEditor {
@@ -16,11 +17,21 @@ export interface BridgeEditor {
   setPosition(position: { lineNumber: number; column: number }): void;
   getModel(): { getLineCount(): number } | null;
   focus(): void;
+  /** The current caret position, for recording navigation history. */
+  getPosition?(): { lineNumber: number; column: number } | null;
   /** Look up a built-in editor action by id, when available. */
   getAction?(id: string): { run(): unknown } | null;
   /** Trigger a command on the editor, the fallback when no action is registered. */
   trigger?(source: string | null | undefined, handlerId: string, payload?: unknown): void;
 }
+
+/** Monaco actions that jump the caret, so the bridge records a navigation point. */
+const NAV_ACTION_IDS = new Set([
+  'editor.action.revealDefinition',
+  'editor.action.goToTypeDefinition',
+  'editor.action.goToImplementation',
+  'editor.action.goToReferences',
+]);
 
 /** A snapshot of the active editor's state, for the status bar. */
 export interface EditorStatus {
@@ -84,6 +95,18 @@ export function getActiveEditor(): BridgeEditor | null {
   return activeEditor;
 }
 
+/** The active editor's caret position, for navigation history; null if unavailable. */
+export function currentPosition(): NavPos | null {
+  const pos = activeEditor?.getPosition?.();
+  return pos ? { line: pos.lineNumber, column: pos.column } : null;
+}
+
+/** Record the active editor's current caret position as a navigation point. */
+function recordCurrentNav(): void {
+  const pos = currentPosition();
+  if (pos) recordNav(pos);
+}
+
 /**
  * Register the function that changes the active editor's language (it needs the
  * Monaco namespace, which lives in the EditorPanel). Pass null on unmount.
@@ -131,6 +154,8 @@ export function setEditorEol(eol: 'LF' | 'CRLF'): boolean {
 export function runEditorAction(actionId: string): boolean {
   const editor = activeEditor;
   if (!editor) return false;
+  // Record a navigation point before a jump action, so Go Back returns here.
+  if (NAV_ACTION_IDS.has(actionId)) recordCurrentNav();
   const action = editor.getAction?.(actionId);
   if (action) {
     void action.run();
@@ -162,9 +187,11 @@ export function insertSnippet(body: string): boolean {
  * from `:9999` lands on the last line rather than failing. Returns true when an
  * editor was available to jump, false otherwise.
  */
-export function gotoLine(line: number, column = 1): boolean {
+export function gotoLine(line: number, column = 1, record = true): boolean {
   const editor = activeEditor;
   if (!editor) return false;
+  // Record where we are jumping from, unless this jump is itself a back/forward step.
+  if (record) recordCurrentNav();
   const lineCount = editor.getModel()?.getLineCount() ?? line;
   const target = Math.max(1, Math.min(line, lineCount));
   editor.revealLineInCenter(target);

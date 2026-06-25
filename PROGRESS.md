@@ -24,6 +24,22 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 106: back/forward navigation history (done)
+
+Add VS Code's Go Back / Go Forward (Alt+Left/Right), pairing with slice 105's Go to Definition (catalog 5.6).
+
+- lib/nav-history.ts: a shared back/forward stack of caret positions (recordNav/navBack/navForward,
+  bounded to 50); pure, unit tested.
+- editor bridge: gotoLine records the position it leaves from (so go-to-line, symbol jumps, the
+  outline, and problem jumps all feed the history); runEditorAction records before the navigation
+  actions (revealDefinition, references, etc.); a new currentPosition() reads the caret. Go
+  Back/Forward call gotoLine with record=false so they do not re-record.
+- App: Go Back / Go Forward commands (Alt+Left / Alt+Right, also in the global keydown handler).
+- Quality: nav-history unit tests; an e2e jumps via @ then Alt+Left (origin) and Alt+Right (back to
+  the symbol); typecheck, lint clean; build and full e2e pass. Matrix 5.6 "Go to definition and
+  back/forward stack" Missing to Partial (in-editor jumps only; cross-file not tracked). 5.6 now
+  8/3/0 (no Missing left in 5.6); TOTAL 114/116/98.
+
 ## Slice 105: code-intelligence commands (Monaco worker) (done)
 
 Expose the TS/JS code-intelligence actions Monaco's bundled worker already provides, and correct the

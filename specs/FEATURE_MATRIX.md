@@ -20,7 +20,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.3 | Editor advanced surface | 8 | 4 | 0 | 0 |
 | 5.4 | Diff and merge | 5 | 2 | 2 | 1 |
 | 5.5 | Workbench layout and navigation | 8 | 13 | 7 | 0 |
-| 5.6 | Quick open and command palette | 8 | 2 | 1 | 0 |
+| 5.6 | Quick open and command palette | 8 | 3 | 0 | 0 |
 | 5.7 | File explorer and workspace management | 6 | 5 | 3 | 3 |
 | 5.8 | Search and replace across files | 5 | 2 | 5 | 0 |
 | 5.9 | Source control and git | 8 | 9 | 7 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 6 | 7 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 4 | 3 | 3 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 114 | 115 | 99 | 5 |
+| TOTAL | | 114 | 116 | 98 | 5 |
 
 ## Legend
 
@@ -198,7 +198,7 @@ The palette is now unified: Ctrl or Cmd plus K opens command mode and Ctrl or Cm
 | Commands via > prefix | Done | parsePaletteInput routes > to command mode inside the unified palette; e2e switches files to commands with >. | |
 | Keybinding display in palette | Done | Command.keybinding field (command-registry.ts); CommandPalette renders it right-aligned; Go to File and Show All Commands carry real shortcuts. | |
 | Command categories/grouping | Partial | The palette derives a category from each command title (splitCommandTitle, unit tested) and shows it as a badge before the label. | No grouping headers and no explicit category field on the command model. |
-| Go to definition and back/forward stack | Missing | No DefinitionProvider; no navigation stack or commands. | Deferred to 5.2: go-to-def, history stack, back/forward. |
+| Go to definition and back/forward stack | Partial | Go to Definition is a command backed by the TS/JS worker (5.2); a navigation history (lib/nav-history.ts, unit tested) records jumps from go-to-line, symbol navigation, and the go-to-definition actions, and Go Back / Go Forward (Alt+Left/Right, also palette commands) step through it. An e2e covers back/forward. | In-editor jumps only (cross-file navigation is not tracked); go-to-definition is TS/JS via Monaco, not a full LSP bridge. |
 | General reusable quick-pick framework | Done | core-shell quick-pick.ts: QuickPickItem, filterQuickPick ranker, parsePaletteInput router; unit tested; reused by file mode and ready for branch, profile, theme, and search pickers. | |
 
 ## 5.7 File explorer and workspace management
