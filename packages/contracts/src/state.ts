@@ -104,6 +104,10 @@ export interface EditorSettings {
   /** A vertical ruler at this column, or 0 for none. */
   rulers: number;
   renderWhitespace: 'none' | 'selection' | 'all';
+  /** Render control characters (such as a literal tab or escape) visibly. */
+  renderControlCharacters: boolean;
+  /** Render the final end-of-file newline with a trailing glyph. */
+  renderFinalNewline: boolean;
   cursorStyle: 'line' | 'block' | 'underline';
   /** How the caret blinks. */
   cursorBlinking: 'blink' | 'smooth' | 'phase' | 'expand' | 'solid';
@@ -200,6 +204,8 @@ export const DEFAULT_SETTINGS: AppSettings = {
     lineNumbers: 'on',
     rulers: 0,
     renderWhitespace: 'selection',
+    renderControlCharacters: true,
+    renderFinalNewline: true,
     cursorStyle: 'line',
     cursorBlinking: 'smooth',
     cursorSmoothCaretAnimation: 'off',

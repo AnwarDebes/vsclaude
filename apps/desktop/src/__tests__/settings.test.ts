@@ -27,6 +27,8 @@ describe('editorSettingsToMonaco', () => {
       lineNumbers: 'on',
       rulers: [],
       renderWhitespace: 'selection',
+      renderControlCharacters: true,
+      renderFinalNewline: 'on',
       cursorStyle: 'line',
       cursorBlinking: 'smooth',
       cursorSmoothCaretAnimation: 'off',
@@ -48,6 +50,16 @@ describe('editorSettingsToMonaco', () => {
       formatOnPaste: false,
       formatOnType: false,
     });
+  });
+
+  it('maps the control-character and final-newline rendering toggles off', () => {
+    const mapped = editorSettingsToMonaco({
+      ...DEFAULT_SETTINGS.editor,
+      renderControlCharacters: false,
+      renderFinalNewline: false,
+    });
+    expect(mapped.renderControlCharacters).toBe(false);
+    expect(mapped.renderFinalNewline).toBe('off');
   });
 
   it('maps the format-on-paste and format-on-type toggles', () => {

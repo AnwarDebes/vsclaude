@@ -15,7 +15,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 
 | Section | Title | Done | Partial | Missing | Not planned |
 | --- | --- | --- | --- | --- | --- |
-| 5.1 | Text editing core | 18 | 9 | 0 | 0 |
+| 5.1 | Text editing core | 19 | 8 | 0 | 0 |
 | 5.2 | Code intelligence (LSP language features) | 3 | 11 | 10 | 0 |
 | 5.3 | Editor advanced surface | 8 | 4 | 0 | 0 |
 | 5.4 | Diff and merge | 6 | 2 | 1 | 1 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 6 | 7 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 4 | 3 | 3 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 115 | 117 | 96 | 5 |
+| TOTAL | | 116 | 116 | 96 | 5 |
 
 ## Legend
 
@@ -66,7 +66,7 @@ The editor integrates Monaco 0.55.1, and its editing actions are now exposed: a 
 | Bracket matching and pair colorization | Done | editor.matchBrackets and editor.bracketPairColorization settings map to Monaco (editorSettingsToMonaco, unit tested) and are exposed in the Settings panel. | |
 | Bracket pair guides | Done | The editor.bracketPairGuides setting maps to Monaco's guides.bracketPairs (editorSettingsToMonaco), on by default. Unit tested. | |
 | Indentation (detect, spaces/tabs, convert, tab size, guides) | Done | tabSize, insertSpaces, detectIndentation, and indentGuides are settings mapped to Monaco (editorSettingsToMonaco, unit tested) and exposed in the Settings panel; Convert Indentation to Spaces and to Tabs are palette commands (editor-commands.ts). | |
-| Whitespace and control char rendering, render final newline | Partial | renderWhitespace is now a setting (none, selection, all) applied to Monaco. | Control-character rendering and render-final-newline are not configurable. |
+| Whitespace and control char rendering, render final newline | Done | renderWhitespace (none/selection/all), renderControlCharacters, and renderFinalNewline are all editor settings mapped to Monaco (editorSettingsToMonaco, unit tested) and toggleable in the Settings UI (settings-schema). | |
 | Cursor styles, blink rate, smooth caret, surrounding lines | Done | cursorStyle, cursorBlinking, cursorSmoothCaretAnimation, and cursorSurroundingLines are all settings mapped to Monaco (editorSettingsToMonaco, unit tested) and exposed in the Settings panel. | |
 | Smooth scrolling, fast scroll, scroll beyond last line, wheel zoom | Done | smoothScrolling, fastScrollSensitivity, scrollBeyondLastLine, and mouseWheelZoom are all settings mapped to Monaco (editorSettingsToMonaco, unit tested) and exposed in the Settings panel. | |
 | Drag-drop text, copy/cut whole line, multi-paste | Partial | Monaco default behaviors not disabled in EditorPanel.tsx. | Defaults likely on but unverified; multi-paste not in specs. |

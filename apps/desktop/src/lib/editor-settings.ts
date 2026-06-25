@@ -18,6 +18,8 @@ export interface MonacoEditorOptions {
   lineNumbers: 'on' | 'off' | 'relative';
   rulers: number[];
   renderWhitespace: 'none' | 'selection' | 'all';
+  renderControlCharacters: boolean;
+  renderFinalNewline: 'on' | 'off' | 'dimmed';
   cursorStyle: 'line' | 'block' | 'underline';
   cursorBlinking: 'blink' | 'smooth' | 'phase' | 'expand' | 'solid';
   cursorSmoothCaretAnimation: 'off' | 'explicit' | 'on';
@@ -54,6 +56,8 @@ export function editorSettingsToMonaco(settings: EditorSettings): MonacoEditorOp
     lineNumbers: settings.lineNumbers,
     rulers: settings.rulers > 0 ? [settings.rulers] : [],
     renderWhitespace: settings.renderWhitespace,
+    renderControlCharacters: settings.renderControlCharacters,
+    renderFinalNewline: settings.renderFinalNewline ? 'on' : 'off',
     cursorStyle: settings.cursorStyle,
     cursorBlinking: settings.cursorBlinking,
     cursorSmoothCaretAnimation: settings.cursorSmoothCaretAnimation,

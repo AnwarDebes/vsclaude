@@ -24,6 +24,20 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 111: control-character and final-newline rendering settings (done)
+
+Make the last two editor rendering options configurable (catalog 5.1), following the established
+settings pattern.
+
+- contracts EditorSettings + DEFAULT_SETTINGS gain renderControlCharacters and renderFinalNewline
+  (both default true, matching Monaco's own prior defaults so the current look is preserved).
+- editor-settings.ts maps them to Monaco (renderControlCharacters boolean; renderFinalNewline ->
+  'on'/'off'); settings-schema.ts adds the two boolean toggles to the Settings UI.
+- Quality: the editorSettingsToMonaco mapper test (exhaustive defaults plus a dedicated toggle case)
+  covers the mapping; typecheck, lint clean; build and full e2e pass. Matrix 5.1 "Whitespace and
+  control char rendering, render final newline" Partial to Done (all three render options now
+  configurable). 5.1 now 19/8/0; TOTAL 116/116/96.
+
 ## Slice 110: bottom panel sash (done)
 
 Make the bottom panel dock resizable too, completing VS Code's two main sashes (catalog 5.5).
