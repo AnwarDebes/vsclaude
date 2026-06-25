@@ -122,6 +122,10 @@ export interface EditorSettings {
   fastScrollSensitivity: number;
   /** Allow scrolling past the last line of the file. */
   scrollBeyondLastLine: boolean;
+  /** Show code folding controls in the gutter. */
+  folding: boolean;
+  /** Pin the enclosing scopes to the top of the editor while scrolling. */
+  stickyScroll: boolean;
   /** Ignore trailing-whitespace-only changes in the diff editor. */
   diffIgnoreTrimWhitespace: boolean;
   /** The diff algorithm the diff editor uses. */
@@ -200,6 +204,8 @@ export const DEFAULT_SETTINGS: AppSettings = {
     smoothScrolling: true,
     fastScrollSensitivity: 5,
     scrollBeyondLastLine: false,
+    folding: true,
+    stickyScroll: true,
     diffIgnoreTrimWhitespace: true,
     diffAlgorithm: 'advanced',
     diffMaxComputationTime: 5000,

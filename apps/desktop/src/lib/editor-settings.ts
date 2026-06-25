@@ -28,6 +28,8 @@ export interface MonacoEditorOptions {
   smoothScrolling: boolean;
   fastScrollSensitivity: number;
   scrollBeyondLastLine: boolean;
+  folding: boolean;
+  stickyScroll: { enabled: boolean };
   guides: { bracketPairs: boolean; indentation: boolean };
   bracketPairColorization: { enabled: boolean };
   autoClosingBrackets: 'always' | 'languageDefined' | 'beforeWhitespace' | 'never';
@@ -60,6 +62,8 @@ export function editorSettingsToMonaco(settings: EditorSettings): MonacoEditorOp
     smoothScrolling: settings.smoothScrolling,
     fastScrollSensitivity: settings.fastScrollSensitivity,
     scrollBeyondLastLine: settings.scrollBeyondLastLine,
+    folding: settings.folding,
+    stickyScroll: { enabled: settings.stickyScroll },
     guides: { bracketPairs: settings.bracketPairGuides, indentation: settings.indentGuides },
     bracketPairColorization: { enabled: settings.bracketPairColorization },
     autoClosingBrackets: settings.autoClosingBrackets,

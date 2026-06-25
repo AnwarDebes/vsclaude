@@ -37,6 +37,8 @@ describe('editorSettingsToMonaco', () => {
       smoothScrolling: true,
       fastScrollSensitivity: 5,
       scrollBeyondLastLine: false,
+      folding: true,
+      stickyScroll: { enabled: true },
       guides: { bracketPairs: true, indentation: true },
       bracketPairColorization: { enabled: true },
       autoClosingBrackets: 'languageDefined',
@@ -44,6 +46,16 @@ describe('editorSettingsToMonaco', () => {
       autoSurround: 'languageDefined',
       matchBrackets: 'always',
     });
+  });
+
+  it('maps folding and sticky scroll', () => {
+    const mapped = editorSettingsToMonaco({
+      ...DEFAULT_SETTINGS.editor,
+      folding: false,
+      stickyScroll: false,
+    });
+    expect(mapped.folding).toBe(false);
+    expect(mapped.stickyScroll).toEqual({ enabled: false });
   });
 
   it('maps the indentation settings', () => {
@@ -193,6 +205,12 @@ describe('filterSettings', () => {
     const ids = SETTINGS_SCHEMA.map((d) => d.id);
     expect(ids).toContain('editor.detectIndentation');
     expect(ids).toContain('editor.indentGuides');
+  });
+
+  it('exposes folding and sticky scroll', () => {
+    const ids = SETTINGS_SCHEMA.map((d) => d.id);
+    expect(ids).toContain('editor.folding');
+    expect(ids).toContain('editor.stickyScroll');
   });
 
   it('exposes the cursor and scrolling settings', () => {

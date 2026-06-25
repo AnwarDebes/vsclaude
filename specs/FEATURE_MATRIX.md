@@ -15,7 +15,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 
 | Section | Title | Done | Partial | Missing | Not planned |
 | --- | --- | --- | --- | --- | --- |
-| 5.1 | Text editing core | 17 | 10 | 0 | 0 |
+| 5.1 | Text editing core | 18 | 9 | 0 | 0 |
 | 5.2 | Code intelligence (LSP language features) | 1 | 10 | 13 | 0 |
 | 5.3 | Editor advanced surface | 8 | 4 | 0 | 0 |
 | 5.4 | Diff and merge | 5 | 2 | 2 | 1 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 6 | 7 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 5 | 3 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 106 | 119 | 103 | 5 |
+| TOTAL | | 107 | 118 | 103 | 5 |
 
 ## Legend
 
@@ -76,7 +76,7 @@ The editor integrates Monaco 0.55.1, and its editing actions are now exposed: a 
 | Trim auto whitespace, insert final newline, trimFinalNewlines | Partial | On save, EditorPanel applies applyOnSave (lib/on-save.ts, unit tested) driven by the editor.trimTrailingWhitespace and editor.insertFinalNewline settings. | No trimFinalNewlines (collapsing extra blank lines), and the workspace editor save path does not apply it yet. |
 | Large-file optimizations and tokenization limit | Done | EditorPanel.tsx sets largeFileOptimizations true and maxTokenizationLineLength 20000. | |
 | Read-only editors and read-only regions | Partial | FilePayload has readonly (spec 3.2); only diff tabs are read-only; main editor ignores the flag. | Main EditorPanel does not respect the readonly flag. |
-| Line numbers, folding, minimap, breadcrumbs, sticky scroll | Partial | EditorPanel.tsx enables minimap; folding/breadcrumbs/sticky scroll are Monaco defaults (spec 7.1). | Not explicitly configured; no UI toggle or verification. |
+| Line numbers, folding, minimap, breadcrumbs, sticky scroll | Done | lineNumbers, minimap, folding, and stickyScroll are settings mapped to Monaco (editorSettingsToMonaco, unit tested) and exposed in the Settings panel; Breadcrumbs.tsx renders above the editor. | |
 | Syntax highlighting and language support | Done | EditorPanel.tsx LANG_BY_EXT for TS/TSX/JS/JSX/JSON/CSS/HTML/MD/Rust; monaco-setup.ts loads workers. | |
 | Font configuration (family, size, ligatures) | Done | EditorPanel.tsx sets fontFamily, fontSize: 13, fontLigatures: true. | |
 | Theme integration (dark theme, color tokens) | Done | EditorPanel.tsx uses theme 'vs-dark'; monaco-setup.ts custom environment. | |

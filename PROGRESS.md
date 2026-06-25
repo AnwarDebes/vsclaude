@@ -24,6 +24,19 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 89: folding and sticky scroll editor settings (done)
+
+Make the last advanced editor surfaces explicit and configurable (catalog 5.1).
+
+- **Settings**: `folding` and `stickyScroll` join EditorSettings and DEFAULT_SETTINGS (both
+  default true, matching Monaco), map through editorSettingsToMonaco (sticky scroll as
+  stickyScroll.enabled), and appear in the Settings panel.
+- **Quality**: editorSettingsToMonaco unit tests updated (defaults plus a focused mapping
+  test); schema exposure tested; typecheck, lint, build, build:packages clean; e2e unaffected.
+  Matrix 5.1 row "Line numbers, folding, minimap, breadcrumbs, sticky scroll" moved Partial
+  to Done (line numbers, minimap, folding, sticky scroll are settings; breadcrumbs is a
+  component). Done crossed to 107; 5.1 now 18/9/0.
+
 ## Slice 88: outline view for code symbols (done)
 
 Broaden the Outline view beyond Markdown (catalog 5.3); the row stays Partial.
