@@ -1350,6 +1350,11 @@ body {
 .app-shell[data-mode='companion'] .app-main {
   grid-template-columns: 220px 1fr 360px;
 }
+/* When the primary sidebar is hidden (Ctrl+B), drop its fixed track so the editor
+   fills the freed space instead of staying pinned to the 220px column. */
+.app-shell[data-mode='companion'][data-sidebar-hidden='true'] .app-main {
+  grid-template-columns: 1fr 360px;
+}
 .app-shell[data-mode='cozy'] .app-main {
   grid-template-columns: 1fr 360px;
 }

@@ -893,4 +893,20 @@ test.describe('vsclaude shell', () => {
     await page.keyboard.press('Enter');
     await expect(item).toHaveAttribute('aria-current', 'true');
   });
+
+  test('Ctrl+B toggles the primary sidebar and lets the editor reclaim the space', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    const explorer = page.getByRole('navigation', { name: 'Files' });
+    const editor = page.locator('.app-center');
+    await expect(explorer).toBeVisible();
+    const widthBefore = (await editor.boundingBox())?.width ?? 0;
+    await page.keyboard.press('Control+KeyB');
+    await expect(explorer).toBeHidden();
+    // The editor must reclaim the freed column, not stay pinned to the 220px track.
+    const widthAfter = (await editor.boundingBox())?.width ?? 0;
+    expect(widthAfter).toBeGreaterThan(widthBefore);
+    await page.keyboard.press('Control+KeyB');
+    await expect(explorer).toBeVisible();
+  });
 });

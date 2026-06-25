@@ -24,6 +24,23 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 99: toggle the primary sidebar (Ctrl+B) (done)
+
+Add VS Code's most-used layout shortcut: hide and show the primary (explorer) sidebar (catalog 5.5).
+
+- App gains a sidebarHidden state; the explorer block renders only when showExplorer && !sidebarHidden.
+  The global keydown handler toggles it on Ctrl/Cmd+B (mirroring the Ctrl+, settings case), and a
+  View: Toggle Primary Sidebar command (keybinding Ctrl+B) toggles it from the palette.
+- The shell carries data-sidebar-hidden; in companion mode (whose grid has a fixed 220px explorer
+  track) a CSS rule collapses that track when hidden so the editor reclaims the space instead of
+  staying pinned to 220px (a layout regression the adversarial review caught; the e2e now asserts
+  the editor width grows on hide).
+- Quality: an e2e presses Ctrl+B and asserts the Files navigation hides/shows and the editor
+  reclaims the width; typecheck, lint clean; build and full e2e pass. Matrix 5.5 "Primary and
+  secondary sidebars" stays Partial (the
+  secondary sidebar still cannot hide independently and views cannot move between sidebars) with the
+  primary-sidebar-hide gap closed. No count change (112/114/102).
+
 ## Slice 98: format on save, paste, and type (done)
 
 Add the VS Code formatting toggles on top of the existing Format Document/Selection commands

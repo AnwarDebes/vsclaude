@@ -147,6 +147,7 @@ export function App() {
   const [releaseOpen, setReleaseOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [zenMode, setZenMode] = useState(false);
+  const [sidebarHidden, setSidebarHidden] = useState(false);
   const untitledCounter = useRef(0);
   const live = useLiveProvider();
   const { available: liveAvailable, start: liveStart } = live;
@@ -511,6 +512,11 @@ export function App() {
         setSettingsOpen((o) => !o);
         return;
       }
+      if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === 'b') {
+        e.preventDefault();
+        setSidebarHidden((h) => !h);
+        return;
+      }
       if (!(e.ctrlKey || e.metaKey) || !e.shiftKey) return;
       const key = e.key.toLowerCase();
       if (key === 'm') {
@@ -841,6 +847,13 @@ export function App() {
       keywords: ['zen', 'distraction', 'focus', 'fullscreen', 'hide'],
       run: () => setZenMode((z) => !z),
     });
+    r.register({
+      id: 'toggle-sidebar',
+      title: 'View: Toggle Primary Sidebar',
+      keywords: ['sidebar', 'explorer', 'hide', 'show', 'panel', 'left'],
+      keybinding: 'Ctrl+B',
+      run: () => setSidebarHidden((h) => !h),
+    });
     // Detected npm scripts, each runnable in a new terminal.
     const runTask = (task: NpmTask) => {
       const repo = hasWorkspace ? ws.roots[0]?.path ?? '' : '';
@@ -1114,7 +1127,13 @@ export function App() {
   );
 
   return (
-    <div className="app-shell" data-mode={mode} data-zen={zenMode} style={{ zoom: settings.uiScale }}>
+    <div
+      className="app-shell"
+      data-mode={mode}
+      data-zen={zenMode}
+      data-sidebar-hidden={sidebarHidden}
+      style={{ zoom: settings.uiScale }}
+    >
       <PixieActionSprite />
 
       <header className="app-header">
@@ -1150,7 +1169,7 @@ export function App() {
           onShortcuts={() => setShortcutsOpen(true)}
         />
         <main className="app-main">
-        {showExplorer ? (
+        {showExplorer && !sidebarHidden ? (
           hasWorkspace ? (
             <WorkspaceExplorer ws={ws} />
           ) : (
