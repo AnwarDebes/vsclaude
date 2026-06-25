@@ -78,6 +78,7 @@ export const demoFiles = [
   { name: 'login-form.tsx', path: 'src/auth/login-form.tsx', kind: 'file' as const },
   { name: 'login-form.test.tsx', path: 'src/auth/login-form.test.tsx', kind: 'file' as const },
   { name: 'session.ts', path: 'src/auth/session.ts', kind: 'file' as const },
+  { name: 'session.config.ts', path: 'src/auth/session.config.ts', kind: 'file' as const },
   { name: 'use-auth.ts', path: 'src/auth/use-auth.ts', kind: 'file' as const },
   { name: 'auth', path: 'src/auth', kind: 'directory' as const },
   { name: 'App.tsx', path: 'src/App.tsx', kind: 'file' as const },

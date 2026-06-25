@@ -24,6 +24,22 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 107: merge-conflict bar and resolution (done)
+
+Detect git merge conflicts and resolve them from the editor, like VS Code (catalog 5.4).
+
+- lib/conflicts.ts: findConflicts parses the <<<<<<< / ======= / >>>>>>> blocks (ignoring a markdown
+  setext underline) and resolveConflict rewrites the file keeping the current, incoming, or both
+  sides. Pure, unit tested.
+- components/MergeConflictBar.tsx: a bar above the editor that counts the conflicts and offers Accept
+  Current / Incoming / Both per conflict; App computes conflicts from the active content and resolves
+  via setEditedContents. A demo file (session.config.ts) ships an unresolved conflict.
+- Quality: conflicts unit tests (parse + resolve + no-markers-left); an e2e opens the conflict file,
+  sees the bar, accepts Current, and the bar disappears. Typecheck, lint clean; build and full e2e
+  pass. Matrix 5.4 "Inline merge-conflict decorations and accept actions" Missing to Partial (no
+  inline editor decorations/CodeLens, no 3-way merge editor, demo editor only). 5.4 now 5/3/1;
+  TOTAL 114/117/97.
+
 ## Slice 106: back/forward navigation history (done)
 
 Add VS Code's Go Back / Go Forward (Alt+Left/Right), pairing with slice 105's Go to Definition (catalog 5.6).

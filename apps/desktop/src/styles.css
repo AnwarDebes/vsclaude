@@ -1378,6 +1378,33 @@ body {
   flex: 1 1 auto;
   min-height: 0;
 }
+.merge-bar {
+  flex: 0 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 6px var(--space-md);
+  background: var(--color-accent-muted);
+  border-bottom: 1px solid var(--color-border, var(--color-accent));
+  font-size: 0.82rem;
+}
+.merge-bar__count {
+  font-weight: 600;
+  color: var(--color-text);
+}
+.merge-bar__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.merge-bar__loc {
+  color: var(--color-text-muted);
+}
+.merge-bar__btn {
+  font-size: 0.78rem;
+  padding: 2px 6px;
+}
 .breadcrumbs {
   flex: 0 0 auto;
   display: flex;

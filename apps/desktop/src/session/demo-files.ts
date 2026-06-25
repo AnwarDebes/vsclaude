@@ -64,6 +64,17 @@ export function isExpired(session: Session, now = Date.now()): boolean {
   return session.expiresAt <= now;
 }
 `,
+  'src/auth/session.config.ts': `// A file with an unresolved git merge conflict, to demo the conflict bar.
+export const sessionConfig = {
+<<<<<<< HEAD
+  timeoutMs: 30_000,
+  refresh: true,
+=======
+  timeoutMs: 60_000,
+  refresh: false,
+>>>>>>> feature/longer-session
+};
+`,
   'src/auth/use-auth.ts': `import { useState } from 'react';
 
 export function useAuth() {

@@ -76,6 +76,8 @@ import { MediaPlayer, type MediaTarget } from './components/MediaPlayer';
 import { isMediaPath, mediaKind, mediaMime } from './lib/media';
 import { HexView, type HexTarget } from './components/HexView';
 import { base64ToBytes } from './lib/hex';
+import { MergeConflictBar } from './components/MergeConflictBar';
+import { findConflicts, resolveConflict, type Conflict, type ConflictChoice } from './lib/conflicts';
 import { ProcessInfoModal } from './components/ProcessInfoModal';
 import { AccessibilityHelp } from './components/AccessibilityHelp';
 import { themeForSystem } from './lib/system-theme';
@@ -1206,6 +1208,17 @@ export function App() {
   const showTimeline = mode !== 'minimal';
   const showBottom = mode !== 'minimal';
   const content = editedContents[openFile] ?? demoContentFor(openFile);
+  // Git merge conflicts in the active (demo) file, for the conflict bar.
+  const conflicts = useMemo<Conflict[]>(() => findConflicts(content), [content]);
+  const resolveActiveConflict = useCallback(
+    (conflict: Conflict, choice: ConflictChoice) => {
+      setEditedContents((m) => ({
+        ...m,
+        [openFile]: resolveConflict(m[openFile] ?? demoContentFor(openFile), conflict, choice),
+      }));
+    },
+    [openFile],
+  );
   // The active file's outline symbols, for inline `@` Go to Symbol in the palette.
   const editorSymbols = useMemo(() => outlineSymbols(openFile, content), [openFile, content]);
   // Flat path list backing the breadcrumb folder dropdowns: the demo file set, or
@@ -1321,7 +1334,9 @@ export function App() {
               {hasWorkspace ? (
                 <WorkspaceEditor ws={ws} />
               ) : (
-                <EditorPanel
+                <>
+                  <MergeConflictBar conflicts={conflicts} onResolve={resolveActiveConflict} />
+                  <EditorPanel
                   path={openFile}
                   value={content}
                   language={
@@ -1333,7 +1348,8 @@ export function App() {
                   onRevealed={clearRevealTarget}
                   onChange={(v) => setEditedContents((m) => ({ ...m, [openFile]: v }))}
                   onSave={(v) => setEditedContents((m) => ({ ...m, [openFile]: v }))}
-                />
+                  />
+                </>
               )}
             </div>
           ) : (

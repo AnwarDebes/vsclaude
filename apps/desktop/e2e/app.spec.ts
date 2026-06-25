@@ -960,4 +960,17 @@ test.describe('vsclaude shell', () => {
     await page.keyboard.press('Alt+ArrowRight');
     await expect(page.getByRole('button', { name: /^Line 4,/i })).toBeVisible();
   });
+
+  test('the merge conflict bar resolves a conflict', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    // session.config.ts ships with an unresolved merge conflict.
+    await page.getByRole('button', { name: 'session.config.ts', exact: true }).click();
+    const bar = page.getByRole('region', { name: 'Merge conflicts' });
+    await expect(bar).toBeVisible();
+    await expect(bar.getByText(/1 merge conflict/i)).toBeVisible();
+    await bar.getByRole('button', { name: 'Accept Current' }).click();
+    // Resolving rewrites the file, so the conflict (and the bar) disappear.
+    await expect(bar).toBeHidden();
+  });
 });

@@ -18,7 +18,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.1 | Text editing core | 18 | 9 | 0 | 0 |
 | 5.2 | Code intelligence (LSP language features) | 3 | 11 | 10 | 0 |
 | 5.3 | Editor advanced surface | 8 | 4 | 0 | 0 |
-| 5.4 | Diff and merge | 5 | 2 | 2 | 1 |
+| 5.4 | Diff and merge | 5 | 3 | 1 | 1 |
 | 5.5 | Workbench layout and navigation | 8 | 13 | 7 | 0 |
 | 5.6 | Quick open and command palette | 8 | 3 | 0 | 0 |
 | 5.7 | File explorer and workspace management | 6 | 5 | 3 | 3 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 6 | 7 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 4 | 3 | 3 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 114 | 116 | 98 | 5 |
+| TOTAL | | 114 | 117 | 97 | 5 |
 
 ## Legend
 
@@ -145,7 +145,7 @@ A real Monaco diff editor now ships (DiffView.tsx and DiffModal.tsx): side-by-si
 | Accessible diff viewer | Partial | DiffReview.tsx has role='dialog' and header aria-label; diff lines are plain spans. | Lines lack ARIA live regions and semantic labels; no screen-reader hunk descriptions. |
 | Compare feature (select, with saved, across workspace, folders) | Partial | Compare with Saved (App.tsx compareWithSaved) diffs the editor's unsaved changes against disk, in the workspace and the demo. | No select-for-compare between two arbitrary files, and no folder comparison. |
 | Three-way merge editor (current/incoming/result) | Not planned | GIT_SPEC section 17 states the merge editor is its own spec, a non-goal for git. | Out of scope for current phase. |
-| Inline merge-conflict decorations and accept actions | Missing | No conflict decorations or resolution buttons; model.ts has no conflicted state. | No conflict highlighting, accept buttons, or conflict detection. |
+| Inline merge-conflict decorations and accept actions | Partial | findConflicts detects git conflict blocks and resolveConflict rewrites the file keeping the current, incoming, or both sides (lib/conflicts.ts, unit tested); a MergeConflictBar above the editor counts the conflicts and offers Accept Current/Incoming/Both per conflict. An e2e resolves one. | No inline editor decorations or per-conflict CodeLens, no 3-way merge editor, and the native workspace editor does not show the bar yet (demo editor only). |
 | Diff settings (ignore trim whitespace, side-by-side threshold, max compute time) | Done | DiffView reads editor.diffIgnoreTrimWhitespace, editor.diffAlgorithm (legacy or advanced), and editor.diffMaxComputationTime from the editor-settings store and passes them to the Monaco diff editor; the modal chrome also toggles side-by-side versus inline. Settings unit tested. | (No per-pixel side-by-side breakpoint, but the diff settings surface is present.) |
 
 ## 5.5 Workbench layout and navigation
