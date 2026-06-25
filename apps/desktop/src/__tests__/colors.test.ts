@@ -33,6 +33,29 @@ describe('findColors', () => {
     expect(c.map((m) => m.start)).toEqual([2, 9]);
   });
 
+  it('parses hsl and hsla', () => {
+    expect(findColors('hsl(0, 100%, 50%)')[0]!.color).toEqual({ red: 1, green: 0, blue: 0, alpha: 1 });
+    const green = findColors('hsla(120, 100%, 50%, 0.5)')[0]!.color;
+    expect(green).toEqual({ red: 0, green: 1, blue: 0, alpha: 0.5 });
+  });
+
+  it('matches named colors only when enabled, on word boundaries', () => {
+    // Off by default, so a bare word is never a color.
+    expect(findColors('color: red')).toEqual([]);
+    const red = findColors('color: red', { includeNamed: true });
+    expect(red).toHaveLength(1);
+    expect(red[0]!.color).toEqual({ red: 1, green: 0, blue: 0, alpha: 1 });
+    expect(red[0]!.start).toBe(7);
+    // A name embedded in a longer identifier is not matched.
+    expect(findColors('colored', { includeNamed: true })).toEqual([]);
+    // Sigil-prefixed identifiers (CSS class, variable) are not decorated.
+    expect(findColors('.red { color: blue }', { includeNamed: true }).map((m) => m.start)).toEqual([14]);
+    expect(findColors('--red: 1; $blue: 2; color: green', { includeNamed: true }).map((m) => m.start)).toEqual([27]);
+    // Multi-word names and transparent work.
+    expect(findColors('cornflowerblue', { includeNamed: true })).toHaveLength(1);
+    expect(findColors('transparent', { includeNamed: true })[0]!.color.alpha).toBe(0);
+  });
+
   it('ignores non-colors', () => {
     expect(findColors('hello world')).toEqual([]);
     expect(findColors('#xyz')).toEqual([]);

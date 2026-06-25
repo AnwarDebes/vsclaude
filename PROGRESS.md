@@ -24,6 +24,20 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 92: hsl and named color decorators (done)
+
+Complete the editor color decorators (catalog 5.2).
+
+- **Detection** (`lib/colors.ts`): `findColors` now also recognizes `hsl()/hsla()` (with an
+  HSL-to-RGB conversion) and the full set of CSS named colors. Named colors are opt-in via
+  `findColors(text, { includeNamed })` and matched on word boundaries. Unit tested.
+- **Scoping** (`monaco-setup.ts`): named colors are enabled only for CSS-family languages
+  (css/scss/less/html), so a plain identifier like `red` in JS/TS is never decorated.
+- **Quality**: unit tests (hsl, named on/off, word-boundary, transparent); typecheck, lint
+  clean (no contracts change); the renderer build succeeds; e2e unaffected (the Monaco color
+  UI is not browser-e2e-able, like the original color slice). Matrix 5.2 color-decorators row
+  moved Partial to Done (Done crossed to 109; 5.2 now 2/9/13).
+
 ## Slice 91: image viewer pan and rotate (done)
 
 Complete the SVG/image viewer with pan and rotate (catalog 5.22).

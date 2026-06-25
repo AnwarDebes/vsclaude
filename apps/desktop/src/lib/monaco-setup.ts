@@ -98,15 +98,19 @@ for (const language of LINK_LANGUAGES) {
   });
 }
 
-// Show a color swatch and an inline picker for #hex and rgb()/rgba() colors.
+// Show a color swatch and an inline picker for #hex, rgb()/rgba(), hsl()/hsla(),
+// and CSS named colors. Named colors are matched only in CSS-family languages, so
+// a word like `red` is not decorated when it is just an identifier in code.
 const COLOR_LANGUAGES = ['css', 'scss', 'less', 'html', 'markdown', 'json', 'typescript', 'javascript'];
+const NAMED_COLOR_LANGUAGES = new Set(['css', 'scss', 'less', 'html']);
 for (const language of COLOR_LANGUAGES) {
+  const includeNamed = NAMED_COLOR_LANGUAGES.has(language);
   monaco.languages.registerColorProvider(language, {
     provideDocumentColors(model) {
       const colors: monaco.languages.IColorInformation[] = [];
       const lineCount = model.getLineCount();
       for (let line = 1; line <= lineCount; line += 1) {
-        for (const match of findColors(model.getLineContent(line))) {
+        for (const match of findColors(model.getLineContent(line), { includeNamed })) {
           colors.push({
             range: new monaco.Range(line, match.start + 1, line, match.end + 1),
             color: match.color,
