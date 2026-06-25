@@ -17,4 +17,12 @@ describe('EDITOR_COMMANDS', () => {
   it('namespaces every palette id under editor.', () => {
     expect(EDITOR_COMMANDS.every((c) => c.id.startsWith('editor.'))).toBe(true);
   });
+
+  it('exposes the code-intelligence actions backed by the language workers', () => {
+    const actionIds = EDITOR_COMMANDS.map((c) => c.actionId);
+    expect(actionIds).toContain('editor.action.revealDefinition');
+    expect(actionIds).toContain('editor.action.goToReferences');
+    expect(actionIds).toContain('editor.action.rename');
+    expect(actionIds).toContain('editor.action.quickFix');
+  });
 });

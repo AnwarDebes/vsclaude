@@ -24,6 +24,24 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 105: code-intelligence commands (Monaco worker) (done)
+
+Expose the TS/JS code-intelligence actions Monaco's bundled worker already provides, and correct the
+matrix rows that wrongly said they needed an LSP bridge (catalog 5.2).
+
+- editor-commands.ts: added Go to Definition (F12), Peek Definition (Alt+F12), Go to Type Definition,
+  Go to Implementation (Ctrl+F12), Go to References (Shift+F12), Rename Symbol (F2), Quick Fix
+  (Ctrl+.). They register through the existing EDITOR_COMMANDS loop and run Monaco actions on the
+  active editor; Monaco's TS/JS worker (the same one behind diagnostics and inlay hints) supplies the
+  behavior. The keybinding labels are Monaco's real defaults.
+- Matrix: three under-stated 5.2 rows moved Missing to Partial (they were marked "needs LSP bridge"
+  but the Monaco worker provides them for TS/JS): Go to definition/references, Rename symbol, and
+  Code actions/quick fixes. Each gap now says TS/JS-only via the worker; no LSP bridge for other
+  languages. The "Find all references results view" row stays Missing (Monaco offers a peek, not a
+  docked results panel). The 5.2 intro prose was corrected. 5.2 now 3/11/10; TOTAL 114/115/99.
+- Quality: editor-commands unit test asserts the new actions are present; a discoverability e2e finds
+  Go to Definition in the palette; typecheck, lint clean; build and full e2e pass.
+
 ## Slice 104: hex view true bytes (done)
 
 Make the hex dump exact, completing the binary-read story (image 101, media 103, hex now) (catalog 5.22).

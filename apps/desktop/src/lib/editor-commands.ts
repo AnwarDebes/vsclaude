@@ -67,4 +67,13 @@ export const EDITOR_COMMANDS: readonly EditorCommandDef[] = [
   // Find and replace
   { id: 'editor.find', title: 'Find', actionId: 'actions.find', keybinding: 'Ctrl+F', keywords: ['search'] },
   { id: 'editor.replace', title: 'Replace', actionId: 'editor.action.startFindReplaceAction', keybinding: 'Ctrl+H', keywords: ['replace'] },
+
+  // Code intelligence (backed by the language workers; TS/JS today)
+  { id: 'editor.goToDefinition', title: 'Go to Definition', actionId: 'editor.action.revealDefinition', keybinding: 'F12', keywords: ['definition', 'goto', 'navigate'] },
+  { id: 'editor.peekDefinition', title: 'Peek Definition', actionId: 'editor.action.peekDefinition', keybinding: 'Alt+F12', keywords: ['definition', 'peek'] },
+  { id: 'editor.goToTypeDefinition', title: 'Go to Type Definition', actionId: 'editor.action.goToTypeDefinition', keywords: ['type', 'definition', 'goto'] },
+  { id: 'editor.goToImplementation', title: 'Go to Implementation', actionId: 'editor.action.goToImplementation', keybinding: 'Ctrl+F12', keywords: ['implementation', 'goto'] },
+  { id: 'editor.findReferences', title: 'Go to References', actionId: 'editor.action.goToReferences', keybinding: 'Shift+F12', keywords: ['references', 'usages', 'find all'] },
+  { id: 'editor.rename', title: 'Rename Symbol', actionId: 'editor.action.rename', keybinding: 'F2', keywords: ['rename', 'refactor', 'symbol'] },
+  { id: 'editor.quickFix', title: 'Quick Fix', actionId: 'editor.action.quickFix', keybinding: 'Ctrl+.', keywords: ['quick fix', 'code action', 'lightbulb'] },
 ];

@@ -16,7 +16,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | Section | Title | Done | Partial | Missing | Not planned |
 | --- | --- | --- | --- | --- | --- |
 | 5.1 | Text editing core | 18 | 9 | 0 | 0 |
-| 5.2 | Code intelligence (LSP language features) | 3 | 8 | 13 | 0 |
+| 5.2 | Code intelligence (LSP language features) | 3 | 11 | 10 | 0 |
 | 5.3 | Editor advanced surface | 8 | 4 | 0 | 0 |
 | 5.4 | Diff and merge | 5 | 2 | 2 | 1 |
 | 5.5 | Workbench layout and navigation | 8 | 13 | 7 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 6 | 7 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 4 | 3 | 3 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 114 | 112 | 102 | 5 |
+| TOTAL | | 114 | 115 | 99 | 5 |
 
 ## Legend
 
@@ -83,15 +83,15 @@ The editor integrates Monaco 0.55.1, and its editing actions are now exposed: a 
 
 ## 5.2 Code intelligence (LSP language features)
 
-vsclaude implements a limited set of code intelligence features, relying on Monaco's built-in capabilities. Multi-cursor, syntax highlighting, minimap, and folding come from Monaco defaults. Language support covers TS, JS, JSON, CSS, HTML, Markdown, and Rust through workers. Diagnostics now surface: the Monaco worker markers are collected into a Problems panel and an error and warning count in the status bar (see specs/PROBLEMS_AND_DIAGNOSTICS.md). There is still no external language server bridge and no advanced IDE features (code actions, hover wiring, symbol navigation, refactoring, formatting, semantic highlighting). The LSP host (A2) has not started; the app focuses on displaying agent edits rather than hand-editing.
+vsclaude implements a limited set of code intelligence features, relying on Monaco's built-in capabilities. Multi-cursor, syntax highlighting, minimap, and folding come from Monaco defaults. Language support covers TS, JS, JSON, CSS, HTML, Markdown, and Rust through workers. Diagnostics now surface: the Monaco worker markers are collected into a Problems panel and an error and warning count in the status bar (see specs/PROBLEMS_AND_DIAGNOSTICS.md). For TS and JS, Monaco's bundled language worker (the same one behind diagnostics and inlay hints) also powers go-to-definition, references, rename, and quick fixes, now exposed as palette commands. There is still no external language-server bridge, so those features do not extend to Python, Rust, or other languages, and richer features (semantic highlighting, call hierarchy, refactorings beyond rename, a back/forward navigation stack) remain. The LSP host (A2) has not started; the app focuses on displaying agent edits rather than hand-editing.
 
 | Capability | Status | Evidence | What is missing |
 | --- | --- | --- | --- |
 | IntelliSense (completions, signature help, hover) | Partial | monaco-setup.ts configures TS/JS worker; no custom providers registered in apps/desktop/src. | No completion/hover/signature providers; LSP bridge (spec 7.4) not implemented. |
-| Go to definition/declaration/type/implementation/references | Missing | No definition or reference providers found in apps/desktop/src or packages/editor/src. | No navigation; needs LSP bridge or provider registration. |
+| Go to definition/declaration/type/implementation/references | Partial | Go to Definition (F12), Peek Definition, Type Definition, Implementation, and Go to References are exposed as palette commands (editor-commands.ts) and run Monaco's actions, backed by the TS/JS language worker (the same worker that produces diagnostics and inlay hints). | TS/JS only via the Monaco worker; no cross-language LSP bridge, no declaration-vs-definition split, and no back/forward navigation stack. |
 | Find all references results view | Missing | No references panel or provider; global search is ripgrep text search (spec 8). | No symbol reference finder. |
-| Rename symbol with cross-file preview | Missing | No rename provider in EditorPanel.tsx. | No symbol rename; needs LSP bridge. |
-| Code actions and quick fixes (lightbulb) | Missing | No CodeActionProvider or lightbulb UI. | No quick fixes; needs provider or bridge. |
+| Rename symbol with cross-file preview | Partial | Rename Symbol (F2) is exposed as a palette command and runs Monaco's editor.action.rename, backed by the TS/JS worker. | TS/JS only via the Monaco worker; no cross-file rename preview panel, and no LSP bridge for other languages. |
+| Code actions and quick fixes (lightbulb) | Partial | Quick Fix (Ctrl+.) is exposed as a palette command and runs Monaco's editor.action.quickFix; the TS/JS worker supplies the lightbulb code actions. | TS/JS only via the Monaco worker; no custom CodeActionProviders and no LSP bridge for other languages. |
 | Refactorings (extract, inline, move to file) | Missing | No refactoring UI, commands, or provider. | No refactoring features. |
 | Document and range formatting (on save/paste/type) | Partial | editor-commands.ts registers Format Document and Format Selection; editor.formatOnPaste and editor.formatOnType map to Monaco (editorSettingsToMonaco, unit tested) and editor.formatOnSave runs Format Document on save in the editor's save handler. All three are exposed in the Settings panel. Uses Monaco's built-in formatters for the bundled languages. | No external formatter providers (Prettier or LSP via extensions, tracked in 5.17); built-in formatters cover the bundled languages only. |
 | Organize/sort imports and unused cleanup | Missing | No organize-imports command or provider. | No import sorting or cleanup. |

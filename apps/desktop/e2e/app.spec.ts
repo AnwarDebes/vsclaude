@@ -933,4 +933,13 @@ test.describe('vsclaude shell', () => {
     // The chosen sibling opened, so the breadcrumb file segment now reads App.tsx.
     await expect(breadcrumbs.getByRole('button', { name: /App\.tsx/ })).toBeVisible();
   });
+
+  test('code-intelligence commands are in the palette', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('Go to Definition');
+    await expect(palette.getByRole('option', { name: /Go to Definition/i })).toBeVisible();
+  });
 });
