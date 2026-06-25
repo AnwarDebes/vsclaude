@@ -8,7 +8,7 @@ import {
   type StatusBarItem,
 } from '@vsclaude/core-shell';
 import { diffSidesForCode, type GitFileChange } from '@vsclaude/git';
-import { basePathName, joinPath } from '@vsclaude/editor';
+import { basePathName, joinPath, type TreeNode } from '@vsclaude/editor';
 import { bundledThemeIds } from '@vsclaude/design-system';
 import { languageForPath } from './lib/language';
 import { languageLabel, detectLanguageFromContent, SELECTABLE_LANGUAGES } from './lib/languages';
@@ -1144,6 +1144,20 @@ export function App() {
   const content = editedContents[openFile] ?? demoContentFor(openFile);
   // The active file's outline symbols, for inline `@` Go to Symbol in the palette.
   const editorSymbols = useMemo(() => outlineSymbols(openFile, content), [openFile, content]);
+  // Flat path list backing the breadcrumb folder dropdowns: the demo file set, or
+  // the loaded workspace tree flattened (the open file's ancestors are loaded).
+  const breadcrumbEntries = useMemo<{ path: string; kind: 'file' | 'directory' }[]>(() => {
+    if (!hasWorkspace) return demoFiles;
+    const flat: { path: string; kind: 'file' | 'directory' }[] = [];
+    const walk = (nodes: readonly TreeNode[]) => {
+      for (const node of nodes) {
+        flat.push({ path: node.path, kind: node.isDirectory ? 'directory' : 'file' });
+        if (node.children) walk(node.children);
+      }
+    };
+    walk(ws.tree);
+    return flat;
+  }, [hasWorkspace, ws.tree]);
 
   const terminalLines = useMemo(() => {
     const lines: string[] = [];
@@ -1235,6 +1249,8 @@ export function App() {
                 <Breadcrumbs
                   path={(hasWorkspace ? ws.activePath : openFile) as string}
                   root={hasWorkspace ? ws.roots[0]?.path : undefined}
+                  entries={breadcrumbEntries}
+                  onOpen={openFileFromPalette}
                   onSymbols={() => runEditorAction('editor.action.quickOutline')}
                 />
               ) : null}

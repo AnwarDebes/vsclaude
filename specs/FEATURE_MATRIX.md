@@ -19,7 +19,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.2 | Code intelligence (LSP language features) | 3 | 8 | 13 | 0 |
 | 5.3 | Editor advanced surface | 8 | 4 | 0 | 0 |
 | 5.4 | Diff and merge | 5 | 2 | 2 | 1 |
-| 5.5 | Workbench layout and navigation | 7 | 14 | 7 | 0 |
+| 5.5 | Workbench layout and navigation | 8 | 13 | 7 | 0 |
 | 5.6 | Quick open and command palette | 8 | 2 | 1 | 0 |
 | 5.7 | File explorer and workspace management | 6 | 5 | 3 | 3 |
 | 5.8 | Search and replace across files | 5 | 2 | 5 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 6 | 7 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 4 | 3 | 3 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 113 | 113 | 102 | 5 |
+| TOTAL | | 114 | 112 | 102 | 5 |
 
 ## Legend
 
@@ -180,7 +180,7 @@ vsclaude uses a fixed, presentation-mode-driven layout rather than the dockable 
 | Focused / zen editor expansion | Partial | Minimal mode shows only center editor. | No per-panel maximize button or transition animation. |
 | Command palette (fuzzy search, run commands) | Done | CommandPalette.tsx (Ctrl/Cmd+K, fuzzy, arrows, Enter); CommandRegistry ranks; commands in App.tsx. | |
 | Search/replace functionality | Partial | Quick-open ships: Ctrl/Cmd+P file open, : go-to-line, and the > command route (CommandPalette.tsx, see 5.6). Monaco's in-file find is on by default. | Project-wide search and replace across files (5.8), and @ or # symbol search, are still missing. |
-| Breadcrumbs / path navigation | Partial | Breadcrumbs.tsx renders the active file's folders and name above the editor (breadcrumbSegments, root-relative); the file segment opens the document symbol picker. | No folder dropdown pickers in the trail. |
+| Breadcrumbs / path navigation | Done | Breadcrumbs.tsx renders the active file's folders and name above the editor (breadcrumbSegments, root-relative); the file segment opens the document symbol picker, and each folder segment opens a dropdown of that folder's contents (folderChildren over the demo files or the flattened workspace tree; crumbFolderPath resolves the menu into the entry namespace so it works in both the demo and a real absolute-path workspace; all unit tested) where a file opens it and a subfolder drills in. The menu closes on outside-click or Escape. An e2e jumps to a sibling file. | |
 | Keyboard shortcuts and customization | Missing | CommandPalette.tsx and WorkspaceEditor.tsx hardcode keys; no rebinding. | No keybindings.json, editor, or shortcut help view. |
 
 ## 5.6 Quick open and command palette

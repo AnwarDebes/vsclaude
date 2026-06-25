@@ -920,4 +920,17 @@ test.describe('vsclaude shell', () => {
     await page.keyboard.press('Control+KeyJ');
     await expect(problems).toBeHidden();
   });
+
+  test('a breadcrumb folder dropdown jumps to a sibling file', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    // Default file is src/auth/login-form.tsx, so the trail is src / auth / login-form.tsx.
+    const breadcrumbs = page.getByRole('navigation', { name: 'Breadcrumbs' });
+    await breadcrumbs.getByRole('button', { name: 'src' }).click();
+    const menu = page.getByRole('menu', { name: /src contents/i });
+    await expect(menu).toBeVisible();
+    await menu.getByRole('menuitem', { name: /App\.tsx/ }).click();
+    // The chosen sibling opened, so the breadcrumb file segment now reads App.tsx.
+    await expect(breadcrumbs.getByRole('button', { name: /App\.tsx/ })).toBeVisible();
+  });
 });

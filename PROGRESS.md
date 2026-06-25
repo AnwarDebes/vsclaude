@@ -24,6 +24,24 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 102: breadcrumb folder dropdowns (done)
+
+Add VS Code's breadcrumb folder pickers: click a folder segment to jump to a sibling (catalog 5.5).
+
+- lib/breadcrumbs.ts: folderChildren derives a folder's direct children (files plus immediate
+  subfolders, including ones implied only by a deeper path) from a flat path list, folders first;
+  unit tested.
+- Breadcrumbs.tsx: folder segments are now buttons that open a dropdown of that folder's contents;
+  a file opens it, a subfolder drills the dropdown in. The menu closes on outside-click or Escape.
+  App feeds entries from demoFiles (demo) or the flattened workspace tree (native), and onOpen.
+- Namespace fix (caught by the adversarial review): crumb paths are root-relative but the workspace
+  tree's paths are absolute, so the first cut showed empty dropdowns natively. crumbFolderPath
+  re-prepends the root so the menu filters in the entry namespace (demo paths are already relative);
+  unit tested in both namespaces.
+- Quality: folderChildren and crumbFolderPath unit tests (incl. an absolute-path case) and an e2e
+  (click the src crumb, pick App.tsx, the trail updates); typecheck, lint clean; build and full e2e
+  pass. Matrix 5.5 "Breadcrumbs / path navigation" Partial to Done (Done crossed to 114; 5.5 now 8/13/7).
+
 ## Slice 101: native image preview (binary file read) (done)
 
 Make raster image preview work in the native app, not just the browser demo (catalog 5.22).
