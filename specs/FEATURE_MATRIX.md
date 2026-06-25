@@ -19,7 +19,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.2 | Code intelligence (LSP language features) | 3 | 11 | 10 | 0 |
 | 5.3 | Editor advanced surface | 8 | 4 | 0 | 0 |
 | 5.4 | Diff and merge | 6 | 2 | 1 | 1 |
-| 5.5 | Workbench layout and navigation | 8 | 13 | 7 | 0 |
+| 5.5 | Workbench layout and navigation | 8 | 14 | 6 | 0 |
 | 5.6 | Quick open and command palette | 8 | 3 | 0 | 0 |
 | 5.7 | File explorer and workspace management | 6 | 5 | 3 | 3 |
 | 5.8 | Search and replace across files | 5 | 2 | 5 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 6 | 7 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 4 | 3 | 3 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 115 | 116 | 97 | 5 |
+| TOTAL | | 115 | 117 | 96 | 5 |
 
 ## Legend
 
@@ -163,7 +163,7 @@ vsclaude uses a fixed, presentation-mode-driven layout rather than the dockable 
 | Activity bar with view containers and badges | Partial | ActivityBar.tsx is a left icon rail (Explorer, Search, Source Control, Problems, Settings, Keyboard Shortcuts) that opens each view, highlights the active one (activeViewFor), and shows count badges (formatBadge) for problems and changes. | No relocatable or hideable view containers. |
 | Primary and secondary sidebars (left/right) | Partial | App.tsx renders left explorer and right sidebar (companion, timeline); placement hardcoded per mode. The primary sidebar can be toggled with View: Toggle Primary Sidebar (Ctrl/Cmd+B), covered by an e2e. | The secondary sidebar cannot hide independently, and views cannot move between sidebars. |
 | Bottom panel (terminal, problems, output, debug console) | Partial | App.tsx footer renders TerminalPanel, TokenPanel, Narration; only terminal is wired. | No problems, output, or debug console; panel cannot maximize, move, or sash-resize. |
-| Sash resizing (visual splitter) | Missing | No sash elements; fixed grid columns; ResizeObserver only in TerminalPanel.tsx. | No draggable splitters; layout not user-resizable. |
+| Sash resizing (visual splitter) | Partial | The primary sidebar (companion mode) has a draggable, keyboard-operable sash (components/Sash.tsx, role=separator with Arrow/Home/End) that resizes it via a --sidebar-width CSS var, clamped 160-480 and persisted to localStorage. An e2e resizes it with the keyboard. | Only the sidebar resizes; the bottom panel and editor groups are not yet draggable, and there are no editor splits to size. |
 | Outline / Document Symbol view | Done | OutlinePanel.tsx (View: Outline) lists the active file's symbols indented by level, reveals a line on click, and highlights and follows the symbol containing the caret (activeLine from the editor status). An e2e covers the follow-cursor highlight. The symbol source (which languages produce symbols) is tracked separately in 5.3. | |
 | Problems / Diagnostics view | Done | ProblemsPanel.tsx is a docked, grouped, jump-to-able panel; the status bar carries the error and warning count badge; View: Problems and Ctrl or Cmd plus Shift plus M toggle it. | |
 | Status bar (language, encoding, EOL, indent, cursor, branch, errors) | Partial | StatusBar.tsx renders the error and warning counts, branch and change count, language, EOL, indentation, cursor position, and selection, from core-shell orderStatusItems and the editor-bridge status store; cursor opens go-to-line, branch opens review, problems toggles the panel, and the language, EOL, and indentation items are now clickable pickers (Change Language Mode, Change End of Line, Convert Indentation). | No encoding indicator or encoding picker. |

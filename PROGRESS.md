@@ -24,6 +24,22 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 109: draggable sidebar sash (done)
+
+Make the primary sidebar user-resizable, like VS Code's sashes (catalog 5.5).
+
+- components/Sash.tsx: a reusable splitter exposed as an ARIA separator (role=separator,
+  aria-valuenow/min/max). Pointer drag (with pointer capture) or Arrow/Home/End keys report a new
+  size via onChange; keyboard-operable so it is accessible and e2e-testable without a mouse. The pure
+  math (clampSize, loadSidebarWidth, the min/max/default constants) lives in lib/sash.ts and is unit
+  tested.
+- App tracks sidebarWidth (clamped 160-480, persisted to localStorage) and feeds it to a
+  --sidebar-width CSS var; the companion grid's first track uses it. The sash renders in the gap
+  between the sidebar and the editor (companion mode, sidebar shown).
+- Quality: an e2e focuses the sash and arrow-keys it wider, asserting the explorer grows; typecheck,
+  lint clean; build and full e2e pass. Matrix 5.5 "Sash resizing (visual splitter)" Missing to Partial
+  (only the sidebar resizes; bottom panel and editor groups not yet). 5.5 now 8/14/6; TOTAL 115/117/96.
+
 ## Slice 108: inline conflict decorations + native conflict bar (done)
 
 Complete the merge-conflict feature: highlight conflicts inline and make accept work in both editors

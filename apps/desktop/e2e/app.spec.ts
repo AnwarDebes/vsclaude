@@ -990,4 +990,17 @@ test.describe('vsclaude shell', () => {
     await expect(markers.first()).toBeVisible();
     await expect(markers).toHaveCount(initial);
   });
+
+  test('the sidebar sash resizes the explorer', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    const files = page.getByRole('navigation', { name: 'Files' });
+    await expect(files).toBeVisible();
+    const before = (await files.boundingBox())!.width;
+    const sash = page.getByRole('separator', { name: 'Resize sidebar' });
+    await sash.focus();
+    for (let i = 0; i < 6; i += 1) await page.keyboard.press('ArrowRight');
+    const after = (await files.boundingBox())!.width;
+    expect(after).toBeGreaterThan(before + 50);
+  });
 });

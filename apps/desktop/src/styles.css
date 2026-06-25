@@ -1345,10 +1345,33 @@ body {
   padding: var(--space-lg) var(--space-xl);
   min-height: 0;
   overflow: hidden;
+  position: relative;
 }
 
 .app-shell[data-mode='companion'] .app-main {
-  grid-template-columns: 220px 1fr 360px;
+  grid-template-columns: var(--sidebar-width, 220px) 1fr 360px;
+}
+.sash {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  margin-left: -3px;
+  cursor: col-resize;
+  z-index: 6;
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+.sash:hover,
+.sash:focus-visible {
+  background: var(--color-accent);
+  outline: none;
+}
+.sash--sidebar {
+  /* Sit in the gap between the sidebar (var(--sidebar-width)) and the editor; the
+     offset mirrors .app-main's left padding (space-xl) and column gap (space-lg). */
+  left: calc(var(--space-xl) + var(--sidebar-width, 220px) + var(--space-lg) / 2);
 }
 /* When the primary sidebar is hidden (Ctrl+B), drop its fixed track so the editor
    fills the freed space instead of staying pinned to the 220px column. */

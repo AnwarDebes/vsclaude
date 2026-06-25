@@ -77,6 +77,8 @@ import { isMediaPath, mediaKind, mediaMime } from './lib/media';
 import { HexView, type HexTarget } from './components/HexView';
 import { base64ToBytes } from './lib/hex';
 import { MergeConflictBar } from './components/MergeConflictBar';
+import { Sash } from './components/Sash';
+import { loadSidebarWidth, SIDEBAR_MIN, SIDEBAR_MAX } from './lib/sash';
 import { findConflicts, resolveConflict, type Conflict, type ConflictChoice } from './lib/conflicts';
 import { ProcessInfoModal } from './components/ProcessInfoModal';
 import { AccessibilityHelp } from './components/AccessibilityHelp';
@@ -1186,6 +1188,13 @@ export function App() {
 
   const mode = settings.presentationMode;
   const isEditorMode = mode === 'companion' || mode === 'cozy';
+  // Width of the primary sidebar (companion mode), draggable via a sash and persisted.
+  const [sidebarWidth, setSidebarWidth] = useState<number>(() =>
+    loadSidebarWidth(localStorage.getItem('vsclaude.sidebarWidth')),
+  );
+  useEffect(() => {
+    localStorage.setItem('vsclaude.sidebarWidth', String(sidebarWidth));
+  }, [sidebarWidth]);
   const stateLabel = STATE_LABELS[session.directive.state] ?? session.directive.state;
   const currentPath = session.current?.payload?.['path'];
   const activePath = typeof currentPath === 'string' ? currentPath : undefined;
@@ -1260,7 +1269,7 @@ export function App() {
       data-mode={mode}
       data-zen={zenMode}
       data-sidebar-hidden={sidebarHidden}
-      style={{ zoom: settings.uiScale }}
+      style={{ zoom: settings.uiScale, ['--sidebar-width']: `${sidebarWidth}px` } as React.CSSProperties}
     >
       <PixieActionSprite />
 
@@ -1310,6 +1319,17 @@ export function App() {
               onSelect={setOpenFile}
             />
           )
+        ) : null}
+
+        {mode === 'companion' && !sidebarHidden ? (
+          <Sash
+            value={sidebarWidth}
+            min={SIDEBAR_MIN}
+            max={SIDEBAR_MAX}
+            onChange={setSidebarWidth}
+            ariaLabel="Resize sidebar"
+            className="sash--sidebar"
+          />
         ) : null}
 
         <div className="app-center">
