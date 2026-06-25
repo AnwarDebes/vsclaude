@@ -1353,11 +1353,6 @@ body {
 }
 .sash {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 6px;
-  margin-left: -3px;
-  cursor: col-resize;
   z-index: 6;
   background: transparent;
   border: 0;
@@ -1368,10 +1363,27 @@ body {
   background: var(--color-accent);
   outline: none;
 }
+.sash--vertical {
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  margin-left: -3px;
+  cursor: col-resize;
+}
+.sash--horizontal {
+  left: 0;
+  right: 0;
+  height: 6px;
+  cursor: row-resize;
+}
 .sash--sidebar {
   /* Sit in the gap between the sidebar (var(--sidebar-width)) and the editor; the
      offset mirrors .app-main's left padding (space-xl) and column gap (space-lg). */
   left: calc(var(--space-xl) + var(--sidebar-width, 220px) + var(--space-lg) / 2);
+}
+.sash--bottom {
+  /* The top edge of the bottom dock; drag up to grow it. */
+  top: 0;
 }
 /* When the primary sidebar is hidden (Ctrl+B), drop its fixed track so the editor
    fills the freed space instead of staying pinned to the 220px column. */
@@ -1576,8 +1588,9 @@ body {
   padding: var(--space-md) var(--space-xl);
   border-top: 1px solid var(--color-border);
   background: var(--color-surface);
-  height: 248px;
+  height: var(--bottom-height, 248px);
   overflow: hidden;
+  position: relative;
 }
 .app-bottom--minimal {
   grid-template-columns: 1fr;

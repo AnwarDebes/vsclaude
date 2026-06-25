@@ -2,6 +2,12 @@ import { useRef } from 'react';
 import { clampSize } from '../lib/sash';
 
 export interface SashProps {
+  /**
+   * 'vertical' resizes a width (the splitter line is vertical, on a panel's right
+   * edge; drag right / ArrowRight grows it). 'horizontal' resizes a height (the line
+   * is horizontal, on a panel's top edge; drag up / ArrowUp grows it).
+   */
+  orientation: 'vertical' | 'horizontal';
   /** Current size (px) of the panel this sash resizes. */
   value: number;
   min: number;
@@ -19,19 +25,22 @@ export interface SashProps {
  * caller feeds it back through `value`. Exposed as an ARIA separator so assistive tech
  * and tests can drive it without a mouse.
  */
-export function Sash({ value, min, max, onChange, ariaLabel, step = 16, className }: SashProps) {
-  const dragRef = useRef<{ startX: number; startValue: number } | null>(null);
+export function Sash({ orientation, value, min, max, onChange, ariaLabel, step = 16, className }: SashProps) {
+  const dragRef = useRef<{ start: number; startValue: number } | null>(null);
+  const vertical = orientation === 'vertical';
   const clamp = (n: number) => clampSize(n, min, max);
 
   const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
     event.preventDefault();
-    dragRef.current = { startX: event.clientX, startValue: value };
+    dragRef.current = { start: vertical ? event.clientX : event.clientY, startValue: value };
     event.currentTarget.setPointerCapture(event.pointerId);
   };
   const onPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
     const drag = dragRef.current;
     if (!drag) return;
-    onChange(clamp(drag.startValue + (event.clientX - drag.startX)));
+    // Vertical sash grows rightward; horizontal sash (top edge) grows upward.
+    const delta = vertical ? event.clientX - drag.start : drag.start - event.clientY;
+    onChange(clamp(drag.startValue + delta));
   };
   const onPointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
     dragRef.current = null;
@@ -40,12 +49,14 @@ export function Sash({ value, min, max, onChange, ariaLabel, step = 16, classNam
     }
   };
   const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === 'ArrowLeft') {
-      event.preventDefault();
-      onChange(clamp(value - step));
-    } else if (event.key === 'ArrowRight') {
+    const grow = vertical ? 'ArrowRight' : 'ArrowUp';
+    const shrink = vertical ? 'ArrowLeft' : 'ArrowDown';
+    if (event.key === grow) {
       event.preventDefault();
       onChange(clamp(value + step));
+    } else if (event.key === shrink) {
+      event.preventDefault();
+      onChange(clamp(value - step));
     } else if (event.key === 'Home') {
       event.preventDefault();
       onChange(min);
@@ -57,9 +68,9 @@ export function Sash({ value, min, max, onChange, ariaLabel, step = 16, classNam
 
   return (
     <div
-      className={`sash${className ? ` ${className}` : ''}`}
+      className={`sash sash--${orientation}${className ? ` ${className}` : ''}`}
       role="separator"
-      aria-orientation="vertical"
+      aria-orientation={orientation}
       aria-label={ariaLabel}
       aria-valuenow={Math.round(value)}
       aria-valuemin={min}

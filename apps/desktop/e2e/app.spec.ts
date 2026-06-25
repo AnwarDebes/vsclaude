@@ -1003,4 +1003,17 @@ test.describe('vsclaude shell', () => {
     const after = (await files.boundingBox())!.width;
     expect(after).toBeGreaterThan(before + 50);
   });
+
+  test('the bottom panel sash resizes the dock', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    const dock = page.locator('.app-bottom');
+    await expect(dock).toBeVisible();
+    const before = (await dock.boundingBox())!.height;
+    const sash = page.getByRole('separator', { name: 'Resize panel' });
+    await sash.focus();
+    for (let i = 0; i < 6; i += 1) await page.keyboard.press('ArrowUp');
+    const after = (await dock.boundingBox())!.height;
+    expect(after).toBeGreaterThan(before + 50);
+  });
 });

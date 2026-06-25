@@ -78,7 +78,14 @@ import { HexView, type HexTarget } from './components/HexView';
 import { base64ToBytes } from './lib/hex';
 import { MergeConflictBar } from './components/MergeConflictBar';
 import { Sash } from './components/Sash';
-import { loadSidebarWidth, SIDEBAR_MIN, SIDEBAR_MAX } from './lib/sash';
+import {
+  loadSidebarWidth,
+  loadBottomHeight,
+  SIDEBAR_MIN,
+  SIDEBAR_MAX,
+  BOTTOM_MIN,
+  BOTTOM_MAX,
+} from './lib/sash';
 import { findConflicts, resolveConflict, type Conflict, type ConflictChoice } from './lib/conflicts';
 import { ProcessInfoModal } from './components/ProcessInfoModal';
 import { AccessibilityHelp } from './components/AccessibilityHelp';
@@ -1195,6 +1202,13 @@ export function App() {
   useEffect(() => {
     localStorage.setItem('vsclaude.sidebarWidth', String(sidebarWidth));
   }, [sidebarWidth]);
+  // Height of the bottom panel dock, draggable via a horizontal sash and persisted.
+  const [bottomHeight, setBottomHeight] = useState<number>(() =>
+    loadBottomHeight(localStorage.getItem('vsclaude.bottomHeight')),
+  );
+  useEffect(() => {
+    localStorage.setItem('vsclaude.bottomHeight', String(bottomHeight));
+  }, [bottomHeight]);
   const stateLabel = STATE_LABELS[session.directive.state] ?? session.directive.state;
   const currentPath = session.current?.payload?.['path'];
   const activePath = typeof currentPath === 'string' ? currentPath : undefined;
@@ -1269,7 +1283,13 @@ export function App() {
       data-mode={mode}
       data-zen={zenMode}
       data-sidebar-hidden={sidebarHidden}
-      style={{ zoom: settings.uiScale, ['--sidebar-width']: `${sidebarWidth}px` } as React.CSSProperties}
+      style={
+        {
+          zoom: settings.uiScale,
+          ['--sidebar-width']: `${sidebarWidth}px`,
+          ['--bottom-height']: `${bottomHeight}px`,
+        } as React.CSSProperties
+      }
     >
       <PixieActionSprite />
 
@@ -1323,6 +1343,7 @@ export function App() {
 
         {mode === 'companion' && !sidebarHidden ? (
           <Sash
+            orientation="vertical"
             value={sidebarWidth}
             min={SIDEBAR_MIN}
             max={SIDEBAR_MAX}
@@ -1397,6 +1418,15 @@ export function App() {
 
       {showBottom ? (
         <footer className="app-bottom">
+          <Sash
+            orientation="horizontal"
+            value={bottomHeight}
+            min={BOTTOM_MIN}
+            max={BOTTOM_MAX}
+            onChange={setBottomHeight}
+            ariaLabel="Resize panel"
+            className="sash--bottom"
+          />
           <TerminalTabs fallbackLines={terminalLines} cwd={hasWorkspace ? ws.roots[0]?.path : undefined} />
           <TokenPanel tokens={session.tokens} tree={session.tree} />
           <Narration narration={session.narration} />

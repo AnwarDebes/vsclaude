@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { clampSize, loadSidebarWidth, SIDEBAR_DEFAULT } from '../lib/sash';
+import {
+  BOTTOM_DEFAULT,
+  clampSize,
+  loadBottomHeight,
+  loadSidebarWidth,
+  SIDEBAR_DEFAULT,
+} from '../lib/sash';
 
 describe('clampSize', () => {
   it('clamps below min, above max, and passes a mid-range value', () => {
@@ -25,5 +31,17 @@ describe('loadSidebarWidth', () => {
 
   it('returns the saved value when in range', () => {
     expect(loadSidebarWidth('300')).toBe(300);
+  });
+});
+
+describe('loadBottomHeight', () => {
+  it('falls back to the default for invalid or out-of-range values', () => {
+    expect(loadBottomHeight(null)).toBe(BOTTOM_DEFAULT);
+    expect(loadBottomHeight('40')).toBe(BOTTOM_DEFAULT);
+    expect(loadBottomHeight('9999')).toBe(BOTTOM_DEFAULT);
+  });
+
+  it('returns the saved value when in range', () => {
+    expect(loadBottomHeight('400')).toBe(400);
   });
 });

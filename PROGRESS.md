@@ -24,6 +24,21 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 110: bottom panel sash (done)
+
+Make the bottom panel dock resizable too, completing VS Code's two main sashes (catalog 5.5).
+
+- Sash.tsx now takes an orientation: 'vertical' resizes a width (sidebar), 'horizontal' resizes a
+  height (the bottom dock, top edge, drag up to grow). Keyboard maps to the orientation (Left/Right vs
+  Up/Down); the ARIA separator reports aria-orientation accordingly.
+- lib/sash.ts adds a generic loadSize plus bottom-panel constants and loadBottomHeight (unit tested).
+- App tracks bottomHeight (clamped 120-560, persisted) and feeds a --bottom-height var; .app-bottom
+  uses it. The horizontal sash renders at the top of the dock.
+- Quality: an e2e focuses the bottom sash and arrow-keys it taller, asserting the dock grows; the
+  sidebar sash e2e still passes after the orientation refactor. Typecheck, lint clean; build and full
+  e2e pass. Matrix 5.5 "Sash resizing (visual splitter)" evidence updated (sidebar + bottom panel both
+  resize; editor groups remain) -- stays Partial, no flip. TOTAL unchanged 115/117/96.
+
 ## Slice 109: draggable sidebar sash (done)
 
 Make the primary sidebar user-resizable, like VS Code's sashes (catalog 5.5).
