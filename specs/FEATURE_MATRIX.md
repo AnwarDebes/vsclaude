@@ -15,7 +15,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 
 | Section | Title | Done | Partial | Missing | Not planned |
 | --- | --- | --- | --- | --- | --- |
-| 5.1 | Text editing core | 14 | 13 | 0 | 0 |
+| 5.1 | Text editing core | 16 | 11 | 0 | 0 |
 | 5.2 | Code intelligence (LSP language features) | 1 | 10 | 13 | 0 |
 | 5.3 | Editor advanced surface | 8 | 4 | 0 | 0 |
 | 5.4 | Diff and merge | 5 | 2 | 2 | 1 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 6 | 7 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 2 | 5 | 3 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 103 | 122 | 103 | 5 |
+| TOTAL | | 105 | 120 | 103 | 5 |
 
 ## Legend
 
@@ -67,8 +67,8 @@ The editor integrates Monaco 0.55.1, and its editing actions are now exposed: a 
 | Bracket pair guides | Done | The editor.bracketPairGuides setting maps to Monaco's guides.bracketPairs (editorSettingsToMonaco), on by default. Unit tested. | |
 | Indentation (detect, spaces/tabs, convert, tab size, guides) | Partial | EditorPanel.tsx sets tabSize: 2; no detectIndentation or insertSpaces. | No auto-detect, no insertSpaces toggle, no convert command, no explicit guide config. |
 | Whitespace and control char rendering, render final newline | Partial | renderWhitespace is now a setting (none, selection, all) applied to Monaco. | Control-character rendering and render-final-newline are not configurable. |
-| Cursor styles, blink rate, smooth caret, surrounding lines | Partial | cursorStyle is now a setting (line, block, underline); cursorBlinking is smooth and the caret animates. | No cursorSurroundingLines or blink-rate setting. |
-| Smooth scrolling, fast scroll, scroll beyond last line, wheel zoom | Partial | EditorPanel.tsx sets smoothScrolling: true, scrollBeyondLastLine: false. | fastScrollSensitivity and wheel-zoom unset; scrollBeyondLastLine differs from VS Code default. |
+| Cursor styles, blink rate, smooth caret, surrounding lines | Done | cursorStyle, cursorBlinking, cursorSmoothCaretAnimation, and cursorSurroundingLines are all settings mapped to Monaco (editorSettingsToMonaco, unit tested) and exposed in the Settings panel. | |
+| Smooth scrolling, fast scroll, scroll beyond last line, wheel zoom | Done | smoothScrolling, fastScrollSensitivity, scrollBeyondLastLine, and mouseWheelZoom are all settings mapped to Monaco (editorSettingsToMonaco, unit tested) and exposed in the Settings panel. | |
 | Drag-drop text, copy/cut whole line, multi-paste | Partial | Monaco default behaviors not disabled in EditorPanel.tsx. | Defaults likely on but unverified; multi-paste not in specs. |
 | Undo/redo and undo stops, soft undo across saves | Partial | Monaco provides undo/redo and undo stops in the editor, surfaced as Edit: Undo and Edit: Redo (and the Edit menu) alongside cut/copy/paste/find/replace commands. | No soft undo across saves and no undo-history persistence or IPC sync. |
 | EOL handling (LF/CRLF detect, convert, platform default) | Partial | FilePayload reports eol (spec 3.2/11.1); EditorPanel.tsx exposes no EOL UI. | Core reads EOL but no selection, conversion, or platform-default UI. |

@@ -27,9 +27,15 @@ describe('editorSettingsToMonaco', () => {
       rulers: [],
       renderWhitespace: 'selection',
       cursorStyle: 'line',
+      cursorBlinking: 'smooth',
+      cursorSmoothCaretAnimation: 'off',
+      cursorSurroundingLines: 0,
       lineHeight: 0,
       fontWeight: 'normal',
       mouseWheelZoom: false,
+      smoothScrolling: true,
+      fastScrollSensitivity: 5,
+      scrollBeyondLastLine: false,
       guides: { bracketPairs: true },
       bracketPairColorization: { enabled: true },
       autoClosingBrackets: 'languageDefined',
@@ -37,6 +43,24 @@ describe('editorSettingsToMonaco', () => {
       autoSurround: 'languageDefined',
       matchBrackets: 'always',
     });
+  });
+
+  it('maps the cursor and scrolling settings', () => {
+    const mapped = editorSettingsToMonaco({
+      ...DEFAULT_SETTINGS.editor,
+      cursorBlinking: 'phase',
+      cursorSmoothCaretAnimation: 'on',
+      cursorSurroundingLines: 3,
+      smoothScrolling: false,
+      fastScrollSensitivity: 8,
+      scrollBeyondLastLine: true,
+    });
+    expect(mapped.cursorBlinking).toBe('phase');
+    expect(mapped.cursorSmoothCaretAnimation).toBe('on');
+    expect(mapped.cursorSurroundingLines).toBe(3);
+    expect(mapped.smoothScrolling).toBe(false);
+    expect(mapped.fastScrollSensitivity).toBe(8);
+    expect(mapped.scrollBeyondLastLine).toBe(true);
   });
 
   it('maps the bracket and auto-close settings', () => {
@@ -152,5 +176,15 @@ describe('filterSettings', () => {
     expect(ids).toContain('editor.autoClosingQuotes');
     expect(ids).toContain('editor.autoSurround');
     expect(ids).toContain('editor.matchBrackets');
+  });
+
+  it('exposes the cursor and scrolling settings', () => {
+    const ids = SETTINGS_SCHEMA.map((d) => d.id);
+    expect(ids).toContain('editor.cursorBlinking');
+    expect(ids).toContain('editor.cursorSmoothCaretAnimation');
+    expect(ids).toContain('editor.cursorSurroundingLines');
+    expect(ids).toContain('editor.smoothScrolling');
+    expect(ids).toContain('editor.fastScrollSensitivity');
+    expect(ids).toContain('editor.scrollBeyondLastLine');
   });
 });

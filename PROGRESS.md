@@ -24,6 +24,20 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 86: explicit cursor and scrolling editor settings (done)
+
+Make the editor's cursor and scrolling behaviors explicit and configurable (catalog 5.1).
+
+- **Settings**: `cursorBlinking`, `cursorSmoothCaretAnimation`, `cursorSurroundingLines`,
+  `smoothScrolling`, `fastScrollSensitivity`, and `scrollBeyondLastLine` join EditorSettings
+  and DEFAULT_SETTINGS, map through editorSettingsToMonaco, and appear in the Settings panel.
+  EditorPanel's hardcoded scrollBeyondLastLine/smoothScrolling/cursorBlinking were removed
+  (the mapper is now the single source of truth; defaults preserve prior behavior).
+- **Quality**: editorSettingsToMonaco unit tests updated (defaults plus a focused mapping
+  test); schema exposure tested; typecheck, lint, build, build:packages clean; e2e unaffected.
+  Matrix 5.1 rows cursor (styles/blink/smooth caret/surrounding) and scrolling (smooth/fast/
+  beyond-last-line/wheel-zoom) moved Partial to Done (Done crossed to 105).
+
 ## Slice 85: explicit bracket and auto-close editor settings (done)
 
 Make three Monaco-default behaviors explicit and configurable (catalog 5.1).

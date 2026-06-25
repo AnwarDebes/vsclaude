@@ -103,11 +103,23 @@ export interface EditorSettings {
   rulers: number;
   renderWhitespace: 'none' | 'selection' | 'all';
   cursorStyle: 'line' | 'block' | 'underline';
+  /** How the caret blinks. */
+  cursorBlinking: 'blink' | 'smooth' | 'phase' | 'expand' | 'solid';
+  /** Animate the caret as it moves between positions. */
+  cursorSmoothCaretAnimation: 'off' | 'explicit' | 'on';
+  /** Keep at least this many lines visible above and below the caret. */
+  cursorSurroundingLines: number;
   /** Line height in pixels, or 0 to derive it from the font size. */
   lineHeight: number;
   fontWeight: 'normal' | '500' | '600' | 'bold';
   /** Zoom the editor font with Ctrl and the mouse wheel. */
   mouseWheelZoom: boolean;
+  /** Animate scrolling within the editor. */
+  smoothScrolling: boolean;
+  /** Speed multiplier when scrolling with the Alt key held. */
+  fastScrollSensitivity: number;
+  /** Allow scrolling past the last line of the file. */
+  scrollBeyondLastLine: boolean;
   /** Ignore trailing-whitespace-only changes in the diff editor. */
   diffIgnoreTrimWhitespace: boolean;
   /** The diff algorithm the diff editor uses. */
@@ -174,9 +186,15 @@ export const DEFAULT_SETTINGS: AppSettings = {
     rulers: 0,
     renderWhitespace: 'selection',
     cursorStyle: 'line',
+    cursorBlinking: 'smooth',
+    cursorSmoothCaretAnimation: 'off',
+    cursorSurroundingLines: 0,
     lineHeight: 0,
     fontWeight: 'normal',
     mouseWheelZoom: false,
+    smoothScrolling: true,
+    fastScrollSensitivity: 5,
+    scrollBeyondLastLine: false,
     diffIgnoreTrimWhitespace: true,
     diffAlgorithm: 'advanced',
     diffMaxComputationTime: 5000,

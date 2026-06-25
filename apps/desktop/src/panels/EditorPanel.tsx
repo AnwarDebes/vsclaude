@@ -106,14 +106,13 @@ export function EditorPanel({ path, value, language, onChange, onSave }: EditorP
         onMount={onMount}
         loading={<div className="editor-loading">Loading editor...</div>}
         options={{
-          scrollBeyondLastLine: false,
           automaticLayout: true,
-          smoothScrolling: true,
-          cursorBlinking: 'smooth',
           largeFileOptimizations: true,
           maxTokenizationLineLength: 20000,
           inlayHints: { enabled: 'on' },
           find: { seedSearchStringFromSelection: 'always', autoFindInSelection: 'multiline' },
+          // scrollBeyondLastLine, smoothScrolling, and cursorBlinking now come from
+          // editorSettingsToMonaco below (spread last, so it is the source of truth).
           ...editorSettingsToMonaco(settings),
         }}
       />

@@ -18,9 +18,15 @@ export interface MonacoEditorOptions {
   rulers: number[];
   renderWhitespace: 'none' | 'selection' | 'all';
   cursorStyle: 'line' | 'block' | 'underline';
+  cursorBlinking: 'blink' | 'smooth' | 'phase' | 'expand' | 'solid';
+  cursorSmoothCaretAnimation: 'off' | 'explicit' | 'on';
+  cursorSurroundingLines: number;
   lineHeight: number;
   fontWeight: string;
   mouseWheelZoom: boolean;
+  smoothScrolling: boolean;
+  fastScrollSensitivity: number;
+  scrollBeyondLastLine: boolean;
   guides: { bracketPairs: boolean };
   bracketPairColorization: { enabled: boolean };
   autoClosingBrackets: 'always' | 'languageDefined' | 'beforeWhitespace' | 'never';
@@ -43,9 +49,15 @@ export function editorSettingsToMonaco(settings: EditorSettings): MonacoEditorOp
     rulers: settings.rulers > 0 ? [settings.rulers] : [],
     renderWhitespace: settings.renderWhitespace,
     cursorStyle: settings.cursorStyle,
+    cursorBlinking: settings.cursorBlinking,
+    cursorSmoothCaretAnimation: settings.cursorSmoothCaretAnimation,
+    cursorSurroundingLines: settings.cursorSurroundingLines,
     lineHeight: settings.lineHeight,
     fontWeight: settings.fontWeight,
     mouseWheelZoom: settings.mouseWheelZoom,
+    smoothScrolling: settings.smoothScrolling,
+    fastScrollSensitivity: settings.fastScrollSensitivity,
+    scrollBeyondLastLine: settings.scrollBeyondLastLine,
     guides: { bracketPairs: settings.bracketPairGuides },
     bracketPairColorization: { enabled: settings.bracketPairColorization },
     autoClosingBrackets: settings.autoClosingBrackets,
