@@ -10,7 +10,7 @@ export interface WelcomeTip {
 
 export const WELCOME_TIPS: readonly WelcomeTip[] = [
   { keys: 'Ctrl/Cmd+P', text: 'Quickly open any file by name.' },
-  { keys: 'Ctrl/Cmd+K', text: 'Run any command from the palette.' },
+  { keys: 'Ctrl/Cmd+Shift+P', text: 'Run any command from the palette.' },
   { keys: 'Ctrl/Cmd+Shift+F', text: 'Search across the whole project.' },
   { keys: 'Ctrl/Cmd+Shift+G', text: 'Stage and commit from Source Control.' },
   { keys: 'Ctrl/Cmd+,', text: 'Open Settings to tune the editor.' },

@@ -220,6 +220,16 @@ test.describe('vsclaude shell', () => {
     await expect(page.getByText('No build task found in this folder.')).toBeVisible();
   });
 
+  test('Ctrl+Shift+P opens the command palette in command mode', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+Shift+KeyP');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await expect(palette).toBeVisible();
+    // The command-mode placeholder confirms it opened commands (not the Ctrl+P files mode).
+    await expect(palette.getByPlaceholder(/type a command/i)).toBeVisible();
+  });
+
   test('the active file is restored after a reload', async ({ page }) => {
     await page.goto('/');
     // The default open file is login-form.tsx; open a different one (exact avoids session.config.ts).

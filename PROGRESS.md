@@ -24,6 +24,27 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 141: Ctrl/Cmd+Shift+P opens the command palette (done; Done-row parity polish)
+
+Add VS Code's iconic command-palette shortcut. The palette was opened by Ctrl/Cmd+K only; Ctrl+Shift+P
+(which every VS Code user reaches for) fell through to the Ctrl+P files branch.
+
+- CommandPalette.tsx keydown listener: a new first case (ctrl/meta + shift + p) -> toggleTo('commands'),
+  placed before the Ctrl+P files case so Ctrl+Shift+P no longer opens files. Ctrl+K still opens commands.
+- App.tsx show-commands command: keybinding metadata 'Ctrl+K' -> 'Ctrl+Shift+P' (the VS Code-standard,
+  now shown in the Keyboard Shortcuts reference and known to the conflict detector); Ctrl+K keeps working
+  via the listener (the e2es that press Ctrl+K still pass).
+- Quality: typecheck, lint clean; the keyboard-shortcuts conflict e2e still reports no conflicts (Ctrl+Shift+P
+  is unique); a new e2e presses Ctrl+Shift+P and asserts the palette opens in COMMAND mode (the
+  'type a command' placeholder, distinguishing it from the Ctrl+P files mode). build + full e2e pass.
+- HONESTY: the command-palette row (5.6) is already Done; this is parity POLISH on a Done row (adds the
+  standard shortcut), so there is NO matrix count/status change. Evidence updated in the two palette rows
+  and the 5.6 prose. TOTAL unchanged 129/102/97.
+- Review: 2 minors, both the consistency ripple of changing the advertised shortcut (the slice-133 lesson):
+  the welcome "Learn the keys" tip (lib/welcome.ts) still showed Ctrl/Cmd+K -> updated to Ctrl/Cmd+Shift+P;
+  and specs/QUICK_OPEN.md (cited by the 5.6 prose) still documented Ctrl+K -> updated to lead with
+  Ctrl/Cmd+Shift+P (Ctrl/Cmd+K legacy alias). Both fixed.
+
 ## Slice 140: restore sidebar visibility and the open panel across a reload (done; honest no-flip)
 
 Extend layout-state persistence (catalog 5.5) so a reload restores the primary sidebar visibility and

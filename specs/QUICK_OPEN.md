@@ -23,8 +23,9 @@ In scope for this slice:
   returns the file paths under a folder, skipping heavy or noise directories and
   capping the result so a huge tree never hangs the picker. This bumps the IPC
   protocol to version 4.
-- A unified palette in the desktop app that opens on Ctrl or Cmd plus K in command
-  mode and Ctrl or Cmd plus P in file mode, and routes live on the typed prefix:
+- A unified palette in the desktop app that opens on Ctrl or Cmd plus Shift plus P (or
+  the Ctrl or Cmd plus K legacy alias) in command mode and Ctrl or Cmd plus P in file
+  mode, and routes live on the typed prefix:
   `>` for commands, `:` for go to line and column, and no prefix for the mode it
   was opened in.
 - Keybinding display: commands may carry a `keybinding` label that the palette
@@ -81,8 +82,9 @@ a display label only; it does not register a real key handler.
 4. Ctrl or Cmd plus P opens the palette in file mode with the file index loaded
    for the open workspace, or the demo files when no workspace is open. Typing
    filters; Enter opens the highlighted file in the editor.
-5. Ctrl or Cmd plus K still opens command mode with the existing label and
-   placeholder, so the current palette flow and its end-to-end test keep passing.
+5. Ctrl or Cmd plus Shift plus P (and the Ctrl or Cmd plus K legacy alias) opens command
+   mode with the existing label and placeholder, so the current palette flow and its
+   end-to-end test keep passing.
    Typing `>` in file mode switches to commands, and `:` switches to go-to-line.
 6. With a file open, choosing `:40` reveals and selects line 40 in the active
    editor and focuses it.

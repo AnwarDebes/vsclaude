@@ -706,7 +706,8 @@ export function App() {
       id: 'show-commands',
       title: 'Show All Commands',
       keywords: ['command', 'palette'],
-      keybinding: 'Ctrl+K',
+      // VS Code's command-palette shortcut; Ctrl/Cmd+K also opens it (legacy alias).
+      keybinding: 'Ctrl+Shift+P',
       run: () => openPalette('commands'),
     });
     r.register({

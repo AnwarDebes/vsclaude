@@ -113,7 +113,11 @@ export function CommandPalette({
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const key = e.key.toLowerCase();
-      if ((e.ctrlKey || e.metaKey) && key === 'k') {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && key === 'p') {
+        // Ctrl/Cmd+Shift+P opens the command palette (VS Code's command-palette shortcut).
+        e.preventDefault();
+        toggleTo('commands');
+      } else if ((e.ctrlKey || e.metaKey) && key === 'k') {
         e.preventDefault();
         toggleTo('commands');
       } else if ((e.ctrlKey || e.metaKey) && key === 'p') {
