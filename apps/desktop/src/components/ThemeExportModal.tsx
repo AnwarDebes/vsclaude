@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import type { AppSettings } from '@vsclaude/contracts';
 import { exportTheme } from '../lib/theme';
+import { useFocusRestore } from '../lib/focus-restore';
 
 export interface ThemeExportModalProps {
   open: boolean;
@@ -10,6 +11,7 @@ export interface ThemeExportModalProps {
 
 /** Show the active theme as JSON so it can be copied out and shared. */
 export function ThemeExportModal({ open, settings, onClose }: ThemeExportModalProps) {
+  useFocusRestore(open);
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {

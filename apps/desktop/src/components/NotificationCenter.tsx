@@ -5,6 +5,7 @@ import {
   getNotifications,
   subscribeNotifications,
 } from '../lib/notifications';
+import { useFocusRestore } from '../lib/focus-restore';
 
 export interface NotificationCenterProps {
   open: boolean;
@@ -14,6 +15,7 @@ export interface NotificationCenterProps {
 /** The notification center: the message history, newest first, each dismissable. */
 export function NotificationCenter({ open, onClose }: NotificationCenterProps) {
   const items = useSyncExternalStore(subscribeNotifications, getNotifications, getNotifications);
+  useFocusRestore(open);
 
   if (!open) return null;
 

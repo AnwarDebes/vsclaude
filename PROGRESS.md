@@ -24,6 +24,20 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 123: modal focus restore (done)
+
+Return focus to the trigger when a modal closes, like VS Code (catalog 5.20 focus management).
+
+- lib/focus-restore.ts: a module-level focusin tracker records the last focus OUTSIDE any [role=dialog],
+  and a useFocusRestore(open) hook refocuses it when a modal closes. This works regardless of how each
+  modal focuses its own content on open (the tracker captures the background focus independently),
+  sidestepping the autofocus-timing problem.
+- Applied to the command palette, the theme export/import modals, and the notification center.
+- Quality: an e2e focuses the sidebar sash, opens the palette, presses Escape, and asserts focus
+  returns to the sash; typecheck, lint clean; build and full e2e pass. Matrix 5.20 "Focus management
+  with roving tabindex and restoration" evidence updated (modal focus restore done; a reusable
+  focus-trap hook and per-mode focus order remain) -- stays Partial, no flip. TOTAL unchanged 124/107/97.
+
 ## Slice 122: drag-drop / whole-line-copy / multi-paste settings (done)
 
 Expose the last cluster of editing-behavior options as settings (catalog 5.1).

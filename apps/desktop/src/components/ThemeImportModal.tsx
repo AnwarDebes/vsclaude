@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { Theme } from '@vsclaude/contracts';
 import { parseImportedTheme } from '../lib/theme';
+import { useFocusRestore } from '../lib/focus-restore';
 
 export interface ThemeImportModalProps {
   open: boolean;
@@ -10,6 +11,7 @@ export interface ThemeImportModalProps {
 
 /** Paste a theme JSON (as produced by Theme: Export) and apply it as a custom theme. */
 export function ThemeImportModal({ open, onApply, onClose }: ThemeImportModalProps) {
+  useFocusRestore(open);
   const [text, setText] = useState('');
   const [error, setError] = useState<string | null>(null);
 

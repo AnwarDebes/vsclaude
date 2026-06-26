@@ -1141,6 +1141,33 @@ test.describe('vsclaude shell', () => {
     expect(await inRegion('.status-bar')).toBe(true);
   });
 
+  test('closing the command palette restores focus to the trigger', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    // Focus a non-dialog element, open the palette, dismiss it, and expect focus back.
+    const sash = page.getByRole('separator', { name: 'Resize sidebar' });
+    await sash.focus();
+    await expect(sash).toBeFocused();
+    await page.keyboard.press('Control+KeyK');
+    await expect(page.getByRole('dialog', { name: /command palette/i })).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(sash).toBeFocused();
+  });
+
+  test('closing the theme export modal restores focus too', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    const sash = page.getByRole('separator', { name: 'Resize sidebar' });
+    await sash.focus();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('Theme: Export');
+    await page.keyboard.press('Enter');
+    await expect(page.getByRole('dialog', { name: 'Export theme' })).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(sash).toBeFocused();
+  });
+
   test('F6 skips regions with no focusable child (minimal mode)', async ({ page }) => {
     await page.goto('/');
     await page.getByText('Claude Code, in motion').click();
