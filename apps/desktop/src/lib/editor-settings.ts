@@ -13,7 +13,9 @@ export interface MonacoEditorOptions {
   tabSize: number;
   insertSpaces: boolean;
   detectIndentation: boolean;
-  wordWrap: 'on' | 'off';
+  wordWrap: 'off' | 'on' | 'wordWrapColumn' | 'bounded';
+  wordWrapColumn: number;
+  wrappingIndent: 'none' | 'same' | 'indent' | 'deepIndent';
   wordBasedSuggestions: 'off' | 'currentDocument' | 'matchingDocuments' | 'allDocuments';
   columnSelection: boolean;
   occurrencesHighlight: 'off' | 'singleFile' | 'multiFile';
@@ -57,7 +59,9 @@ export function editorSettingsToMonaco(settings: EditorSettings): MonacoEditorOp
     tabSize: settings.tabSize,
     insertSpaces: settings.insertSpaces,
     detectIndentation: settings.detectIndentation,
-    wordWrap: settings.wordWrap ? 'on' : 'off',
+    wordWrap: settings.wordWrap,
+    wordWrapColumn: settings.wordWrapColumn,
+    wrappingIndent: settings.wrappingIndent,
     wordBasedSuggestions: settings.wordBasedSuggestions,
     columnSelection: settings.columnSelection,
     occurrencesHighlight: settings.occurrencesHighlight,

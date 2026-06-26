@@ -76,6 +76,25 @@ function mergeRecords(
 }
 
 /**
+ * Coerce legacy override shapes to the current schema before merging. Older
+ * documents stored `editor.wordWrap` as a boolean; the current schema uses a
+ * string enum ('off' | 'on' | ...). Operate on the opaque record so the
+ * migration sees the raw stored value, not the narrowed current type.
+ */
+function migrateOverride(
+  override: Record<string, unknown>,
+): Record<string, unknown> {
+  const editor = override.editor;
+  if (isRecord(editor) && typeof editor.wordWrap === 'boolean') {
+    return {
+      ...override,
+      editor: { ...editor, wordWrap: editor.wordWrap ? 'on' : 'off' },
+    };
+  }
+  return override;
+}
+
+/**
  * Merge a partial settings override over {@link DEFAULT_SETTINGS}.
  *
  * @param partial A recursively-partial override. Omitted fields, and
@@ -90,7 +109,7 @@ export function mergeSettings(
   if (partial === undefined || partial === null) {
     return clone(DEFAULT_SETTINGS);
   }
-  const override = partial as unknown as Record<string, unknown>;
+  const override = migrateOverride(partial as unknown as Record<string, unknown>);
   return mergeRecords(base, override) as unknown as AppSettings;
 }
 

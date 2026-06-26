@@ -94,10 +94,50 @@ export const SETTINGS_SCHEMA: readonly SettingDef[] = [
     id: 'editor.wordWrap',
     category: 'Editor',
     label: 'Word Wrap',
-    description: 'Wrap long lines to fit the editor width.',
-    control: { kind: 'boolean' },
+    description: 'Wrap long lines: off, at the viewport width, at a fixed column, or bounded by the smaller.',
+    control: {
+      kind: 'select',
+      options: [
+        { value: 'off', label: 'Off' },
+        { value: 'on', label: 'On' },
+        { value: 'wordWrapColumn', label: 'At Column' },
+        { value: 'bounded', label: 'Bounded' },
+      ],
+    },
     get: (s) => s.editor.wordWrap,
-    set: (s, v) => ({ ...s, editor: { ...s.editor, wordWrap: Boolean(v) } }),
+    set: (s, v) => ({
+      ...s,
+      editor: { ...s.editor, wordWrap: v as 'off' | 'on' | 'wordWrapColumn' | 'bounded' },
+    }),
+  },
+  {
+    id: 'editor.wordWrapColumn',
+    category: 'Editor',
+    label: 'Word Wrap Column',
+    description: 'The column to wrap at when Word Wrap is At Column or Bounded.',
+    control: { kind: 'number', min: 1, max: 320 },
+    get: (s) => s.editor.wordWrapColumn,
+    set: (s, v) => ({ ...s, editor: { ...s.editor, wordWrapColumn: Number(v) } }),
+  },
+  {
+    id: 'editor.wrappingIndent',
+    category: 'Editor',
+    label: 'Wrapping Indent',
+    description: 'How wrapped lines are indented relative to their first line.',
+    control: {
+      kind: 'select',
+      options: [
+        { value: 'none', label: 'None' },
+        { value: 'same', label: 'Same' },
+        { value: 'indent', label: 'Indent' },
+        { value: 'deepIndent', label: 'Deep Indent' },
+      ],
+    },
+    get: (s) => s.editor.wrappingIndent,
+    set: (s, v) => ({
+      ...s,
+      editor: { ...s.editor, wrappingIndent: v as 'none' | 'same' | 'indent' | 'deepIndent' },
+    }),
   },
   {
     id: 'editor.columnSelection',

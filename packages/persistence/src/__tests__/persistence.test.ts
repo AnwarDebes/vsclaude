@@ -122,6 +122,16 @@ describe('settings merge', () => {
     expect(merged).toEqual(DEFAULT_SETTINGS);
   });
 
+  it('migrates a legacy boolean editor.wordWrap to the string enum', () => {
+    // Older documents stored wordWrap as a boolean; the current schema is an enum.
+    expect(mergeSettings({ editor: { wordWrap: true } } as never).editor.wordWrap).toBe('on');
+    expect(mergeSettings({ editor: { wordWrap: false } } as never).editor.wordWrap).toBe('off');
+    // A current string value passes through untouched.
+    expect(mergeSettings({ editor: { wordWrap: 'bounded' } } as never).editor.wordWrap).toBe(
+      'bounded',
+    );
+  });
+
   it('fills defaults while keeping explicit overrides', () => {
     const defaultKeys = Object.keys(
       DEFAULT_SETTINGS as unknown as Record<string, unknown>,

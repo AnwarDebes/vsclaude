@@ -95,7 +95,12 @@ export interface EditorSettings {
   insertSpaces: boolean;
   /** Auto-detect tab size and spaces-vs-tabs from the file content on open. */
   detectIndentation: boolean;
-  wordWrap: boolean;
+  /** How long lines wrap: off, on (viewport width), at a fixed column, or bounded by the smaller of the two. */
+  wordWrap: 'off' | 'on' | 'wordWrapColumn' | 'bounded';
+  /** The column to wrap at when wordWrap is 'wordWrapColumn' or 'bounded'. */
+  wordWrapColumn: number;
+  /** How wrapped lines are indented relative to their first line. */
+  wrappingIndent: 'none' | 'same' | 'indent' | 'deepIndent';
   /** Where word-based completions are sourced from (across open documents or not). */
   wordBasedSuggestions: 'off' | 'currentDocument' | 'matchingDocuments' | 'allDocuments';
   /** Make selection with the mouse and keys do column (box) selection. */
@@ -218,7 +223,9 @@ export const DEFAULT_SETTINGS: AppSettings = {
     tabSize: 2,
     insertSpaces: true,
     detectIndentation: true,
-    wordWrap: false,
+    wordWrap: 'off',
+    wordWrapColumn: 80,
+    wrappingIndent: 'same',
     wordBasedSuggestions: 'matchingDocuments',
     columnSelection: false,
     occurrencesHighlight: 'singleFile',

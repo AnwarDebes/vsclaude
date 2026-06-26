@@ -23,6 +23,8 @@ describe('editorSettingsToMonaco', () => {
       insertSpaces: true,
       detectIndentation: true,
       wordWrap: 'off',
+      wordWrapColumn: 80,
+      wrappingIndent: 'same',
       wordBasedSuggestions: 'matchingDocuments',
       columnSelection: false,
       occurrencesHighlight: 'singleFile',
@@ -167,13 +169,20 @@ describe('editorSettingsToMonaco', () => {
     expect(editorSettingsToMonaco({ ...DEFAULT_SETTINGS.editor, rulers: 0 }).rulers).toEqual([]);
   });
 
-  it('maps word wrap and minimap booleans to Monaco shapes', () => {
+  it('maps the word-wrap mode, column, and wrapping indent to Monaco', () => {
     const mapped = editorSettingsToMonaco({
       ...DEFAULT_SETTINGS.editor,
-      wordWrap: true,
-      minimap: false,
+      wordWrap: 'bounded',
+      wordWrapColumn: 120,
+      wrappingIndent: 'indent',
     });
-    expect(mapped.wordWrap).toBe('on');
+    expect(mapped.wordWrap).toBe('bounded');
+    expect(mapped.wordWrapColumn).toBe(120);
+    expect(mapped.wrappingIndent).toBe('indent');
+  });
+
+  it('maps the minimap boolean to a Monaco shape', () => {
+    const mapped = editorSettingsToMonaco({ ...DEFAULT_SETTINGS.editor, minimap: false });
     expect(mapped.minimap).toEqual({ enabled: false, side: 'right', size: 'proportional' });
   });
 

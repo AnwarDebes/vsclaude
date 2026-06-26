@@ -24,6 +24,23 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 125: word wrap mode, column, and wrapping indent (done)
+
+Complete the word-wrap row with the wrap mode, column, and indent as settings (catalog 5.1).
+(Note: an earlier slice-125 attempt to add a global Alt+Z binding was reverted -- Monaco already binds
+Alt+Z and the keyboard-shortcuts conflict detector correctly rejected the duplicate.)
+
+- contracts: editor.wordWrap becomes an enum (off/on/wordWrapColumn/bounded, default off) and gains
+  wordWrapColumn (default 80) and wrappingIndent (none/same/indent/deepIndent, default same). All three
+  defaults match Monaco's runtime defaults (editorOptions.js).
+- persistence: mergeSettings migrates a legacy boolean wordWrap (true/false) to the enum (on/off) before
+  merging, operating on the opaque record so it sees the raw stored value. Unit tested.
+- editor-settings.ts maps all three to Monaco; settings-schema.ts turns Word Wrap into a select and adds
+  a column number control and a wrapping-indent select. The mapper test covers the mode/column/indent.
+- Quality: contracts + persistence build; typecheck, lint clean; build and full e2e pass; the matrix
+  integrity check passes. Matrix 5.1 "Word wrap and wrap column control" Partial to Done; 5.1 now 23/4/0;
+  TOTAL 125/106/97.
+
 ## Slice 124: modal focus trap (done)
 
 Trap Tab focus within an open modal, pairing with slice 123's focus restore (catalog 5.20).

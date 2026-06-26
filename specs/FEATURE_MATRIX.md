@@ -15,7 +15,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 
 | Section | Title | Done | Partial | Missing | Not planned |
 | --- | --- | --- | --- | --- | --- |
-| 5.1 | Text editing core | 22 | 5 | 0 | 0 |
+| 5.1 | Text editing core | 23 | 4 | 0 | 0 |
 | 5.2 | Code intelligence (LSP language features) | 4 | 10 | 10 | 0 |
 | 5.3 | Editor advanced surface | 9 | 3 | 0 | 0 |
 | 5.4 | Diff and merge | 6 | 2 | 1 | 1 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 6 | 7 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 4 | 3 | 3 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 124 | 107 | 97 | 5 |
+| TOTAL | | 125 | 106 | 97 | 5 |
 
 ## Legend
 
@@ -60,7 +60,7 @@ The editor integrates Monaco 0.55.1, and its editing actions are now exposed: a 
 | Smart expand/shrink selection by syntax | Done | editor-commands.ts registers Expand Selection and Shrink Selection (editor.action.smartSelect.expand and shrink). | |
 | Line operations (move/copy, delete, insert, join, indent/outdent, transpose, sort, trim) | Done | editor-commands.ts registers delete, move up and down, copy up and down, insert above and below, join, indent and outdent, transpose, sort ascending and descending, and trim trailing whitespace. | |
 | Case transforms (upper/lower/title) | Done | editor-commands.ts registers Transform to Uppercase, Lowercase, and Title Case. | |
-| Word wrap and wrap column control | Partial | editor-commands.ts registers Toggle Word Wrap (editor.action.toggleWordWrap). | No wrap-column setting or wrap-indent control. |
+| Word wrap and wrap column control | Done | editor-commands.ts registers Toggle Word Wrap (editor.action.toggleWordWrap, Alt+Z), plus three settings mapped to Monaco (editorSettingsToMonaco, unit tested) and in the Settings UI: wordWrap (off/on/wordWrapColumn/bounded; default off = Monaco), wordWrapColumn (default 80 = Monaco), and wrappingIndent (none/same/indent/deepIndent; default same = Monaco). A legacy boolean wordWrap is migrated to the enum in mergeSettings (persistence, unit tested). | |
 | Auto-closing brackets and quotes | Done | editor.autoClosingBrackets and editor.autoClosingQuotes settings map to Monaco (editorSettingsToMonaco, unit tested) and are exposed in the Settings panel. | |
 | Auto-surround and bracket pair selection | Done | The editor.autoSurround setting maps to Monaco's autoSurround (editorSettingsToMonaco, unit tested) and is exposed in the Settings panel. | |
 | Bracket matching and pair colorization | Done | editor.matchBrackets and editor.bracketPairColorization settings map to Monaco (editorSettingsToMonaco, unit tested) and are exposed in the Settings panel. | |
@@ -404,7 +404,7 @@ vsclaude has a strong design-token system and bundled themes. Theme selection (f
 | Editor font weight customization | Done | The editor.fontWeight setting (normal, medium, semibold, bold) maps to Monaco's fontWeight (editorSettingsToMonaco). Unit tested. | |
 | Editor wheel/scroll zoom | Done | The editor.mouseWheelZoom setting maps to Monaco's mouseWheelZoom (editorSettingsToMonaco), so Ctrl and the mouse wheel zoom the editor font. Unit tested. | |
 | Editor tab size and indentation settings | Done | AppSettings.editor.tabSize and insertSpaces, edited in the Settings panel and applied to Monaco. | |
-| Editor word wrap setting | Done | AppSettings.editor.wordWrap, toggled in the Settings panel and applied to Monaco. | |
+| Editor word wrap setting | Done | AppSettings.editor.wordWrap (a select: off/on/wordWrapColumn/bounded), set in the Settings panel with the wrap column and wrapping indent, and applied to Monaco. | |
 | Editor minimap visibility | Done | AppSettings.editor.minimap, toggled in the Settings panel and applied to Monaco. | |
 | Follow OS system theme | Partial | The workbench.followSystemTheme setting makes App listen to matchMedia(prefers-color-scheme) and switch between cozy-dark and cozy-light (themeForSystem, unit tested). | No separate preferred dark and light theme selection. |
 | UI scale customization | Done | The workbench.uiScale setting (80 to 150 percent) zooms the whole app shell (App.tsx style zoom). | |
