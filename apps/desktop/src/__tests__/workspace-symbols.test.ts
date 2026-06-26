@@ -3,8 +3,40 @@ import {
   buildWorkspaceSymbols,
   codeSymbols,
   filterWorkspaceSymbols,
+  jsonSymbols,
   outlineSymbols,
 } from '../lib/workspace-symbols';
+
+describe('jsonSymbols', () => {
+  it('lists top-level keys with their lines and ignores nested keys', () => {
+    const text = ['{', '  "name": "demo",', '  "nested": {', '    "inner": 1', '  }', '}'].join('\n');
+    expect(jsonSymbols(text)).toEqual([
+      { name: 'name', line: 2 },
+      { name: 'nested', line: 3 },
+    ]);
+  });
+
+  it('ignores array elements and colons inside string values', () => {
+    const text = ['{', '  "url": "http://x:8080",', '  "list": ["a", "b"]', '}'].join('\n');
+    expect(jsonSymbols(text)).toEqual([
+      { name: 'url', line: 2 },
+      { name: 'list', line: 3 },
+    ]);
+  });
+
+  it('handles escaped quotes in values without ending the string early', () => {
+    const text = ['{', '  "a": "say \\"hi\\"",', '  "b": 2', '}'].join('\n');
+    expect(jsonSymbols(text)).toEqual([
+      { name: 'a', line: 2 },
+      { name: 'b', line: 3 },
+    ]);
+  });
+
+  it('outlineSymbols routes .json files through jsonSymbols at level 1', () => {
+    const text = ['{', '  "version": "1.0.0"', '}'].join('\n');
+    expect(outlineSymbols('package.json', text)).toEqual([{ name: 'version', level: 1, line: 2 }]);
+  });
+});
 
 describe('codeSymbols', () => {
   it('captures top-level declarations and skips nested locals', () => {
@@ -61,8 +93,8 @@ describe('outlineSymbols', () => {
     ]);
   });
 
-  it('returns nothing for a file with no detectable symbols', () => {
-    expect(outlineSymbols('data.json', '{ "a": 1 }')).toEqual([]);
+  it('returns nothing for a file type with no outline support', () => {
+    expect(outlineSymbols('notes.txt', 'plain prose, no declarations here')).toEqual([]);
   });
 });
 

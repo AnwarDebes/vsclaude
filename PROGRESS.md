@@ -24,6 +24,21 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 133: JSON outline (done; honest no-flip)
+
+Add JSON top-level keys to the Outline view (catalog 5.3 outline).
+
+- lib/workspace-symbols.ts: jsonSymbols(text) -- a pure, string-aware brace-depth scan emitting the
+  root object's top-level keys with their line numbers; ignores nested keys, array elements, and colons
+  inside string values. outlineSymbols routes .json files through it (level 1).
+- Quality: jsonSymbols unit tested (nested ignored, array/colon-in-string ignored, escaped quotes don't
+  end the string early, .json routing). An e2e opens package.json and asserts the outline lists its keys
+  (version, private). Updated a pre-existing test that used a .json file to expect [] -- JSON now
+  correctly outlines, so it now uses a .txt file for the no-outline case. typecheck, lint clean; build
+  and full e2e pass.
+- Matrix 5.3 "Outline rendering source" evidence updated (JSON added); STAYS Partial (CSS/SCSS/LESS,
+  HTML, YAML/TOML, code nesting, and Python remain). TOTAL unchanged 129/102/97.
+
 ## Slice 132: toggle maximized bottom panel (done; honest no-flip)
 
 Add VS Code's "Toggle Maximized Panel" for the bottom dock (catalog 5.5).

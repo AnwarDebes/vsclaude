@@ -37,12 +37,65 @@ export function codeSymbols(text: string, rust = false): Array<{ name: string; l
 }
 
 /**
+ * Top-level keys of a JSON document, with the line each key appears on. A small
+ * string-aware scan tracks brace/bracket depth so only keys of the root object
+ * (depth 1) are emitted; keys of nested objects, array elements, and colons inside
+ * string values are ignored. Pure, so it is unit tested.
+ */
+export function jsonSymbols(text: string): Array<{ name: string; line: number }> {
+  const out: Array<{ name: string; line: number }> = [];
+  let depth = 0;
+  let line = 1;
+  let i = 0;
+  while (i < text.length) {
+    const ch = text[i];
+    if (ch === '\n') {
+      line += 1;
+      i += 1;
+    } else if (ch === '"') {
+      const startLine = line;
+      let name = '';
+      i += 1;
+      while (i < text.length && text[i] !== '"') {
+        if (text[i] === '\\') {
+          i += 1;
+          if (i < text.length) {
+            if (text[i] === '\n') line += 1;
+            name += text[i];
+            i += 1;
+          }
+          continue;
+        }
+        if (text[i] === '\n') line += 1;
+        name += text[i];
+        i += 1;
+      }
+      i += 1; // closing quote
+      if (depth === 1) {
+        let j = i;
+        while (j < text.length && /\s/.test(text[j]!)) j += 1;
+        if (text[j] === ':') out.push({ name, line: startLine });
+      }
+    } else {
+      if (ch === '{' || ch === '[') depth += 1;
+      else if (ch === '}' || ch === ']') depth -= 1;
+      i += 1;
+    }
+  }
+  return out;
+}
+
+/**
  * The Outline view symbols for any file: Markdown headings (with their heading
- * level) or top-level code declarations (rendered flat at level 1). Pure.
+ * level), JSON top-level keys, or top-level code declarations (rendered flat at
+ * level 1). Pure.
  */
 export function outlineSymbols(path: string, text: string): OutlineItem[] {
   const lower = path.toLowerCase();
   if (lower.endsWith('.md')) return markdownSymbols(text);
+  if (lower.endsWith('.json')) {
+    return jsonSymbols(text).map((symbol) => ({ name: symbol.name, level: 1, line: symbol.line }));
+  }
   return codeSymbols(text, lower.endsWith('.rs')).map((symbol) => ({
     name: symbol.name,
     level: 1,
