@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Theme } from '@vsclaude/contracts';
 import { parseImportedTheme } from '../lib/theme';
-import { useFocusRestore } from '../lib/focus-restore';
+import { useFocusRestore, useFocusTrap } from '../lib/focus-restore';
 
 export interface ThemeImportModalProps {
   open: boolean;
@@ -11,7 +11,9 @@ export interface ThemeImportModalProps {
 
 /** Paste a theme JSON (as produced by Theme: Export) and apply it as a custom theme. */
 export function ThemeImportModal({ open, onApply, onClose }: ThemeImportModalProps) {
+  const modalRef = useRef<HTMLDivElement>(null);
   useFocusRestore(open);
+  useFocusTrap(modalRef, open);
   const [text, setText] = useState('');
   const [error, setError] = useState<string | null>(null);
 
@@ -40,7 +42,7 @@ export function ThemeImportModal({ open, onApply, onClose }: ThemeImportModalPro
 
   return (
     <div className="sjson-overlay" role="dialog" aria-label="Import theme" onClick={onClose}>
-      <div className="sjson-modal" onClick={(e) => e.stopPropagation()}>
+      <div className="sjson-modal" ref={modalRef} onClick={(e) => e.stopPropagation()}>
         <header className="sjson-modal__header">
           <h2 className="sjson-modal__title">Import Theme</h2>
           <button type="button" className="sjson-modal__action" onClick={apply}>

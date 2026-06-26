@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import type { AppSettings } from '@vsclaude/contracts';
 import { exportTheme } from '../lib/theme';
-import { useFocusRestore } from '../lib/focus-restore';
+import { useFocusRestore, useFocusTrap } from '../lib/focus-restore';
 
 export interface ThemeExportModalProps {
   open: boolean;
@@ -11,7 +11,9 @@ export interface ThemeExportModalProps {
 
 /** Show the active theme as JSON so it can be copied out and shared. */
 export function ThemeExportModal({ open, settings, onClose }: ThemeExportModalProps) {
+  const modalRef = useRef<HTMLDivElement>(null);
   useFocusRestore(open);
+  useFocusTrap(modalRef, open);
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
@@ -27,7 +29,7 @@ export function ThemeExportModal({ open, settings, onClose }: ThemeExportModalPr
 
   return (
     <div className="sjson-overlay" role="dialog" aria-label="Export theme" onClick={onClose}>
-      <div className="sjson-modal" onClick={(e) => e.stopPropagation()}>
+      <div className="sjson-modal" ref={modalRef} onClick={(e) => e.stopPropagation()}>
         <header className="sjson-modal__header">
           <h2 className="sjson-modal__title">Export Theme</h2>
           <button

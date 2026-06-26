@@ -24,6 +24,22 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 124: modal focus trap (done)
+
+Trap Tab focus within an open modal, pairing with slice 123's focus restore (catalog 5.20).
+
+- lib/focus-restore.ts: a useFocusTrap(ref, active) hook installs a window capture keydown listener
+  that, on Tab, wraps focus from last to first (and Shift+Tab first to last) within the container and
+  pulls focus back in if it has escaped. A window listener (not the container) keeps the trap effective
+  even if focus leaves the modal.
+- Applied (with a container ref) to the command palette, theme export/import modals, and notification
+  center -- the same modals as the focus-restore hook.
+- Quality: an e2e opens the theme-export modal and Tabs/Shift+Tabs repeatedly, asserting focus never
+  escapes the dialog; typecheck, lint clean; build and full e2e pass. Matrix evidence updated for two
+  5.20 rows (focus-trap hook done in "Focus management ..."; modal focus trap done in "Full keyboard
+  operability ...") -- both stay Partial (per-mode focus order, and Alt+Z/Alt+H/Ctrl+. remain),
+  no flip. TOTAL unchanged 124/107/97.
+
 ## Slice 123: modal focus restore (done)
 
 Return focus to the trigger when a modal closes, like VS Code (catalog 5.20 focus management).

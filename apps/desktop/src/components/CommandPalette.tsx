@@ -6,7 +6,7 @@ import {
   type QuickPickItem,
 } from '@vsclaude/core-shell';
 import { splitCommandTitle } from '../lib/command-title';
-import { useFocusRestore } from '../lib/focus-restore';
+import { useFocusRestore, useFocusTrap } from '../lib/focus-restore';
 import { filterWorkspaceSymbols, type WorkspaceSymbol } from '../lib/workspace-symbols';
 import type { OutlineItem } from '../lib/symbols';
 
@@ -77,7 +77,9 @@ export function CommandPalette({
   const [query, setQuery] = useState('');
   const [active, setActive] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const paletteRef = useRef<HTMLDivElement>(null);
   useFocusRestore(open);
+  useFocusTrap(paletteRef, open);
 
   // Refs mirror the latest state and props so the single global key listener can
   // stay registered once without going stale.
@@ -266,7 +268,7 @@ export function CommandPalette({
       aria-label={dialogLabel}
       onClick={() => setOpen(false)}
     >
-      <div className="palette" onClick={(e) => e.stopPropagation()}>
+      <div className="palette" ref={paletteRef} onClick={(e) => e.stopPropagation()}>
         <input
           ref={inputRef}
           className="palette__input"

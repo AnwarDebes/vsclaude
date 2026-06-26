@@ -1,11 +1,11 @@
-import { useSyncExternalStore } from 'react';
+import { useRef, useSyncExternalStore } from 'react';
 import {
   clearNotifications,
   dismissNotification,
   getNotifications,
   subscribeNotifications,
 } from '../lib/notifications';
-import { useFocusRestore } from '../lib/focus-restore';
+import { useFocusRestore, useFocusTrap } from '../lib/focus-restore';
 
 export interface NotificationCenterProps {
   open: boolean;
@@ -15,13 +15,15 @@ export interface NotificationCenterProps {
 /** The notification center: the message history, newest first, each dismissable. */
 export function NotificationCenter({ open, onClose }: NotificationCenterProps) {
   const items = useSyncExternalStore(subscribeNotifications, getNotifications, getNotifications);
+  const panelRef = useRef<HTMLDivElement>(null);
   useFocusRestore(open);
+  useFocusTrap(panelRef, open);
 
   if (!open) return null;
 
   return (
     <div className="notif-overlay" role="dialog" aria-label="Notifications" onClick={onClose}>
-      <div className="notif-panel" onClick={(e) => e.stopPropagation()}>
+      <div className="notif-panel" ref={panelRef} onClick={(e) => e.stopPropagation()}>
         <header className="notif-panel__header">
           <h2 className="notif-panel__title">Notifications</h2>
           <button type="button" className="notif-panel__action" onClick={() => clearNotifications()}>

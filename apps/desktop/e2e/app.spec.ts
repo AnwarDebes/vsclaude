@@ -1168,6 +1168,24 @@ test.describe('vsclaude shell', () => {
     await expect(sash).toBeFocused();
   });
 
+  test('an open modal traps Tab focus inside it', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('Theme: Export');
+    await page.keyboard.press('Enter');
+    await expect(page.getByRole('dialog', { name: 'Export theme' })).toBeVisible();
+    const inDialog = () => page.evaluate(() => !!document.activeElement?.closest('[role="dialog"]'));
+    // Tab forward and backward repeatedly; focus must never escape the dialog.
+    for (let i = 0; i < 6; i += 1) {
+      await page.keyboard.press('Tab');
+      expect(await inDialog()).toBe(true);
+    }
+    await page.keyboard.press('Shift+Tab');
+    expect(await inDialog()).toBe(true);
+  });
+
   test('F6 skips regions with no focusable child (minimal mode)', async ({ page }) => {
     await page.goto('/');
     await page.getByText('Claude Code, in motion').click();

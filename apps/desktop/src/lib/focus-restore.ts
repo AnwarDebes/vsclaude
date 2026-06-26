@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, type RefObject } from 'react';
 
 /**
  * The most recently focused element that is NOT inside a dialog. A module-level
@@ -31,4 +31,41 @@ export function useFocusRestore(open: boolean): void {
       if (target && document.contains(target)) target.focus();
     }
   }, [open]);
+}
+
+const FOCUSABLE =
+  'button:not([disabled]), a[href], input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+/**
+ * Trap Tab focus within an open modal: Tab past the last focusable wraps to the first,
+ * Shift+Tab past the first wraps to the last, and Tab while focus has escaped pulls it
+ * back in. A window capture listener keeps the trap effective even if focus leaves the
+ * container. Pass the container ref and the modal's open state.
+ */
+export function useFocusTrap(ref: RefObject<HTMLElement | null>, active: boolean): void {
+  useEffect(() => {
+    if (!active) return undefined;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== 'Tab') return;
+      const container = ref.current;
+      if (!container) return;
+      const focusables = Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE));
+      if (focusables.length === 0) return;
+      const first = focusables[0]!;
+      const last = focusables[focusables.length - 1]!;
+      const current = document.activeElement;
+      if (!(current instanceof HTMLElement) || !container.contains(current)) {
+        event.preventDefault();
+        first.focus();
+      } else if (event.shiftKey && current === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && current === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    window.addEventListener('keydown', onKey, true);
+    return () => window.removeEventListener('keydown', onKey, true);
+  }, [ref, active]);
 }
