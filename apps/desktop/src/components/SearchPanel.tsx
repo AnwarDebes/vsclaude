@@ -2,7 +2,7 @@ import { useEffect, useState, type KeyboardEvent as ReactKeyboardEvent } from 'r
 import type { SearchResult } from '@vsclaude/contracts';
 import { basePathName } from '@vsclaude/editor';
 import { isTauri } from '../lib/tauri';
-import { pushSearchHistory } from '../lib/search-history';
+import { pushSearchHistory, loadSearchHistory, saveSearchHistory } from '../lib/search-history';
 import { searchFind } from '../workspace/searchClient';
 import { splitLineByRanges, summarizeSearch } from '../workspace/searchModel';
 
@@ -37,8 +37,13 @@ export function SearchPanel({ root, onOpen, onClose }: SearchPanelProps) {
   const [result, setResult] = useState<SearchResult | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [history, setHistory] = useState<string[]>([]);
+  const [history, setHistory] = useState<string[]>(() => loadSearchHistory());
   const [historyIndex, setHistoryIndex] = useState(-1);
+
+  // Persist the recent-query history so it survives a reload.
+  useEffect(() => {
+    saveSearchHistory(history);
+  }, [history]);
 
   const onQueryKeyDown = (e: ReactKeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {

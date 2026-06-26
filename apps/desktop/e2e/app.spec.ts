@@ -1214,6 +1214,25 @@ test.describe('vsclaude shell', () => {
     await expect(editorPanel).not.toHaveAttribute('data-readonly', 'true');
   });
 
+  test('search history persists across reloads', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.getByText('vsclaude').first()).toBeVisible();
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+Shift+KeyF');
+    const box = page.getByRole('region', { name: 'Search' }).getByRole('textbox', { name: 'Search' });
+    await box.fill('persistme');
+    await box.press('Enter');
+    // Reload: the recent-query history should survive.
+    await page.reload();
+    await expect(page.getByText('vsclaude').first()).toBeVisible();
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+Shift+KeyF');
+    const box2 = page.getByRole('region', { name: 'Search' }).getByRole('textbox', { name: 'Search' });
+    await box2.click();
+    await box2.press('ArrowUp');
+    await expect(box2).toHaveValue('persistme');
+  });
+
   test('F6 skips regions with no focusable child (minimal mode)', async ({ page }) => {
     await page.goto('/');
     await page.getByText('Claude Code, in motion').click();

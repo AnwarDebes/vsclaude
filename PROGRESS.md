@@ -24,6 +24,19 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 127: persist search history across reloads (done)
+
+Make the search box's recent-query history survive a reload (catalog 5.8).
+
+- search-history.ts gains parseSearchHistory (pure, tolerates corrupt/null/non-array storage and caps at
+  20), loadSearchHistory, and saveSearchHistory (localStorage, guarded for non-browser envs).
+- SearchPanel initializes its history state from loadSearchHistory() and persists on change via an
+  effect. Up/Down recall still works; now the list is restored after a reload.
+- Quality: parseSearchHistory unit tested (valid array, null/invalid JSON/non-array, non-string and
+  empty entries dropped, cap); an e2e searches a query, reloads the page, and recalls it with Up;
+  typecheck, lint clean; build and full e2e pass. Matrix 5.8 "Search history" Partial to Done; 5.8 now
+  6/1/5; TOTAL 126/105/97.
+
 ## Slice 126: toggle editor read-only (done)
 
 Add VS Code's "Toggle Active Editor Read-only" as a session command (catalog 5.1).
