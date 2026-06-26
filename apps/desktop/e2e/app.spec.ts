@@ -1117,4 +1117,45 @@ test.describe('vsclaude shell', () => {
     expect(reset).toBeLessThan(widened);
     expect(reset).toBeLessThanOrEqual(240);
   });
+
+  test('F6 cycles focus through the main regions and wraps', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    const inRegion = (selector: string) =>
+      page.evaluate((s) => !!document.activeElement?.closest(s), selector);
+    await page.keyboard.press('F6');
+    expect(await inRegion('.activity-bar')).toBe(true);
+    await page.keyboard.press('F6');
+    expect(await inRegion('nav[aria-label="Files"]')).toBe(true);
+    await page.keyboard.press('F6');
+    expect(await inRegion('.app-center')).toBe(true);
+    await page.keyboard.press('F6');
+    expect(await inRegion('.app-bottom')).toBe(true);
+    await page.keyboard.press('F6');
+    expect(await inRegion('.status-bar')).toBe(true);
+    // Forward from the last region wraps to the first.
+    await page.keyboard.press('F6');
+    expect(await inRegion('.activity-bar')).toBe(true);
+    // Shift+F6 steps back (wrapping to the status bar).
+    await page.keyboard.press('Shift+F6');
+    expect(await inRegion('.status-bar')).toBe(true);
+  });
+
+  test('F6 skips regions with no focusable child (minimal mode)', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    // In minimal mode the center (PixieStage) and the bottom (narration footer) have
+    // no focusables, so F6 must skip them rather than stalling.
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('Switch to minimal mode');
+    await page.keyboard.press('Enter');
+    await expect(palette).toBeHidden();
+    const inRegion = (selector: string) =>
+      page.evaluate((s) => !!document.activeElement?.closest(s), selector);
+    await page.keyboard.press('F6');
+    expect(await inRegion('.activity-bar')).toBe(true);
+    await page.keyboard.press('F6');
+    expect(await inRegion('.status-bar')).toBe(true);
+  });
 });

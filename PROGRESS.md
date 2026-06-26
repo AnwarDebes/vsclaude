@@ -24,6 +24,21 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 120: F6 region cycling (done)
+
+Add VS Code's F6 focus cycling between the main regions (catalog 5.20 accessibility).
+
+- App: F6 (and Shift+F6 to reverse) in the global keydown handler cycles focus through the activity
+  bar, primary sidebar, editor, bottom panel, and status bar. It walks to the next region that has a
+  focusable child, SKIPPING empty regions (the adversarial review caught that the first version stalled
+  on the PixieStage center and the minimal narration footer in stage/minimal modes, leaving later
+  regions unreachable); stops after a full lap if nothing is focusable.
+- Quality: one e2e cycles all five regions forward, wraps, and reverses; another switches to minimal
+  mode and asserts F6 skips the two empty regions to reach the status bar; typecheck, lint clean; build
+  and full e2e pass. Matrix 5.20 "Full keyboard operability with visible focus" evidence updated (F6 plus
+  the sash keyboard pane-resize now done; Alt+Z/Alt+H, Ctrl/Cmd+., and a modal focus trap remain) --
+  stays Partial, no flip. TOTAL unchanged 122/109/97.
+
 ## Slice 119: reset layout resets panel sizes (done)
 
 Make View: Reset Layout also reset the sash-driven panel sizes, completing the row (catalog 5.5).

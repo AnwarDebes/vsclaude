@@ -614,6 +614,31 @@ export function App() {
         }
         return;
       }
+      // F6 cycles focus through the main regions (Shift+F6 reverses), like VS Code.
+      if (e.key === 'F6' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        const regions = ['.activity-bar', 'nav[aria-label="Files"]', '.app-center', '.app-bottom', '.status-bar']
+          .map((selector) => document.querySelector(selector))
+          .filter((el): el is HTMLElement => el instanceof HTMLElement);
+        if (regions.length === 0) return;
+        e.preventDefault();
+        const FOCUSABLE =
+          'button:not([disabled]), a[href], input:not([disabled]), textarea, select, [tabindex]:not([tabindex="-1"])';
+        const current = regions.findIndex((region) => region.contains(document.activeElement));
+        const step = e.shiftKey ? -1 : 1;
+        // Walk to the next region that actually has a focusable child, so empty regions
+        // (for example the PixieStage or the minimal narration footer) are skipped
+        // rather than swallowing focus. Stop after a full lap if nothing is focusable.
+        let pos = current === -1 ? (step === 1 ? -1 : regions.length) : current;
+        for (let i = 0; i < regions.length; i += 1) {
+          pos = (pos + step + regions.length) % regions.length;
+          const focusable = regions[pos]?.querySelector<HTMLElement>(FOCUSABLE);
+          if (focusable) {
+            focusable.focus();
+            break;
+          }
+        }
+        return;
+      }
       if (!(e.ctrlKey || e.metaKey) || !e.shiftKey) return;
       const key = e.key.toLowerCase();
       if (key === 'm') {
