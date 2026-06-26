@@ -24,6 +24,25 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 138: Ctrl/Cmd+Shift+B runs the build task (done; honest no-flip)
+
+Wire the standard VS Code build-task chord (catalog 5.11 "Task groups ... and default task").
+
+- The Tasks: Run Build Task command already existed (App.tsx, runs the first build-group task); the gap
+  was "no Ctrl or Cmd plus Shift plus B keybinding wired." NOTE: the global key handler uses explicit
+  per-key if-blocks, so the command-registry `keybinding:` field is only metadata (palette/reference
+  display) -- it does NOT auto-wire the keydown. Added BOTH: keybinding: 'Ctrl+Shift+B' on the command
+  (shown in the Keyboard Shortcuts reference, no conflict) AND a `b` case in the Ctrl/Cmd+Shift chord
+  block that invokes the command. Because that key effect is mount-once ([] deps), it reaches the latest
+  command via a new registryRef (a useEffect keeps registryRef.current = registry, whose deps include
+  npmTasks), then registryRef.current.get('tasks-run-build').run().
+- Quality: typecheck, lint clean; the keyboard-shortcuts conflict e2e still reports "no keybinding
+  conflicts"; a new e2e blurs the editor and presses Ctrl+Shift+B, asserting the "No build task found in
+  this folder." notification (the demo has no scripts), which proves the chord fires the command. build +
+  full e2e pass.
+- HONESTY: narrows the gap by removing the keybinding clause; the OTHER clause ("no persisted default
+  task") remains, so 5.11 STAYS Partial. TOTAL unchanged 129/102/97.
+
 ## Slice 137: inlay-hints editor setting (done; honest no-flip)
 
 Diversified away from the outline series. Expose inlay-hints rendering as a user setting (catalog 5.2

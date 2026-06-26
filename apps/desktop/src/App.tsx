@@ -571,6 +571,9 @@ export function App() {
 
   // The bottom drawer shortcuts, matching VS Code: Ctrl or Cmd plus Shift plus M
   // for Problems and plus Shift plus F for Search. One slot, so each toggles.
+  // A ref to the latest command registry lets this stable (mount-once) key handler
+  // invoke registry commands without re-subscribing when their closures change.
+  const registryRef = useRef<CommandRegistry | null>(null);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -663,6 +666,10 @@ export function App() {
       } else if (key === 'u') {
         e.preventDefault();
         setBottomPanel((p) => (p === 'output' ? 'none' : 'output'));
+      } else if (key === 'b') {
+        // Ctrl/Cmd+Shift+B runs the build task (VS Code's Tasks: Run Build Task).
+        e.preventDefault();
+        registryRef.current?.get('tasks-run-build')?.run();
       }
     };
     window.addEventListener('keydown', onKey);
@@ -1122,6 +1129,7 @@ export function App() {
       id: 'tasks-run-build',
       title: 'Tasks: Run Build Task',
       keywords: ['task', 'run', 'build', 'compile'],
+      keybinding: 'Ctrl+Shift+B',
       run: () => {
         const build = npmTasks.find((t) => t.group === 'build');
         if (build) runTask(build);
@@ -1327,6 +1335,12 @@ export function App() {
     openFile,
     editedContents,
   ]);
+
+  // Keep the key-handler's registry ref current so Ctrl/Cmd+Shift+B reaches the
+  // latest Tasks: Run Build Task closure (which depends on npmTasks).
+  useEffect(() => {
+    registryRef.current = registry;
+  }, [registry]);
 
   const mode = settings.presentationMode;
   const isEditorMode = mode === 'companion' || mode === 'cozy';

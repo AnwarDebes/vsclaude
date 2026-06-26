@@ -210,6 +210,16 @@ test.describe('vsclaude shell', () => {
     await expect(page.getByRole('dialog', { name: 'Keyboard Shortcuts' })).toHaveCount(0);
   });
 
+  test('Ctrl+Shift+B is wired to Tasks: Run Build Task', async ({ page }) => {
+    await page.goto('/');
+    // Blur the editor so the global keydown handler receives the chord.
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+Shift+KeyB');
+    // The browser demo has no build task, so the command reports that via a notification,
+    // which proves the keybinding fires Tasks: Run Build Task.
+    await expect(page.getByText('No build task found in this folder.')).toBeVisible();
+  });
+
   test('terminal: a new terminal adds a tab and closing removes it', async ({ page }) => {
     await page.goto('/');
     const tablist = page.getByRole('tablist', { name: 'Terminals' });
