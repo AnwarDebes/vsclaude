@@ -14,6 +14,7 @@ export interface MonacoEditorOptions {
   insertSpaces: boolean;
   detectIndentation: boolean;
   wordWrap: 'on' | 'off';
+  wordBasedSuggestions: 'off' | 'currentDocument' | 'matchingDocuments' | 'allDocuments';
   minimap: { enabled: boolean; side: 'left' | 'right'; size: 'proportional' | 'fill' | 'fit' };
   lineNumbers: 'on' | 'off' | 'relative';
   rulers: number[];
@@ -52,6 +53,7 @@ export function editorSettingsToMonaco(settings: EditorSettings): MonacoEditorOp
     insertSpaces: settings.insertSpaces,
     detectIndentation: settings.detectIndentation,
     wordWrap: settings.wordWrap ? 'on' : 'off',
+    wordBasedSuggestions: settings.wordBasedSuggestions,
     minimap: { enabled: settings.minimap, side: settings.minimapSide, size: settings.minimapSize },
     lineNumbers: settings.lineNumbers,
     rulers: settings.rulers > 0 ? [settings.rulers] : [],

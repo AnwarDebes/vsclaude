@@ -24,6 +24,18 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 115: word-based suggestions setting (done)
+
+Make Monaco's word-based completion scope configurable, including across open documents (catalog 5.3).
+
+- contracts EditorSettings + DEFAULT_SETTINGS gain wordBasedSuggestions
+  (off / currentDocument / matchingDocuments / allDocuments), default matchingDocuments -- Monaco's
+  own default (confirmed in migrateOptions/editorConfigurationSchema), so no behavior change.
+- editor-settings.ts maps it straight to Monaco; settings-schema.ts adds the select.
+- Quality: the editorSettingsToMonaco mapper test covers the default and a scope change; typecheck,
+  lint clean; build and full e2e pass. Matrix 5.3 "Word-based suggestions across open docs" Partial to
+  Done (configurable, cross-document via matchingDocuments/allDocuments). 5.3 now 9/3/0; TOTAL 119/113/96.
+
 ## Slice 114: select for compare (done)
 
 Add VS Code's Select for Compare / Compare with Selected, diffing two arbitrary files (catalog 5.4).

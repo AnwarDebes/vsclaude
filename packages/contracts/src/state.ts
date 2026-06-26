@@ -96,6 +96,8 @@ export interface EditorSettings {
   /** Auto-detect tab size and spaces-vs-tabs from the file content on open. */
   detectIndentation: boolean;
   wordWrap: boolean;
+  /** Where word-based completions are sourced from (across open documents or not). */
+  wordBasedSuggestions: 'off' | 'currentDocument' | 'matchingDocuments' | 'allDocuments';
   minimap: boolean;
   /** Which side of the editor the minimap sits on. */
   minimapSide: 'left' | 'right';
@@ -207,6 +209,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
     insertSpaces: true,
     detectIndentation: true,
     wordWrap: false,
+    wordBasedSuggestions: 'matchingDocuments',
     minimap: true,
     minimapSide: 'right',
     minimapSize: 'proportional',

@@ -23,6 +23,7 @@ describe('editorSettingsToMonaco', () => {
       insertSpaces: true,
       detectIndentation: true,
       wordWrap: 'off',
+      wordBasedSuggestions: 'matchingDocuments',
       minimap: { enabled: true, side: 'right', size: 'proportional' },
       lineNumbers: 'on',
       rulers: [],
@@ -50,6 +51,14 @@ describe('editorSettingsToMonaco', () => {
       formatOnPaste: false,
       formatOnType: false,
     });
+  });
+
+  it('maps the word-based-suggestions scope through to Monaco', () => {
+    const mapped = editorSettingsToMonaco({
+      ...DEFAULT_SETTINGS.editor,
+      wordBasedSuggestions: 'allDocuments',
+    });
+    expect(mapped.wordBasedSuggestions).toBe('allDocuments');
   });
 
   it('maps the control-character and final-newline rendering toggles off', () => {

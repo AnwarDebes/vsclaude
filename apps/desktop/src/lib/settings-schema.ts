@@ -100,6 +100,29 @@ export const SETTINGS_SCHEMA: readonly SettingDef[] = [
     set: (s, v) => ({ ...s, editor: { ...s.editor, wordWrap: Boolean(v) } }),
   },
   {
+    id: 'editor.wordBasedSuggestions',
+    category: 'Editor',
+    label: 'Word Based Suggestions',
+    description: 'Where word completions are sourced from across open documents.',
+    control: {
+      kind: 'select',
+      options: [
+        { value: 'off', label: 'Off' },
+        { value: 'currentDocument', label: 'Current Document' },
+        { value: 'matchingDocuments', label: 'Matching Documents' },
+        { value: 'allDocuments', label: 'All Documents' },
+      ],
+    },
+    get: (s) => s.editor.wordBasedSuggestions,
+    set: (s, v) => ({
+      ...s,
+      editor: {
+        ...s.editor,
+        wordBasedSuggestions: v as 'off' | 'currentDocument' | 'matchingDocuments' | 'allDocuments',
+      },
+    }),
+  },
+  {
     id: 'editor.minimap',
     category: 'Editor',
     label: 'Minimap',

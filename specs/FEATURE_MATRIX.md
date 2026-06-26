@@ -17,7 +17,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | --- | --- | --- | --- | --- | --- |
 | 5.1 | Text editing core | 20 | 7 | 0 | 0 |
 | 5.2 | Code intelligence (LSP language features) | 3 | 11 | 10 | 0 |
-| 5.3 | Editor advanced surface | 8 | 4 | 0 | 0 |
+| 5.3 | Editor advanced surface | 9 | 3 | 0 | 0 |
 | 5.4 | Diff and merge | 6 | 2 | 1 | 1 |
 | 5.5 | Workbench layout and navigation | 8 | 14 | 6 | 0 |
 | 5.6 | Quick open and command palette | 8 | 3 | 0 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 6 | 7 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 4 | 3 | 3 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 118 | 114 | 96 | 5 |
+| TOTAL | | 119 | 113 | 96 | 5 |
 
 ## Legend
 
@@ -126,7 +126,7 @@ The editor uses Monaco 0.55.1. Editor appearance and behavior are now exposed th
 | Breadcrumbs (path plus symbol nav plus dropdowns) | Done | Spec line 305; Monaco breadcrumbs default on; not disabled. | (No custom styling beyond defaults.) |
 | Inline diagnostics plus squiggle/gutter icons | Partial | Monaco shows squiggles when workers provide them; TS/JS workers configured. | No custom diagnostic provider; only TS/JS; no toggle or gutter config. |
 | Hover controls, def-on-hover preview, click-to-peek | Partial | Monaco hovers default on; TS worker provides hovers; spec 7.3 registration surface unwired. | No definition/references provider; no peek or Ctrl+Click-to-def. |
-| Word-based suggestions across open docs | Partial | Monaco completions default on; word-based built in. | No explicit or cross-document config. |
+| Word-based suggestions across open docs | Done | editor.wordBasedSuggestions is a setting (off / currentDocument / matchingDocuments / allDocuments) mapped to Monaco (editorSettingsToMonaco, unit tested) and editable in the Settings UI. Default matchingDocuments (Monaco's own default) draws word completions across open same-language docs; allDocuments spans every open doc. | |
 | Suggest widget status bar plus details toggle | Done | Monaco suggest widget default on with details pane; not disabled. | |
 | Outline rendering source for Outline view | Partial | OutlinePanel renders outlineSymbols (lib/workspace-symbols.ts, unit tested): Markdown headings, plus flat top-level declarations for JS/TS and Rust files via codeSymbols. Clicking an entry reveals its line; an e2e covers Markdown and code. | No structural outline for JSON, CSS/SCSS/LESS, HTML, or YAML/TOML; code coverage is flat top-level JS/TS and Rust declarations only (no nesting) and does not detect Python defs. |
 | Indent guides plus bracket guides plus active highlight | Done | Monaco indent and bracket guides default on; not disabled. | (No custom color/width/active styling.) |
