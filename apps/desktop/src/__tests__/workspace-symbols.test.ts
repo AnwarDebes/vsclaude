@@ -2,10 +2,69 @@ import { describe, expect, it } from 'vitest';
 import {
   buildWorkspaceSymbols,
   codeSymbols,
+  cssSymbols,
   filterWorkspaceSymbols,
   jsonSymbols,
   outlineSymbols,
 } from '../lib/workspace-symbols';
+
+describe('cssSymbols', () => {
+  it('lists top-level selectors with their start lines', () => {
+    const text = ['.app {', '  color: red;', '}', '', '.btn:hover {', '  color: blue;', '}'].join('\n');
+    expect(cssSymbols(text)).toEqual([
+      { name: '.app', line: 1 },
+      { name: '.btn:hover', line: 5 },
+    ]);
+  });
+
+  it('joins a multi-line selector and ignores declarations inside a rule', () => {
+    const text = ['.a,', '.b {', '  color: red;', '}'].join('\n');
+    expect(cssSymbols(text)).toEqual([{ name: '.a, .b', line: 1 }]);
+  });
+
+  it('skips at-rules and does not outline their inner rules, and ignores comments', () => {
+    const text = [
+      '/* a comment with { braces } */',
+      '@media (min-width: 600px) {',
+      '  .inner { color: red; }',
+      '}',
+      '.real {',
+      '  color: blue;',
+      '}',
+    ].join('\n');
+    expect(cssSymbols(text)).toEqual([{ name: '.real', line: 5 }]);
+  });
+
+  it('ignores braces inside string values and attribute-selector strings', () => {
+    const text = ['.a {', '  content: "}";', '}', '[data-x="}"] {', '  color: red;', '}'].join('\n');
+    expect(cssSymbols(text)).toEqual([
+      { name: '.a', line: 1 },
+      { name: '[data-x="}"]', line: 4 },
+    ]);
+  });
+
+  it('skips bare at-statements ending in a semicolon', () => {
+    const text = ["@import url('x.css');", '.a {', '  color: red;', '}'].join('\n');
+    expect(cssSymbols(text)).toEqual([{ name: '.a', line: 2 }]);
+  });
+
+  it('keeps real rules when /* or */ appear inside string literals (string-aware comments)', () => {
+    const text = ['a[x="/*"] {', '  c: 1;', '}', '.real {', '  c: 2;', '}', 'b[y="*/"] {', '  c: 3;', '}'].join(
+      '\n',
+    );
+    expect(cssSymbols(text)).toEqual([
+      { name: 'a[x="/*"]', line: 1 },
+      { name: '.real', line: 4 },
+      { name: 'b[y="*/"]', line: 7 },
+    ]);
+  });
+
+  it('outlineSymbols routes .css through cssSymbols at level 1', () => {
+    expect(outlineSymbols('styles.css', '.x { color: red; }')).toEqual([
+      { name: '.x', level: 1, line: 1 },
+    ]);
+  });
+});
 
 describe('jsonSymbols', () => {
   it('lists top-level keys with their lines and ignores nested keys', () => {

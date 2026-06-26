@@ -37,6 +37,85 @@ export function codeSymbols(text: string, rust = false): Array<{ name: string; l
 }
 
 /**
+ * Top-level CSS selectors (the rules of the stylesheet root), with the line each
+ * selector begins on. Block comments are stripped first; brace depth is tracked so
+ * only depth-0 rules are emitted (declarations inside a rule and the inner rules of
+ * an at-rule like @media are ignored), and at-rules themselves (starting with @) and
+ * bare statements ending in ; are skipped. Pure, so it is unit tested.
+ */
+export function cssSymbols(text: string): Array<{ name: string; line: number }> {
+  const stripped = text;
+  const out: Array<{ name: string; line: number }> = [];
+  let depth = 0;
+  let line = 1;
+  let sel = '';
+  let selStart = -1;
+  for (let i = 0; i < stripped.length; i += 1) {
+    const ch = stripped[i]!;
+    if (ch === '\n') {
+      line += 1;
+      if (depth === 0 && sel.trim() !== '') sel += ' ';
+      continue;
+    }
+    if (ch === '/' && stripped[i + 1] === '*') {
+      // A block comment, handled in-loop (after string handling) so a /* or */ that
+      // appears inside a string literal is never mistaken for a comment delimiter.
+      i += 2;
+      while (i < stripped.length && !(stripped[i] === '*' && stripped[i + 1] === '/')) {
+        if (stripped[i] === '\n') line += 1;
+        i += 1;
+      }
+      i += 1; // land on the closing '/'; the loop's i += 1 moves past it
+      continue;
+    }
+    if (ch === '"' || ch === "'") {
+      // A quoted string (attribute selector value or a declaration value): consume it
+      // whole so braces inside it do not change depth. Keep it in the selector at depth 0.
+      const quote = ch;
+      if (depth === 0) {
+        if (sel.trim() === '') selStart = line;
+        sel += ch;
+      }
+      i += 1;
+      while (i < stripped.length && stripped[i] !== quote) {
+        if (stripped[i] === '\\') {
+          if (depth === 0) sel += stripped[i];
+          i += 1;
+        }
+        if (i < stripped.length) {
+          if (stripped[i] === '\n') line += 1;
+          if (depth === 0) sel += stripped[i];
+          i += 1;
+        }
+      }
+      if (depth === 0 && i < stripped.length) sel += quote; // closing quote
+      continue;
+    }
+    if (depth === 0 && ch === '{') {
+      const name = sel.trim().replace(/\s+/g, ' ');
+      if (name !== '' && !name.startsWith('@')) out.push({ name, line: selStart });
+      sel = '';
+      selStart = -1;
+      depth += 1;
+    } else if (ch === '{') {
+      depth += 1;
+    } else if (ch === '}') {
+      if (depth > 0) depth -= 1;
+      sel = '';
+      selStart = -1;
+    } else if (depth === 0 && ch === ';') {
+      // A bare at-statement (e.g. @import url(...);) -- not a selector.
+      sel = '';
+      selStart = -1;
+    } else if (depth === 0) {
+      if (sel.trim() === '' && /\S/.test(ch)) selStart = line;
+      sel += ch;
+    }
+  }
+  return out;
+}
+
+/**
  * Top-level keys of a JSON document, with the line each key appears on. A small
  * string-aware scan tracks brace/bracket depth so only keys of the root object
  * (depth 1) are emitted; keys of nested objects, array elements, and colons inside
@@ -95,6 +174,9 @@ export function outlineSymbols(path: string, text: string): OutlineItem[] {
   if (lower.endsWith('.md')) return markdownSymbols(text);
   if (lower.endsWith('.json')) {
     return jsonSymbols(text).map((symbol) => ({ name: symbol.name, level: 1, line: symbol.line }));
+  }
+  if (lower.endsWith('.css')) {
+    return cssSymbols(text).map((symbol) => ({ name: symbol.name, level: 1, line: symbol.line }));
   }
   return codeSymbols(text, lower.endsWith('.rs')).map((symbol) => ({
     name: symbol.name,

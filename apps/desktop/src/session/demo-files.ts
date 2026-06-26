@@ -99,6 +99,20 @@ import { App } from './App';
 
 createRoot(document.getElementById('root')!).render(<App />);
 `,
+  'src/styles.css': `/* App styles */
+.app {
+  display: grid;
+  gap: 1rem;
+}
+
+.button {
+  color: var(--accent);
+}
+
+.button:hover {
+  color: var(--accent-strong);
+}
+`,
   'README.md': `# Aurora
 
 A small demo project shown in the **vsclaude** editor.

@@ -24,6 +24,29 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 134: CSS outline (done; honest no-flip)
+
+Add top-level CSS selectors to the Outline view (catalog 5.3 outline), extending the JSON slice.
+
+- lib/workspace-symbols.ts: cssSymbols(text) -- a pure, string-aware scan that tracks brace depth and
+  emits depth-0 selectors with their start line; skips block comments (handled in-loop so /* or */ inside
+  a string is not a delimiter), at-rules (starting @), at-rule inner rules (depth > 0), declarations
+  inside a rule, and bare ;-statements; joins multi-line selectors; ignores braces inside strings.
+  outlineSymbols routes .css through it.
+- A demo src/styles.css was added to BOTH demoFileContents (content) AND demoFiles (the explorer tree
+  list -- they are separate sources; the tree is built from demoFiles).
+- Quality: cssSymbols unit tested (multi-selector, multi-line join, @media + comments skipped, @import
+  skipped, braces-in-strings/attribute-selectors ignored, /* */ inside strings across rules, .css
+  routing). An e2e opens styles.css and asserts the outline lists .app and .button. typecheck, lint
+  clean; build and full e2e pass.
+- HONESTY (review caught two real minors): (1) // line comments (idiomatic in SCSS/LESS) were NOT
+  handled, so the original .scss/.less routing produced wrong outlines -- NARROWED to .css only (handling
+  // safely conflicts with url(http://...) so SCSS/LESS is deferred, listed in the gap); (2) the old
+  /* */ regex pre-pass was not string-aware -- moved block-comment handling into the loop. Per the
+  slice-133 lesson updated the 5.3 row, the 5.3 prose, and the 5.6 @ row (all say CSS). 5.3 "Outline
+  rendering source" STAYS Partial (SCSS/LESS, HTML, YAML/TOML, code nesting, Python remain). TOTAL
+  unchanged 129/102/97.
+
 ## Slice 133: JSON outline (done; honest no-flip)
 
 Add JSON top-level keys to the Outline view (catalog 5.3 outline).

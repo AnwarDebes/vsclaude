@@ -702,6 +702,21 @@ test.describe('vsclaude shell', () => {
     await expect(outline.getByRole('button', { name: 'private' })).toBeVisible();
   });
 
+  test('the outline view lists CSS selectors', async ({ page }) => {
+    await page.goto('/');
+    await page.locator('.explorer-list').getByRole('button', { name: 'styles.css', exact: true }).click();
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('view outline');
+    await page.keyboard.press('Enter');
+    const outline = page.getByRole('region', { name: 'Outline' });
+    await expect(outline).toBeVisible();
+    // styles.css's top-level selectors become outline entries.
+    await expect(outline.getByRole('button', { name: '.app' })).toBeVisible();
+    await expect(outline.getByRole('button', { name: '.button', exact: true })).toBeVisible();
+  });
+
   test('accessibility help opens from the Help menu', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('button', { name: 'Help', exact: true }).click();
