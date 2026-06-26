@@ -231,6 +231,20 @@ test.describe('vsclaude shell', () => {
     await expect(page.getByText('isExpired').first()).toBeVisible();
   });
 
+  test('the sidebar visibility and open panel are restored after a reload', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    // Hide the primary sidebar and open the Problems panel.
+    await page.keyboard.press('Control+KeyB');
+    await expect(page.getByRole('navigation', { name: 'Files' })).toBeHidden();
+    await page.keyboard.press('Control+Shift+KeyM');
+    await expect(page.getByRole('region', { name: 'Problems' })).toBeVisible();
+    await page.reload();
+    // Both layout choices survive the reload.
+    await expect(page.getByRole('navigation', { name: 'Files' })).toBeHidden();
+    await expect(page.getByRole('region', { name: 'Problems' })).toBeVisible();
+  });
+
   test('terminal: a new terminal adds a tab and closing removes it', async ({ page }) => {
     await page.goto('/');
     const tablist = page.getByRole('tablist', { name: 'Terminals' });
@@ -1305,11 +1319,10 @@ test.describe('vsclaude shell', () => {
     const box = page.getByRole('region', { name: 'Search' }).getByRole('textbox', { name: 'Search' });
     await box.fill('persistme');
     await box.press('Enter');
-    // Reload: the recent-query history should survive.
+    // Reload: the recent-query history should survive, and the Search panel is now
+    // restored open across the reload (layout-state persistence), so it needs no reopening.
     await page.reload();
     await expect(page.getByText('vsclaude').first()).toBeVisible();
-    await page.getByText('Claude Code, in motion').click();
-    await page.keyboard.press('Control+Shift+KeyF');
     const box2 = page.getByRole('region', { name: 'Search' }).getByRole('textbox', { name: 'Search' });
     await box2.click();
     await box2.press('ArrowUp');

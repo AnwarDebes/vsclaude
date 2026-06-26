@@ -24,6 +24,26 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 140: restore sidebar visibility and the open panel across a reload (done; honest no-flip)
+
+Extend layout-state persistence (catalog 5.5) so a reload restores the primary sidebar visibility and
+the open bottom panel, alongside the active file (slice 139) and presentationMode.
+
+- lib/layout-state.ts: BOTTOM_PANELS + BottomPanel/RestorablePanel types + parseBottomPanel(saved) (pure,
+  validates against the known panels, falls back to 'none'; unit tested). App.tsx: sidebarHidden inits
+  from localStorage('vsclaude.sidebarHidden')==='true'; bottomPanel inits from
+  parseBottomPanel(localStorage('vsclaude.bottomPanel')); lastBottomPanelRef is seeded from the restored
+  panel so Ctrl+J after a reload reopens the same one; two useEffects persist both on change. Reused the
+  shared BottomPanel type for the existing bottomPanel state and the lastBottomPanel ref (single source).
+- Quality: typecheck, lint clean; parseBottomPanel unit tested; a new e2e hides the sidebar (Ctrl+B) and
+  opens Problems (Ctrl+Shift+M), reloads, and asserts both survive. The search-history reload e2e was
+  updated: the Search panel now restores OPEN across reload, so its redundant reopen (Ctrl+Shift+F, which
+  would have toggled it closed) was removed -- it now also implicitly verifies the panel restore. build +
+  full e2e pass. No interference: a fresh context has no saved values, so the defaults apply.
+- HONESTY: additive within 5.5 (adds sidebar/panel visibility persistence); the gap (editor split sizes,
+  dockable panel positions, multi-tab order, native active tab) is unchanged, so 5.5 STAYS Partial. TOTAL
+  unchanged 129/102/97.
+
 ## Slice 139: restore the active file across a reload (done; honest no-flip)
 
 Persist the browser demo's active editor file so a reload reopens it (catalog 5.5 "Layout persistence

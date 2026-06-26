@@ -34,6 +34,7 @@ import { EDITOR_COMMANDS } from './lib/editor-commands';
 import { useDiagnostics } from './lib/useDiagnostics';
 import { demoFiles } from './session/demo-session';
 import { parseActiveFile } from './lib/active-file';
+import { parseBottomPanel, type BottomPanel, type RestorablePanel } from './lib/layout-state';
 import { demoContentFor, demoFileContents } from './session/demo-files';
 import { buildWorkspaceSymbols, outlineSymbols } from './lib/workspace-symbols';
 import { applyTheme, loadAppSettings, saveAppSettings } from './lib/theme';
@@ -145,13 +146,14 @@ export function App() {
   );
   const [editedContents, setEditedContents] = useState<Record<string, string>>({});
   const [reviewOpen, setReviewOpen] = useState(false);
-  const [bottomPanel, setBottomPanel] = useState<
-    'none' | 'problems' | 'search' | 'scm' | 'output' | 'outline' | 'narration'
-  >('none');
-  // The last non-hidden bottom panel, so Toggle Panel (Ctrl+J) can restore it.
-  const lastBottomPanelRef = useRef<
-    'problems' | 'search' | 'scm' | 'output' | 'outline' | 'narration'
-  >('problems');
+  // The open bottom panel is persisted so a reload restores it (see lib/layout-state.ts).
+  const restoredBottomPanel = parseBottomPanel(localStorage.getItem('vsclaude.bottomPanel'));
+  const [bottomPanel, setBottomPanel] = useState<BottomPanel>(restoredBottomPanel);
+  // The last non-hidden bottom panel, so Toggle Panel (Ctrl+J) can restore it. Seed it
+  // from the restored panel so Ctrl+J after a reload reopens the same one.
+  const lastBottomPanelRef = useRef<RestorablePanel>(
+    restoredBottomPanel === 'none' ? 'problems' : restoredBottomPanel,
+  );
   const [gitNonce, setGitNonce] = useState(0);
   const [diffTarget, setDiffTarget] = useState<DiffTarget | null>(null);
   const [markdownTarget, setMarkdownTarget] = useState<MarkdownTarget | null>(null);
@@ -189,7 +191,9 @@ export function App() {
     document.addEventListener('fullscreenchange', onChange);
     return () => document.removeEventListener('fullscreenchange', onChange);
   }, []);
-  const [sidebarHidden, setSidebarHidden] = useState(false);
+  const [sidebarHidden, setSidebarHidden] = useState(
+    () => localStorage.getItem('vsclaude.sidebarHidden') === 'true',
+  );
   const untitledCounter = useRef(0);
   const live = useLiveProvider();
   const { available: liveAvailable, start: liveStart } = live;
@@ -1368,6 +1372,13 @@ export function App() {
   useEffect(() => {
     localStorage.setItem('vsclaude.activeFile', openFile);
   }, [openFile]);
+  // Persist the primary sidebar visibility and the open bottom panel across a reload.
+  useEffect(() => {
+    localStorage.setItem('vsclaude.sidebarHidden', String(sidebarHidden));
+  }, [sidebarHidden]);
+  useEffect(() => {
+    localStorage.setItem('vsclaude.bottomPanel', bottomPanel);
+  }, [bottomPanel]);
   const stateLabel = STATE_LABELS[session.directive.state] ?? session.directive.state;
   const currentPath = session.current?.payload?.['path'];
   const activePath = typeof currentPath === 'string' ? currentPath : undefined;
