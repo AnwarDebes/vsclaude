@@ -100,6 +100,15 @@ export const SETTINGS_SCHEMA: readonly SettingDef[] = [
     set: (s, v) => ({ ...s, editor: { ...s.editor, wordWrap: Boolean(v) } }),
   },
   {
+    id: 'editor.columnSelection',
+    category: 'Editor',
+    label: 'Column Selection',
+    description: 'Make selection with the mouse and keys do column (box) selection.',
+    control: { kind: 'boolean' },
+    get: (s) => s.editor.columnSelection,
+    set: (s, v) => ({ ...s, editor: { ...s.editor, columnSelection: Boolean(v) } }),
+  },
+  {
     id: 'editor.wordBasedSuggestions',
     category: 'Editor',
     label: 'Word Based Suggestions',

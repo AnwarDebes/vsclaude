@@ -98,6 +98,8 @@ export interface EditorSettings {
   wordWrap: boolean;
   /** Where word-based completions are sourced from (across open documents or not). */
   wordBasedSuggestions: 'off' | 'currentDocument' | 'matchingDocuments' | 'allDocuments';
+  /** Make selection with the mouse and keys do column (box) selection. */
+  columnSelection: boolean;
   minimap: boolean;
   /** Which side of the editor the minimap sits on. */
   minimapSide: 'left' | 'right';
@@ -210,6 +212,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
     detectIndentation: true,
     wordWrap: false,
     wordBasedSuggestions: 'matchingDocuments',
+    columnSelection: false,
     minimap: true,
     minimapSide: 'right',
     minimapSize: 'proportional',

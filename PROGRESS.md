@@ -24,6 +24,19 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 118: column selection setting (done)
+
+Expose Monaco's column-selection mode as a setting (catalog 5.1).
+
+- contracts EditorSettings + DEFAULT_SETTINGS gain columnSelection (default false, Monaco's own
+  default, so no behavior change). editor-settings.ts maps it to Monaco; settings-schema.ts adds the
+  toggle.
+- Box selection via Shift+Alt+drag was already a Monaco standalone default; this adds the explicit
+  config the row was missing.
+- Quality: the editorSettingsToMonaco mapper test covers the default and the toggle; typecheck, lint
+  clean; build and full e2e pass. Matrix 5.1 "Column/box selection" Partial to Done. 5.1 now 21/6/0;
+  TOTAL 121/110/97.
+
 ## Slice 117: full screen toggle (F11) (done)
 
 Add OS full screen alongside the existing zen mode (catalog 5.5).

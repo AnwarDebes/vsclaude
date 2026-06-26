@@ -24,6 +24,7 @@ describe('editorSettingsToMonaco', () => {
       detectIndentation: true,
       wordWrap: 'off',
       wordBasedSuggestions: 'matchingDocuments',
+      columnSelection: false,
       minimap: { enabled: true, side: 'right', size: 'proportional' },
       lineNumbers: 'on',
       rulers: [],
@@ -51,6 +52,11 @@ describe('editorSettingsToMonaco', () => {
       formatOnPaste: false,
       formatOnType: false,
     });
+  });
+
+  it('maps the column-selection toggle through to Monaco', () => {
+    const mapped = editorSettingsToMonaco({ ...DEFAULT_SETTINGS.editor, columnSelection: true });
+    expect(mapped.columnSelection).toBe(true);
   });
 
   it('maps the word-based-suggestions scope through to Monaco', () => {
