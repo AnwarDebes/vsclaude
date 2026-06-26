@@ -33,6 +33,7 @@ import { applyMonacoTheme } from './lib/monaco-theme';
 import { EDITOR_COMMANDS } from './lib/editor-commands';
 import { useDiagnostics } from './lib/useDiagnostics';
 import { demoFiles } from './session/demo-session';
+import { parseActiveFile } from './lib/active-file';
 import { demoContentFor, demoFileContents } from './session/demo-files';
 import { buildWorkspaceSymbols, outlineSymbols } from './lib/workspace-symbols';
 import { applyTheme, loadAppSettings, saveAppSettings } from './lib/theme';
@@ -134,9 +135,14 @@ const STATE_LABELS: Record<string, string> = {
  * tree, the chat builder drives the timeline, and the design system themes it.
  * Presentation modes rearrange the room; the command palette runs everything.
  */
+/** The demo file paths, used to validate a persisted active file before restoring it. */
+const DEMO_FILE_PATHS = demoFiles.filter((f) => f.kind === 'file').map((f) => f.path);
+
 export function App() {
   const [settings, setSettings] = useState<AppSettings>(() => loadAppSettings());
-  const [openFile, setOpenFile] = useState('src/auth/login-form.tsx');
+  const [openFile, setOpenFile] = useState(() =>
+    parseActiveFile(localStorage.getItem('vsclaude.activeFile'), DEMO_FILE_PATHS, 'src/auth/login-form.tsx'),
+  );
   const [editedContents, setEditedContents] = useState<Record<string, string>>({});
   const [reviewOpen, setReviewOpen] = useState(false);
   const [bottomPanel, setBottomPanel] = useState<
@@ -1358,6 +1364,10 @@ export function App() {
   useEffect(() => {
     localStorage.setItem('vsclaude.bottomHeight', String(bottomHeight));
   }, [bottomHeight]);
+  // Persist the browser demo's active file so a reload reopens it (see lib/active-file.ts).
+  useEffect(() => {
+    localStorage.setItem('vsclaude.activeFile', openFile);
+  }, [openFile]);
   const stateLabel = STATE_LABELS[session.directive.state] ?? session.directive.state;
   const currentPath = session.current?.payload?.['path'];
   const activePath = typeof currentPath === 'string' ? currentPath : undefined;

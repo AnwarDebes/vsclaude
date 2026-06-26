@@ -24,6 +24,29 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 139: restore the active file across a reload (done; honest no-flip)
+
+Persist the browser demo's active editor file so a reload reopens it (catalog 5.5 "Layout persistence
+across sessions"), via the established localStorage pattern.
+
+- lib/active-file.ts: parseActiveFile(saved, validPaths, fallback) -- pure, returns the saved path only
+  when it still names a known file, else the fallback; unit tested. App.tsx: openFile initializes from
+  localStorage('vsclaude.activeFile') through parseActiveFile (validated against DEMO_FILE_PATHS) and a
+  useEffect persists it on change.
+- Quality: typecheck, lint clean; the parseActiveFile unit tests pass; an e2e opens session.ts, asserts a
+  session.ts-only symbol (isExpired), reloads, and asserts it is still shown (the persisted file reopened,
+  not the default login-form.tsx). build + full e2e pass. No e2e interference: a fresh context has no
+  saved value, so the default file still opens.
+- HONESTY (general-gap scoping, the slice-130 lesson): this covers the BROWSER DEMO active file (openFile)
+  only. The NATIVE workspace's active tab (ws.activePath) is a different state and is NOT persisted by this
+  slice -- the gap now says so explicitly, alongside split sizes, panel positions, and multi-tab order. So
+  5.5 STAYS Partial. TOTAL unchanged 129/102/97.
+- Review: 1 nit (non-blocking, no code change). The demo's pre-existing follow-agent auto-play
+  (setOpenFile on path-bearing demo events) overrides the restored file roughly 9s into replay; the
+  restore is genuine at mount and the e2e asserts well within that window (~9s margin, resolves <1s, not
+  flaky). The persistence claim is mount-time restore-on-reload; the auto-play following the agent
+  afterward is unchanged demo behavior.
+
 ## Slice 138: Ctrl/Cmd+Shift+B runs the build task (done; honest no-flip)
 
 Wire the standard VS Code build-task chord (catalog 5.11 "Task groups ... and default task").

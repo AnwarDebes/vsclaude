@@ -220,6 +220,17 @@ test.describe('vsclaude shell', () => {
     await expect(page.getByText('No build task found in this folder.')).toBeVisible();
   });
 
+  test('the active file is restored after a reload', async ({ page }) => {
+    await page.goto('/');
+    // The default open file is login-form.tsx; open a different one (exact avoids session.config.ts).
+    await page.locator('.explorer-list').getByRole('button', { name: 'session.ts', exact: true }).click();
+    // isExpired is declared in session.ts, not in the default login-form.tsx.
+    await expect(page.getByText('isExpired').first()).toBeVisible();
+    await page.reload();
+    // After reload the persisted active file (session.ts) reopens, not the default.
+    await expect(page.getByText('isExpired').first()).toBeVisible();
+  });
+
   test('terminal: a new terminal adds a tab and closing removes it', async ({ page }) => {
     await page.goto('/');
     const tablist = page.getByRole('tablist', { name: 'Terminals' });
