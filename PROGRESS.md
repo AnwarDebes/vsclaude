@@ -24,6 +24,22 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 112: trim final newlines and consistent on-save (done)
+
+Finish the on-save transforms and apply them on every save path (catalog 5.1).
+
+- on-save.ts gains trimFinalNewlines (collapse extra trailing blank lines to one final newline),
+  applied between trim-trailing and insert-final-newline; pure, unit tested.
+- contracts EditorSettings + DEFAULT_SETTINGS + settings-schema add the editor.trimFinalNewlines
+  toggle (default off, like the other on-save options).
+- useWorkspace.save now applies applyOnSave (reading the editor settings) before writing and updates
+  the buffer, so Save and Save All trim consistently, not just the editor's Ctrl+S (the EditorPanel
+  handler already covered Ctrl+S). Idempotent where both run. (Tab close discards via closeDoc and is
+  not a save path.)
+- Quality: on-save unit tests cover trimFinalNewlines and the combined transforms; typecheck, lint
+  clean; build and full e2e pass. Matrix 5.1 "Trim auto whitespace, insert final newline,
+  trimFinalNewlines" Partial to Done. 5.1 now 20/7/0; TOTAL 117/115/96.
+
 ## Slice 111: control-character and final-newline rendering settings (done)
 
 Make the last two editor rendering options configurable (catalog 5.1), following the established

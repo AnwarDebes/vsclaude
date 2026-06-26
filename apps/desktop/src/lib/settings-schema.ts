@@ -507,6 +507,15 @@ export const SETTINGS_SCHEMA: readonly SettingDef[] = [
     set: (s, v) => ({ ...s, editor: { ...s.editor, insertFinalNewline: Boolean(v) } }),
   },
   {
+    id: 'editor.trimFinalNewlines',
+    category: 'Editor',
+    label: 'Trim Final Newlines',
+    description: 'On save, collapse extra blank lines at the end of the file to one newline.',
+    control: { kind: 'boolean' },
+    get: (s) => s.editor.trimFinalNewlines,
+    set: (s, v) => ({ ...s, editor: { ...s.editor, trimFinalNewlines: Boolean(v) } }),
+  },
+  {
     id: 'editor.formatOnSave',
     category: 'Editor',
     label: 'Format On Save',

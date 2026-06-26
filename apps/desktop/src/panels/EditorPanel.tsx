@@ -71,6 +71,7 @@ export function EditorPanel({
         const next = applyOnSave(editor.getValue(), {
           trimTrailingWhitespace: current.trimTrailingWhitespace,
           insertFinalNewline: current.insertFinalNewline,
+          trimFinalNewlines: current.trimFinalNewlines,
         });
         if (next !== editor.getValue()) {
           const position = editor.getPosition();

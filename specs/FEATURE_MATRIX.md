@@ -15,7 +15,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 
 | Section | Title | Done | Partial | Missing | Not planned |
 | --- | --- | --- | --- | --- | --- |
-| 5.1 | Text editing core | 19 | 8 | 0 | 0 |
+| 5.1 | Text editing core | 20 | 7 | 0 | 0 |
 | 5.2 | Code intelligence (LSP language features) | 3 | 11 | 10 | 0 |
 | 5.3 | Editor advanced surface | 8 | 4 | 0 | 0 |
 | 5.4 | Diff and merge | 6 | 2 | 1 | 1 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 6 | 7 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 4 | 3 | 3 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 116 | 116 | 96 | 5 |
+| TOTAL | | 117 | 115 | 96 | 5 |
 
 ## Legend
 
@@ -73,7 +73,7 @@ The editor integrates Monaco 0.55.1, and its editing actions are now exposed: a 
 | Undo/redo and undo stops, soft undo across saves | Partial | Monaco provides undo/redo and undo stops in the editor, surfaced as Edit: Undo and Edit: Redo (and the Edit menu) alongside cut/copy/paste/find/replace commands. | No soft undo across saves and no undo-history persistence or IPC sync. |
 | EOL handling (LF/CRLF detect, convert, platform default) | Partial | FilePayload reports eol; the status bar shows the model EOL and its item opens a Change End of Line picker that converts the line endings live (setEditorEol via the editor bridge, model.pushEOL); unit and e2e covered. | No platform-default EOL for newly created files. |
 | Encoding (detect, reopen with, save with, guess) | Partial | FilePayload includes encoding (spec 3.2); EditorPanel.tsx has no encoding option. | Detected but no picker, reopen-with, or save-as-encoding. |
-| Trim auto whitespace, insert final newline, trimFinalNewlines | Partial | On save, EditorPanel applies applyOnSave (lib/on-save.ts, unit tested) driven by the editor.trimTrailingWhitespace and editor.insertFinalNewline settings. | No trimFinalNewlines (collapsing extra blank lines), and the workspace editor save path does not apply it yet. |
+| Trim auto whitespace, insert final newline, trimFinalNewlines | Done | applyOnSave (lib/on-save.ts, unit tested) trims trailing whitespace, collapses extra final blank lines (trimFinalNewlines), and inserts a final newline, each driven by an editor setting. Both the editor Ctrl+S handler and the workspace save path (ws.save, covering Save and Save All) apply them and update the buffer. | |
 | Large-file optimizations and tokenization limit | Done | EditorPanel.tsx sets largeFileOptimizations true and maxTokenizationLineLength 20000. | |
 | Read-only editors and read-only regions | Partial | FilePayload has readonly (spec 3.2); only diff tabs are read-only; main editor ignores the flag. | Main EditorPanel does not respect the readonly flag. |
 | Line numbers, folding, minimap, breadcrumbs, sticky scroll | Done | lineNumbers, minimap, folding, and stickyScroll are settings mapped to Monaco (editorSettingsToMonaco, unit tested) and exposed in the Settings panel; Breadcrumbs.tsx renders above the editor. | |

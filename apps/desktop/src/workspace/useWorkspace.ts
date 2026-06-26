@@ -40,6 +40,8 @@ import {
   watchPath,
   writeFile,
 } from './fsClient';
+import { applyOnSave } from '../lib/on-save';
+import { getEditorSettings } from '../lib/editor-settings';
 
 const RECENTS_KEY = 'vsclaude.workspace.recents';
 const ROOTS_KEY = 'vsclaude.workspace.roots';
@@ -332,13 +334,22 @@ export function useWorkspace(): WorkspaceApi {
       const target = normalizePath(path);
       const doc = docsRef.current.get(target);
       if (!doc) return;
+      // Apply the on-save transforms so every save path (Save and Save All), not only
+      // the editor's Ctrl+S, trims and normalizes the file consistently.
+      const settings = getEditorSettings();
+      const text = applyOnSave(doc.draft, {
+        trimTrailingWhitespace: settings.trimTrailingWhitespace,
+        insertFinalNewline: settings.insertFinalNewline,
+        trimFinalNewlines: settings.trimFinalNewlines,
+      });
       try {
-        const { mtimeMs } = await writeFile(target, doc.draft);
+        const { mtimeMs } = await writeFile(target, text);
         setDocs((prev) => {
           const current = prev.get(target);
           if (!current) return prev;
           const next = new Map(prev);
-          next.set(target, { ...current, disk: current.draft, mtimeMs, dirty: false, external: 'none' });
+          // Update the draft too, so the editor reflects the saved (trimmed) text.
+          next.set(target, { ...current, draft: text, disk: text, mtimeMs, dirty: false, external: 'none' });
           return next;
         });
       } catch (e) {

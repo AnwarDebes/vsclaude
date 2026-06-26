@@ -154,6 +154,8 @@ export interface EditorSettings {
   trimTrailingWhitespace: boolean;
   /** On save, ensure the file ends with a newline. */
   insertFinalNewline: boolean;
+  /** On save, collapse extra blank lines at the end of the file to one newline. */
+  trimFinalNewlines: boolean;
   /** Format the whole document on save. */
   formatOnSave: boolean;
   /** Format pasted content. */
@@ -230,6 +232,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
     matchBrackets: 'always',
     trimTrailingWhitespace: false,
     insertFinalNewline: false,
+    trimFinalNewlines: false,
     formatOnSave: false,
     formatOnPaste: false,
     formatOnType: false,
