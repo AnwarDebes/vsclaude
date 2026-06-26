@@ -230,6 +230,17 @@ test.describe('vsclaude shell', () => {
     await expect(palette.getByPlaceholder(/type a command/i)).toBeVisible();
   });
 
+  test('broken Markdown links are reported in the Problems panel', async ({ page }) => {
+    await page.goto('/');
+    // notes.md links to src/App.tsx (valid) and CHANGELOG.md (missing from the demo).
+    await page.locator('.explorer-list').getByRole('button', { name: 'notes.md', exact: true }).click();
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+Shift+KeyM');
+    const problems = page.getByRole('region', { name: 'Problems' });
+    await expect(problems).toBeVisible();
+    await expect(problems.getByText(/Link target not found: CHANGELOG\.md/)).toBeVisible();
+  });
+
   test('the active file is restored after a reload', async ({ page }) => {
     await page.goto('/');
     // The default open file is login-form.tsx; open a different one (exact avoids session.config.ts).

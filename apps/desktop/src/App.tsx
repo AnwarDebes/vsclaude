@@ -225,6 +225,9 @@ export function App() {
   );
 
   const paletteFiles = hasWorkspace ? fileIndex.items : demoFileItems;
+  // The set of files Markdown links can target, for broken-link diagnostics. QuickPickItem.id
+  // is the file path (see demoFileItems and the file index).
+  const linkablePaths = useMemo(() => paletteFiles.map((f) => f.id), [paletteFiles]);
 
   // The workspace-symbol index for the `#` palette mode. Built from the demo file
   // contents; a real workspace would need the core to supply file bodies.
@@ -1546,7 +1549,7 @@ export function App() {
                 />
               ) : null}
               {hasWorkspace ? (
-                <WorkspaceEditor ws={ws} />
+                <WorkspaceEditor ws={ws} linkablePaths={linkablePaths} />
               ) : (
                 <>
                   <MergeConflictBar conflicts={conflicts} onResolve={resolveActiveConflict} />
@@ -1563,6 +1566,7 @@ export function App() {
                   onChange={(v) => setEditedContents((m) => ({ ...m, [openFile]: v }))}
                   onSave={(v) => setEditedContents((m) => ({ ...m, [openFile]: v }))}
                   readOnly={editorReadOnly}
+                  linkablePaths={linkablePaths}
                   />
                 </>
               )}

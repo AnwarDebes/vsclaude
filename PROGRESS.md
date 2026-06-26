@@ -24,6 +24,33 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 142: Markdown broken-link diagnostics (done; honest no-flip)
+
+Flag Markdown inline links whose target is not a known workspace file, in the Problems panel (catalog
+5.2 markdown). A real Partial->Partial after the clean-well ran dry.
+
+- lib/markdown-links.ts: findBrokenLinks(text, mdPath, files) -- pure, extracts [text](target) links,
+  skips external/protocol-relative/anchor targets, strips a trailing #anchor or ?query, resolves the
+  relative target against the doc's directory (resolveLinkTarget collapses . and ..), blanks fenced and
+  inline code first so links shown as code are not analyzed, and flags targets not in the file set, with
+  1-based line/column ranges. Unit tested (inline links only; reference-style links are not analyzed).
+- EditorPanel: a new linkablePaths prop + a useEffect (mirroring the conflict-decoration effect) that,
+  for .md files, computes findBrokenLinks and setModelMarkers(model, 'markdown-links', warnings); clears
+  for non-md. The Problems panel reads these via useDiagnostics (onDidChangeMarkers). App.tsx passes
+  linkablePaths = paletteFiles.map(f => f.id) (QuickPickItem.id is the path; demo + workspace).
+- A demo notes.md (in BOTH demoFileContents and demoFiles) links to src/App.tsx (valid) and CHANGELOG.md
+  (missing). An e2e opens notes.md, opens Problems, and asserts the "Link target not found: CHANGELOG.md"
+  warning. typecheck, lint clean; build + full e2e pass.
+- HONESTY: narrows the 5.2 gap by removing "broken-link diagnostics"; synced-scroll, link/path
+  completion, and math/diagram rendering remain, so 5.2 STAYS Partial. TOTAL unchanged 129/102/97.
+- Review: 1 major (the demo/native wiring trap again) + minors, all fixed. linkablePaths was passed only
+  to the demo EditorPanel, NOT to WorkspaceEditor -> in a real workspace EVERY valid link was false-flagged
+  (undefined treated as an empty set). Fixed: threaded linkablePaths through WorkspaceEditor, AND EditorPanel
+  now SKIPS marking when linkablePaths is undefined (defense-in-depth, no false positives). Also broadened
+  the link regex to validate titled links [a](target "title") with a robust target offset (indexOf from the
+  "](" opener, not lastIndexOf), plus a unit test. The e2e covers the demo path; the native path is wired
+  identically (not browser-e2e-able). Reference-style links remain out of scope.
+
 ## Slice 141: Ctrl/Cmd+Shift+P opens the command palette (done; Done-row parity polish)
 
 Add VS Code's iconic command-palette shortcut. The palette was opened by Ctrl/Cmd+K only; Ctrl+Shift+P

@@ -8,6 +8,8 @@ import { findConflicts, resolveConflict } from '../lib/conflicts';
 
 interface WorkspaceEditorProps {
   ws: WorkspaceApi;
+  /** Workspace file paths used to validate Markdown links (broken-link diagnostics). */
+  linkablePaths?: readonly string[];
 }
 
 /**
@@ -16,7 +18,7 @@ interface WorkspaceEditorProps {
  * active document with real save-to-disk, and a banner when a file changes or
  * disappears on disk underneath an edit.
  */
-export function WorkspaceEditor({ ws }: WorkspaceEditorProps) {
+export function WorkspaceEditor({ ws, linkablePaths }: WorkspaceEditorProps) {
   const tabs = Array.from(ws.docs.values());
   const active = ws.activeDoc;
   const activeIndex = tabs.findIndex((doc) => doc.path === ws.activePath);
@@ -135,6 +137,7 @@ export function WorkspaceEditor({ ws }: WorkspaceEditorProps) {
               value={active.draft}
               onChange={(v) => ws.setDraft(active.path, v)}
               onSave={() => void ws.save(active.path)}
+              linkablePaths={linkablePaths}
             />
           </>
         ) : (

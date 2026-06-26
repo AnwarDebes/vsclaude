@@ -132,6 +132,11 @@ serde = { version = "1", features = ["derive"] }
 
 [dev-dependencies]
 `,
+  'notes.md': `# Notes
+
+- See [the app](src/App.tsx) for the entry point.
+- The [changelog](CHANGELOG.md) is not written yet.
+`,
   'README.md': `# Aurora
 
 A small demo project shown in the **vsclaude** editor.

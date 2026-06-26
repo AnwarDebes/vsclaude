@@ -18,6 +18,7 @@ import { useMonacoTheme } from '../lib/monaco-theme';
 import { languageForPath } from '../lib/language';
 import { applyOnSave } from '../lib/on-save';
 import { findConflicts } from '../lib/conflicts';
+import { findBrokenLinks } from '../lib/markdown-links';
 import { isUntitled } from '../lib/untitled';
 import { resolveDefaultEol, isWindowsPlatform } from '../lib/eol';
 
@@ -33,6 +34,8 @@ interface EditorPanelProps {
   onSave?: (value: string) => void;
   /** When true, the editor is read-only (Monaco rejects edits). */
   readOnly?: boolean;
+  /** Workspace file paths used to validate Markdown links (broken-link diagnostics). */
+  linkablePaths?: readonly string[];
 }
 
 /**
@@ -50,6 +53,7 @@ export function EditorPanel({
   onChange,
   onSave,
   readOnly,
+  linkablePaths,
 }: EditorPanelProps) {
   const editorRef = useRef<BridgeEditor | null>(null);
   const monacoEditorRef = useRef<Parameters<OnMount>[0] | null>(null);
@@ -197,6 +201,31 @@ export function EditorPanel({
     const previous = conflictDecorationsByModelRef.current.get(model) ?? [];
     conflictDecorationsByModelRef.current.set(model, editor.deltaDecorations(previous, decorations));
   }, [value, path]);
+
+  // Flag Markdown links whose target is not a known workspace file, as Problems-panel
+  // warnings (Monaco markers under our own owner). Cleared for non-Markdown files.
+  useEffect(() => {
+    const editor = monacoEditorRef.current;
+    const model = editor?.getModel();
+    const monaco = monacoApiRef.current;
+    if (!editor || !model || !monaco) return;
+    const owner = 'markdown-links';
+    // Only validate when the file set is actually provided; treating "not provided" as an
+    // empty set would flag every valid link. Cleared for non-Markdown files.
+    if (path && path.toLowerCase().endsWith('.md') && linkablePaths) {
+      const markers = findBrokenLinks(value, path, linkablePaths).map((link) => ({
+        severity: monaco.MarkerSeverity.Warning,
+        message: `Link target not found: ${link.target}`,
+        startLineNumber: link.line,
+        startColumn: link.column,
+        endLineNumber: link.line,
+        endColumn: link.endColumn,
+      }));
+      monaco.editor.setModelMarkers(model, owner, markers);
+    } else {
+      monaco.editor.setModelMarkers(model, owner, []);
+    }
+  }, [value, path, linkablePaths]);
 
   // A new untitled file takes the configured default line ending, applied once per path
   // (the first time it is seen empty) so clearing the buffer later does not override a
