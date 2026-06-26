@@ -24,6 +24,24 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 131: typed-confirmation gating for commit amend (done)
+
+Gate the history-rewriting Amend behind a typed confirmation (catalog 5.9).
+
+- lib/scm-commit.ts: amendConfirmed(typed) (true when typed trims/lowercases to "amend") and
+  commitDisabled({busy, message, amend, stagedCount, amendConfirm}) -- pure, unit tested. commitDisabled
+  reproduces the prior button rules and adds: when amend is on, the button stays disabled until the
+  confirmation is typed.
+- SourceControlPanel: an amendConfirm field appears when Amend is checked; the commit button uses
+  commitDisabled; the confirmation resets both when Amend is toggled and after each successful commit, so
+  every history-rewriting amend re-requires it (the review noted it previously persisted across back-to-
+  back amends).
+- Quality: scm-commit unit tests cover amendConfirmed and every commitDisabled branch (incl. the amend
+  gate). typecheck, lint clean; build and full e2e pass. Git UI is native and cargo-tested; the browser
+  demo has no repo so the SCM panel is not browser-e2e'd (consistent with other git features) -- the
+  gating logic is verified by the pure unit tests. Matrix 5.9 "Commit amend" Partial to Done; 5.9 now
+  9/8/7; TOTAL 129/102/97.
+
 ## Slice 130: default EOL for new untitled files (done; honest no-flip)
 
 Give new untitled scratchpads a configurable / OS-default line ending (catalog 5.1).

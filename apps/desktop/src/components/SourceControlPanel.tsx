@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { commitDisabled } from '../lib/scm-commit';
 import {
   countStashes,
   parsePorcelainStatus,
@@ -57,6 +58,7 @@ export function SourceControlPanel({ repo, onDiff, onClose, onChanged }: SourceC
   const [stashCount, setStashCount] = useState(0);
   const [message, setMessage] = useState('');
   const [amend, setAmend] = useState(false);
+  const [amendConfirm, setAmendConfirm] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [branchMenuOpen, setBranchMenuOpen] = useState(false);
@@ -117,7 +119,13 @@ export function SourceControlPanel({ repo, onDiff, onClose, onChanged }: SourceC
     if (!repo || !message.trim()) return;
     const text = message.trim();
     const run = amend ? gitCommitAmend(repo, text) : gitCommitStaged(repo, text);
-    void act(() => run.then(() => setMessage('')));
+    void act(() =>
+      run.then(() => {
+        setMessage('');
+        // Re-require the typed confirmation before the next history-rewriting amend.
+        setAmendConfirm('');
+      }),
+    );
   };
   const stashAll = () => repo && act(() => gitStash(repo));
   const popStash = () => repo && act(() => gitStashPop(repo));
@@ -292,16 +300,38 @@ export function SourceControlPanel({ repo, onDiff, onClose, onChanged }: SourceC
             <button
               type="button"
               className="btn scm__commitbtn"
-              disabled={busy || message.trim().length === 0 || (!amend && groups.staged.length === 0)}
+              disabled={commitDisabled({
+                busy,
+                message,
+                amend,
+                stagedCount: groups.staged.length,
+                amendConfirm,
+              })}
               onClick={() => void commit()}
             >
               {amend ? 'Amend' : 'Commit'}
             </button>
           </div>
           <label className="scm__amend">
-            <input type="checkbox" checked={amend} onChange={(e) => setAmend(e.target.checked)} />
+            <input
+              type="checkbox"
+              checked={amend}
+              onChange={(e) => {
+                setAmend(e.target.checked);
+                setAmendConfirm('');
+              }}
+            />
             Amend last commit
           </label>
+          {amend ? (
+            <input
+              className="scm__message scm__amend-confirm"
+              aria-label="Type amend to confirm rewriting the last commit"
+              placeholder="Type amend to confirm rewriting the last commit"
+              value={amendConfirm}
+              onChange={(e) => setAmendConfirm(e.target.value)}
+            />
+          ) : null}
 
           {groups.staged.length + groups.changes.length > 0 || stashCount > 0 ? (
             <div className="scm__stashrow">

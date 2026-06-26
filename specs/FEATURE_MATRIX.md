@@ -23,7 +23,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.6 | Quick open and command palette | 8 | 3 | 0 | 0 |
 | 5.7 | File explorer and workspace management | 7 | 4 | 3 | 3 |
 | 5.8 | Search and replace across files | 6 | 1 | 5 | 0 |
-| 5.9 | Source control and git | 8 | 9 | 7 | 0 |
+| 5.9 | Source control and git | 9 | 8 | 7 | 0 |
 | 5.10 | Integrated terminal | 6 | 8 | 4 | 0 |
 | 5.11 | Tasks (VS Code task support) | 0 | 8 | 2 | 0 |
 | 5.12 | Debugging (Debug Adapter Protocol) | 0 | 0 | 10 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 6 | 7 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 4 | 3 | 3 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 128 | 103 | 97 | 5 |
+| TOTAL | | 129 | 102 | 97 | 5 |
 
 ## Legend
 
@@ -254,7 +254,7 @@ vsclaude now has a working Source Control panel for the daily git workflow: stag
 | Diff viewing (inline and full) | Done | git.rs git_diff; DiffReview.tsx renders line-by-line with kind classes. | |
 | Commit with message input | Done | git.rs git_commit stages all and commits; DiffReview.tsx message field with validation and refresh. | |
 | Staging and unstaging (file and hunk level) | Partial | git.rs git_stage, git_unstage, and git_commit_staged; SourceControlPanel.tsx stages and unstages per file and in bulk and commits the staged set. Cargo tested. | Hunk-level and line-level staging are not wired. |
-| Commit amend | Partial | git.rs git_commit_amend (cargo tested); the SourceControlPanel has an Amend last commit toggle that amends with the staged changes and a new message. | No typed-confirmation gating for the history rewrite. |
+| Commit amend | Done | git.rs git_commit_amend (cargo tested); the SourceControlPanel has an Amend last commit toggle that amends with the staged changes and a new message. The history rewrite is gated behind a typed confirmation: with Amend on, the commit button stays disabled until the user types "amend" into a confirmation field (commitDisabled / amendConfirmed in lib/scm-commit.ts, unit tested), and toggling Amend resets it. (Git UI is native and cargo-tested; the browser demo has no repo, so it is not browser-e2e'd.) | |
 | Branch operations (create/checkout/delete/rename) | Done | git.rs git_branches, git_checkout, git_create_branch, git_delete_branch, and git_rename_branch (cargo tested); the SourceControlPanel branch picker switches, creates, deletes a branch, and renames the current one. | |
 | Merge, rebase, cherry-pick, revert | Partial | git.rs git_revert (cargo tested) creates a revert commit; the GitHistoryModal has a per-commit Revert. | No merge, rebase, or cherry-pick, and no continue or abort flow. |
 | Push, pull, fetch, sync with ahead/behind | Done | git.rs git_fetch, git_pull (fast-forward only), and git_push (cargo tested over a bare remote); the SourceControlPanel has Fetch, Pull, and Push buttons; ahead/behind are shown. Authentication uses git's own credential helper or ssh-agent. | |
