@@ -38,6 +38,11 @@ describe('pythonSymbols', () => {
     expect(pythonSymbols(text)).toEqual([{ name: 'real', line: 6 }]);
   });
 
+  it('handles a line that closes and reopens a triple-quoted block', () => {
+    const text = ['"""', 'a', '""" """', 'b', '"""', 'def after():', '    pass'].join('\n');
+    expect(pythonSymbols(text)).toEqual([{ name: 'after', line: 6 }]);
+  });
+
   it('outlineSymbols routes .py through pythonSymbols at level 1', () => {
     expect(outlineSymbols('app.py', 'def go():\n    pass')).toEqual([{ name: 'go', level: 1, line: 1 }]);
   });
@@ -82,6 +87,14 @@ describe('tomlSymbols', () => {
     expect(tomlSymbols(text)).toEqual([
       { name: 'x', line: 1 },
       { name: 't', line: 2 },
+    ]);
+  });
+
+  it('handles a line that closes and reopens a multi-line string', () => {
+    const text = ['[a]', 'x = """', 'one """ + y + """', 'two', '"""', '[b]'].join('\n');
+    expect(tomlSymbols(text)).toEqual([
+      { name: 'a', line: 1 },
+      { name: 'b', line: 6 },
     ]);
   });
 

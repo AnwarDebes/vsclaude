@@ -183,6 +183,18 @@ export function yamlSymbols(text: string): Array<{ name: string; line: number }>
 }
 
 /**
+ * The triple-quote delimiter (""" or ''') that is opened or closed an odd number of
+ * times in a string, or null when both kinds are balanced. Used by the TOML and Python
+ * outline scanners to track multi-line string blocks.
+ */
+function unbalancedTripleQuoteDelim(s: string): '"""' | "'''" | null {
+  for (const candidate of ['"""', "'''"] as const) {
+    if ((s.split(candidate).length - 1) % 2 === 1) return candidate;
+  }
+  return null;
+}
+
+/**
  * TOML structure for the Outline view: [table] and [[array-of-table]] headers, plus
  * top-level keys that appear before the first table. Keys under a table are skipped
  * (the table header represents them). Comments (full-line or trailing) and blank lines
@@ -200,7 +212,15 @@ export function tomlSymbols(text: string): Array<{ name: string; line: number }>
     .split('\n')
     .forEach((raw, index) => {
       if (inBlock) {
-        if (raw.includes(delim)) inBlock = false;
+        const idx = raw.indexOf(delim);
+        if (idx === -1) return;
+        // The block closes mid-line; a triple-quote after it can reopen a new one.
+        inBlock = false;
+        const reopener = unbalancedTripleQuoteDelim(raw.slice(idx + delim.length));
+        if (reopener !== null) {
+          inBlock = true;
+          delim = reopener;
+        }
         return;
       }
       const line = raw.trim();
@@ -229,12 +249,10 @@ export function tomlSymbols(text: string): Array<{ name: string; line: number }>
           break;
         }
       }
-      for (const candidate of ['"""', "'''"]) {
-        if ((scan.split(candidate).length - 1) % 2 === 1) {
-          inBlock = true;
-          delim = candidate;
-          break;
-        }
+      const opener = unbalancedTripleQuoteDelim(scan);
+      if (opener !== null) {
+        inBlock = true;
+        delim = opener;
       }
     });
   return out;
@@ -254,7 +272,15 @@ export function pythonSymbols(text: string): Array<{ name: string; line: number 
     .split('\n')
     .forEach((raw, index) => {
       if (inBlock) {
-        if (raw.includes(delim)) inBlock = false;
+        const idx = raw.indexOf(delim);
+        if (idx === -1) return;
+        // The block closes mid-line; a triple-quote after it can reopen a new one.
+        inBlock = false;
+        const reopener = unbalancedTripleQuoteDelim(raw.slice(idx + delim.length));
+        if (reopener !== null) {
+          inBlock = true;
+          delim = reopener;
+        }
         return;
       }
       const match = /^(?:async\s+)?(?:def|class)\s+([A-Za-z_]\w*)/.exec(raw);
@@ -275,12 +301,10 @@ export function pythonSymbols(text: string): Array<{ name: string; line: number 
           break;
         }
       }
-      for (const candidate of ['"""', "'''"]) {
-        if ((scan.split(candidate).length - 1) % 2 === 1) {
-          inBlock = true;
-          delim = candidate;
-          break;
-        }
+      const opener = unbalancedTripleQuoteDelim(scan);
+      if (opener !== null) {
+        inBlock = true;
+        delim = opener;
       }
     });
   return out;
