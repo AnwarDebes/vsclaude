@@ -24,6 +24,19 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 114: select for compare (done)
+
+Add VS Code's Select for Compare / Compare with Selected, diffing two arbitrary files (catalog 5.4).
+
+- App: a compareBase state plus an activeFileSnapshot helper (native draft or demo edited content).
+  File: Select for Compare stashes the active file; File: Compare with Selected opens the Monaco diff
+  modal (DiffModal already accepts arbitrary original/modified) with base vs the current file.
+- Both registered as palette commands and added to the command-registration deps so they stay fresh.
+- Quality: an e2e selects the default file, opens another, runs Compare with Selected, and asserts the
+  "selected for compare" diff; typecheck, lint clean; build and full e2e pass. Matrix 5.4 "Compare
+  feature" evidence updated (Compare with Saved + select-for-compare; folder/whole-workspace compare
+  remain) -- stays Partial, no flip. TOTAL unchanged 118/114/96.
+
 ## Slice 113: custom theme import (done)
 
 Pair the existing Theme: Export with a Theme: Import, so a pasted theme JSON applies (catalog 5.16).

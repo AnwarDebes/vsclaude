@@ -315,6 +315,36 @@ export function App() {
     }
   }, [hasWorkspace, ws.activeDoc, openFile, editedContents]);
 
+  // Select-for-compare: stash the active file, then diff a second file against it.
+  const [compareBase, setCompareBase] = useState<{ name: string; content: string } | null>(null);
+  const activeFileSnapshot = useCallback(() => {
+    if (hasWorkspace) {
+      const doc = ws.activeDoc;
+      if (!doc) return null;
+      return { name: basePathName(doc.path), content: doc.draft, language: languageForPath(doc.path) };
+    }
+    return {
+      name: basePathName(openFile),
+      content: editedContents[openFile] ?? demoContentFor(openFile),
+      language: languageForPath(openFile),
+    };
+  }, [hasWorkspace, ws.activeDoc, openFile, editedContents]);
+  const selectForCompare = useCallback(() => {
+    const snap = activeFileSnapshot();
+    if (snap) setCompareBase({ name: snap.name, content: snap.content });
+  }, [activeFileSnapshot]);
+  const compareWithSelected = useCallback(() => {
+    const snap = activeFileSnapshot();
+    if (!snap || !compareBase) return;
+    setDiffTarget({
+      name: `${compareBase.name} vs ${snap.name}`,
+      original: compareBase.content,
+      modified: snap.content,
+      language: snap.language,
+      subtitle: 'selected for compare',
+    });
+  }, [activeFileSnapshot, compareBase]);
+
   const notifications = useSyncExternalStore(subscribeNotifications, getNotifications, getNotifications);
 
   const statusItems = useMemo<StatusBarItem[]>(() => {
@@ -639,6 +669,18 @@ export function App() {
       title: 'Compare with Saved',
       keywords: ['diff', 'compare', 'changes', 'saved', 'disk'],
       run: compareWithSaved,
+    });
+    r.register({
+      id: 'select-for-compare',
+      title: 'File: Select for Compare',
+      keywords: ['diff', 'compare', 'select', 'base', 'file'],
+      run: selectForCompare,
+    });
+    r.register({
+      id: 'compare-with-selected',
+      title: 'File: Compare with Selected',
+      keywords: ['diff', 'compare', 'selected', 'against', 'file'],
+      run: compareWithSelected,
     });
     r.register({
       id: 'markdown-preview',
@@ -1196,6 +1238,8 @@ export function App() {
     hasWorkspace,
     ws,
     compareWithSaved,
+    selectForCompare,
+    compareWithSelected,
     npmTasks,
     openFile,
     editedContents,

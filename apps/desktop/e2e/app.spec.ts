@@ -1057,4 +1057,23 @@ test.describe('vsclaude shell', () => {
     );
     expect(bg).toBe('#123456');
   });
+
+  test('select for compare diffs two files', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    // Select the default open file as the compare base.
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('Select for Compare');
+    await page.keyboard.press('Enter');
+    await expect(palette).toBeHidden();
+    // Open a different file (focus moves to the explorer, so Ctrl+K still opens the
+    // palette rather than a Monaco chord), then compare it against the base.
+    await page.locator('.explorer-list').getByRole('button', { name: 'session.ts', exact: true }).click();
+    await page.keyboard.press('Control+KeyK');
+    await expect(palette).toBeVisible();
+    await palette.getByPlaceholder(/type a command/i).fill('Compare with Selected');
+    await page.keyboard.press('Enter');
+    await expect(page.getByText('selected for compare')).toBeVisible();
+  });
 });
