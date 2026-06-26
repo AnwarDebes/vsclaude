@@ -1303,6 +1303,38 @@ test.describe('vsclaude shell', () => {
     await expect(page.getByRole('button', { name: /^End of line LF/i })).toBeVisible();
   });
 
+  test('Toggle Maximized Panel maximizes the bottom dock', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.getByText('vsclaude').first()).toBeVisible();
+    const shell = page.locator('.app-shell');
+    await expect(shell).toHaveAttribute('data-bottom-maximized', 'false');
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('Toggle Maximized Panel');
+    await page.keyboard.press('Enter');
+    await expect(shell).toHaveAttribute('data-bottom-maximized', 'true');
+  });
+
+  test('maximizing in minimal mode does not blow up the narration footer', async ({ page }) => {
+    await page.addInitScript(() => {
+      localStorage.setItem('vsclaude.settings', JSON.stringify({ presentationMode: 'minimal' }));
+    });
+    await page.goto('/');
+    await expect(page.getByText('vsclaude').first()).toBeVisible();
+    const minimalFooter = page.locator('.app-bottom--minimal');
+    await expect(minimalFooter).toBeVisible();
+    // Toggle maximize via the palette; the slim footer must NOT grow to fill the viewport.
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('Toggle Maximized Panel');
+    await page.keyboard.press('Enter');
+    await expect(page.locator('.app-shell')).toHaveAttribute('data-bottom-maximized', 'true');
+    const height = await minimalFooter.evaluate((el) => el.getBoundingClientRect().height);
+    expect(height).toBeLessThan(200);
+  });
+
   test('F6 skips regions with no focusable child (minimal mode)', async ({ page }) => {
     await page.goto('/');
     await page.getByText('Claude Code, in motion').click();

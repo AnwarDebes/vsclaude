@@ -1592,6 +1592,11 @@ body {
   overflow: hidden;
   position: relative;
 }
+/* Toggle Maximized Panel: the bottom dock fills the workbench, squeezing the editor.
+   Scoped off the minimal-mode narration footer so maximizing there cannot blow it up. */
+.app-shell[data-bottom-maximized='true'] .app-bottom:not(.app-bottom--minimal) {
+  height: calc(100vh - 7.5rem);
+}
 .app-bottom--minimal {
   grid-template-columns: 1fr;
   height: auto;

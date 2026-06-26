@@ -172,6 +172,9 @@ export function App() {
   // Session-scoped read-only toggle for the active editor (VS Code's Toggle Active
   // Editor Read-only): Monaco rejects edits while on.
   const [editorReadOnly, setEditorReadOnly] = useState(false);
+  // Whether the bottom dock is maximized to fill the editor area (VS Code's Toggle
+  // Maximized Panel). Drives data-bottom-maximized, which overrides --bottom-height.
+  const [bottomMaximized, setBottomMaximized] = useState(false);
   // Whether the document is in OS full screen (tracked from the real event so the
   // attribute reflects actual state, not just intent).
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -1034,6 +1037,12 @@ export function App() {
       run: () => setEditorReadOnly((r) => !r),
     });
     r.register({
+      id: 'toggle-maximized-panel',
+      title: 'View: Toggle Maximized Panel',
+      keywords: ['maximize', 'panel', 'bottom', 'terminal', 'expand'],
+      run: () => setBottomMaximized((m) => !m),
+    });
+    r.register({
       id: 'toggle-fullscreen',
       title: 'View: Toggle Full Screen',
       keywords: ['fullscreen', 'full screen', 'f11', 'maximize'],
@@ -1410,6 +1419,7 @@ export function App() {
       data-zen={zenMode}
       data-fullscreen={isFullscreen}
       data-sidebar-hidden={sidebarHidden}
+      data-bottom-maximized={bottomMaximized}
       style={
         {
           zoom: settings.uiScale,

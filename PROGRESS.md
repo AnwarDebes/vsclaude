@@ -24,6 +24,24 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 132: toggle maximized bottom panel (done; honest no-flip)
+
+Add VS Code's "Toggle Maximized Panel" for the bottom dock (catalog 5.5).
+
+- App: a bottomMaximized state + a View: Toggle Maximized Panel command set data-bottom-maximized on the
+  app-shell; styles.css overrides --bottom-height to calc(100vh - 7.5rem) when maximized, so the dock
+  fills the workbench and squeezes the editor.
+- Quality: an e2e runs the command via the palette and asserts data-bottom-maximized flips false->true
+  (inherently strong: without the command the toggle never fires). The adversarial review caught a minor
+  bug -- the override also matched the minimal-mode narration footer (higher CSS specificity than
+  .app-bottom--minimal), so maximizing in minimal mode blew it up; fixed by scoping the selector with
+  :not(.app-bottom--minimal), with a regression e2e (minimal mode + maximize -> footer stays small,
+  validated to fail without the fix). typecheck, lint clean; build and full e2e pass.
+- HONESTY: while here, corrected stale claims in the 5.5 "Bottom panel" row -- the gap listed "cannot
+  maximize" (now done) and "cannot sash-resize" (done in slice 110, the bottom Sash). Both removed; the
+  row STAYS Partial (no problems/output/debug as panel tabs; panel cannot be moved). TOTAL unchanged
+  129/102/97 -- this is a real feature + honesty correction, not a count-move.
+
 ## Slice 131: typed-confirmation gating for commit amend (done)
 
 Gate the history-rewriting Amend behind a typed confirmation (catalog 5.9).
