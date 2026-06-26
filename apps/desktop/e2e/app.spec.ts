@@ -1186,6 +1186,34 @@ test.describe('vsclaude shell', () => {
     expect(await inDialog()).toBe(true);
   });
 
+  test('Toggle Editor Read-only makes the editor reject edits', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.getByText('vsclaude').first()).toBeVisible();
+    const editorPanel = page.locator('.editor-panel');
+    await expect(editorPanel).toBeVisible();
+    const runToggle = async () => {
+      // Click the neutral brand tag so the Monaco editor does not capture the Ctrl+K chord.
+      await page.getByText('Claude Code, in motion').click();
+      await page.keyboard.press('Control+KeyK');
+      const palette = page.getByRole('dialog', { name: /command palette/i });
+      await expect(palette).toBeVisible();
+      await palette.getByPlaceholder(/type a command/i).fill('Toggle Editor Read-only');
+      await page.keyboard.press('Enter');
+      await expect(palette).not.toBeVisible();
+    };
+    await runToggle();
+    await expect(editorPanel).toHaveAttribute('data-readonly', 'true');
+    // Edits are rejected: type into the editor and confirm the first line is unchanged.
+    const firstLine = page.locator('.view-lines .view-line').first();
+    const before = (await firstLine.innerText()).trim();
+    await page.locator('.monaco-editor').first().click();
+    await page.keyboard.type('ZZZZ');
+    await expect(firstLine).toHaveText(before);
+    // Toggling again restores editability.
+    await runToggle();
+    await expect(editorPanel).not.toHaveAttribute('data-readonly', 'true');
+  });
+
   test('F6 skips regions with no focusable child (minimal mode)', async ({ page }) => {
     await page.goto('/');
     await page.getByText('Claude Code, in motion').click();

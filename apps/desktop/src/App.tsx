@@ -169,6 +169,9 @@ export function App() {
   const [releaseOpen, setReleaseOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [zenMode, setZenMode] = useState(false);
+  // Session-scoped read-only toggle for the active editor (VS Code's Toggle Active
+  // Editor Read-only): Monaco rejects edits while on.
+  const [editorReadOnly, setEditorReadOnly] = useState(false);
   // Whether the document is in OS full screen (tracked from the real event so the
   // attribute reflects actual state, not just intent).
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -1021,6 +1024,12 @@ export function App() {
       run: () => setZenMode((z) => !z),
     });
     r.register({
+      id: 'toggle-editor-readonly',
+      title: 'View: Toggle Editor Read-only',
+      keywords: ['read-only', 'readonly', 'lock', 'editable'],
+      run: () => setEditorReadOnly((r) => !r),
+    });
+    r.register({
       id: 'toggle-fullscreen',
       title: 'View: Toggle Full Screen',
       keywords: ['fullscreen', 'full screen', 'f11', 'maximize'],
@@ -1503,6 +1512,7 @@ export function App() {
                   onRevealed={clearRevealTarget}
                   onChange={(v) => setEditedContents((m) => ({ ...m, [openFile]: v }))}
                   onSave={(v) => setEditedContents((m) => ({ ...m, [openFile]: v }))}
+                  readOnly={editorReadOnly}
                   />
                 </>
               )}

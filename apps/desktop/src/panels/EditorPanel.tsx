@@ -29,6 +29,8 @@ interface EditorPanelProps {
   onRevealed?: () => void;
   onChange?: (value: string) => void;
   onSave?: (value: string) => void;
+  /** When true, the editor is read-only (Monaco rejects edits). */
+  readOnly?: boolean;
 }
 
 /**
@@ -45,6 +47,7 @@ export function EditorPanel({
   onRevealed,
   onChange,
   onSave,
+  readOnly,
 }: EditorPanelProps) {
   const editorRef = useRef<BridgeEditor | null>(null);
   const monacoEditorRef = useRef<Parameters<OnMount>[0] | null>(null);
@@ -192,7 +195,7 @@ export function EditorPanel({
   }, [value, path]);
 
   return (
-    <div className="editor-panel">
+    <div className="editor-panel" data-readonly={readOnly ? 'true' : undefined}>
       <Editor
         height="100%"
         theme={monacoTheme}
@@ -211,6 +214,8 @@ export function EditorPanel({
           // scrollBeyondLastLine, smoothScrolling, and cursorBlinking now come from
           // editorSettingsToMonaco below (spread last, so it is the source of truth).
           ...editorSettingsToMonaco(settings),
+          // After the settings spread so a future settings-sourced readOnly cannot override the toggle.
+          readOnly: readOnly ?? false,
         }}
       />
     </div>

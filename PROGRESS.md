@@ -24,6 +24,21 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 126: toggle editor read-only (done)
+
+Add VS Code's "Toggle Active Editor Read-only" as a session command (catalog 5.1).
+
+- App: a session-scoped editorReadOnly state and a View: Toggle Editor Read-only command flip it.
+  EditorPanel gains a readOnly prop applied as Monaco's readOnly option (placed after the settings
+  spread so a future settings-sourced readOnly cannot override it) and mirrors it as data-readonly on
+  the panel for styling/tests.
+- Quality: an e2e toggles read-only via the palette, asserts data-readonly and that typing is rejected
+  (first line unchanged), then toggles back to editable; typecheck, lint clean; build and full e2e pass.
+- Honesty: the 5.1 "Read-only editors and read-only regions" evidence claimed "FilePayload has readonly"
+  but FilePayload (event-payloads.ts) has no such field; corrected. The row stays Partial -- this adds a
+  manual session toggle, not a per-file readonly flag from fs/IPC, and no read-only regions. No flip.
+  TOTAL unchanged 125/106/97.
+
 ## Slice 125: word wrap mode, column, and wrapping indent (done)
 
 Complete the word-wrap row with the wrap mode, column, and indent as settings (catalog 5.1).
