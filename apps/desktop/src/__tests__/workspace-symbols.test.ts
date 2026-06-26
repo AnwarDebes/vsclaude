@@ -6,8 +6,56 @@ import {
   filterWorkspaceSymbols,
   jsonSymbols,
   outlineSymbols,
+  tomlSymbols,
   yamlSymbols,
 } from '../lib/workspace-symbols';
+
+describe('tomlSymbols', () => {
+  it('lists tables, array-of-tables, and top-level keys before the first table', () => {
+    const text = [
+      'title = "demo"',
+      '[package]',
+      'name = "aurora"',
+      '[[bin]]',
+      'name = "cli"',
+      '[deps]',
+    ].join('\n');
+    expect(tomlSymbols(text)).toEqual([
+      { name: 'title', line: 1 },
+      { name: 'package', line: 2 },
+      { name: 'bin', line: 4 },
+      { name: 'deps', line: 6 },
+    ]);
+  });
+
+  it('skips comments, blank lines, and keys under a table', () => {
+    const text = ['# a comment', '', '[a]', 'x = 1', 'y = 2', '[b]'].join('\n');
+    expect(tomlSymbols(text)).toEqual([
+      { name: 'a', line: 3 },
+      { name: 'b', line: 6 },
+    ]);
+  });
+
+  it('does not treat a bracketed line inside a multi-line string as a table', () => {
+    const text = ['[a]', 'desc = """', '[not-a-table]', '"""', '[b]'].join('\n');
+    expect(tomlSymbols(text)).toEqual([
+      { name: 'a', line: 1 },
+      { name: 'b', line: 5 },
+    ]);
+  });
+
+  it('does not open a phantom block from a triple-quote inside a trailing comment', () => {
+    const text = ['x = 1 # has """ here', '[t]', 'y = 2'].join('\n');
+    expect(tomlSymbols(text)).toEqual([
+      { name: 'x', line: 1 },
+      { name: 't', line: 2 },
+    ]);
+  });
+
+  it('outlineSymbols routes .toml through tomlSymbols at level 1', () => {
+    expect(outlineSymbols('Cargo.toml', '[package]')).toEqual([{ name: 'package', level: 1, line: 1 }]);
+  });
+});
 
 describe('yamlSymbols', () => {
   it('lists top-level keys, skipping nested keys, list items, and comments', () => {

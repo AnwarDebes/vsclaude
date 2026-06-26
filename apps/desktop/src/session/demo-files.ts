@@ -122,6 +122,16 @@ scripts:
   dev: vite
   test: vitest
 `,
+  'Cargo.toml': `[package]
+name = "aurora"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+
+[dev-dependencies]
+`,
   'README.md': `# Aurora
 
 A small demo project shown in the **vsclaude** editor.

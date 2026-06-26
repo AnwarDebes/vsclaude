@@ -183,9 +183,67 @@ export function yamlSymbols(text: string): Array<{ name: string; line: number }>
 }
 
 /**
+ * TOML structure for the Outline view: [table] and [[array-of-table]] headers, plus
+ * top-level keys that appear before the first table. Keys under a table are skipped
+ * (the table header represents them). Comments (full-line or trailing) and blank lines
+ * are ignored, and the contents of multi-line basic/literal strings (""" / ''') are
+ * skipped so a bracketed line inside one is not mistaken for a table. Pure, so it is
+ * unit tested.
+ */
+export function tomlSymbols(text: string): Array<{ name: string; line: number }> {
+  const out: Array<{ name: string; line: number }> = [];
+  let seenTable = false;
+  let inBlock = false;
+  let delim = '';
+  text
+    .replace(/\r\n/g, '\n')
+    .split('\n')
+    .forEach((raw, index) => {
+      if (inBlock) {
+        if (raw.includes(delim)) inBlock = false;
+        return;
+      }
+      const line = raw.trim();
+      if (line === '' || line.startsWith('#')) return;
+      const table = /^\[\[?\s*([^\][]+?)\s*\]\]?/.exec(line);
+      if (table) {
+        out.push({ name: table[1]!, line: index + 1 });
+        seenTable = true;
+      } else if (!seenTable) {
+        const key = /^([A-Za-z0-9_."'-]+)\s*=/.exec(line);
+        if (key) out.push({ name: key[1]!, line: index + 1 });
+      }
+      // Scan for a multi-line-string opener only in the part of the line before an
+      // unquoted '#', so a triple-quote inside a trailing comment cannot falsely open
+      // a block and swallow later tables.
+      let scan = line;
+      let quote = '';
+      for (let k = 0; k < line.length; k += 1) {
+        const c = line[k]!;
+        if (quote) {
+          if (c === quote) quote = '';
+        } else if (c === '"' || c === "'") {
+          quote = c;
+        } else if (c === '#') {
+          scan = line.slice(0, k);
+          break;
+        }
+      }
+      for (const candidate of ['"""', "'''"]) {
+        if ((scan.split(candidate).length - 1) % 2 === 1) {
+          inBlock = true;
+          delim = candidate;
+          break;
+        }
+      }
+    });
+  return out;
+}
+
+/**
  * The Outline view symbols for any file: Markdown headings (with their heading
- * level), JSON top-level keys, CSS selectors, YAML top-level keys, or top-level code
- * declarations (rendered flat at level 1). Pure.
+ * level), JSON top-level keys, CSS selectors, YAML top-level keys, TOML tables, or
+ * top-level code declarations (rendered flat at level 1). Pure.
  */
 export function outlineSymbols(path: string, text: string): OutlineItem[] {
   const lower = path.toLowerCase();
@@ -198,6 +256,9 @@ export function outlineSymbols(path: string, text: string): OutlineItem[] {
   }
   if (lower.endsWith('.yaml') || lower.endsWith('.yml')) {
     return yamlSymbols(text).map((symbol) => ({ name: symbol.name, level: 1, line: symbol.line }));
+  }
+  if (lower.endsWith('.toml')) {
+    return tomlSymbols(text).map((symbol) => ({ name: symbol.name, level: 1, line: symbol.line }));
   }
   return codeSymbols(text, lower.endsWith('.rs')).map((symbol) => ({
     name: symbol.name,

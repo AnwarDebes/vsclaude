@@ -24,6 +24,26 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 136: TOML outline (done; honest no-flip)
+
+Add TOML structure to the Outline view (catalog 5.3 outline), extending JSON + CSS + YAML.
+
+- lib/workspace-symbols.ts: tomlSymbols(text) -- a pure per-line scan emitting [table] and
+  [[array-of-table]] headers plus top-level keys before the first table; keys under a table are
+  skipped (the header represents them); comments/blanks ignored; the contents of multi-line strings
+  (""" / ''') are skipped so a bracketed line inside one is not mistaken for a table. outlineSymbols
+  routes .toml through it.
+- A demo Cargo.toml added to BOTH demoFileContents and demoFiles (separate sources).
+- Quality: tomlSymbols unit tested (tables + [[array]] + top-level keys, comments/blanks/under-table
+  keys skipped, multi-line-string brackets not mistaken for tables, .toml routing). An e2e opens
+  Cargo.toml and asserts the outline lists package and dependencies. typecheck, lint clean; build and
+  full e2e pass. Updated the 5.3 row, 5.3 prose, and 5.6 @ row (slice-133 lesson).
+- HONESTY (review caught 1 minor): a triple-quote inside a TRAILING comment (x = 1 # has """ here)
+  falsely opened a multi-line block (the delim scan ran over the trailing comment) and swallowed later
+  tables -- fixed with a string-aware strip of the unquoted trailing comment before the delim scan, plus
+  a regression test. 5.3 STAYS Partial
+  (SCSS/LESS, HTML, YAML quoted keys, code nesting, Python remain). TOTAL unchanged 129/102/97.
+
 ## Slice 135: YAML outline (done; honest no-flip)
 
 Add top-level YAML mapping keys to the Outline view (catalog 5.3 outline), extending JSON + CSS.

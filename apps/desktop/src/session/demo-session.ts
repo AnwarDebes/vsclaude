@@ -91,6 +91,7 @@ export const demoFiles = [
   { name: 'assets', path: 'assets', kind: 'directory' as const },
   { name: 'package.json', path: 'package.json', kind: 'file' as const },
   { name: 'config.yml', path: 'config.yml', kind: 'file' as const },
+  { name: 'Cargo.toml', path: 'Cargo.toml', kind: 'file' as const },
   // A noise directory, hidden by the default files.exclude (see lib/excludes.ts).
   { name: 'index.js', path: 'node_modules/react/index.js', kind: 'file' as const },
 ];

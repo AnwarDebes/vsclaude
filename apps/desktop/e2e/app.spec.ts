@@ -732,6 +732,21 @@ test.describe('vsclaude shell', () => {
     await expect(outline.getByRole('button', { name: 'scripts' })).toBeVisible();
   });
 
+  test('the outline view lists TOML tables', async ({ page }) => {
+    await page.goto('/');
+    await page.locator('.explorer-list').getByRole('button', { name: 'Cargo.toml', exact: true }).click();
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('view outline');
+    await page.keyboard.press('Enter');
+    const outline = page.getByRole('region', { name: 'Outline' });
+    await expect(outline).toBeVisible();
+    // Cargo.toml's [table] headers become outline entries.
+    await expect(outline.getByRole('button', { name: 'package' })).toBeVisible();
+    await expect(outline.getByRole('button', { name: 'dependencies', exact: true })).toBeVisible();
+  });
+
   test('accessibility help opens from the Help menu', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('button', { name: 'Help', exact: true }).click();
