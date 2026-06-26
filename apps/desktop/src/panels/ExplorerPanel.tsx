@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { FsEntry } from '@vsclaude/contracts';
 import { buildFileTree, collectDirectoryPaths, flattenVisible, toggleExpanded } from '@vsclaude/editor';
 import { FileIcon } from '../components/FileIcon';
@@ -48,6 +48,11 @@ export function ExplorerPanel({
     });
   }, [openPath]);
 
+  // Scroll the revealed row into view once per open-file change. A callback ref fires
+  // when the active row is actually in the DOM (after the auto-reveal expands its
+  // ancestors), so it survives the expand-then-render timing; the guard scrolls once.
+  const lastRevealedRef = useRef<string | undefined>(undefined);
+
   return (
     <nav className="explorer-panel" aria-label="Files">
       <h2 className="panel-title">Explorer</h2>
@@ -78,6 +83,19 @@ export function ExplorerPanel({
             <li key={row.node.path}>
               <button
                 type="button"
+                ref={
+                  // Attach the scroll ref to the OPENED file's row only. Keying off `active`
+                  // (openPath || activePath) would let the agent's activePath row, often
+                  // higher in document order, consume the one scroll and reveal the wrong row.
+                  row.node.path === openPath
+                    ? (el) => {
+                        if (el && openPath && lastRevealedRef.current !== openPath) {
+                          lastRevealedRef.current = openPath;
+                          el.scrollIntoView({ block: 'nearest' });
+                        }
+                      }
+                    : undefined
+                }
                 className={`explorer-row${active ? ' explorer-row--active' : ''}`}
                 style={{ paddingLeft: `${8 + row.depth * 14}px` }}
                 onClick={() =>

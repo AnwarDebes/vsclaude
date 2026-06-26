@@ -1233,6 +1233,46 @@ test.describe('vsclaude shell', () => {
     await expect(box2).toHaveValue('persistme');
   });
 
+  test('the explorer scrolls the revealed file into view', async ({ page }) => {
+    // A short viewport makes the file tree overflow, so reaching a bottom file needs a scroll.
+    await page.setViewportSize({ width: 1100, height: 340 });
+    await page.goto('/');
+    const filesNav = page.getByRole('navigation', { name: 'Files' });
+    await expect(filesNav).toBeVisible();
+    // Open a file at the bottom of the tree via quick-open; auto-reveal scrolls it into view.
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyP');
+    const palette = page.getByRole('dialog', { name: /go to file/i });
+    await palette.getByPlaceholder(/search files by name/i).fill('package.json');
+    await page.keyboard.press('Enter');
+    const activeRow = filesNav.locator('.explorer-row--active');
+    await expect(activeRow).toContainText('package.json');
+    await expect(activeRow).toBeInViewport();
+  });
+
+  test('the explorer reveals the opened file even when the agent is on another file', async ({ page }) => {
+    // Regression guard: with the agent's activePath differing from the opened file, the scroll must
+    // target the OPENED row, not the (often higher) activePath row.
+    await page.setViewportSize({ width: 1100, height: 360 });
+    await page.goto('/');
+    const filesNav = page.getByRole('navigation', { name: 'Files' });
+    await expect(filesNav).toBeVisible();
+    // Let the demo session advance so activePath points at a source file, then pause to freeze it.
+    await page.waitForTimeout(5000);
+    await page.getByRole('button', { name: 'Pause' }).click();
+    // Scroll the tree to the top so the bottom file starts off-screen.
+    await page.locator('.explorer-panel').evaluate((el) => el.scrollTo(0, 0));
+    const pkgRow = filesNav.locator('.explorer-list').getByRole('button', { name: /package\.json/ });
+    await expect(pkgRow).not.toBeInViewport();
+    // Open the bottom file; it must scroll into view despite the activePath row also being active.
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyP');
+    const palette = page.getByRole('dialog', { name: /go to file/i });
+    await palette.getByPlaceholder(/search files by name/i).fill('package.json');
+    await page.keyboard.press('Enter');
+    await expect(pkgRow).toBeInViewport();
+  });
+
   test('F6 skips regions with no focusable child (minimal mode)', async ({ page }) => {
     await page.goto('/');
     await page.getByText('Claude Code, in motion').click();

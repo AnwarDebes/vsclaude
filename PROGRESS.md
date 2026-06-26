@@ -24,6 +24,25 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 128: scroll the revealed file into view (done)
+
+Complete auto-reveal by scrolling the revealed explorer row into view (catalog 5.7).
+
+- ExplorerPanel (panels/): a guarded callback ref on the OPENED file's row (keyed to openPath, not the
+  active set) scrolls it into view (scrollIntoView block nearest) once per open-file change. A callback
+  ref (not an effect) fires when the row is actually in the DOM, after the auto-reveal expands its
+  ancestors, so it survives the expand-then-render timing; lastRevealedRef gates it to one scroll.
+- IMPORTANT (review caught a MAJOR bug): keying the ref off `active` (openPath || activePath) attached it
+  to TWO rows whenever the agent's activePath differed from the opened file; refs attach in document
+  order, so the higher activePath row consumed the single scroll and the opened file was NOT revealed --
+  the exact thing this slice fixes, reintroduced in the normal running-session state. Fixed by keying
+  the ref to row.node.path === openPath.
+- Quality: a short-viewport e2e opens a bottom-of-tree file (package.json) and asserts its row is in the
+  viewport (STRONG: fails when scrollIntoView is removed); a second regression e2e pauses the session on
+  a different activePath and confirms the opened file still scrolls in (STRONG: fails with the activePath
+  bug). typecheck, lint clean; build and full e2e pass. Matrix 5.7 "Auto-reveal active file" Partial to
+  Done; 5.7 now 7/4/3/3; TOTAL 127/104/97.
+
 ## Slice 127: persist search history across reloads (done)
 
 Make the search box's recent-query history survive a reload (catalog 5.8).
