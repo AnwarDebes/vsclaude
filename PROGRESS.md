@@ -24,6 +24,24 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 144: fix zen mode leaving a stray grid track when a sidebar was hidden (done; bug-fix)
+
+Fix the pre-existing nit slice 143's review surfaced: in zen mode, if a sidebar had been hidden, the
+editor did not fill the width (a stray empty grid track).
+
+- Root cause: the sidebar-hidden grid rules (companion+primary-hidden and companion+secondary-hidden) are
+  (0,4,0) and out-specified the zen collapse rule .app-shell[data-zen='true'] .app-main (0,3,0), so in zen
+  the wrong grid-template-columns won (1fr 360px or var(--sidebar-width) 1fr), leaving an empty track since
+  zen display:none-s the non-editor children. (The other sidebar-hidden rules already resolve to 1fr.)
+- Fix (styles.css): added :not([data-zen='true']) to those two (0,4,0) rules so they do not apply in zen;
+  the zen rule's single 1fr column then wins. Explicit, no !important.
+- Quality: two new e2es (primary-sidebar-hidden and secondary-sidebar-hidden) enter zen and assert
+  .app-main computes to a SINGLE grid track; the primary one was verified to FAIL without the fix
+  (regression-validated, the slice-132 lesson), covering both rules touched. typecheck, lint clean; build +
+  full e2e pass.
+- HONESTY: Zen mode (5.5 line 174) was already Done; this is a Done-row BUG-FIX, so NO matrix count/status
+  change (evidence note added). TOTAL unchanged 129/102/97.
+
 ## Slice 143: Toggle Secondary Sidebar (done; honest no-flip)
 
 Let the secondary (right) sidebar hide independently (catalog 5.5, line 164 "Primary and secondary

@@ -383,6 +383,45 @@ test.describe('vsclaude shell', () => {
     await expect(page.locator('.app-header')).toBeVisible();
   });
 
+  test('zen mode fills the editor even when a sidebar was hidden', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    // Hide the primary sidebar first, then enter zen.
+    await page.keyboard.press('Control+KeyB');
+    await expect(page.getByRole('navigation', { name: 'Files' })).toBeHidden();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('zen');
+    await page.keyboard.press('Enter');
+    await expect(page.locator('.app-header')).toBeHidden();
+    // In zen the editor fills the width: the grid collapses to a single track, with no
+    // stray column left over from the hidden sidebar.
+    const cols = await page.locator('.app-main').evaluate((el) => getComputedStyle(el).gridTemplateColumns);
+    expect(cols.trim().split(/\s+/)).toHaveLength(1);
+  });
+
+  test('zen mode fills the editor when the secondary sidebar was hidden', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    // Hide the secondary sidebar (a different grid rule than the primary), then enter zen.
+    await page.keyboard.press('Control+Shift+KeyP');
+    await page
+      .getByRole('dialog', { name: /command palette/i })
+      .getByPlaceholder(/type a command/i)
+      .fill('toggle secondary sidebar');
+    await page.keyboard.press('Enter');
+    await expect(page.locator('.app-right')).toBeHidden();
+    await page.keyboard.press('Control+Shift+KeyP');
+    await page
+      .getByRole('dialog', { name: /command palette/i })
+      .getByPlaceholder(/type a command/i)
+      .fill('zen mode');
+    await page.keyboard.press('Enter');
+    await expect(page.locator('.app-header')).toBeHidden();
+    const cols = await page.locator('.app-main').evaluate((el) => getComputedStyle(el).gridTemplateColumns);
+    expect(cols.trim().split(/\s+/)).toHaveLength(1);
+  });
+
   test('breadcrumbs show the active file path', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('button', { name: 'session.ts', exact: true }).click();

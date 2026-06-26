@@ -1386,8 +1386,9 @@ body {
   top: 0;
 }
 /* When the primary sidebar is hidden (Ctrl+B), drop its fixed track so the editor
-   fills the freed space instead of staying pinned to the 220px column. */
-.app-shell[data-mode='companion'][data-sidebar-hidden='true'] .app-main {
+   fills the freed space instead of staying pinned to the 220px column. Excluded in zen
+   mode so its single-column collapse is not out-specified into a stray track. */
+.app-shell[data-mode='companion'][data-sidebar-hidden='true']:not([data-zen='true']) .app-main {
   grid-template-columns: 1fr 360px;
 }
 .app-shell[data-mode='cozy'] .app-main {
@@ -1398,8 +1399,10 @@ body {
 }
 
 /* Hiding the secondary (right) sidebar drops its 360px column so the editor reclaims the
-   space, per layout mode. Minimal has no right sidebar, so it needs no override. */
-.app-shell[data-secondary-sidebar-hidden='true'][data-mode='companion'] .app-main {
+   space, per layout mode. Minimal has no right sidebar, so it needs no override. The
+   companion case is excluded in zen mode so its collapse is not out-specified (the other
+   secondary rules already resolve to a single 1fr column). */
+.app-shell[data-secondary-sidebar-hidden='true'][data-mode='companion']:not([data-zen='true']) .app-main {
   grid-template-columns: var(--sidebar-width, 220px) 1fr;
 }
 .app-shell[data-secondary-sidebar-hidden='true'][data-mode='companion'][data-sidebar-hidden='true'] .app-main {
