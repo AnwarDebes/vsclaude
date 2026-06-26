@@ -24,6 +24,26 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 130: default EOL for new untitled files (done; honest no-flip)
+
+Give new untitled scratchpads a configurable / OS-default line ending (catalog 5.1).
+
+- contracts: EditorSettings gains defaultEol ('auto' | 'LF' | 'CRLF', default 'auto').
+- lib/eol.ts: resolveDefaultEol(setting, isWindows) (pure; auto -> CRLF on Windows, LF elsewhere) and
+  isWindowsPlatform(). EditorPanel applies it to a new untitled model via model.pushEOL, once per path
+  (eolAppliedRef guard) so clearing the buffer later does not override a manual EOL choice.
+- settings-schema: an Editor select (Auto/LF/CRLF).
+- Quality: resolveDefaultEol unit tested. An e2e forces LF (Monaco defaults a new model to CRLF on this
+  Windows env), creates an untitled, and asserts the status-bar shows LF. Validated STRONG against a
+  FRESH dev server: with the effect disabled the untitled is CRLF, so the LF assertion fails.
+- HONESTY (review caught a MAJOR overstatement): the matrix gap "No platform-default EOL for newly
+  created files" is GENERAL. This slice covers only the untitled scratchpad; the explorer/palette
+  "New File" path (ws.newFile, native) creates a real workspace file that isUntitled() rejects, so it
+  still uses Monaco's default. That path is native-only (not e2e-able in the browser demo), so the row
+  STAYS Partial with a narrowed gap, NOT a Done flip. 5.1 stays 23/4/0; TOTAL stays 128/103/97.
+- NOTE: playwright.config webServer uses reuseExistingServer:true; a reused dev server serves STALE
+  source, so disable-validation must kill port 1420 first to force a fresh server.
+
 ## Slice 129: preferred dark/light themes for follow-system (done)
 
 Let users pick which theme follow-system uses in each mode (catalog 5.16).

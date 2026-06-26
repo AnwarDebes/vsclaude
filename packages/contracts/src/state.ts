@@ -95,6 +95,8 @@ export interface EditorSettings {
   insertSpaces: boolean;
   /** Auto-detect tab size and spaces-vs-tabs from the file content on open. */
   detectIndentation: boolean;
+  /** Line ending for newly created files: the OS default, or forced LF/CRLF. */
+  defaultEol: 'auto' | 'LF' | 'CRLF';
   /** How long lines wrap: off, on (viewport width), at a fixed column, or bounded by the smaller of the two. */
   wordWrap: 'off' | 'on' | 'wordWrapColumn' | 'bounded';
   /** The column to wrap at when wordWrap is 'wordWrapColumn' or 'bounded'. */
@@ -229,6 +231,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
     tabSize: 2,
     insertSpaces: true,
     detectIndentation: true,
+    defaultEol: 'auto',
     wordWrap: 'off',
     wordWrapColumn: 80,
     wrappingIndent: 'same',

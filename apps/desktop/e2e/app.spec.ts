@@ -1286,6 +1286,23 @@ test.describe('vsclaude shell', () => {
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'high-contrast');
   });
 
+  test('a new untitled file uses the default end-of-line setting', async ({ page }) => {
+    // Force LF; a new Monaco model defaults to CRLF on this platform, so asserting LF proves
+    // the setting is honored (validated to fail against a fresh dev server without the wiring).
+    await page.addInitScript(() => {
+      localStorage.setItem('vsclaude.settings', JSON.stringify({ editor: { defaultEol: 'LF' } }));
+    });
+    await page.goto('/');
+    await expect(page.getByText('vsclaude').first()).toBeVisible();
+    // Create a new untitled file via the palette (blur Monaco first so Ctrl+K is not captured).
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('New Untitled File');
+    await page.keyboard.press('Enter');
+    await expect(page.getByRole('button', { name: /^End of line LF/i })).toBeVisible();
+  });
+
   test('F6 skips regions with no focusable child (minimal mode)', async ({ page }) => {
     await page.goto('/');
     await page.getByText('Claude Code, in motion').click();

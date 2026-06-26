@@ -91,6 +91,22 @@ export const SETTINGS_SCHEMA: readonly SettingDef[] = [
     set: (s, v) => ({ ...s, editor: { ...s.editor, detectIndentation: Boolean(v) } }),
   },
   {
+    id: 'editor.defaultEol',
+    category: 'Editor',
+    label: 'Default End of Line',
+    description: 'Line ending for newly created files: the OS default, or forced LF/CRLF.',
+    control: {
+      kind: 'select',
+      options: [
+        { value: 'auto', label: 'Auto (OS default)' },
+        { value: 'LF', label: 'LF' },
+        { value: 'CRLF', label: 'CRLF' },
+      ],
+    },
+    get: (s) => s.editor.defaultEol,
+    set: (s, v) => ({ ...s, editor: { ...s.editor, defaultEol: v as 'auto' | 'LF' | 'CRLF' } }),
+  },
+  {
     id: 'editor.wordWrap',
     category: 'Editor',
     label: 'Word Wrap',

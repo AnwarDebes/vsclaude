@@ -18,6 +18,8 @@ import { useMonacoTheme } from '../lib/monaco-theme';
 import { languageForPath } from '../lib/language';
 import { applyOnSave } from '../lib/on-save';
 import { findConflicts } from '../lib/conflicts';
+import { isUntitled } from '../lib/untitled';
+import { resolveDefaultEol, isWindowsPlatform } from '../lib/eol';
 
 interface EditorPanelProps {
   path?: string;
@@ -51,6 +53,7 @@ export function EditorPanel({
 }: EditorPanelProps) {
   const editorRef = useRef<BridgeEditor | null>(null);
   const monacoEditorRef = useRef<Parameters<OnMount>[0] | null>(null);
+  const monacoApiRef = useRef<Parameters<OnMount>[1] | null>(null);
   // Decoration ids tracked PER MODEL: @monaco-editor/react keeps one editor and swaps
   // cached models on a path change, and deltaDecorations only clears ids on the current
   // model, so a single shared id list would leak/duplicate across file switches.
@@ -60,6 +63,7 @@ export function EditorPanel({
 
   const onMount: OnMount = (editor, monacoInstance) => {
     monacoEditorRef.current = editor;
+    monacoApiRef.current = monacoInstance;
     editor.addCommand(monacoInstance.KeyMod.CtrlCmd | monacoInstance.KeyCode.KeyS, () => {
       void (async () => {
         const current = getEditorSettings();
@@ -193,6 +197,22 @@ export function EditorPanel({
     const previous = conflictDecorationsByModelRef.current.get(model) ?? [];
     conflictDecorationsByModelRef.current.set(model, editor.deltaDecorations(previous, decorations));
   }, [value, path]);
+
+  // A new untitled file takes the configured default line ending, applied once per path
+  // (the first time it is seen empty) so clearing the buffer later does not override a
+  // manual End of Line choice. Existing files keep their detected EOL (handled on load).
+  const eolAppliedRef = useRef<Set<string>>(new Set());
+  useEffect(() => {
+    if (!path || !isUntitled(path) || value !== '' || eolAppliedRef.current.has(path)) return;
+    const model = monacoEditorRef.current?.getModel();
+    const monaco = monacoApiRef.current;
+    if (!model || !monaco) return;
+    eolAppliedRef.current.add(path);
+    const eol = resolveDefaultEol(settings.defaultEol, isWindowsPlatform());
+    model.pushEOL(
+      eol === 'CRLF' ? monaco.editor.EndOfLineSequence.CRLF : monaco.editor.EndOfLineSequence.LF,
+    );
+  }, [path, value, settings.defaultEol]);
 
   return (
     <div className="editor-panel" data-readonly={readOnly ? 'true' : undefined}>
