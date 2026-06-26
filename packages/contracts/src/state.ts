@@ -7,6 +7,7 @@
  */
 import type { AgentEvent, ProviderId } from './agent-event.js';
 import type { TodoItem } from './event-payloads.js';
+import type { Theme } from './design-tokens.js';
 
 /** The five ways Pixie can be presented. Remembered per user. */
 export type PresentationMode = 'companion' | 'stage' | 'swarm' | 'minimal' | 'cozy';
@@ -167,6 +168,11 @@ export interface EditorSettings {
 /** User-level application settings. */
 export interface AppSettings {
   themeId: string;
+  /**
+   * An imported custom theme, applied when themeId is "custom". Picking any built-in
+   * theme sets a real themeId, which makes this inert without needing to clear it.
+   */
+  customTheme: Theme | null;
   presentationMode: PresentationMode;
   /** Whole-UI zoom factor (1 is 100 percent). */
   uiScale: number;
@@ -186,6 +192,7 @@ export interface AppSettings {
 /** The default settings a fresh install starts from. */
 export const DEFAULT_SETTINGS: AppSettings = {
   themeId: 'cozy-dark',
+  customTheme: null,
   presentationMode: 'companion',
   uiScale: 1,
   followSystemTheme: false,

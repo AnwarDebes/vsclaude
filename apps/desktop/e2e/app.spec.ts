@@ -1016,4 +1016,45 @@ test.describe('vsclaude shell', () => {
     const after = (await dock.boundingBox())!.height;
     expect(after).toBeGreaterThan(before + 50);
   });
+
+  test('importing a theme JSON applies it as a custom theme', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('Theme: Import');
+    await page.keyboard.press('Enter');
+    const dialog = page.getByRole('dialog', { name: 'Import theme' });
+    await expect(dialog).toBeVisible();
+    // A complete theme (all ColorTokens keys) with a distinctive background, so the
+    // assertion proves a consumed variable actually applied, not just data-theme.
+    const theme = {
+      id: 'imported-test',
+      name: 'Imported',
+      appearance: 'dark',
+      color: {
+        bg: '#123456',
+        surface: '#1a1a1a',
+        surfaceElevated: '#222222',
+        border: '#333333',
+        text: '#eeeeee',
+        textMuted: '#aaaaaa',
+        accent: '#4f8cff',
+        accentMuted: '#2a4a80',
+        accentContrast: '#ffffff',
+        success: '#3fb950',
+        warning: '#d29922',
+        danger: '#f85149',
+        info: '#58a6ff',
+        glow: '#4f8cff',
+      },
+    };
+    await dialog.getByLabel('Theme JSON').fill(JSON.stringify(theme));
+    await dialog.getByRole('button', { name: 'Apply' }).click();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'imported-test');
+    const bg = await page.evaluate(() =>
+      getComputedStyle(document.documentElement).getPropertyValue('--color-bg').trim(),
+    );
+    expect(bg).toBe('#123456');
+  });
 });

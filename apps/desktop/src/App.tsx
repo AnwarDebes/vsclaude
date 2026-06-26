@@ -60,6 +60,7 @@ import { gitLog, type GitCommit } from './lib/tauri';
 import { SettingsPanel } from './components/SettingsPanel';
 import { SettingsJsonModal } from './components/SettingsJsonModal';
 import { ThemeExportModal } from './components/ThemeExportModal';
+import { ThemeImportModal } from './components/ThemeImportModal';
 import { KeyboardShortcuts } from './components/KeyboardShortcuts';
 import { WelcomePanel } from './components/WelcomePanel';
 import { ReleaseNotes } from './components/ReleaseNotes';
@@ -160,6 +161,7 @@ export function App() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [settingsJsonOpen, setSettingsJsonOpen] = useState(false);
   const [themeExportOpen, setThemeExportOpen] = useState(false);
+  const [themeImportOpen, setThemeImportOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const [welcomeOpen, setWelcomeOpen] = useState(false);
   const [releaseOpen, setReleaseOpen] = useState(false);
@@ -788,6 +790,12 @@ export function App() {
       title: 'Theme: Export',
       keywords: ['theme', 'export', 'copy', 'json', 'color', 'appearance'],
       run: () => setThemeExportOpen(true),
+    });
+    r.register({
+      id: 'theme-import',
+      title: 'Theme: Import',
+      keywords: ['theme', 'import', 'paste', 'json', 'color', 'appearance', 'custom'],
+      run: () => setThemeImportOpen(true),
     });
     r.register({
       id: 'developer-process-info',
@@ -1561,6 +1569,11 @@ export function App() {
         onClose={() => setSettingsJsonOpen(false)}
       />
       <ThemeExportModal open={themeExportOpen} settings={settings} onClose={() => setThemeExportOpen(false)} />
+      <ThemeImportModal
+        open={themeImportOpen}
+        onApply={(theme) => setSettings((s) => ({ ...s, themeId: 'custom', customTheme: theme }))}
+        onClose={() => setThemeImportOpen(false)}
+      />
       <DiffReview
         open={reviewOpen}
         cwd={hasWorkspace ? ws.roots[0]?.path ?? '.' : '.'}

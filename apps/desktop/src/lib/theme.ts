@@ -36,10 +36,41 @@ export function saveAppSettings(settings: AppSettings): void {
 
 /** The theme that the settings resolve to, after accessibility overrides. */
 export function currentTheme(settings: AppSettings): Theme {
+  // An imported custom theme takes over while themeId is the "custom" sentinel.
+  if (settings.themeId === 'custom' && settings.customTheme) {
+    return settings.customTheme;
+  }
   return resolveThemeForSettings(settings.themeId, {
     reducedMotion: settings.reducedMotion,
     colorBlindSafe: settings.colorBlindSafe,
   });
+}
+
+/**
+ * Parse a pasted theme JSON (as produced by exportTheme) into a Theme, or null when
+ * it is not valid JSON or is missing the required shape. Pure, so it is unit tested.
+ */
+export function parseImportedTheme(json: string): Theme | null {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(json);
+  } catch {
+    return null;
+  }
+  if (!parsed || typeof parsed !== 'object') return null;
+  const candidate = parsed as Record<string, unknown>;
+  if (typeof candidate.id !== 'string' || candidate.id.length === 0) return null;
+  if (typeof candidate.name !== 'string') return null;
+  if (candidate.appearance !== 'light' && candidate.appearance !== 'dark') return null;
+  if (!candidate.color || typeof candidate.color !== 'object') return null;
+  // Require every color token the app consumes, so a partial or wrong-shaped paste is
+  // rejected (with the modal's error) instead of importing as a silent no-op. The key
+  // list is derived from the default theme, so it tracks ColorTokens automatically.
+  const color = candidate.color as Record<string, unknown>;
+  for (const key of Object.keys(currentTheme(DEFAULT_SETTINGS).color)) {
+    if (typeof color[key] !== 'string') return null;
+  }
+  return parsed as Theme;
 }
 
 /** The active theme serialized as JSON, for export. */

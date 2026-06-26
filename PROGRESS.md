@@ -24,6 +24,24 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 113: custom theme import (done)
+
+Pair the existing Theme: Export with a Theme: Import, so a pasted theme JSON applies (catalog 5.16).
+
+- lib/theme.ts: parseImportedTheme(json) validates and parses a theme (id/name/appearance plus the
+  full color token set, derived at runtime from the default theme so a partial paste errors instead of
+  importing as a silent no-op -- a gap the adversarial review caught);
+  currentTheme returns settings.customTheme when themeId is the "custom" sentinel, else resolves the
+  built-in. Both pure, unit tested (incl. an export -> import round-trip).
+- contracts AppSettings + DEFAULT gain customTheme: Theme | null (mergeSettings replaces it
+  wholesale). Picking any built-in theme sets a real themeId, making the custom theme inert without
+  needing to clear it at the four themeId-set sites.
+- components/ThemeImportModal.tsx: paste JSON, Apply (or an inline error); App registers Theme: Import
+  and applies via setSettings(themeId 'custom', customTheme). The existing applyTheme effect renders it.
+- Quality: theme unit tests (parse, override, round-trip); an e2e imports a theme via the palette and
+  asserts html[data-theme]; typecheck, lint clean; build and full e2e pass. Matrix 5.16 "Custom theme
+  file import/export" Partial to Done. 5.16 now 18/2/3; TOTAL 118/114/96.
+
 ## Slice 112: trim final newlines and consistent on-save (done)
 
 Finish the on-save transforms and apply them on every save path (catalog 5.1).
