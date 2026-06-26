@@ -194,6 +194,9 @@ export function App() {
   const [sidebarHidden, setSidebarHidden] = useState(
     () => localStorage.getItem('vsclaude.sidebarHidden') === 'true',
   );
+  const [secondarySidebarHidden, setSecondarySidebarHidden] = useState(
+    () => localStorage.getItem('vsclaude.secondarySidebarHidden') === 'true',
+  );
   const untitledCounter = useRef(0);
   const live = useLiveProvider();
   const { available: liveAvailable, start: liveStart } = live;
@@ -1040,6 +1043,7 @@ export function App() {
         setBottomPanel('none');
         setZenMode(false);
         setSidebarHidden(false);
+        setSecondarySidebarHidden(false);
         setSidebarWidth(SIDEBAR_DEFAULT);
         setBottomHeight(BOTTOM_DEFAULT);
         setSettings((s) => ({ ...s, presentationMode: DEFAULT_SETTINGS.presentationMode }));
@@ -1081,6 +1085,12 @@ export function App() {
       keywords: ['sidebar', 'explorer', 'hide', 'show', 'panel', 'left'],
       keybinding: 'Ctrl+B',
       run: () => setSidebarHidden((h) => !h),
+    });
+    r.register({
+      id: 'toggle-secondary-sidebar',
+      title: 'View: Toggle Secondary Sidebar',
+      keywords: ['secondary', 'sidebar', 'companion', 'timeline', 'hide', 'show', 'right'],
+      run: () => setSecondarySidebarHidden((h) => !h),
     });
     r.register({
       id: 'nav-back',
@@ -1383,6 +1393,9 @@ export function App() {
   useEffect(() => {
     localStorage.setItem('vsclaude.bottomPanel', bottomPanel);
   }, [bottomPanel]);
+  useEffect(() => {
+    localStorage.setItem('vsclaude.secondarySidebarHidden', String(secondarySidebarHidden));
+  }, [secondarySidebarHidden]);
   const stateLabel = STATE_LABELS[session.directive.state] ?? session.directive.state;
   const currentPath = session.current?.payload?.['path'];
   const activePath = typeof currentPath === 'string' ? currentPath : undefined;
@@ -1458,6 +1471,7 @@ export function App() {
       data-zen={zenMode}
       data-fullscreen={isFullscreen}
       data-sidebar-hidden={sidebarHidden}
+      data-secondary-sidebar-hidden={secondarySidebarHidden}
       data-bottom-maximized={bottomMaximized}
       style={
         {

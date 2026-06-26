@@ -1397,6 +1397,21 @@ body {
   grid-template-columns: 1fr;
 }
 
+/* Hiding the secondary (right) sidebar drops its 360px column so the editor reclaims the
+   space, per layout mode. Minimal has no right sidebar, so it needs no override. */
+.app-shell[data-secondary-sidebar-hidden='true'][data-mode='companion'] .app-main {
+  grid-template-columns: var(--sidebar-width, 220px) 1fr;
+}
+.app-shell[data-secondary-sidebar-hidden='true'][data-mode='companion'][data-sidebar-hidden='true'] .app-main {
+  grid-template-columns: 1fr;
+}
+.app-shell[data-secondary-sidebar-hidden='true'][data-mode='cozy'] .app-main {
+  grid-template-columns: 1fr;
+}
+.app-shell[data-secondary-sidebar-hidden='true'] .app-right {
+  display: none;
+}
+
 .app-center {
   min-width: 0;
   display: flex;

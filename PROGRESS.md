@@ -24,6 +24,31 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 143: Toggle Secondary Sidebar (done; honest no-flip)
+
+Let the secondary (right) sidebar hide independently (catalog 5.5, line 164 "Primary and secondary
+sidebars"), a recognizable VS Code feature (Toggle Secondary Side Bar).
+
+- App.tsx: secondarySidebarHidden state (init from localStorage, persisted via a useEffect, mirroring
+  sidebarHidden); a data-secondary-sidebar-hidden attr on .app-shell; a View: Toggle Secondary Sidebar
+  command (palette, no keybinding -- avoids the Ctrl+Alt+B vs Ctrl+B keydown disambiguation for now);
+  View: Reset Layout resets it (the slice-119 lesson).
+- styles.css: per-mode grid-template-columns overrides that DROP the 360px right column so the editor
+  reclaims the space (companion, companion+primary-hidden, cozy; minimal has no right sidebar), beating
+  the mode rules by specificity, plus .app-right { display: none }.
+- Quality: typecheck, lint clean; a new e2e runs the command, asserts .app-right hides, reloads, and
+  asserts it stays hidden (persistence); the keyboard-shortcuts conflict e2e still reports no conflicts.
+  build + full e2e pass.
+- Per the ripple lesson, updated BOTH line 164 (gap drops "cannot hide independently" -> "Views cannot
+  move between sidebars") and line 179 (the right sidebar now toggles as a group; individual
+  companion/timeline + the terminal footer remain). 5.5 STAYS Partial. TOTAL unchanged 129/102/97.
+- Review: 1 minor + 1 nit. Minor (the ripple lesson again): line 177 (Layout persistence) listed only
+  sidebarHidden + bottomPanel; added secondarySidebarHidden to match line 164 -- fixed. Nit (NOT fixed,
+  out of scope, pre-existing): in the rare zen + companion + hidden-sidebar combo, the (0,4,0) sidebar
+  grid rules out-specify the zen collapse rule (0,3,0), leaving a stray track; this already affects the
+  primary sidebar pre-slice, so slice 143 faithfully mirrors the established pattern. The verifier said
+  ship as-is; a durable fix (harden the zen .app-main grid for both sidebars) is a separate follow-up.
+
 ## Slice 142: Markdown broken-link diagnostics (done; honest no-flip)
 
 Flag Markdown inline links whose target is not a known workspace file, in the Problems panel (catalog

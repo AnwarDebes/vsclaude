@@ -1028,6 +1028,21 @@ test.describe('vsclaude shell', () => {
     await expect(explorer).toBeVisible();
   });
 
+  test('the secondary sidebar can be hidden and the choice persists', async ({ page }) => {
+    await page.goto('/');
+    // The companion-mode right sidebar (companion + timeline) is visible by default.
+    await expect(page.locator('.app-right')).toBeVisible();
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+Shift+KeyP');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('toggle secondary sidebar');
+    await page.keyboard.press('Enter');
+    await expect(page.locator('.app-right')).toBeHidden();
+    await page.reload();
+    // The hidden choice survives a reload (layout-state persistence).
+    await expect(page.locator('.app-right')).toBeHidden();
+  });
+
   test('Ctrl+J toggles the bottom panel', async ({ page }) => {
     await page.goto('/');
     await page.getByText('Claude Code, in motion').click();
