@@ -137,6 +137,17 @@ serde = { version = "1", features = ["derive"] }
 - See [the app](src/App.tsx) for the entry point.
 - The [changelog](CHANGELOG.md) is not written yet.
 `,
+  'build.py': `import sys
+
+
+def main():
+    print("building")
+
+
+class Builder:
+    def run(self):
+        return 0
+`,
   'README.md': `# Aurora
 
 A small demo project shown in the **vsclaude** editor.

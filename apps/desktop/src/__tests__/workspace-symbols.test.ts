@@ -6,9 +6,42 @@ import {
   filterWorkspaceSymbols,
   jsonSymbols,
   outlineSymbols,
+  pythonSymbols,
   tomlSymbols,
   yamlSymbols,
 } from '../lib/workspace-symbols';
+
+describe('pythonSymbols', () => {
+  it('lists top-level def and class declarations, skipping nested ones', () => {
+    const text = [
+      'import sys',
+      '',
+      'def main():',
+      '    print("hi")',
+      '',
+      'class App:',
+      '    def run(self):',
+      '        pass',
+      '',
+      'async def fetch():',
+      '    pass',
+    ].join('\n');
+    expect(pythonSymbols(text)).toEqual([
+      { name: 'main', line: 3 },
+      { name: 'App', line: 6 },
+      { name: 'fetch', line: 10 },
+    ]);
+  });
+
+  it('does not flag a column-0 def or class inside a triple-quoted docstring', () => {
+    const text = ['"""', 'def fake():', '    pass', '"""', '', 'def real():', '    pass'].join('\n');
+    expect(pythonSymbols(text)).toEqual([{ name: 'real', line: 6 }]);
+  });
+
+  it('outlineSymbols routes .py through pythonSymbols at level 1', () => {
+    expect(outlineSymbols('app.py', 'def go():\n    pass')).toEqual([{ name: 'go', level: 1, line: 1 }]);
+  });
+});
 
 describe('tomlSymbols', () => {
   it('lists tables, array-of-tables, and top-level keys before the first table', () => {

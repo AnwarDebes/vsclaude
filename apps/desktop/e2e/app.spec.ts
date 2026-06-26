@@ -858,6 +858,21 @@ test.describe('vsclaude shell', () => {
     await expect(outline.getByRole('button', { name: 'dependencies', exact: true })).toBeVisible();
   });
 
+  test('the outline view lists Python defs and classes', async ({ page }) => {
+    await page.goto('/');
+    await page.locator('.explorer-list').getByRole('button', { name: 'build.py', exact: true }).click();
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('view outline');
+    await page.keyboard.press('Enter');
+    const outline = page.getByRole('region', { name: 'Outline' });
+    await expect(outline).toBeVisible();
+    // build.py's top-level def and class become outline entries (the nested method is skipped).
+    await expect(outline.getByRole('button', { name: 'main' })).toBeVisible();
+    await expect(outline.getByRole('button', { name: 'Builder' })).toBeVisible();
+  });
+
   test('accessibility help opens from the Help menu', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('button', { name: 'Help', exact: true }).click();

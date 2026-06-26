@@ -241,9 +241,56 @@ export function tomlSymbols(text: string): Array<{ name: string; line: number }>
 }
 
 /**
+ * Top-level (column-0) Python def and class declarations, with the line each begins on.
+ * Indented (nested) defs are skipped, matching the flat coverage of the brace languages.
+ * Pure, so it is unit tested.
+ */
+export function pythonSymbols(text: string): Array<{ name: string; line: number }> {
+  const out: Array<{ name: string; line: number }> = [];
+  let inBlock = false;
+  let delim = '';
+  text
+    .replace(/\r\n/g, '\n')
+    .split('\n')
+    .forEach((raw, index) => {
+      if (inBlock) {
+        if (raw.includes(delim)) inBlock = false;
+        return;
+      }
+      const match = /^(?:async\s+)?(?:def|class)\s+([A-Za-z_]\w*)/.exec(raw);
+      if (match) out.push({ name: match[1]!, line: index + 1 });
+      // Enter a triple-quoted string block (e.g. a docstring) so a column-0 def/class
+      // inside it is not mistaken for a declaration. Scan for the opener only before an
+      // unquoted '#', so a triple-quote inside a comment does not start a phantom block.
+      let scan = raw;
+      let quote = '';
+      for (let k = 0; k < raw.length; k += 1) {
+        const c = raw[k]!;
+        if (quote !== '') {
+          if (c === quote) quote = '';
+        } else if (c === '"' || c === "'") {
+          quote = c;
+        } else if (c === '#') {
+          scan = raw.slice(0, k);
+          break;
+        }
+      }
+      for (const candidate of ['"""', "'''"]) {
+        if ((scan.split(candidate).length - 1) % 2 === 1) {
+          inBlock = true;
+          delim = candidate;
+          break;
+        }
+      }
+    });
+  return out;
+}
+
+/**
  * The Outline view symbols for any file: Markdown headings (with their heading
- * level), JSON top-level keys, CSS selectors, YAML top-level keys, TOML tables, or
- * top-level code declarations (rendered flat at level 1). Pure.
+ * level), JSON top-level keys, CSS selectors, YAML top-level keys, TOML tables,
+ * Python defs and classes, or top-level code declarations (rendered flat at level 1).
+ * Pure.
  */
 export function outlineSymbols(path: string, text: string): OutlineItem[] {
   const lower = path.toLowerCase();
@@ -259,6 +306,9 @@ export function outlineSymbols(path: string, text: string): OutlineItem[] {
   }
   if (lower.endsWith('.toml')) {
     return tomlSymbols(text).map((symbol) => ({ name: symbol.name, level: 1, line: symbol.line }));
+  }
+  if (lower.endsWith('.py')) {
+    return pythonSymbols(text).map((symbol) => ({ name: symbol.name, level: 1, line: symbol.line }));
   }
   return codeSymbols(text, lower.endsWith('.rs')).map((symbol) => ({
     name: symbol.name,

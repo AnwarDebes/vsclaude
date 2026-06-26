@@ -24,6 +24,24 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 146: Python outline (def and class) (done; honest no-flip)
+
+Detect Python def and class declarations in the Outline view (catalog 5.3), closing the "does not detect
+Python defs" sub-gap. A clean dedicated-parser slice (like the JSON/CSS/YAML/TOML outline parsers).
+
+- lib/workspace-symbols.ts: pythonSymbols(text) -- pure; emits column-0 def/class (and async def) names
+  with their line; indented (nested) defs are skipped, and def/class inside triple-quoted docstrings are
+  skipped (block-aware, mirroring tomlSymbols), matching the flat coverage of the brace languages.
+  outlineSymbols routes .py through it. (Previously .py fell to codeSymbols, which caught class but not
+  def, hence the gap.)
+- A demo build.py added to BOTH demoFileContents and demoFiles (separate sources).
+- Quality: pythonSymbols unit tested (top-level def/class/async def, nested skipped, docstring def skipped,
+  .py routing). An e2e
+  opens build.py and asserts the outline lists main and Builder (the nested method is skipped). typecheck,
+  lint clean; build + full e2e pass. Updated the 5.3 row, 5.3 prose, and 5.6 @ row (slice-133 ripple).
+- HONESTY: narrows the 5.3 gap by adding Python; the remaining sub-gaps (no code nesting, SCSS/LESS, HTML,
+  YAML quoted keys) stay, so 5.3 STAYS Partial. TOTAL unchanged 129/102/97.
+
 ## Slice 145: Markdown link-path completion (done; honest no-flip)
 
 Suggest workspace file paths while typing a Markdown link target (catalog 5.2 markdown), reusing the
