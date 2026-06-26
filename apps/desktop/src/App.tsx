@@ -167,6 +167,14 @@ export function App() {
   const [releaseOpen, setReleaseOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [zenMode, setZenMode] = useState(false);
+  // Whether the document is in OS full screen (tracked from the real event so the
+  // attribute reflects actual state, not just intent).
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  useEffect(() => {
+    const onChange = () => setIsFullscreen(Boolean(document.fullscreenElement));
+    document.addEventListener('fullscreenchange', onChange);
+    return () => document.removeEventListener('fullscreenchange', onChange);
+  }, []);
   const [sidebarHidden, setSidebarHidden] = useState(false);
   const untitledCounter = useRef(0);
   const live = useLiveProvider();
@@ -593,6 +601,17 @@ export function App() {
         if (next) gotoLine(next.line, next.column, false);
         return;
       }
+      // F11 toggles OS full screen via the Fullscreen API (works in the browser demo
+      // and the Tauri webview); no modifiers.
+      if (e.key === 'F11' && !e.ctrlKey && !e.metaKey && !e.altKey && !e.shiftKey) {
+        e.preventDefault();
+        if (document.fullscreenElement) {
+          void document.exitFullscreen().catch(() => {});
+        } else {
+          void document.documentElement.requestFullscreen().catch(() => {});
+        }
+        return;
+      }
       if (!(e.ctrlKey || e.metaKey) || !e.shiftKey) return;
       const key = e.key.toLowerCase();
       if (key === 'm') {
@@ -968,8 +987,20 @@ export function App() {
     r.register({
       id: 'toggle-zen',
       title: 'View: Toggle Zen Mode',
-      keywords: ['zen', 'distraction', 'focus', 'fullscreen', 'hide'],
+      keywords: ['zen', 'distraction', 'focus', 'hide'],
       run: () => setZenMode((z) => !z),
+    });
+    r.register({
+      id: 'toggle-fullscreen',
+      title: 'View: Toggle Full Screen',
+      keywords: ['fullscreen', 'full screen', 'f11', 'maximize'],
+      run: () => {
+        if (document.fullscreenElement) {
+          void document.exitFullscreen().catch(() => {});
+        } else {
+          void document.documentElement.requestFullscreen().catch(() => {});
+        }
+      },
     });
     r.register({
       id: 'toggle-sidebar',
@@ -1334,6 +1365,7 @@ export function App() {
       className="app-shell"
       data-mode={mode}
       data-zen={zenMode}
+      data-fullscreen={isFullscreen}
       data-sidebar-hidden={sidebarHidden}
       style={
         {

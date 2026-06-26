@@ -24,6 +24,19 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 117: full screen toggle (F11) (done)
+
+Add OS full screen alongside the existing zen mode (catalog 5.5).
+
+- App: a View: Toggle Full Screen command and an F11 keybinding toggle the Fullscreen API
+  (document requestFullscreen/exitFullscreen, both rejection-guarded). isFullscreen is tracked from
+  the real fullscreenchange event (not just intent) and reflected in the shell's data-fullscreen.
+  Works in the browser demo and the Tauri webview; no new dependency.
+- Quality: an e2e runs the command to enter and leave fullscreen, asserting data-fullscreen flips
+  true then false (Playwright's chromium supports the Fullscreen API); typecheck, lint clean; build
+  and full e2e pass. Matrix 5.5 "Full screen / distraction-free" Partial to Done (zen + OS full screen
+  via the Fullscreen API). 5.5 now 9/13/6; TOTAL 120/111/97.
+
 ## Slice 116: honesty correction -- Emmet over-claim (done)
 
 While scoping an Emmet feature, found that adding the integration package (emmet-monaco-es) is blocked

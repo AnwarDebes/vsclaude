@@ -19,7 +19,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.2 | Code intelligence (LSP language features) | 3 | 11 | 10 | 0 |
 | 5.3 | Editor advanced surface | 9 | 3 | 0 | 0 |
 | 5.4 | Diff and merge | 6 | 2 | 1 | 1 |
-| 5.5 | Workbench layout and navigation | 8 | 14 | 6 | 0 |
+| 5.5 | Workbench layout and navigation | 9 | 13 | 6 | 0 |
 | 5.6 | Quick open and command palette | 8 | 3 | 0 | 0 |
 | 5.7 | File explorer and workspace management | 6 | 5 | 3 | 3 |
 | 5.8 | Search and replace across files | 5 | 2 | 5 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 6 | 7 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 4 | 3 | 3 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 119 | 112 | 97 | 5 |
+| TOTAL | | 120 | 111 | 97 | 5 |
 
 ## Legend
 
@@ -172,7 +172,7 @@ vsclaude uses a fixed, presentation-mode-driven layout rather than the dockable 
 | Drag-drop views between containers | Missing | Panels hardcoded per mode; no relocation API. | No relocating views between sidebars or panel. |
 | Floating / auxiliary editor windows | Missing | No floating window support; single-window only. | No float of a view or editor group. |
 | Zen mode (hide UI chrome) | Done | The View: Toggle Zen Mode command sets data-zen on the shell, hiding the header, activity bar, panels, and status bar to leave just the editor; Escape exits. | |
-| Full screen / distraction-free | Partial | Zen mode is the distraction-free path (just the editor). | No OS full-screen (F11) toggle through the Fullscreen API or the window. |
+| Full screen / distraction-free | Done | Zen mode is the distraction-free path; View: Toggle Full Screen (and F11) toggles OS full screen via the Fullscreen API (requestFullscreen/exitFullscreen, working in the browser demo and the Tauri webview), tracked by the fullscreenchange event and reflected in the shell's data-fullscreen. An e2e enters and leaves fullscreen. | |
 | Custom title bar / menu bar | Partial | MenuBar in the header offers File, View, Go, and Help dropdowns that run registry commands (MENU_BAR data unit tested). An e2e opens Release Notes from the Help menu. | No fully custom-themed title bar or native window controls. |
 | Layout persistence across sessions | Partial | useWorkspace.ts persists root paths and recents; App.tsx restores presentationMode. | No split sizes, panel positions, tab order, or active tab persisted. |
 | Reset layout to defaults | Partial | View: Reset Layout restores the default presentation mode, closes the bottom drawer, and exits zen mode. An e2e covers it. | No panel-size or view-location reset, since those positions are fixed. |

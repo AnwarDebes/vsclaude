@@ -1076,4 +1076,22 @@ test.describe('vsclaude shell', () => {
     await page.keyboard.press('Enter');
     await expect(page.getByText('selected for compare')).toBeVisible();
   });
+
+  test('Toggle Full Screen enters and leaves fullscreen', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    const shell = page.locator('.app-shell');
+    await expect(shell).toHaveAttribute('data-fullscreen', 'false');
+    const run = async () => {
+      await page.keyboard.press('Control+KeyK');
+      const palette = page.getByRole('dialog', { name: /command palette/i });
+      await palette.getByPlaceholder(/type a command/i).fill('Toggle Full Screen');
+      await page.keyboard.press('Enter');
+      await expect(palette).toBeHidden();
+    };
+    await run();
+    await expect(shell).toHaveAttribute('data-fullscreen', 'true');
+    await run();
+    await expect(shell).toHaveAttribute('data-fullscreen', 'false');
+  });
 });
