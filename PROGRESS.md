@@ -24,6 +24,26 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 129: preferred dark/light themes for follow-system (done)
+
+Let users pick which theme follow-system uses in each mode (catalog 5.16).
+
+- contracts: AppSettings gains preferredDarkTheme and preferredLightTheme (defaults cozy-dark/cozy-light).
+- system-theme.ts: themeForSystem(prefersDark, darkTheme?, lightTheme?) is parametrized (defaults preserve
+  the old behavior); still pure and unit tested.
+- App: the follow-system effect passes s.preferredDarkTheme/Light (read fresh inside setSettings) and
+  re-applies when either preference changes (added to the effect deps).
+- settings-schema: two Appearance selects over the bundled theme ids.
+- Quality: themeForSystem unit tests cover the supplied preferences and the default fallback; an e2e
+  emulates an OS dark preference with preferredDarkTheme=high-contrast and asserts html data-theme is
+  high-contrast. Validated STRONG: it fails when the preference is not wired through App. typecheck,
+  lint clean; build and full e2e pass. Matrix 5.16 "Follow OS system theme" Partial to Done; 5.16 now
+  19/1/3; TOTAL 128/103/97.
+- Honesty: also refreshed specs/SETTINGS_THEMES_PERSISTENCE.md -- its follow-system prose described the
+  old cozy-pair-only behavior (now superseded by the preferred-theme selects), and it listed a stale
+  theme id 'colorblind-safe' (the contract id is 'cozy-cb-safe'); both corrected (the review surfaced
+  the id drift as pre-existing).
+
 ## Slice 128: scroll the revealed file into view (done)
 
 Complete auto-reveal by scrolling the revealed explorer row into view (catalog 5.7).

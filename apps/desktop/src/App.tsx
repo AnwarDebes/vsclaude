@@ -543,11 +543,15 @@ export function App() {
   useEffect(() => {
     if (!settings.followSystemTheme) return;
     const media = window.matchMedia('(prefers-color-scheme: dark)');
-    const apply = () => setSettings((s) => ({ ...s, themeId: themeForSystem(media.matches) }));
+    const apply = () =>
+      setSettings((s) => ({
+        ...s,
+        themeId: themeForSystem(media.matches, s.preferredDarkTheme, s.preferredLightTheme),
+      }));
     apply();
     media.addEventListener('change', apply);
     return () => media.removeEventListener('change', apply);
-  }, [settings.followSystemTheme]);
+  }, [settings.followSystemTheme, settings.preferredDarkTheme, settings.preferredLightTheme]);
 
   // Notable events flow to the Output channels: general logs to Log, window
   // lifecycle to Window, so the panel's channel selector has more than one entry.

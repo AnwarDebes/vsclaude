@@ -119,7 +119,7 @@ export interface AdvancedSettings {
 
 export type ThemeId =
   | 'cozy-dark' | 'cozy-light'
-  | 'high-contrast' | 'colorblind-safe'
+  | 'high-contrast' | 'cozy-cb-safe'
   | `custom:${string}`;
 ```
 
@@ -243,11 +243,11 @@ A theme is a named bundle of design tokens. The catalog is defined in the [Desig
 | `cozy-dark` | Cozy Dark | Default, terracotta over warm charcoal |
 | `cozy-light` | Cozy Light | Light pairing of the cozy palette |
 | `high-contrast` | High Contrast | Passes WCAG AAA |
-| `colorblind-safe` | Color-blind Safe | Never encodes meaning by hue alone |
+| `cozy-cb-safe` | Cozy Color-Blind Safe | Never encodes meaning by hue alone |
 
 ### Persistence model
 
-The chosen theme persists in `appearance.theme`. When `appearance.followSystemTheme` is true, the core listens to the OS appearance change signal and selects the light or dark variant of the cozy pair automatically, while still honoring an explicit non-cozy choice (high-contrast and color-blind-safe ignore the system pairing).
+The chosen theme persists in `appearance.theme`. When `appearance.followSystemTheme` is true, the core listens to the OS appearance change signal and applies the configured `preferredDarkTheme` or `preferredLightTheme` automatically (either may be any bundled theme; they default to the cozy dark and light pair).
 
 ### No flash of wrong theme
 

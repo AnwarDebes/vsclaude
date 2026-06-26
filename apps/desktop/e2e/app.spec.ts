@@ -1273,6 +1273,19 @@ test.describe('vsclaude shell', () => {
     await expect(pkgRow).toBeInViewport();
   });
 
+  test('follow system theme applies the preferred dark theme', async ({ page }) => {
+    await page.emulateMedia({ colorScheme: 'dark' });
+    await page.addInitScript(() => {
+      localStorage.setItem(
+        'vsclaude.settings',
+        JSON.stringify({ followSystemTheme: true, preferredDarkTheme: 'high-contrast' }),
+      );
+    });
+    await page.goto('/');
+    // The OS is dark + following is on, so the chosen preferred dark theme should apply.
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'high-contrast');
+  });
+
   test('F6 skips regions with no focusable child (minimal mode)', async ({ page }) => {
     await page.goto('/');
     await page.getByText('Claude Code, in motion').click();

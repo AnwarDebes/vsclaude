@@ -195,6 +195,10 @@ export interface AppSettings {
   uiScale: number;
   /** Follow the OS light/dark preference, overriding themeId while on. */
   followSystemTheme: boolean;
+  /** The theme to use while following the OS preference and the OS is in dark mode. */
+  preferredDarkTheme: string;
+  /** The theme to use while following the OS preference and the OS is in light mode. */
+  preferredLightTheme: string;
   reducedMotion: boolean;
   colorBlindSafe: boolean;
   sound: SoundSettings;
@@ -213,6 +217,8 @@ export const DEFAULT_SETTINGS: AppSettings = {
   presentationMode: 'companion',
   uiScale: 1,
   followSystemTheme: false,
+  preferredDarkTheme: 'cozy-dark',
+  preferredLightTheme: 'cozy-light',
   reducedMotion: false,
   colorBlindSafe: false,
   sound: { enabled: false, masterVolume: 0.6, typing: true, ambient: false },

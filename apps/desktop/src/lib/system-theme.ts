@@ -6,6 +6,10 @@
 export const SYSTEM_DARK_THEME = 'cozy-dark';
 export const SYSTEM_LIGHT_THEME = 'cozy-light';
 
-export function themeForSystem(prefersDark: boolean): string {
-  return prefersDark ? SYSTEM_DARK_THEME : SYSTEM_LIGHT_THEME;
+export function themeForSystem(
+  prefersDark: boolean,
+  darkTheme: string = SYSTEM_DARK_THEME,
+  lightTheme: string = SYSTEM_LIGHT_THEME,
+): string {
+  return prefersDark ? darkTheme : lightTheme;
 }
