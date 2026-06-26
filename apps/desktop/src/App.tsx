@@ -84,8 +84,10 @@ import {
   loadBottomHeight,
   SIDEBAR_MIN,
   SIDEBAR_MAX,
+  SIDEBAR_DEFAULT,
   BOTTOM_MIN,
   BOTTOM_MAX,
+  BOTTOM_DEFAULT,
 } from './lib/sash';
 import { findConflicts, resolveConflict, type Conflict, type ConflictChoice } from './lib/conflicts';
 import { ProcessInfoModal } from './components/ProcessInfoModal';
@@ -981,6 +983,9 @@ export function App() {
       run: () => {
         setBottomPanel('none');
         setZenMode(false);
+        setSidebarHidden(false);
+        setSidebarWidth(SIDEBAR_DEFAULT);
+        setBottomHeight(BOTTOM_DEFAULT);
         setSettings((s) => ({ ...s, presentationMode: DEFAULT_SETTINGS.presentationMode }));
       },
     });

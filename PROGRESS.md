@@ -24,6 +24,20 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 119: reset layout resets panel sizes (done)
+
+Make View: Reset Layout also reset the sash-driven panel sizes, completing the row (catalog 5.5).
+
+- App: the view-reset-layout command now sets sidebarWidth to SIDEBAR_DEFAULT, bottomHeight to
+  BOTTOM_DEFAULT, and sidebarHidden to false (alongside the existing mode/drawer/zen resets), so a
+  user who dragged the sashes or hid the sidebar with Ctrl+B can restore the default layout. The
+  adversarial review caught that the first version did not restore Ctrl+B sidebar visibility (so the
+  reset sidebarWidth had no visible effect); fixed. (View locations are fixed, nothing else to
+  relocate.)
+- Quality: an e2e widens the sidebar via the sash, runs Reset Layout, and asserts the width returns to
+  the default; typecheck, lint clean; build and full e2e pass. Matrix 5.5 "Reset layout to defaults"
+  Partial to Done. 5.5 now 10/12/6; TOTAL 122/109/97.
+
 ## Slice 118: column selection setting (done)
 
 Expose Monaco's column-selection mode as a setting (catalog 5.1).

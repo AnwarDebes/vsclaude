@@ -1094,4 +1094,27 @@ test.describe('vsclaude shell', () => {
     await run();
     await expect(shell).toHaveAttribute('data-fullscreen', 'false');
   });
+
+  test('Reset Layout restores the default sidebar width and visibility', async ({ page }) => {
+    await page.goto('/');
+    await page.getByText('Claude Code, in motion').click();
+    const files = page.getByRole('navigation', { name: 'Files' });
+    const sash = page.getByRole('separator', { name: 'Resize sidebar' });
+    await sash.focus();
+    for (let i = 0; i < 6; i += 1) await page.keyboard.press('ArrowRight');
+    const widened = (await files.boundingBox())!.width;
+    expect(widened).toBeGreaterThan(250);
+    // Hide the sidebar with Ctrl+B as well, so reset must restore both size and visibility.
+    await page.keyboard.press('Control+KeyB');
+    await expect(files).toBeHidden();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('Reset Layout');
+    await page.keyboard.press('Enter');
+    await expect(palette).toBeHidden();
+    await expect(files).toBeVisible();
+    const reset = (await files.boundingBox())!.width;
+    expect(reset).toBeLessThan(widened);
+    expect(reset).toBeLessThanOrEqual(240);
+  });
 });
