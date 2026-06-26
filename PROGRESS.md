@@ -24,6 +24,20 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 116: honesty correction -- Emmet over-claim (done)
+
+While scoping an Emmet feature, found that adding the integration package (emmet-monaco-es) is blocked
+by the sandbox (untrusted external dependency), and that the matrix over-claimed Emmet: 5.13 row
+"Emmet abbreviation expansion and commands" was Partial on the premise "Monaco 0.55.1 ships Emmet."
+That is false -- Monaco standalone bundles no Emmet (only an incidental "emmet" token in a DOM
+utility; no Emmet actions/providers), EditorPanel does no Emmet registration, and emmet-monaco-es is
+not a dependency, so abbreviation expansion does not work.
+
+- Corrected the 5.13 row Partial to Missing (honest downgrade) with accurate evidence, reconciling it
+  with 5.2's Emmet row (already Missing). Fixed the 5.13 intro prose that claimed "default Emmet."
+- No code change (matrix/docs only); matrix integrity holds. 5.13 now 1/2/2; TOTAL 119/112/97.
+- Emmet itself remains a real parity gap, deferred until the emmet-monaco-es dependency can be approved.
+
 ## Slice 115: word-based suggestions setting (done)
 
 Make Monaco's word-based completion scope configurable, including across open documents (catalog 5.3).

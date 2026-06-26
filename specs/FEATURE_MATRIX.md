@@ -27,7 +27,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.10 | Integrated terminal | 6 | 8 | 4 | 0 |
 | 5.11 | Tasks (VS Code task support) | 0 | 8 | 2 | 0 |
 | 5.12 | Debugging (Debug Adapter Protocol) | 0 | 0 | 10 | 0 |
-| 5.13 | Snippets and Emmet | 1 | 3 | 1 | 0 |
+| 5.13 | Snippets and Emmet | 1 | 2 | 2 | 0 |
 | 5.14 | Settings and configuration | 2 | 3 | 4 | 1 |
 | 5.15 | Keybindings and keymaps | 3 | 3 | 5 | 0 |
 | 5.16 | Themes and appearance | 18 | 2 | 3 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 6 | 7 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 4 | 3 | 3 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 119 | 113 | 96 | 5 |
+| TOTAL | | 119 | 112 | 97 | 5 |
 
 ## Legend
 
@@ -336,11 +336,11 @@ The repository contains no debugging features (DAP, breakpoints, launch.json, de
 
 ## 5.13 Snippets and Emmet
 
-Monaco 0.55.1 is integrated with basic configuration, and Emmet and snippets are available as Monaco defaults. But there is no user-facing snippet or Emmet functionality: no palette commands for snippet insertion or Emmet, no snippet definition files or loaders, and no snippet configuration UI. The spec describes snippets with TextMate syntax as a planned feature, still unimplemented. Monaco's built-in IntelliSense and default Emmet are technically accessible but not wired into the UI.
+Monaco 0.55.1 is integrated with basic configuration, and snippet completions are available as Monaco defaults. Emmet, however, is NOT a Monaco default (it is a separate VS Code extension); Monaco standalone ships no Emmet, so abbreviation expansion does not work without an integration such as emmet-monaco-es (not currently a dependency). There is also no user-facing snippet functionality: no palette commands for snippet insertion, no snippet definition files or loaders, and no snippet configuration UI. The spec describes snippets with TextMate syntax as a planned feature, still unimplemented. Monaco's built-in IntelliSense is accessible but not wired into the UI.
 
 | Capability | Status | Evidence | What is missing |
 | --- | --- | --- | --- |
-| Emmet abbreviation expansion and commands | Partial | Monaco 0.55.1 ships Emmet; EditorPanel.tsx does not disable it; no Emmet commands in CommandRegistry. | No palette entries, keybindings, or customization for Emmet. |
+| Emmet abbreviation expansion and commands | Missing | Corrected over-claim: Monaco standalone does NOT bundle Emmet (only an incidental "emmet" token in a DOM utility; no Emmet actions or providers), EditorPanel does no Emmet registration, and emmet-monaco-es is not a dependency, so abbreviation expansion does not work. | Needs an Emmet integration (for example emmet-monaco-es) plus palette commands and customization; matches 5.2's Emmet row. |
 | Built-in and user snippet definitions | Partial | lib/snippets.ts defines built-in TypeScript and JavaScript snippets (clg, fn, afn, imp, todo), surfaced by a Monaco CompletionItemProvider in monaco-setup.ts. Unit tested. | No user or workspace snippet files, storage, or management. |
 | Snippet syntax support (TextMate grammar) | Missing | Spec specifies tabstops/placeholders/choices/variables; no parser or provider. | No TextMate snippet parser, tabstop nav, or variable substitution. |
 | Snippet management UI and commands | Partial | Snippets: Insert Snippet opens a browser of the built-in snippets (allSnippets, unit tested); choosing one inserts it at the cursor through the editor's snippet action (insertSnippet in editor-bridge). An e2e opens the browser. | No user or workspace snippet creation, editing, or from-selection capture. |
