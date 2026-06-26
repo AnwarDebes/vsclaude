@@ -16,7 +16,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | Section | Title | Done | Partial | Missing | Not planned |
 | --- | --- | --- | --- | --- | --- |
 | 5.1 | Text editing core | 21 | 6 | 0 | 0 |
-| 5.2 | Code intelligence (LSP language features) | 3 | 11 | 10 | 0 |
+| 5.2 | Code intelligence (LSP language features) | 4 | 10 | 10 | 0 |
 | 5.3 | Editor advanced surface | 9 | 3 | 0 | 0 |
 | 5.4 | Diff and merge | 6 | 2 | 1 | 1 |
 | 5.5 | Workbench layout and navigation | 10 | 12 | 6 | 0 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 6 | 7 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 4 | 3 | 3 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 122 | 109 | 97 | 5 |
+| TOTAL | | 123 | 108 | 97 | 5 |
 
 ## Legend
 
@@ -99,7 +99,7 @@ vsclaude implements a limited set of code intelligence features, relying on Mona
 | Semantic highlighting (over TextMate) | Missing | semanticHighlighting not enabled; no SemanticTokensProvider. | Only TextMate; needs bridge. |
 | Document and workspace symbols | Partial | A markdown DocumentSymbolProvider (monaco-setup.ts over markdownSymbols) drives Go to Symbol and the breadcrumb for .md; the Outline view lists them. | Markdown only; no symbols for code languages and no workspace-symbol search. |
 | Call hierarchy and type hierarchy | Missing | No hierarchy providers or UI. | No hierarchy views. |
-| Document links and highlights | Partial | monaco-setup.ts registers a DocumentLinkProvider over findLinks (lib/links.ts) for many languages, making URLs clickable. Unit tested. | No document-highlight provider (matching-symbol highlights). |
+| Document links and highlights | Done | monaco-setup.ts registers a DocumentLinkProvider over findLinks (lib/links.ts) for many languages, making URLs clickable (unit tested). editor.occurrencesHighlight is now a setting (off/singleFile/multiFile) mapped to Monaco (editorSettingsToMonaco, unit tested), default singleFile (Monaco's own default), so occurrences of the symbol at the cursor highlight (semantic for TS/JS via the worker, word-based otherwise). | |
 | Folding and selection ranges from language | Partial | Monaco default folding enabled; no FoldingRangeProvider override. | No language-specific richer folding ranges. |
 | CodeLens | Missing | No CodeLensProvider or lens UI. | No CodeLens. |
 | Inlay hints | Partial | EditorPanel enables inlayHints, and the TS and JS workers provide parameter-name and type hints via setInlayHintsOptions (TS_INLAY_HINTS, unit tested). | Hints come from the worker only; no custom InlayHintsProvider for other languages. |

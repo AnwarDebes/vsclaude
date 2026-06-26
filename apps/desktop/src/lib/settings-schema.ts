@@ -109,6 +109,25 @@ export const SETTINGS_SCHEMA: readonly SettingDef[] = [
     set: (s, v) => ({ ...s, editor: { ...s.editor, columnSelection: Boolean(v) } }),
   },
   {
+    id: 'editor.occurrencesHighlight',
+    category: 'Editor',
+    label: 'Occurrences Highlight',
+    description: 'Highlight occurrences of the symbol at the cursor.',
+    control: {
+      kind: 'select',
+      options: [
+        { value: 'off', label: 'Off' },
+        { value: 'singleFile', label: 'Single File' },
+        { value: 'multiFile', label: 'Multi File' },
+      ],
+    },
+    get: (s) => s.editor.occurrencesHighlight,
+    set: (s, v) => ({
+      ...s,
+      editor: { ...s.editor, occurrencesHighlight: v as 'off' | 'singleFile' | 'multiFile' },
+    }),
+  },
+  {
     id: 'editor.wordBasedSuggestions',
     category: 'Editor',
     label: 'Word Based Suggestions',

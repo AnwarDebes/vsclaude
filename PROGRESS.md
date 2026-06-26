@@ -24,6 +24,20 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 121: occurrences-highlight setting (done)
+
+Expose Monaco's occurrence highlighting as a setting, completing the document links + highlights row
+(catalog 5.2).
+
+- contracts EditorSettings + DEFAULT_SETTINGS gain occurrencesHighlight (off/singleFile/multiFile),
+  default singleFile (Monaco's own default, so no behavior change). editor-settings.ts maps it to
+  Monaco; settings-schema.ts adds the select.
+- Document links already had a custom DocumentLinkProvider; this adds the explicit config for the
+  symbol-at-cursor occurrence highlighting (semantic for TS/JS via the worker, word-based otherwise).
+- Quality: the editorSettingsToMonaco mapper test covers the default and a scope change; typecheck,
+  lint clean; build and full e2e pass. Matrix 5.2 "Document links and highlights" Partial to Done.
+  5.2 now 4/10/10; TOTAL 123/108/97.
+
 ## Slice 120: F6 region cycling (done)
 
 Add VS Code's F6 focus cycling between the main regions (catalog 5.20 accessibility).

@@ -100,6 +100,8 @@ export interface EditorSettings {
   wordBasedSuggestions: 'off' | 'currentDocument' | 'matchingDocuments' | 'allDocuments';
   /** Make selection with the mouse and keys do column (box) selection. */
   columnSelection: boolean;
+  /** Highlight occurrences of the symbol at the cursor (single file or across files). */
+  occurrencesHighlight: 'off' | 'singleFile' | 'multiFile';
   minimap: boolean;
   /** Which side of the editor the minimap sits on. */
   minimapSide: 'left' | 'right';
@@ -213,6 +215,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
     wordWrap: false,
     wordBasedSuggestions: 'matchingDocuments',
     columnSelection: false,
+    occurrencesHighlight: 'singleFile',
     minimap: true,
     minimapSide: 'right',
     minimapSize: 'proportional',

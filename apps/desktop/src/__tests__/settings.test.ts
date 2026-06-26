@@ -25,6 +25,7 @@ describe('editorSettingsToMonaco', () => {
       wordWrap: 'off',
       wordBasedSuggestions: 'matchingDocuments',
       columnSelection: false,
+      occurrencesHighlight: 'singleFile',
       minimap: { enabled: true, side: 'right', size: 'proportional' },
       lineNumbers: 'on',
       rulers: [],
@@ -52,6 +53,11 @@ describe('editorSettingsToMonaco', () => {
       formatOnPaste: false,
       formatOnType: false,
     });
+  });
+
+  it('maps the occurrences-highlight scope through to Monaco', () => {
+    const mapped = editorSettingsToMonaco({ ...DEFAULT_SETTINGS.editor, occurrencesHighlight: 'multiFile' });
+    expect(mapped.occurrencesHighlight).toBe('multiFile');
   });
 
   it('maps the column-selection toggle through to Monaco', () => {
