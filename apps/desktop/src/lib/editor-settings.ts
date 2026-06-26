@@ -40,6 +40,7 @@ export interface MonacoEditorOptions {
   scrollBeyondLastLine: boolean;
   folding: boolean;
   stickyScroll: { enabled: boolean };
+  inlayHints: { enabled: 'on' | 'off' };
   guides: { bracketPairs: boolean; indentation: boolean };
   bracketPairColorization: { enabled: boolean };
   autoClosingBrackets: 'always' | 'languageDefined' | 'beforeWhitespace' | 'never';
@@ -86,6 +87,7 @@ export function editorSettingsToMonaco(settings: EditorSettings): MonacoEditorOp
     scrollBeyondLastLine: settings.scrollBeyondLastLine,
     folding: settings.folding,
     stickyScroll: { enabled: settings.stickyScroll },
+    inlayHints: { enabled: settings.inlayHints ? 'on' : 'off' },
     guides: { bracketPairs: settings.bracketPairGuides, indentation: settings.indentGuides },
     bracketPairColorization: { enabled: settings.bracketPairColorization },
     autoClosingBrackets: settings.autoClosingBrackets,

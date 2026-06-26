@@ -24,6 +24,23 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 137: inlay-hints editor setting (done; honest no-flip)
+
+Diversified away from the outline series. Expose inlay-hints rendering as a user setting (catalog 5.2
+"Inlay hints"), parity with VS Code's editor.inlayHints.enabled (exposed as a boolean on/off subset of
+its four-value enum).
+
+- Inlay hints were hardcoded `inlayHints: { enabled: 'on' }` in EditorPanel with no user control. Added
+  the setting via the proven pattern, mirroring stickyScroll exactly: contracts EditorSettings.inlayHints
+  + DEFAULT (true); editor-settings.ts MonacoEditorOptions.inlayHints + the mapper (true -> 'on', false
+  -> 'off'); removed the EditorPanel hardcode (now from the mapper spread); settings-schema.ts boolean
+  control "Inlay Hints"; settings.test.ts (defaults + a mapper test). Rebuilt @vsclaude/contracts.
+- Quality: typecheck, lint clean; settings unit suite green; the existing "settings expose ..." e2e now
+  also asserts the Inlay Hints control; build and full e2e pass.
+- HONESTY: this ADDS the user-facing toggle (a real VS Code setting); it does NOT narrow the row's stated
+  gap ("no custom InlayHintsProvider for other languages"), which remains. The evidence notes the toggle;
+  the row STAYS Partial. TOTAL unchanged 129/102/97.
+
 ## Slice 136: TOML outline (done; honest no-flip)
 
 Add TOML structure to the Outline view (catalog 5.3 outline), extending JSON + CSS + YAML.

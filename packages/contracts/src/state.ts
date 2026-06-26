@@ -150,6 +150,8 @@ export interface EditorSettings {
   folding: boolean;
   /** Pin the enclosing scopes to the top of the editor while scrolling. */
   stickyScroll: boolean;
+  /** Render inlay hints (parameter names and inferred types) from language workers. */
+  inlayHints: boolean;
   /** Ignore trailing-whitespace-only changes in the diff editor. */
   diffIgnoreTrimWhitespace: boolean;
   /** The diff algorithm the diff editor uses. */
@@ -261,6 +263,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
     scrollBeyondLastLine: false,
     folding: true,
     stickyScroll: true,
+    inlayHints: true,
     diffIgnoreTrimWhitespace: true,
     diffAlgorithm: 'advanced',
     diffMaxComputationTime: 5000,

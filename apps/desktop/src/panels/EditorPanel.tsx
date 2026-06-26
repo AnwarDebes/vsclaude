@@ -229,7 +229,6 @@ export function EditorPanel({
           automaticLayout: true,
           largeFileOptimizations: true,
           maxTokenizationLineLength: 20000,
-          inlayHints: { enabled: 'on' },
           find: { seedSearchStringFromSelection: 'always', autoFindInSelection: 'multiline' },
           // scrollBeyondLastLine, smoothScrolling, and cursorBlinking now come from
           // editorSettingsToMonaco below (spread last, so it is the source of truth).

@@ -484,6 +484,15 @@ export const SETTINGS_SCHEMA: readonly SettingDef[] = [
     set: (s, v) => ({ ...s, editor: { ...s.editor, stickyScroll: Boolean(v) } }),
   },
   {
+    id: 'editor.inlayHints',
+    category: 'Editor',
+    label: 'Inlay Hints',
+    description: 'Render inlay hints (parameter names and inferred types) provided by language workers.',
+    control: { kind: 'boolean' },
+    get: (s) => s.editor.inlayHints,
+    set: (s, v) => ({ ...s, editor: { ...s.editor, inlayHints: Boolean(v) } }),
+  },
+  {
     id: 'editor.diffIgnoreTrimWhitespace',
     category: 'Editor',
     label: 'Diff Ignore Trailing Whitespace',

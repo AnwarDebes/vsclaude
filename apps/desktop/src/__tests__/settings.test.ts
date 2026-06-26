@@ -49,6 +49,7 @@ describe('editorSettingsToMonaco', () => {
       scrollBeyondLastLine: false,
       folding: true,
       stickyScroll: { enabled: true },
+      inlayHints: { enabled: 'on' },
       guides: { bracketPairs: true, indentation: true },
       bracketPairColorization: { enabled: true },
       autoClosingBrackets: 'languageDefined',
@@ -118,6 +119,15 @@ describe('editorSettingsToMonaco', () => {
     });
     expect(mapped.folding).toBe(false);
     expect(mapped.stickyScroll).toEqual({ enabled: false });
+  });
+
+  it('maps the inlay-hints toggle to the Monaco enabled string', () => {
+    expect(editorSettingsToMonaco({ ...DEFAULT_SETTINGS.editor, inlayHints: false }).inlayHints).toEqual({
+      enabled: 'off',
+    });
+    expect(editorSettingsToMonaco({ ...DEFAULT_SETTINGS.editor, inlayHints: true }).inlayHints).toEqual({
+      enabled: 'on',
+    });
   });
 
   it('maps the indentation settings', () => {
