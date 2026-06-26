@@ -26,6 +26,9 @@ describe('editorSettingsToMonaco', () => {
       wordBasedSuggestions: 'matchingDocuments',
       columnSelection: false,
       occurrencesHighlight: 'singleFile',
+      dragAndDrop: true,
+      emptySelectionClipboard: true,
+      multiCursorPaste: 'spread',
       minimap: { enabled: true, side: 'right', size: 'proportional' },
       lineNumbers: 'on',
       rulers: [],
@@ -53,6 +56,18 @@ describe('editorSettingsToMonaco', () => {
       formatOnPaste: false,
       formatOnType: false,
     });
+  });
+
+  it('maps the drag-drop, empty-selection-clipboard, and multi-cursor-paste settings', () => {
+    const mapped = editorSettingsToMonaco({
+      ...DEFAULT_SETTINGS.editor,
+      dragAndDrop: false,
+      emptySelectionClipboard: false,
+      multiCursorPaste: 'full',
+    });
+    expect(mapped.dragAndDrop).toBe(false);
+    expect(mapped.emptySelectionClipboard).toBe(false);
+    expect(mapped.multiCursorPaste).toBe('full');
   });
 
   it('maps the occurrences-highlight scope through to Monaco', () => {

@@ -17,6 +17,9 @@ export interface MonacoEditorOptions {
   wordBasedSuggestions: 'off' | 'currentDocument' | 'matchingDocuments' | 'allDocuments';
   columnSelection: boolean;
   occurrencesHighlight: 'off' | 'singleFile' | 'multiFile';
+  dragAndDrop: boolean;
+  emptySelectionClipboard: boolean;
+  multiCursorPaste: 'spread' | 'full';
   minimap: { enabled: boolean; side: 'left' | 'right'; size: 'proportional' | 'fill' | 'fit' };
   lineNumbers: 'on' | 'off' | 'relative';
   rulers: number[];
@@ -58,6 +61,9 @@ export function editorSettingsToMonaco(settings: EditorSettings): MonacoEditorOp
     wordBasedSuggestions: settings.wordBasedSuggestions,
     columnSelection: settings.columnSelection,
     occurrencesHighlight: settings.occurrencesHighlight,
+    dragAndDrop: settings.dragAndDrop,
+    emptySelectionClipboard: settings.emptySelectionClipboard,
+    multiCursorPaste: settings.multiCursorPaste,
     minimap: { enabled: settings.minimap, side: settings.minimapSide, size: settings.minimapSize },
     lineNumbers: settings.lineNumbers,
     rulers: settings.rulers > 0 ? [settings.rulers] : [],

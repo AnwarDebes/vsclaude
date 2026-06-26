@@ -102,6 +102,12 @@ export interface EditorSettings {
   columnSelection: boolean;
   /** Highlight occurrences of the symbol at the cursor (single file or across files). */
   occurrencesHighlight: 'off' | 'singleFile' | 'multiFile';
+  /** Allow dragging selected text to move it (on by default, matching Monaco and VS Code). */
+  dragAndDrop: boolean;
+  /** Copy or cut the whole line when there is no selection. */
+  emptySelectionClipboard: boolean;
+  /** Paste with multiple cursors: spread lines across cursors, or paste full text at each. */
+  multiCursorPaste: 'spread' | 'full';
   minimap: boolean;
   /** Which side of the editor the minimap sits on. */
   minimapSide: 'left' | 'right';
@@ -216,6 +222,9 @@ export const DEFAULT_SETTINGS: AppSettings = {
     wordBasedSuggestions: 'matchingDocuments',
     columnSelection: false,
     occurrencesHighlight: 'singleFile',
+    dragAndDrop: true,
+    emptySelectionClipboard: true,
+    multiCursorPaste: 'spread',
     minimap: true,
     minimapSide: 'right',
     minimapSize: 'proportional',

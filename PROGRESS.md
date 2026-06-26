@@ -24,6 +24,21 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 122: drag-drop / whole-line-copy / multi-paste settings (done)
+
+Expose the last cluster of editing-behavior options as settings (catalog 5.1).
+
+- contracts EditorSettings + DEFAULT_SETTINGS gain dragAndDrop, emptySelectionClipboard, and
+  multiCursorPaste. All three defaults (dragAndDrop true, emptySelectionClipboard true, multiCursorPaste
+  'spread') match Monaco's own RUNTIME defaults (verified in editorOptions.js: dragAndDrop is registered
+  with defaultValue true at line 3132 -- the monaco.d.ts "Defaults to false" comment is stale), so no
+  behavior change; they also match VS Code. The adversarial review caught that an earlier draft wrongly
+  described dragAndDrop as an enablement based on that stale d.ts comment.
+- editor-settings.ts maps all three to Monaco; settings-schema.ts adds two toggles and a select.
+- Quality: the editorSettingsToMonaco mapper test covers the defaults and the toggled values;
+  typecheck, lint clean; build and full e2e pass. Matrix 5.1 "Drag-drop text, copy/cut whole line,
+  multi-paste" Partial to Done. 5.1 now 22/5/0; TOTAL 124/107/97.
+
 ## Slice 121: occurrences-highlight setting (done)
 
 Expose Monaco's occurrence highlighting as a setting, completing the document links + highlights row

@@ -15,7 +15,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 
 | Section | Title | Done | Partial | Missing | Not planned |
 | --- | --- | --- | --- | --- | --- |
-| 5.1 | Text editing core | 21 | 6 | 0 | 0 |
+| 5.1 | Text editing core | 22 | 5 | 0 | 0 |
 | 5.2 | Code intelligence (LSP language features) | 4 | 10 | 10 | 0 |
 | 5.3 | Editor advanced surface | 9 | 3 | 0 | 0 |
 | 5.4 | Diff and merge | 6 | 2 | 1 | 1 |
@@ -38,7 +38,7 @@ Date: 2026-06-24. Already done at baseline: Phase 0 (native desktop build) and P
 | 5.21 | Productivity and workspace lifecycle | 6 | 7 | 4 | 0 |
 | 5.22 | Custom editors, webviews, and previews | 4 | 3 | 3 | 0 |
 | 5.23 | Performance, logging, diagnostics, updates | 0 | 5 | 3 | 0 |
-| TOTAL | | 123 | 108 | 97 | 5 |
+| TOTAL | | 124 | 107 | 97 | 5 |
 
 ## Legend
 
@@ -69,7 +69,7 @@ The editor integrates Monaco 0.55.1, and its editing actions are now exposed: a 
 | Whitespace and control char rendering, render final newline | Done | renderWhitespace (none/selection/all), renderControlCharacters, and renderFinalNewline are all editor settings mapped to Monaco (editorSettingsToMonaco, unit tested) and toggleable in the Settings UI (settings-schema). | |
 | Cursor styles, blink rate, smooth caret, surrounding lines | Done | cursorStyle, cursorBlinking, cursorSmoothCaretAnimation, and cursorSurroundingLines are all settings mapped to Monaco (editorSettingsToMonaco, unit tested) and exposed in the Settings panel. | |
 | Smooth scrolling, fast scroll, scroll beyond last line, wheel zoom | Done | smoothScrolling, fastScrollSensitivity, scrollBeyondLastLine, and mouseWheelZoom are all settings mapped to Monaco (editorSettingsToMonaco, unit tested) and exposed in the Settings panel. | |
-| Drag-drop text, copy/cut whole line, multi-paste | Partial | Monaco default behaviors not disabled in EditorPanel.tsx. | Defaults likely on but unverified; multi-paste not in specs. |
+| Drag-drop text, copy/cut whole line, multi-paste | Done | Three editor settings mapped to Monaco (editorSettingsToMonaco, unit tested) and in the Settings UI: dragAndDrop (default true, matching Monaco's runtime default and VS Code, so no behavior change), emptySelectionClipboard (copy/cut the whole line with no selection; default true = Monaco default), and multiCursorPaste (spread/full; default spread = Monaco default). | |
 | Undo/redo and undo stops, soft undo across saves | Partial | Monaco provides undo/redo and undo stops in the editor, surfaced as Edit: Undo and Edit: Redo (and the Edit menu) alongside cut/copy/paste/find/replace commands. | No soft undo across saves and no undo-history persistence or IPC sync. |
 | EOL handling (LF/CRLF detect, convert, platform default) | Partial | FilePayload reports eol; the status bar shows the model EOL and its item opens a Change End of Line picker that converts the line endings live (setEditorEol via the editor bridge, model.pushEOL); unit and e2e covered. | No platform-default EOL for newly created files. |
 | Encoding (detect, reopen with, save with, guess) | Partial | FilePayload includes encoding (spec 3.2); EditorPanel.tsx has no encoding option. | Detected but no picker, reopen-with, or save-as-encoding. |
