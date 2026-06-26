@@ -24,6 +24,24 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 145: Markdown link-path completion (done; honest no-flip)
+
+Suggest workspace file paths while typing a Markdown link target (catalog 5.2 markdown), reusing the
+linkablePaths infrastructure from the broken-link slice.
+
+- lib/markdown-links.ts: completeMarkdownLinkPath(lineUpToCursor, files) -- pure; when the line up to the
+  cursor ends inside a [text](partial target (regex /\]\(([^)\s]*)$/), returns the partial and the files
+  whose path includes it (capped at 50). Unit tested (in-target, partial filter, not-in-target -> null).
+- monaco-setup.ts: a Markdown completion provider (triggerCharacters '(' and '/') that calls
+  completeMarkdownLinkPath over the line up to the cursor and offers File completion items with a replace
+  range spanning the partial. The file list is injected via a module setter setMarkdownLinkPaths.
+- EditorPanel: a useEffect calls setMarkdownLinkPaths(linkablePaths ?? []) on change (the same
+  paletteFiles-derived list used for broken-link diagnostics, so demo + workspace both work).
+- Quality: typecheck, lint clean; an e2e opens notes.md, types [x](src/ and Ctrl+Space, and asserts the
+  suggest widget lists App.tsx. build + full e2e pass.
+- HONESTY: narrows the 5.2 gap by removing "link or path completion"; synced-scroll and math/diagram
+  rendering remain, so 5.2 STAYS Partial. TOTAL unchanged 129/102/97.
+
 ## Slice 144: fix zen mode leaving a stray grid track when a sidebar was hidden (done; bug-fix)
 
 Fix the pre-existing nit slice 143's review surfaced: in zen mode, if a sidebar had been hidden, the

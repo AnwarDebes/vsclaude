@@ -82,3 +82,28 @@ export function findBrokenLinks(
   }
   return out;
 }
+
+/** A path-completion proposal for a Markdown link whose target is being typed. */
+export interface LinkPathCompletion {
+  /** The partial target already typed after the "](" opener. */
+  readonly partial: string;
+  /** Matching workspace file paths to suggest. */
+  readonly suggestions: string[];
+}
+
+/**
+ * When the text up to the cursor ends inside a Markdown link target ("...](partial"),
+ * return the partial and the workspace files matching it, for path completion. Returns
+ * null when the cursor is not in a link target. Pure, so it is unit tested.
+ */
+export function completeMarkdownLinkPath(
+  lineUpToCursor: string,
+  files: readonly string[],
+): LinkPathCompletion | null {
+  const match = /\]\(([^)\s]*)$/.exec(lineUpToCursor);
+  if (match === null) return null;
+  const partial = match[1]!;
+  const lower = partial.toLowerCase();
+  const suggestions = files.filter((file) => file.toLowerCase().includes(lower)).slice(0, 50);
+  return { partial, suggestions };
+}

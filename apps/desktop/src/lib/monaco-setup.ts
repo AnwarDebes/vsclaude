@@ -13,6 +13,7 @@ import { loader } from '@monaco-editor/react';
 import { findLinks } from './links';
 import { findColors, toHex } from './colors';
 import { markdownSymbols } from './symbols';
+import { completeMarkdownLinkPath } from './markdown-links';
 import { jsonDefaults } from 'monaco-editor/esm/vs/language/json/monaco.contribution';
 import {
   javascriptDefaults,
@@ -149,6 +150,40 @@ for (const language of SNIPPET_LANGUAGES) {
     },
   });
 }
+
+// Path completion for Markdown links: while typing inside [text](..., suggest workspace
+// file paths. The current file list is injected by the editor via setMarkdownLinkPaths.
+let markdownLinkPaths: readonly string[] = [];
+export function setMarkdownLinkPaths(paths: readonly string[]): void {
+  markdownLinkPaths = paths;
+}
+monaco.languages.registerCompletionItemProvider('markdown', {
+  triggerCharacters: ['(', '/'],
+  provideCompletionItems(model, position) {
+    const line = model.getValueInRange({
+      startLineNumber: position.lineNumber,
+      startColumn: 1,
+      endLineNumber: position.lineNumber,
+      endColumn: position.column,
+    });
+    const result = completeMarkdownLinkPath(line, markdownLinkPaths);
+    if (result === null) return { suggestions: [] };
+    const range = new monaco.Range(
+      position.lineNumber,
+      position.column - result.partial.length,
+      position.lineNumber,
+      position.column,
+    );
+    return {
+      suggestions: result.suggestions.map((path) => ({
+        label: path,
+        kind: monaco.languages.CompletionItemKind.File,
+        insertText: path,
+        range,
+      })),
+    };
+  },
+});
 
 // A document-symbol outline for Markdown (headings), so Go to Symbol and the
 // breadcrumb work in .md files.

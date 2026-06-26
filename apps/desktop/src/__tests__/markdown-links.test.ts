@@ -1,5 +1,27 @@
 import { describe, expect, it } from 'vitest';
-import { findBrokenLinks, resolveLinkTarget } from '../lib/markdown-links';
+import { completeMarkdownLinkPath, findBrokenLinks, resolveLinkTarget } from '../lib/markdown-links';
+
+describe('completeMarkdownLinkPath', () => {
+  const files = ['src/App.tsx', 'src/main.tsx', 'README.md'];
+
+  it('returns the partial and matching files when the cursor is in a link target', () => {
+    const result = completeMarkdownLinkPath('See [x](src/', files);
+    expect(result).not.toBeNull();
+    expect(result!.partial).toBe('src/');
+    expect(result!.suggestions).toContain('src/App.tsx');
+    expect(result!.suggestions).toContain('src/main.tsx');
+  });
+
+  it('filters by the typed partial', () => {
+    const result = completeMarkdownLinkPath('[x](src/App', files);
+    expect(result!.suggestions).toEqual(['src/App.tsx']);
+  });
+
+  it('returns null when the cursor is not in a link target', () => {
+    expect(completeMarkdownLinkPath('plain text', files)).toBeNull();
+    expect(completeMarkdownLinkPath('[x](done) more text', files)).toBeNull();
+  });
+});
 
 const FILES = ['README.md', 'src/App.tsx', 'docs/guide.md'];
 

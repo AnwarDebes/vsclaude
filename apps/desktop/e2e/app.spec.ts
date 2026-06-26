@@ -241,6 +241,20 @@ test.describe('vsclaude shell', () => {
     await expect(problems.getByText(/Link target not found: CHANGELOG\.md/)).toBeVisible();
   });
 
+  test('Markdown link path completion suggests workspace files', async ({ page }) => {
+    await page.goto('/');
+    await page.locator('.explorer-list').getByRole('button', { name: 'notes.md', exact: true }).click();
+    // Type a new link target at the end of the file and trigger suggestions.
+    await page.locator('.monaco-editor').first().click();
+    await page.keyboard.press('Control+End');
+    await page.keyboard.press('Enter');
+    await page.keyboard.type('[x](src/');
+    await page.keyboard.press('Control+Space');
+    const widget = page.locator('.suggest-widget');
+    await expect(widget).toBeVisible();
+    await expect(widget).toContainText('App.tsx');
+  });
+
   test('the active file is restored after a reload', async ({ page }) => {
     await page.goto('/');
     // The default open file is login-form.tsx; open a different one (exact avoids session.config.ts).

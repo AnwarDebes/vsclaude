@@ -1,6 +1,6 @@
 import { useRef, useEffect, useSyncExternalStore } from 'react';
 import Editor, { type OnMount } from '@monaco-editor/react';
-import '../lib/monaco-setup';
+import { setMarkdownLinkPaths } from '../lib/monaco-setup';
 import {
   setActiveEditor,
   clearActiveEditor,
@@ -226,6 +226,12 @@ export function EditorPanel({
       monaco.editor.setModelMarkers(model, owner, []);
     }
   }, [value, path, linkablePaths]);
+
+  // Feed the workspace file list to the Markdown link-path completion provider (global,
+  // registered in monaco-setup), so typing [text](... suggests real files.
+  useEffect(() => {
+    setMarkdownLinkPaths(linkablePaths ?? []);
+  }, [linkablePaths]);
 
   // A new untitled file takes the configured default line ending, applied once per path
   // (the first time it is seen empty) so clearing the buffer later does not override a
