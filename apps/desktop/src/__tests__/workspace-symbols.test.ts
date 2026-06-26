@@ -6,7 +6,38 @@ import {
   filterWorkspaceSymbols,
   jsonSymbols,
   outlineSymbols,
+  yamlSymbols,
 } from '../lib/workspace-symbols';
+
+describe('yamlSymbols', () => {
+  it('lists top-level keys, skipping nested keys, list items, and comments', () => {
+    const text = ['name: aurora', '# a comment', '- top-list', 'build:', '  target: es2022', 'on:', '  - push'].join(
+      '\n',
+    );
+    expect(yamlSymbols(text)).toEqual([
+      { name: 'name', line: 1 },
+      { name: 'build', line: 4 },
+      { name: 'on', line: 6 },
+    ]);
+  });
+
+  it('keeps the key when the value contains a colon (e.g. a URL)', () => {
+    expect(yamlSymbols('homepage: https://example.com')).toEqual([{ name: 'homepage', line: 1 }]);
+  });
+
+  it('captures a $-led top-level key like $schema', () => {
+    expect(yamlSymbols('$schema: https://json-schema.org/x')).toEqual([{ name: '$schema', line: 1 }]);
+  });
+
+  it('ignores a key with no space after the colon (a plain scalar, not a mapping)', () => {
+    expect(yamlSymbols('a:b')).toEqual([]);
+  });
+
+  it('outlineSymbols routes .yaml/.yml through yamlSymbols at level 1', () => {
+    expect(outlineSymbols('c.yml', 'x: 1')).toEqual([{ name: 'x', level: 1, line: 1 }]);
+    expect(outlineSymbols('c.yaml', 'y: 2')).toEqual([{ name: 'y', level: 1, line: 1 }]);
+  });
+});
 
 describe('cssSymbols', () => {
   it('lists top-level selectors with their start lines', () => {

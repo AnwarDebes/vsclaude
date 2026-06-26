@@ -113,6 +113,15 @@ createRoot(document.getElementById('root')!).render(<App />);
   color: var(--accent-strong);
 }
 `,
+  'config.yml': `name: aurora
+# Build configuration
+build:
+  target: es2022
+  outDir: dist
+scripts:
+  dev: vite
+  test: vitest
+`,
   'README.md': `# Aurora
 
 A small demo project shown in the **vsclaude** editor.

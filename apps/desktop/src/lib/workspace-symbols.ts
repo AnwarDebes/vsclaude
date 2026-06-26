@@ -165,9 +165,27 @@ export function jsonSymbols(text: string): Array<{ name: string; line: number }>
 }
 
 /**
+ * Top-level (column-0) mapping keys of a YAML document, with the line each begins on.
+ * Indented keys, list items, comment lines, and bare scalars are skipped; the value
+ * after the colon (including URLs with their own colons) is ignored. Quoted keys are
+ * not parsed (best-effort). Pure, so it is unit tested.
+ */
+export function yamlSymbols(text: string): Array<{ name: string; line: number }> {
+  const out: Array<{ name: string; line: number }> = [];
+  text
+    .replace(/\r\n/g, '\n')
+    .split('\n')
+    .forEach((raw, index) => {
+      const match = /^([A-Za-z_$][\w.$-]*)\s*:(\s|$)/.exec(raw);
+      if (match) out.push({ name: match[1]!, line: index + 1 });
+    });
+  return out;
+}
+
+/**
  * The Outline view symbols for any file: Markdown headings (with their heading
- * level), JSON top-level keys, or top-level code declarations (rendered flat at
- * level 1). Pure.
+ * level), JSON top-level keys, CSS selectors, YAML top-level keys, or top-level code
+ * declarations (rendered flat at level 1). Pure.
  */
 export function outlineSymbols(path: string, text: string): OutlineItem[] {
   const lower = path.toLowerCase();
@@ -177,6 +195,9 @@ export function outlineSymbols(path: string, text: string): OutlineItem[] {
   }
   if (lower.endsWith('.css')) {
     return cssSymbols(text).map((symbol) => ({ name: symbol.name, level: 1, line: symbol.line }));
+  }
+  if (lower.endsWith('.yaml') || lower.endsWith('.yml')) {
+    return yamlSymbols(text).map((symbol) => ({ name: symbol.name, level: 1, line: symbol.line }));
   }
   return codeSymbols(text, lower.endsWith('.rs')).map((symbol) => ({
     name: symbol.name,

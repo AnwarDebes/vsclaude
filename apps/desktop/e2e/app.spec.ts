@@ -717,6 +717,21 @@ test.describe('vsclaude shell', () => {
     await expect(outline.getByRole('button', { name: '.button', exact: true })).toBeVisible();
   });
 
+  test('the outline view lists YAML top-level keys', async ({ page }) => {
+    await page.goto('/');
+    await page.locator('.explorer-list').getByRole('button', { name: 'config.yml', exact: true }).click();
+    await page.getByText('Claude Code, in motion').click();
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.getByRole('dialog', { name: /command palette/i });
+    await palette.getByPlaceholder(/type a command/i).fill('view outline');
+    await page.keyboard.press('Enter');
+    const outline = page.getByRole('region', { name: 'Outline' });
+    await expect(outline).toBeVisible();
+    // config.yml's top-level keys become outline entries (nested keys are skipped).
+    await expect(outline.getByRole('button', { name: 'build' })).toBeVisible();
+    await expect(outline.getByRole('button', { name: 'scripts' })).toBeVisible();
+  });
+
   test('accessibility help opens from the Help menu', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('button', { name: 'Help', exact: true }).click();

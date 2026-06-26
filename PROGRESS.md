@@ -24,6 +24,21 @@ accessibility help, git remotes, problems filter, output channels, editor font,
 diff change counter, terminal exit code, workspace symbols, open editors,
 git stash manager, theme export, auto-reveal, narration log.
 
+## Slice 135: YAML outline (done; honest no-flip)
+
+Add top-level YAML mapping keys to the Outline view (catalog 5.3 outline), extending JSON + CSS.
+
+- lib/workspace-symbols.ts: yamlSymbols(text) -- a pure per-line scan emitting column-0 mapping keys
+  (/^[A-Za-z_][\\w.$-]*\\s*:(\\s|$)/) with their line; skips indented/nested keys, list items, comment
+  lines, and bare scalars; the value after the colon (including URLs) is ignored. outlineSymbols routes
+  .yaml/.yml through it.
+- A demo config.yml added to BOTH demoFileContents and demoFiles (separate sources).
+- Quality: yamlSymbols unit tested (nested/list/comment skipped, URL value kept, no-space-after-colon
+  rejected, .yaml/.yml routing). An e2e opens config.yml and asserts the outline lists build and scripts.
+  typecheck, lint clean; build and full e2e pass. Updated the 5.3 row, 5.3 prose, and 5.6 @ row
+  (slice-133 lesson). 5.3 STAYS Partial (SCSS/LESS, HTML, TOML, YAML quoted keys, code nesting, Python
+  remain). TOTAL unchanged 129/102/97.
+
 ## Slice 134: CSS outline (done; honest no-flip)
 
 Add top-level CSS selectors to the Outline view (catalog 5.3 outline), extending the JSON slice.

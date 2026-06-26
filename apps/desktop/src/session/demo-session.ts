@@ -90,6 +90,7 @@ export const demoFiles = [
   { name: 'chime.wav', path: 'assets/chime.wav', kind: 'file' as const },
   { name: 'assets', path: 'assets', kind: 'directory' as const },
   { name: 'package.json', path: 'package.json', kind: 'file' as const },
+  { name: 'config.yml', path: 'config.yml', kind: 'file' as const },
   // A noise directory, hidden by the default files.exclude (see lib/excludes.ts).
   { name: 'index.js', path: 'node_modules/react/index.js', kind: 'file' as const },
 ];
