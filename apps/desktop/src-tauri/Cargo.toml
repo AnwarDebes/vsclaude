@@ -22,11 +22,11 @@ tauri = { version = "2", features = [] }
 tauri-plugin-dialog = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-keyring = "3"
-portable-pty = "0.8"
+keyring = "4"
+portable-pty = "0.9"
 # Live filesystem watching for the explorer and open buffers (Phase A1).
 notify = "8"
-notify-debouncer-full = "0.5"
+notify-debouncer-full = "0.7"
 # Deletes go to the OS recycle bin so they stay recoverable.
 trash = "5"
 # Project-wide search, built on the same libraries ripgrep is: gitignore-aware
