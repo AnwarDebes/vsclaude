@@ -22,7 +22,7 @@
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",
     "@tauri-apps/api": "^2.1.1",
-    "@tauri-apps/plugin-dialog": "^2.0.0",
+    "@tauri-apps/plugin-dialog": "^2.7.2",
     "@vsclaude/agent-runtime": "workspace:*",
     "@vsclaude/chat": "workspace:*",
     "@vsclaude/contracts": "workspace:*",
