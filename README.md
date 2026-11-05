@@ -8,6 +8,8 @@
 
 <p>A cozy, beautiful IDE where you <em>watch</em> your AI coding agent work through living pixel-art animation, instead of scrolling walls of text.</p>
 
+<p>This project now continues in <a href="https://github.com/AnwarDebes/glassbox-studio"><b>Glassbox Studio</b></a>, the coding agent that shows its work. <a href="https://anwardebes.github.io/glassbox-studio/">Open the live app</a>.</p>
+
 <p>
   <img alt="status" src="https://img.shields.io/badge/status-beta-e0a458?style=for-the-badge" />
   <img alt="license" src="https://img.shields.io/badge/license-MIT-7fb069?style=for-the-badge" />
